@@ -1,0 +1,17 @@
+{
+  "version": "V231-jiangshen-excel-tables-final",
+  "date": "2026-05-25",
+  "goal": "修正 V230 後仍被舊降神模組覆蓋的星等、靈氣與經驗計算。",
+  "changes": [
+    "將 js/features/jiangshen/excel-tables-fix.js 移到 enhancements 最後載入，避免舊降神導航或頁面模組蓋回舊公式。",
+    "直接修正 js/features/jiangshen/star-aura-page.js 的星等與靈氣公式，改用 Excel 匯出的累積表。",
+    "直接修正 js/features/jiangshen/star-exp-training.js 的星等、靈氣與經驗讀表邏輯，避免 DATA 讀取失敗時經驗值顯示 0。",
+    "靈氣頁預設目前等級改為 0，讓 0 到 20 直接顯示 2668。",
+    "更新 index.html data-version 為 V231-jiangshen-excel-tables-final。"
+  ],
+  "verified": {
+    "star_0_to_1": "5 顆",
+    "aura_0_to_20": "2668",
+    "exp_1_to_1000": "1000000000000000"
+  }
+}

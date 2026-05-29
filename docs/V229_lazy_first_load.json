@@ -1,0 +1,50 @@
+{
+  "version": "V229-lazy-first-load",
+  "date": "2026-05-24",
+  "goal": "改善第一次開網頁很慢的問題，首頁先顯示，資料改成進入功能頁時才讀取。",
+  "changed": [
+    {
+      "file": "js/core/app-core.js",
+      "notes": [
+        "首頁初始化不再立刻讀取 ITEM.INI、MONSTER_C.INI、MAGIC.INI。",
+        "怪物查詢、道具查詢、掉落反查第一次進入時才載入完整怪物/道具資料，之後沿用已載入資料。",
+        "裝備合成資料改成進入裝備合成模擬時才載入。",
+        "武魂 INI 改成進入武魂頁時才嘗試載入，失敗時仍使用內嵌備援資料。"
+      ]
+    },
+    {
+      "file": "js/script-manifest.js",
+      "notes": [
+        "首頁不再預先載入大型裝備合成備援資料 js/data/equip-compound-data.js。"
+      ]
+    },
+    {
+      "file": "js/pages/compound-page.js",
+      "notes": [
+        "合成頁可在沒有預載 EQUIP_COMPOUND_DATA 的情況下運作，優先使用 data/compound_config.json 與 COMPOUND.INI。"
+      ]
+    },
+    {
+      "file": "js/features/equipment/accessory-filter.js",
+      "notes": [
+        "舊的合成篩選修正若直接打開合成頁，也會先等待合成資料載入完成，避免清單變空。"
+      ]
+    },
+    {
+      "file": "js/pages/item-search.js",
+      "notes": [
+        "舊的道具查詢強化頁若直接打開道具查詢，也會先等待 ITEM / MONSTER 資料載入完成，避免最新道具清單顯示空資料。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V229-lazy-first-load。"
+      ]
+    }
+  ],
+  "expectedImpact": [
+    "第一次開首頁少載入 ITEM.INI、MONSTER_C.INI、MAGIC.INI 與大型合成備援 JS。",
+    "第一次點怪物/道具/掉落反查時會出現一次資料讀取等待，之後切換不需重讀。"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "version": "V237-lazy-soul-tool",
+  "goal": "Load the soul calculator only when the user opens it, instead of during the first page load.",
+  "changedFiles": [
+    "index.html",
+    "js/script-manifest.js",
+    "js/core/app-core.js"
+  ],
+  "initialLoadRemoved": [
+    "js/data/soul-data.js",
+    "js/pages/soul-page.js",
+    "js/pages/soul-data-page.js",
+    "js/pages/soul-quick-force-fix.js"
+  ],
+  "lazyGroupsAdded": {
+    "data_soul": [
+      "js/data/soul-data.js"
+    ],
+    "features_soul": [
+      "js/pages/soul-page.js",
+      "js/pages/soul-data-page.js",
+      "js/pages/soul-quick-force-fix.js"
+    ]
+  },
+  "expectedEffect": [
+    "The home page loads fewer scripts on first open.",
+    "The soul calculator still loads its data before rendering."
+  ],
+  "cleanup": [
+    "Repaired broken legacy strings in js/core/app-core.js so the file passes JavaScript syntax validation after the lazy-load change.",
+    "Kept legacy training fallback simple because the active jiangshen tools are loaded through the lazy jiangshen groups."
+  ]
+}

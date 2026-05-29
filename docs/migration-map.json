@@ -1,0 +1,186 @@
+{
+  "version": "V210 item active cleanup",
+  "base": "V116b",
+  "index_html": "只保留 HTML 框架與 script/css 引用",
+  "css": [
+    "css/main.css"
+  ],
+  "active_script_manifest": "目前正式載入順序以 js/script-manifest.js 為準；V223 已移除根目錄 js/patch-02.js 到 js/patch-20.js 的重複檔，舊版補丁歸檔保留在 js/legacy/patches。",
+  "data": [
+    "data/config.json",
+    "data/pages.json",
+    "data/compound_config.json"
+  ],
+  "modules_placeholder": [
+    "compound.html",
+    "home.html",
+    "item.html",
+    "jiangshen.html",
+    "monster.html",
+    "reverse.html",
+    "soul.html"
+  ],
+  "note": "此版先做安全外部化：功能邏輯完整保留，但從 index.html 拆到 js/*.js；下一階段可再把 app-core.js 依功能語意拆成 monster/item/reverse/compound/soul/jiangshen。",
+  "changes_v201": [
+    "Created js/monster.js",
+    "Moved monster search/detail/drop functions out of js/app-core.js",
+    "index.html now loads js/monster.js after js/app-core.js"
+  ],
+  "changes_v202b": [
+    "Created js/item.js as a safe staged module copy.",
+    "Kept original item functions inside js/app-core.js to preserve item/reverse/compound menu behavior.",
+    "Previous V202/V202a removed too much and broke reverse/compound; V202b avoids that."
+  ],
+  "changes_v203": [
+    "Created js/reverse.js",
+    "Reverse search and showReverse now have active overrides in reverse.js",
+    "Search candidates are de-duplicated by ITEM ID",
+    "app-core.js still keeps original reverse functions as fallback"
+  ],
+  "changes_v203b": [
+    "Kept reverse search candidate de-duplication",
+    "Restored reverse detail page to original showReverse UI",
+    "Original UI shows each monster's drop percentage as before"
+  ],
+  "changes_v204": [
+    "Created js/compound.js as a safe staged module copy.",
+    "app-core.js still keeps original compound functions to preserve working合成模擬.",
+    "This prepares for later true extraction after dependencies are separated."
+  ],
+  "compound_functions_copied": [
+    "parseCompoundIniMulti",
+    "buildCompoundRecipesFromIni",
+    "eqData",
+    "mergeCompoundIniRecipesWithConfig",
+    "eqUnique",
+    "eqEquipList",
+    "eqMergeItemIniStats",
+    "eqNumOrUndef",
+    "eqAddStatFromIni",
+    "eqAddRangeFromIni",
+    "eqBuildBaseStatsFromItemIni",
+    "eqRecipesForType",
+    "eqFmtVal",
+    "eqStatValueText",
+    "eqStatNum",
+    "eqFilteredEquipment",
+    "eqFillSelect",
+    "eqRefreshFilters",
+    "eqRefreshList",
+    "eqSelected",
+    "eqAllowedRecipes",
+    "eqRecipeById",
+    "eqSelectedRecipes",
+    "eqRecipeDefaultCount",
+    "eqRecipeGroupRank",
+    "eqRecipeOrderIndex",
+    "eqSortRecipeObjects",
+    "eqSortRecipePicks",
+    "eqAddRecipe",
+    "eqSimAddRecipe",
+    "eqToggleRecipe",
+    "eqSetRecipeCount",
+    "eqEffectAccumulator",
+    "eqBaseStatsWithRaw",
+    "eqCLevelText",
+    "eqStatLabel",
+    "eqDisplayStatText",
+    "eqMetaLine",
+    "eqRenderStats",
+    "eqRenderRecipeArea",
+    "renderEquipmentCompoundPage",
+    "eqRefreshSelect",
+    "eqRenderPreview",
+    "eqMaterials",
+    "eqAllMaterials",
+    "showEquipmentMaterials",
+    "eqResetRandom",
+    "eqRollEffectValue",
+    "eqSimToggleRecipe",
+    "eqSimSelectedRecipes",
+    "eqRandomOnce",
+    "eqRandomMaterialRows",
+    "eqRenderRandomRecipePicker",
+    "materialRank",
+    "sortMaterialEntries"
+  ],
+  "changes_v205": [
+    "Created js/soul.js as a safe staged module copy.",
+    "app-core.js still keeps original soul functions to preserve working soul calculator.",
+    "This prepares for later full extraction after jiangshen split."
+  ],
+  "soul_functions_copied": [
+    "parseChangeBodyIniBlocks",
+    "soulNum",
+    "buildSoulDataFromChangeBodyIni",
+    "getSoulListV106"
+  ],
+  "changes_v206": [
+    "Created js/jiangshen.js as a safe staged module copy.",
+    "app-core.js still keeps original jiangshen/training functions to preserve all calculators.",
+    "This prepares for later true extraction and data JSON split."
+  ],
+  "jiangshen_functions_copied": [
+    "renderJiangHome",
+    "openJiangMenuOnly",
+    "setJiang",
+    "fillJiangFields",
+    "updateSupportOptions",
+    "trainingGroupRank",
+    "trainingElementRank",
+    "trainingDisplayName",
+    "trainingFilterGroups",
+    "trainingGroupLabel",
+    "trainingViewGroupValue",
+    "sortedTrainingData",
+    "appendTrainingNote",
+    "renderTrainingCalc",
+    "filterTrainingRows",
+    "applyTrainingDerivedLevels",
+    "clampTrainingInputs",
+    "updateTrainingNeeds",
+    "setTrainingAllMax",
+    "clearTrainingTargets",
+    "calcTraining"
+  ],
+  "jiangshen_vars_copied": [
+    "TRAINING_DATA",
+    "EXP_ITEMS",
+    "stars1",
+    "stars20"
+  ],
+  "changes_v207": [
+    "Made soul.js active for CHANGEBODYITEM parser helpers.",
+    "Removed low-risk soul parser helper functions from app-core.js.",
+    "Kept jiangshen functions in app-core.js for now because they have many formula/data dependencies."
+  ],
+  "removed_from_app_core_v207": [
+    "parseChangeBodyIniBlocks",
+    "soulNum",
+    "buildSoulDataFromChangeBodyIni",
+    "getSoulListV106"
+  ],
+  "changes_v208": [
+    "Removed old searchReverseItems/showReverse from app-core.js.",
+    "Embedded original showReverse UI inside js/reverse.js as showReverseOriginalV208.",
+    "reverse.js now fully owns reverse search and detail page while keeping old percent UI."
+  ],
+  "removed_from_app_core_v208": [
+    "searchReverseItems",
+    "showReverse"
+  ],
+  "changes_v210": [
+    "Moved low-risk item helpers/detail functions active to js/item.js.",
+    "Removed those functions from app-core.js.",
+    "Kept renderItemPage/searchItems/setItemSub in app-core/patch flow to avoid breaking reverse/compound menu."
+  ],
+  "removed_from_app_core_v210": [
+    "itemTypeName",
+    "itemKind",
+    "itemStatus",
+    "itemDetailRows",
+    "itemAbilityFields",
+    "itemSearchText",
+    "showItem"
+  ]
+}

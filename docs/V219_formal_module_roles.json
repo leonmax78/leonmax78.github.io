@@ -1,0 +1,28 @@
+{
+  "version": "V219_FORMAL_MODULE_READY",
+  "goal": "把 V218 已確認正常的 active patch 搬出 legacy/patches，改成正式 features/pages 模組；武魂大型資料抽到 js/data/soul-data.js。",
+  "active_patch_folder": "none; js/legacy/patches has been archived under js/legacy/not-loaded/archived-patches-v218",
+  "moved_modules": {
+    "js/legacy/patches/equipment/patch-02-equipment-display.js": "js/features/equipment/display-and-random-sim.js",
+    "js/legacy/patches/equipment/patch-03-equipment-special-filter.js": "js/features/equipment/special-equipment-filter.js",
+    "js/legacy/patches/equipment/patch-04-equipment-stable-group.js": "js/features/equipment/stable-group-routing.js",
+    "js/legacy/patches/equipment/patch-05-underboot-stable70.js": "js/features/equipment/underboot-stable70.js",
+    "js/legacy/patches/equipment/patch-06-equipment-stat-render.js": "js/features/equipment/stat-renderer.js",
+    "js/legacy/patches/equipment/patch-07-accessory-filter.js": "js/features/equipment/accessory-filter.js",
+    "js/legacy/patches/equipment/patch-08-accessory-menu-guard.js": "js/features/equipment/accessory-menu-guard.js",
+    "js/legacy/patches/equipment/patch-18-equipment-sort-and-jiangshen-fix.js": "js/features/compat/equipment-sort-jiangshen-calc-fix.js",
+    "js/legacy/patches/auth/patch-10-license-submit.js": "js/features/auth/license-submit.js",
+    "js/legacy/patches/auth/patch-11-license-countdown.js": "js/features/auth/license-countdown.js",
+    "js/legacy/patches/monster/patch-12-monster-detail-fix.js": "js/pages/monster-detail-fix.js",
+    "js/legacy/patches/safety/patch-13-button-anchor-guard.js": "js/features/safety/button-anchor-guard.js",
+    "js/legacy/patches/item/patch-14-item-detail-order.js": "js/pages/item-detail-order.js",
+    "js/legacy/patches/jiangshen/patch-15-star-aura-tabs.js": "js/features/jiangshen/star-aura-tabs.js",
+    "js/legacy/patches/jiangshen/patch-16-star-exp-training.js": "js/features/jiangshen/star-exp-training.js",
+    "js/legacy/patches/jiangshen/patch-17-star-aura-page.js": "js/features/jiangshen/star-aura-page.js",
+    "js/legacy/patches/jiangshen/patch-19-support-integer-compare.js": "js/features/jiangshen/support-integer-compare.js",
+    "js/legacy/patches/jiangshen/patch-20-support-slots-compare.js": "js/features/jiangshen/support-slots-compare.js"
+  },
+  "soul_data": "js/data/soul-data.js",
+  "soul_page_logic": "js/pages/soul-data-page.js",
+  "index": "pure entry only"
+}

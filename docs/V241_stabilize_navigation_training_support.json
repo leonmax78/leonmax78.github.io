@@ -1,0 +1,25 @@
+{
+  "version": "V241-stabilize-navigation-training-support",
+  "goal": "Restore stable navigation for item, monster, and reverse pages; simplify training quick actions; highlight best support comparison values.",
+  "changedFiles": [
+    "index.html",
+    "js/script-loader.js",
+    "js/script-manifest.js",
+    "js/core/app-core.js",
+    "js/features/jiangshen/support-slots-compare.js"
+  ],
+  "stabilityFixes": [
+    "Removed old garbled item/monster enhancement patches from initial loading.",
+    "Restored explicit window.SZOAppInit assignment so the app always binds events after scripts load.",
+    "Rebuilt script-loader.js with clean status messages and error handling.",
+    "Starts the main item/monster/reverse data load in the background after the home page is ready."
+  ],
+  "trainingChanges": [
+    "Quick actions are now 全部滿階 and 全部歸0.",
+    "全部歸0 sets both current and target levels to 0."
+  ],
+  "supportCompareChanges": [
+    "Each stat row highlights the highest value.",
+    "Tied highest values are highlighted together."
+  ]
+}

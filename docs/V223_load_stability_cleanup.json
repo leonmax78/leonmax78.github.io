@@ -1,0 +1,59 @@
+{
+  "version": "V223-load-stability",
+  "date": "2026-05-24",
+  "goal": "降低第一次開啟等待時間，避免資料載入完成後把使用者跳回首頁，並移除已歸檔的重複補丁檔。",
+  "changed": [
+    {
+      "file": "js/script-loader.js",
+      "notes": [
+        "等待 SZOAppInit 完整完成後才把網站標記為 SZO_READY。",
+        "讓選單保護機制涵蓋資料初始化期間，避免使用者太早點選後又被初始化流程覆蓋。"
+      ]
+    },
+    {
+      "file": "js/core/app-core.js",
+      "notes": [
+        "大型資料檔改為 Promise.all 並行讀取。",
+        "loadAllData 結束時只在目前仍停留首頁時重畫首頁，降低跳頁風險。",
+        "init 改為 async，讓 script-loader 能等資料準備完成。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V223-load-stability。"
+      ]
+    }
+  ],
+  "removed_duplicate_files": [
+    "js/patch-02.js",
+    "js/patch-03.js",
+    "js/patch-04.js",
+    "js/patch-05.js",
+    "js/patch-06.js",
+    "js/patch-07.js",
+    "js/patch-08.js",
+    "js/patch-09.js",
+    "js/patch-10.js",
+    "js/patch-11.js",
+    "js/patch-12.js",
+    "js/patch-13.js",
+    "js/patch-14.js",
+    "js/patch-15.js",
+    "js/patch-16.js",
+    "js/patch-17.js",
+    "js/patch-18.js",
+    "js/patch-19.js",
+    "js/patch-20.js"
+  ],
+  "why_safe": [
+    "目前入口只載入 js/script-manifest.js 裡列出的檔案。",
+    "根目錄 js/patch-02.js 到 js/patch-20.js 沒有被 index.html 或 script-manifest.js 載入。",
+    "同一批舊補丁仍保留在 js/legacy/patches 裡，可供追溯。"
+  ],
+  "verified": [
+    "本機 HTTP 開啟首頁無 console error/warn。",
+    "重新整理後進入載入完成。",
+    "從選單進入怪物查詢可正常顯示資料。"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "version": "V226-reverse-formal-module",
+  "date": "2026-05-24",
+  "goal": "把掉落反查整理成單一正式模組，移除多層舊版覆蓋與額外補丁。",
+  "changed": [
+    {
+      "file": "js/pages/reverse-page.js",
+      "notes": [
+        "改為正式掉落反查模組。",
+        "搜尋來源固定為 ITEM.INI 載入後的 items。",
+        "詳細頁固定以道具 ID 查 dropReverse，也就是由 MONSTER_C.INI DropItem 建出的反查索引。",
+        "保留 SZO_REVERSE_MODULE 供後續檢查與 Python 編輯器使用。"
+      ]
+    },
+    {
+      "file": "js/script-manifest.js",
+      "notes": [
+        "移除 js/pages/reverse-search-dedupe.js 的載入。",
+        "掉落反查只由 js/pages/reverse-page.js 提供。"
+      ]
+    },
+    {
+      "file": "js/pages/reverse-search-dedupe.js",
+      "notes": [
+        "刪除已整併的補丁檔。"
+      ]
+    },
+    {
+      "file": "js/reverse.js / js/reverse-search-dedupe.js",
+      "notes": [
+        "刪除根目錄未載入的反查舊檔，避免與正式模組混淆。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V226-reverse-formal-module。"
+      ]
+    }
+  ],
+  "logic": [
+    "使用者輸入道具名稱或 ID。",
+    "reverse-page.js 搜尋 ITEM.INI 的 items。",
+    "使用者點選道具後，以 item.ID 查 dropReverse[item.ID]。",
+    "dropReverse 由 app-core.js 掃 MONSTER_C.INI 的 DropItem 建立。"
+  ]
+}

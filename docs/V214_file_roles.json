@@ -1,0 +1,13 @@
+{
+  "index.html": "純網頁入口，只放 appRoot 與 shell/manifest/loader。",
+  "js/shell.js": "網站外框、上方列、左側快速選單與主內容容器。",
+  "js/script-manifest.js": "唯一的 JS 載入順序設定。",
+  "js/script-loader.js": "依照 manifest 依序載入 JS，載完後啟動主程式。",
+  "js/core/": "核心初始化、共用設定、全域資料索引。",
+  "js/pages/": "各功能頁與功能增強，例如怪物、道具、反查、配方、收魂、最新清單。",
+  "js/data/": "大型內建資料，避免塞在核心程式裡。",
+  "js/legacy/patches/": "仍在使用的舊補丁，下一階段再逐步正式合併。",
+  "js/legacy/not-loaded/": "已不載入的舊版/實驗版檔案，保留備查但不參與網頁運作。",
+  "data/": "JSON 設定與未來框架修改器會讀寫的資料。",
+  "css/": "網站樣式。"
+}

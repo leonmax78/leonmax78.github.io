@@ -1,0 +1,18 @@
+{
+  "version": "V218",
+  "goal": "把 legacy patches 依功能分類，保留載入順序與原本程式碼，降低下一步合併回正式模組的風險。",
+  "groups": {
+    "equipment": "裝備合成、配方、安定值、飾品篩選、裝備能力顯示。",
+    "soul": "武魂資料與武魂頁補強。",
+    "auth": "授權按鈕與倒數狀態。免授權版仍保留但不主動影響。",
+    "monster": "怪物明細修正。",
+    "item": "道具明細與能力顯示修正。",
+    "safety": "button / anchor 預設行為保護。",
+    "jiangshen": "降神、星等、靈氣、經驗、修練、副降神比較與存檔。"
+  },
+  "next_steps": [
+    "確認 V218 功能正常後，再把 equipment patches 合併進 js/pages/compound-page.js 或 js/calc/compound-calc.js。",
+    "再把 jiangshen patches 合併進 js/pages/jiangshen-page.js 與 js/calc/jiangshen-calc.js。",
+    "最後移除 legacy/patches。"
+  ]
+}

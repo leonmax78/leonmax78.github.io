@@ -1,0 +1,37 @@
+{
+  "version": "V225-reverse-index-hotfix",
+  "date": "2026-05-24",
+  "problem": [
+    "V224 將裝備合成移到 js/pages/compound-page.js 後，COMPOUND.INI 解析依賴的 compGroupFromStable 等輔助函式漏搬。",
+    "資料載入在合成配方解析時中斷，導致 buildDataIndexes 沒有建立 itemIndex 與 dropReverse。",
+    "掉落反查可以搜尋到道具，但點進去沒有怪物掉落資料。"
+  ],
+  "fixed": [
+    {
+      "file": "js/pages/compound-page.js",
+      "notes": [
+        "補回 compTypeToDisplay、compGroupFromStable、compGroupLabel、compEffectList。",
+        "將這些輔助函式加入 SZO_COMPOUND_MODULE 方便後續檢查。"
+      ]
+    },
+    {
+      "file": "js/core/app-core.js",
+      "notes": [
+        "COMPOUND.INI 解析加上 try/catch 保護。",
+        "未來合成配方解析失敗時，改用備援資料，不再阻斷怪物、道具與掉落反查索引。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V225-reverse-index-hotfix。"
+      ]
+    }
+  ],
+  "verified": [
+    "首頁狀態可進入載入完成。",
+    "掉落反查搜尋 ID 20344 可找到跌打藥。",
+    "跌打藥反查可顯示 55 筆怪物掉落資料。",
+    "反查結果可顯示 MONSTER_C.INI 的掉落怪物，並搭配一般怪物位置.csv 顯示地點。"
+  ]
+}

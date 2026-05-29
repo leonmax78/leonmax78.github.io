@@ -1,0 +1,21 @@
+{
+  "version": "V238-restore-training-and-loading-text",
+  "goal": "Restore the old Chinese training calculator UI after V237 simplified it too much, and change the item/reverse loading screen back to Chinese.",
+  "changedFiles": [
+    "index.html",
+    "js/core/app-core.js"
+  ],
+  "trainingRestored": [
+    "Chinese title and labels",
+    "category filter",
+    "current and target level controls",
+    "all-to-max and clear-target buttons",
+    "material summary",
+    "stat gain summary",
+    "detail table"
+  ],
+  "loadingText": [
+    "Data loading screen now explains in Chinese that item, monster, and reverse-search data are loading.",
+    "Back button labels and manual-file alert are Chinese again."
+  ]
+}

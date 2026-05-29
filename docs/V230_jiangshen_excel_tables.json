@@ -1,0 +1,27 @@
+{
+  "version": "V230-jiangshen-excel-tables",
+  "date": "2026-05-25",
+  "goal": "修正降神星等、靈氣、等級經驗與經驗丹計算，改以使用者提供的 Excel 總表為基準。",
+  "sourceWorkbook": "C:\\Users\\Nicole\\Desktop\\降神試算表.xlsx",
+  "sourceSheets": [
+    "降神總表",
+    "靈氣總表",
+    "「經驗值總表」"
+  ],
+  "changes": [
+    "更新 data/jiangshen.json 與 js/data/jiangshen-data.js，補齊 Excel 匯出的 starSoulTable，並讓 starRequirements、auraTable、expTable 對齊 Excel 總表。",
+    "新增 js/features/jiangshen/excel-tables-fix.js，最後接管星等、靈氣、等級經驗與經驗丹計算。",
+    "星等需求改用累積表相減，例如 0 到 1 為 5，0 到 2 為 25，0 到 3 為 75。",
+    "靈氣需求改用靈氣總表累積值相減，不再用舊的線性估算公式。",
+    "等級經驗與經驗丹升等改用經驗值總表，並以 BigInt 處理大型經驗值。",
+    "更新 script-manifest.js 載入順序，確保 Excel 表格修正檔在舊降神模組之後載入。",
+    "更新 index.html data-version 為 V230-jiangshen-excel-tables。"
+  ],
+  "quickChecks": {
+    "star_0_to_1": 5,
+    "star_0_to_2": 25,
+    "star_0_to_3": 75,
+    "aura_0_to_10": 460,
+    "exp_1_to_2": 240
+  }
+}

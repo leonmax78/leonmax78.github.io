@@ -1,0 +1,32 @@
+[
+  {
+    "id": "home",
+    "title": "首頁",
+    "view": "home",
+    "module": "home"
+  },
+  {
+    "id": "jiang",
+    "title": "降神、經驗、修練試算",
+    "view": "jiang",
+    "module": "jiangshen"
+  },
+  {
+    "id": "monster",
+    "title": "怪物查詢",
+    "view": "monster",
+    "module": "monster"
+  },
+  {
+    "id": "item",
+    "title": "道具查詢",
+    "view": "item",
+    "module": "item"
+  },
+  {
+    "id": "soul",
+    "title": "武魂能力試算",
+    "view": "soul",
+    "module": "soul"
+  }
+]

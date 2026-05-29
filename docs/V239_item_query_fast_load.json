@@ -1,0 +1,19 @@
+{
+  "version": "V239-item-query-fast-load",
+  "goal": "Make item search open faster and avoid looking broken while the large monster data is still loading.",
+  "changedFiles": [
+    "index.html",
+    "js/core/app-core.js",
+    "js/pages/item-page.js"
+  ],
+  "changes": [
+    "Added ensureItemDataLoaded() for ITEM.INI, MAGIC.INI, and STATUS.INI only.",
+    "Item search now loads item data without loading MONSTER_C.INI.",
+    "Reverse lookup still loads the full item + monster drop data because it needs DropItem.",
+    "Loading screens were changed back to Chinese."
+  ],
+  "verification": [
+    "JavaScript syntax validation passed.",
+    "Local INI parse check passed for MONSTER_C.INI, ITEM.INI, MAGIC.INI, and STATUS.INI."
+  ]
+}

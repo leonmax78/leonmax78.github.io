@@ -1,0 +1,29 @@
+{
+  "version": "V236-jiangshen-star-owned-label",
+  "goal": "Make the jiangshen star result clearer when owned souls and multiplier are both entered.",
+  "changedFiles": [
+    "js/features/jiangshen/excel-tables-fix.js",
+    "js/features/jiangshen/star-aura-page.js",
+    "js/features/jiangshen/star-exp-training.js",
+    "index.html"
+  ],
+  "before": {
+    "example": "0 star to 2 star, owned 3, multiplier 2",
+    "display": [
+      "累積需求 25",
+      "扣除已有 22",
+      "倍率後還需 11"
+    ],
+    "issue": "The label looked like it was showing the deducted amount, but it was actually showing the remaining amount after owned souls."
+  },
+  "after": {
+    "example": "0 star to 2 star, owned 3, multiplier 2",
+    "display": [
+      "累積需求 25",
+      "已有數量 3",
+      "扣除已有後 22",
+      "倍率後還需 11"
+    ],
+    "formula": "ceil(max(0, cumulativeNeed - owned) / multiplier)"
+  }
+}
