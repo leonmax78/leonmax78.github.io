@@ -38,6 +38,7 @@ let jiangshenToolReady=false;
 let jiangshenSetDelegating=false;
 const lazyScriptLoads={};
 const dataBundleLoads={};
+const lazyScriptGroupLoads={};
 
 function loadScriptOnce(src){
  if(!src)return Promise.resolve();
@@ -58,6 +59,56 @@ function loadScriptOnce(src){
   document.body.appendChild(s);
  });
  return lazyScriptLoads[src];
+}
+
+async function loadScriptGroupOnce(groupName){
+ const groups=window.SZO_SCRIPT_GROUPS||{};
+ const list=groups[groupName]||[];
+ if(!list.length)return true;
+ if(lazyScriptGroupLoads[groupName])return lazyScriptGroupLoads[groupName];
+ lazyScriptGroupLoads[groupName]=(async()=>{
+  for(const src of list)await loadScriptOnce(src);
+  return true;
+ })();
+ return lazyScriptGroupLoads[groupName];
+}
+window.loadScriptGroupOnce = loadScriptGroupOnce;
+
+async function ensurePageScriptsLoaded(){
+ if(typeof window.renderMonsterPage==='function'&&typeof window.renderItemPage==='function'&&typeof window.renderShopPage==='function'&&typeof window.renderCollectBookPage==='function')return true;
+ return await loadScriptGroupOnce('pages');
+}
+window.ensurePageScriptsLoaded = ensurePageScriptsLoaded;
+
+function prefetchResourceOnce(href,asType){
+ if(!href||document.querySelector(`link[data-szo-prefetch="${href}"]`))return;
+ const link=document.createElement('link');
+ link.rel='prefetch';
+ link.href=href;
+ if(asType)link.as=asType;
+ link.dataset.szoPrefetch=href;
+ document.head.appendChild(link);
+}
+
+function scheduleIdleTask(fn,delay=1200){
+ const run=()=>{try{fn();}catch(e){console.warn('idle task failed',e);}};
+ if('requestIdleCallback' in window)window.requestIdleCallback(run,{timeout:delay+2500});
+ else setTimeout(run,delay);
+}
+
+function prefetchLookupBundles(){
+ const version=document.body?.dataset?.version||'dev';
+ const files=['data/search_index.bundle.js','data/monsters.bundle.js','data/items.bundle.js','data/drop_reverse.bundle.js','data/magic.bundle.js','data/locations.bundle.js','data/status.bundle.js'];
+ files.forEach(src=>{
+  const join=src.includes('?')?'&':'?';
+  prefetchResourceOnce(`${src}${join}v=${encodeURIComponent(version)}`,'script');
+ });
+}
+
+function warmLookupDataInBackground(){
+ if(mainDataReady||mainDataLoadPromise)return;
+ if(navigator.connection&&navigator.connection.saveData)return;
+ scheduleIdleTask(()=>ensureLookupDataLoaded().then(()=>{if(currentView==='home')renderHome();}),1800);
 }
 
 // V210d: keep shared data references synced for extracted modules.
@@ -145,7 +196,8 @@ async function setView(view){
  else if(view==='jiang'){openJiangMenuOnly();}
  else if(view==='monster'){renderMonsterPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='item'){openItemMenuOnly();}
- else if(view==='shop'){if(typeof renderShopPage==='function')renderShopPage();}
+ else if(view==='collect'){await ensurePageScriptsLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('weapon');}
+ else if(view==='shop'){await ensurePageScriptsLoaded(); if(typeof renderShopPage==='function')renderShopPage();}
  else if(view==='soul'){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));
@@ -1106,7 +1158,7 @@ function backButtonHTML(view){
 function initEvents(){
  byId('openMenuBtn').onclick=openDrawer;byId('closeMenuBtn').onclick=closeDrawer;byId('backdrop').onclick=closeDrawer;
  document.addEventListener('change',e=>{if(e.target.classList&&e.target.classList.contains('jsSupportName'))updateSupportOptions(); if(e.target.classList&&(e.target.classList.contains('trainCur')||e.target.classList.contains('trainTar'))){clampTrainingInputs(); updateTrainingNeeds();}});
- document.addEventListener('click',e=>{const v=e.target.closest('[data-view]')?.dataset.view;if(v){if(v==='jiang')openJiangMenuOnly();else setView(v);}const o=e.target.closest('[data-open]')?.dataset.open;if(o){setView(o);if(window.innerWidth<980)openDrawer()}const jo=e.target.closest('[data-jiang-open]')?.dataset.jiangOpen;if(jo){setJiang(jo)}const io=e.target.closest('[data-item-open]')?.dataset.itemOpen;if(io){setItemSub(io)}const jk=e.target.closest('[data-jiang]')?.dataset.jiang;if(jk)setJiang(jk);const mid=e.target.closest('[data-monster]')?.dataset.monster;if(mid){e.preventDefault();e.stopPropagation();showMonster(mid);return;}const iid=e.target.closest('[data-item]')?.dataset.item;if(iid)showItem(iid);const rid=e.target.closest('[data-rev]')?.dataset.rev;if(rid)showReverse(rid);const rr=e.target.closest('[data-reverse-item]')?.dataset.reverseItem;if(rr)showReverse(rr);const equid=e.target.closest('[data-eq-uid]')?.dataset.eqUid;if(equid){openEquipmentSim(equid);}const eg=e.target.closest('[data-eq-group]')?.dataset.eqGroup;if(eg){eqRenderPreview();}const er=e.target.closest('[data-eq-recipe]')?.dataset.eqRecipe;if(er){eqToggleRecipe(er);}const esr=e.target.closest('[data-eq-sim-recipe]')?.dataset.eqSimRecipe;if(esr){eqSimToggleRecipe(esr);}if(e.target.classList&&e.target.classList.contains('jsSupportName'))updateSupportOptions();if(e.target.id==='calcSupport')calcSupport();if(e.target.id==='calcCompare')calcCompare();if(e.target.id==='calcStars')calcStars();if(e.target.id==='calcNeeds')calcNeeds();if(e.target.id==='calcStarAura')calcStarAura();if(e.target.id==='calcExpNeed')calcExpNeed();if(e.target.id==='calcEatPill')calcEatPill();if(e.target.id==='calcTraining')calcTraining();if(e.target.id==='eqShowMaterials')showEquipmentMaterials();if(e.target.id==='eqBackToSim')eqRenderPreview();if(e.target.id==='eqBackToList')renderEquipmentCompoundPage();if(e.target.id==='eqOpenRandom')renderEquipmentRandomPage();if(e.target.id==='eqSimOnce'){eqRandomOnce();renderEquipmentRandomPage(true);}if(e.target.id==='eqSimClear'){const keep=Object.assign({},eqState.simSelectedRecipes||{});eqResetRandom(false);eqState.simSelectedRecipes=keep;renderEquipmentRandomPage(true);}if(e.target.id==='trainCurrentZero'||e.target.id==='trainAllMax')setTrainingCurrentZero();if(e.target.id==='trainCurrentMax'||e.target.id==='trainClear')setTrainingCurrentMax();const et=e.target.closest('[data-exp-tab]');if(et){document.querySelectorAll('.calcTab').forEach(b=>b.classList.remove('active'));et.classList.add('active');byId('expTabNeed').style.display=et.dataset.expTab==='need'?'block':'none';byId('expTabEat').style.display=et.dataset.expTab==='eat'?'block':'none';}});
+ document.addEventListener('click',e=>{const v=e.target.closest('[data-view]')?.dataset.view;if(v){if(v==='jiang')openJiangMenuOnly();else setView(v);}const o=e.target.closest('[data-open]')?.dataset.open;if(o){setView(o);if(window.innerWidth<980)openDrawer()}const jo=e.target.closest('[data-jiang-open]')?.dataset.jiangOpen;if(jo){setJiang(jo)}const io=e.target.closest('[data-item-open]')?.dataset.itemOpen;if(io){setItemSub(io)}const co=e.target.closest('[data-collect-open]')?.dataset.collectOpen;if(co){ensurePageScriptsLoaded().then(()=>{if(typeof renderCollectBookPage==='function')renderCollectBookPage(co);});}const jk=e.target.closest('[data-jiang]')?.dataset.jiang;if(jk)setJiang(jk);const mid=e.target.closest('[data-monster]')?.dataset.monster;if(mid){e.preventDefault();e.stopPropagation();showMonster(mid);return;}const iid=e.target.closest('[data-item]')?.dataset.item;if(iid)showItem(iid);const rid=e.target.closest('[data-rev]')?.dataset.rev;if(rid)showReverse(rid);const rr=e.target.closest('[data-reverse-item]')?.dataset.reverseItem;if(rr)showReverse(rr);const equid=e.target.closest('[data-eq-uid]')?.dataset.eqUid;if(equid){openEquipmentSim(equid);}const eg=e.target.closest('[data-eq-group]')?.dataset.eqGroup;if(eg){eqRenderPreview();}const er=e.target.closest('[data-eq-recipe]')?.dataset.eqRecipe;if(er){eqToggleRecipe(er);}const esr=e.target.closest('[data-eq-sim-recipe]')?.dataset.eqSimRecipe;if(esr){eqSimToggleRecipe(esr);}if(e.target.classList&&e.target.classList.contains('jsSupportName'))updateSupportOptions();if(e.target.id==='calcSupport')calcSupport();if(e.target.id==='calcCompare')calcCompare();if(e.target.id==='calcStars')calcStars();if(e.target.id==='calcNeeds')calcNeeds();if(e.target.id==='calcStarAura')calcStarAura();if(e.target.id==='calcExpNeed')calcExpNeed();if(e.target.id==='calcEatPill')calcEatPill();if(e.target.id==='calcTraining')calcTraining();if(e.target.id==='eqShowMaterials')showEquipmentMaterials();if(e.target.id==='eqBackToSim')eqRenderPreview();if(e.target.id==='eqBackToList')renderEquipmentCompoundPage();if(e.target.id==='eqOpenRandom')renderEquipmentRandomPage();if(e.target.id==='eqSimOnce'){eqRandomOnce();renderEquipmentRandomPage(true);}if(e.target.id==='eqSimClear'){const keep=Object.assign({},eqState.simSelectedRecipes||{});eqResetRandom(false);eqState.simSelectedRecipes=keep;renderEquipmentRandomPage(true);}if(e.target.id==='trainCurrentZero'||e.target.id==='trainAllMax')setTrainingCurrentZero();if(e.target.id==='trainCurrentMax'||e.target.id==='trainClear')setTrainingCurrentMax();const et=e.target.closest('[data-exp-tab]');if(et){document.querySelectorAll('.calcTab').forEach(b=>b.classList.remove('active'));et.classList.add('active');byId('expTabNeed').style.display=et.dataset.expTab==='need'?'block':'none';byId('expTabEat').style.display=et.dataset.expTab==='eat'?'block':'none';}});
  ['monsterQ','monsterMin','monsterMax'].forEach(id=>{const el=byId(id); if(el)el.addEventListener('input',searchMonsters);});
  
  

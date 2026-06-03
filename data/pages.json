@@ -28,5 +28,11 @@
     "title": "武魂能力試算",
     "view": "soul",
     "module": "soul"
+  },
+  {
+    "id": "collect",
+    "title": "武冠收錄資料",
+    "view": "collect",
+    "module": "collectbook"
   }
 ]

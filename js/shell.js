@@ -28,7 +28,6 @@
       </div>
       <button class="navBtn major" data-view="monster">怪物查詢 <span>›</span></button>
       <button class="navBtn major" data-view="item">道具查詢 <span>›</span></button>
-      <button class="navBtn major" data-view="shop">商店販賣資訊 <span>›</span></button>
       <div class="formBox" id="itemForm">
         <div class="subMenuNote">道具相關功能</div>
         <button class="navBtn sub" data-item-open="item">道具查詢 <span>›</span></button>
@@ -36,6 +35,15 @@
         <button class="navBtn sub" data-item-open="compound">裝備合成模擬 <span>›</span></button>
       </div>
       <button class="navBtn major" data-view="soul">武魂能力試算 <span>›</span></button>
+      <button class="navBtn major" data-view="collect">武冠收錄資料 <span>›</span></button>
+      <div class="formBox" id="collectForm">
+        <div class="subMenuNote">武冠收錄資料</div>
+        <button class="navBtn sub" data-collect-open="weapon">武防出處 <span>›</span></button>
+        <button class="navBtn sub" data-collect-open="artifact">法器出處 <span>›</span></button>
+        <button class="navBtn sub" data-collect-open="recipe">配方出處 <span>›</span></button>
+        <button class="navBtn sub" data-collect-open="beast">封獸出處 <span>›</span></button>
+      </div>
+      <button class="navBtn major" data-view="shop">商店販賣資訊 <span>›</span></button>
     </div>
     <div class="navGroup" id="manualGroup" style="display:none">
       <div class="navTitle">備用手動載入</div>

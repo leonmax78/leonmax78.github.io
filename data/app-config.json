@@ -37,6 +37,16 @@
       "id": "soul",
       "label": "武魂能力試算",
       "enabled": true
+    },
+    {
+      "id": "collect",
+      "label": "武冠收錄資料",
+      "enabled": true
+    },
+    {
+      "id": "shop",
+      "label": "商店販賣資訊",
+      "enabled": true
     }
   ],
   "theme": {
