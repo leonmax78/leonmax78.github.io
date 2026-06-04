@@ -1,0 +1,32 @@
+{
+  "version": "V235-root-duplicates-archive",
+  "goal": "Archive root-level duplicate JavaScript files that are no longer loaded by index.html or the script manifest.",
+  "archivedTo": "js/legacy/not-loaded/root-duplicates-v235/",
+  "archivedFiles": [
+    "js/app.js",
+    "js/app-core.js",
+    "js/compound.js",
+    "js/config-loader.js",
+    "js/item.js",
+    "js/item-search.js",
+    "js/jiangshen.js",
+    "js/latest-list.js",
+    "js/monster.js",
+    "js/soul.js"
+  ],
+  "keptActiveEntryFiles": [
+    "js/shell.js",
+    "js/script-manifest.js",
+    "js/script-loader.js"
+  ],
+  "notes": [
+    "The archived files were not referenced by index.html or active script manifest groups.",
+    "Matching search hits left in js/core/app-core.js are migration comments only.",
+    "Files were moved to archive instead of deleted so they can be restored if needed."
+  ],
+  "verification": [
+    "Confirmed each active manifest script still exists.",
+    "Confirmed initial manifest still excludes large jiangshen and training data.",
+    "Confirmed no active index.html or script-manifest.js reference points to the archived root files."
+  ]
+}

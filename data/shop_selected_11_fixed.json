@@ -1,0 +1,3246 @@
+{
+  "version": "shop_selected_11_fixed_v2",
+  "description": "指定11筆特殊商店，欄位保留網頁需要的物品、販售價格、回收價格。sellPrice或buyPrice為null代表該商店未提供該方向價格。",
+  "shops": [
+    {
+      "shopId": 430,
+      "shopName": "火雲洞府特殊商人",
+      "items": [
+        {
+          "itemId": 32179,
+          "name": "霹靂英雄戰旗",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29862,
+          "name": "武魂碎片：紅夜叉",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23019,
+          "name": "武魂碎片：慕容智",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23066,
+          "name": "五鎖仙器錦囊",
+          "sellPrice": 1000000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26911,
+          "name": "七寶仙咒",
+          "sellPrice": 7000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 27450,
+          "name": "通寶園遊券",
+          "sellPrice": 60000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 20417,
+          "name": "靈咒符石",
+          "sellPrice": 50000,
+          "buyPrice": 15000
+        },
+        {
+          "itemId": 21410,
+          "name": "驃騎將軍印信",
+          "sellPrice": 4000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 21907,
+          "name": "金玉寶珠",
+          "sellPrice": 6000000,
+          "buyPrice": 60000
+        },
+        {
+          "itemId": 22400,
+          "name": "練功符",
+          "sellPrice": 500000,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 22706,
+          "name": "劍仙戰符",
+          "sellPrice": 500000,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 22707,
+          "name": "龍女戰符",
+          "sellPrice": 500000,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 22781,
+          "name": "七曜符石",
+          "sellPrice": 1500000,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 21878,
+          "name": "水晶鑽",
+          "sellPrice": 8000000,
+          "buyPrice": 80000
+        },
+        {
+          "itemId": 21889,
+          "name": "紅水晶鑽",
+          "sellPrice": 8000000,
+          "buyPrice": 80000
+        },
+        {
+          "itemId": 23291,
+          "name": "朱雀靈丹",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 24223,
+          "name": "覺醒散",
+          "sellPrice": 100000,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 24392,
+          "name": "奇跡靈符袋",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25258,
+          "name": "七星封甕配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25289,
+          "name": "八卦封甕配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25410,
+          "name": "九如封甕配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 24542,
+          "name": "經典法器錦囊",
+          "sellPrice": 3000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24680,
+          "name": "真知教幣",
+          "sellPrice": 1000,
+          "buyPrice": 100
+        },
+        {
+          "itemId": 24788,
+          "name": "侯利商行獎券",
+          "sellPrice": 1250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24999,
+          "name": "聖稜水晶瓶",
+          "sellPrice": 500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26424,
+          "name": "十錦集字包裹",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30096,
+          "name": "背包擴充卷",
+          "sellPrice": 15000000,
+          "buyPrice": 1500000
+        },
+        {
+          "itemId": 28634,
+          "name": "終末星質",
+          "sellPrice": 125000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28266,
+          "name": "降神魂元百寶盒",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28739,
+          "name": "天俠無限經典福袋",
+          "sellPrice": 9000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28179,
+          "name": "悟心降魂玉",
+          "sellPrice": 30000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25508,
+          "name": "剛朕配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24786,
+          "name": "天藏太古神兵聖箱",
+          "sellPrice": 95000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30724,
+          "name": "九天太古神兵聖箱",
+          "sellPrice": 255000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29820,
+          "name": "煌星戰憶經典福袋",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30941,
+          "name": "稀奇裝備箱．乙式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25580,
+          "name": "耀巍配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26161,
+          "name": "帝國金幣",
+          "sellPrice": null,
+          "buyPrice": 125
+        },
+        {
+          "itemId": 26654,
+          "name": "九天霜岩",
+          "sellPrice": null,
+          "buyPrice": 30
+        },
+        {
+          "itemId": 27192,
+          "name": "無限元石",
+          "sellPrice": null,
+          "buyPrice": 160
+        },
+        {
+          "itemId": 27789,
+          "name": "御時殘晶",
+          "sellPrice": null,
+          "buyPrice": 200
+        },
+        {
+          "itemId": 28238,
+          "name": "虛空結晶",
+          "sellPrice": null,
+          "buyPrice": 250
+        },
+        {
+          "itemId": 28251,
+          "name": "虛焰餘燼",
+          "sellPrice": null,
+          "buyPrice": 12
+        },
+        {
+          "itemId": 29065,
+          "name": "生命源石",
+          "sellPrice": null,
+          "buyPrice": 275
+        },
+        {
+          "itemId": 23047,
+          "name": "龍脈石",
+          "sellPrice": null,
+          "buyPrice": 300
+        },
+        {
+          "itemId": 29891,
+          "name": "檀君灸草",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30540,
+          "name": "雲母岩",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30758,
+          "name": "花崗石",
+          "sellPrice": null,
+          "buyPrice": 395
+        }
+      ]
+    },
+    {
+      "shopId": 432,
+      "shopName": "古北大營特殊商人",
+      "items": [
+        {
+          "itemId": 32179,
+          "name": "霹靂英雄戰旗",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29862,
+          "name": "武魂碎片：紅夜叉",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23019,
+          "name": "武魂碎片：慕容智",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23066,
+          "name": "五鎖仙器錦囊",
+          "sellPrice": 1000000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29971,
+          "name": "武冠兵甲摸彩券",
+          "sellPrice": 75000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 20128,
+          "name": "天鐵",
+          "sellPrice": 12000,
+          "buyPrice": 240
+        },
+        {
+          "itemId": 21410,
+          "name": "驃騎將軍印信",
+          "sellPrice": 4000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 21828,
+          "name": "天師符咒",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 21907,
+          "name": "金玉寶珠",
+          "sellPrice": 6000000,
+          "buyPrice": 60000
+        },
+        {
+          "itemId": 22199,
+          "name": "四聖諦碎片",
+          "sellPrice": 1250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 22400,
+          "name": "練功符",
+          "sellPrice": 500000,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 23803,
+          "name": "麒麟靈丹",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 23434,
+          "name": "鋼粹之心",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23245,
+          "name": "風之查克拉印",
+          "sellPrice": 250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23246,
+          "name": "火之查克拉印",
+          "sellPrice": 250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23250,
+          "name": "天之查克拉印",
+          "sellPrice": 250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30006,
+          "name": "贖罪丹",
+          "sellPrice": 1000000,
+          "buyPrice": 10000
+        },
+        {
+          "itemId": 24392,
+          "name": "奇跡靈符袋",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25258,
+          "name": "七星封甕配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25289,
+          "name": "八卦封甕配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25410,
+          "name": "九如封甕配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 24543,
+          "name": "懷古法器錦囊",
+          "sellPrice": 3000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24680,
+          "name": "真知教幣",
+          "sellPrice": 1000,
+          "buyPrice": 100
+        },
+        {
+          "itemId": 24787,
+          "name": "迎龍錦囊",
+          "sellPrice": 6000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24999,
+          "name": "聖稜水晶瓶",
+          "sellPrice": 500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26424,
+          "name": "十錦集字包裹",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30096,
+          "name": "背包擴充卷",
+          "sellPrice": 15000000,
+          "buyPrice": 1500000
+        },
+        {
+          "itemId": 24658,
+          "name": "百慧靈晶",
+          "sellPrice": 1000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28266,
+          "name": "降神魂元百寶盒",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28739,
+          "name": "天俠無限經典福袋",
+          "sellPrice": 9000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28179,
+          "name": "悟心降魂玉",
+          "sellPrice": 30000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25508,
+          "name": "剛朕配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24786,
+          "name": "天藏太古神兵聖箱",
+          "sellPrice": 95000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30723,
+          "name": "帝國太古神兵聖箱",
+          "sellPrice": 180000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29212,
+          "name": "仙星紀念經典福袋",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30941,
+          "name": "稀奇裝備箱．乙式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25585,
+          "name": "恆闊配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26161,
+          "name": "帝國金幣",
+          "sellPrice": null,
+          "buyPrice": 125
+        },
+        {
+          "itemId": 26654,
+          "name": "九天霜岩",
+          "sellPrice": null,
+          "buyPrice": 30
+        },
+        {
+          "itemId": 27192,
+          "name": "無限元石",
+          "sellPrice": null,
+          "buyPrice": 160
+        },
+        {
+          "itemId": 27789,
+          "name": "御時殘晶",
+          "sellPrice": null,
+          "buyPrice": 200
+        },
+        {
+          "itemId": 28238,
+          "name": "虛空結晶",
+          "sellPrice": null,
+          "buyPrice": 250
+        },
+        {
+          "itemId": 28251,
+          "name": "虛焰餘燼",
+          "sellPrice": null,
+          "buyPrice": 12
+        },
+        {
+          "itemId": 29065,
+          "name": "生命源石",
+          "sellPrice": null,
+          "buyPrice": 275
+        },
+        {
+          "itemId": 23047,
+          "name": "龍脈石",
+          "sellPrice": null,
+          "buyPrice": 300
+        },
+        {
+          "itemId": 29891,
+          "name": "檀君灸草",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30540,
+          "name": "雲母岩",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30758,
+          "name": "花崗石",
+          "sellPrice": null,
+          "buyPrice": 395
+        }
+      ]
+    },
+    {
+      "shopId": 433,
+      "shopName": "蠱毒洞府特殊商人",
+      "items": [
+        {
+          "itemId": 32179,
+          "name": "霹靂英雄戰旗",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29862,
+          "name": "武魂碎片：紅夜叉",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23019,
+          "name": "武魂碎片：慕容智",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23066,
+          "name": "五鎖仙器錦囊",
+          "sellPrice": 1000000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29971,
+          "name": "武冠兵甲摸彩券",
+          "sellPrice": 75000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 20129,
+          "name": "靈木",
+          "sellPrice": 40000,
+          "buyPrice": 800
+        },
+        {
+          "itemId": 21291,
+          "name": "黑龍鱗片",
+          "sellPrice": 3000000,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 21410,
+          "name": "驃騎將軍印信",
+          "sellPrice": 4000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 21824,
+          "name": "天神符咒",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 22454,
+          "name": "修裝助手",
+          "sellPrice": 300000,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 22569,
+          "name": "天照珠玉",
+          "sellPrice": 1000000,
+          "buyPrice": 10000
+        },
+        {
+          "itemId": 22413,
+          "name": "白虎釀",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 22414,
+          "name": "玄武漿",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 22415,
+          "name": "青龍涎",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 22416,
+          "name": "朱雀血",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 21893,
+          "name": "灰水晶鑽",
+          "sellPrice": 8000000,
+          "buyPrice": 80000
+        },
+        {
+          "itemId": 25393,
+          "name": "聖獸血魄配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 23290,
+          "name": "青龍靈丹",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 24223,
+          "name": "覺醒散",
+          "sellPrice": 100000,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 24392,
+          "name": "奇跡靈符袋",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25258,
+          "name": "七星封甕配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25289,
+          "name": "八卦封甕配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25410,
+          "name": "九如封甕配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 24542,
+          "name": "經典法器錦囊",
+          "sellPrice": 3000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24680,
+          "name": "真知教幣",
+          "sellPrice": 1000,
+          "buyPrice": 100
+        },
+        {
+          "itemId": 24788,
+          "name": "侯利商行獎券",
+          "sellPrice": 1250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24999,
+          "name": "聖稜水晶瓶",
+          "sellPrice": 500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26424,
+          "name": "十錦集字包裹",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30096,
+          "name": "背包擴充卷",
+          "sellPrice": 15000000,
+          "buyPrice": 1500000
+        },
+        {
+          "itemId": 28634,
+          "name": "終末星質",
+          "sellPrice": 125000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28266,
+          "name": "降神魂元百寶盒",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28739,
+          "name": "天俠無限經典福袋",
+          "sellPrice": 9000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28179,
+          "name": "悟心降魂玉",
+          "sellPrice": 30000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25508,
+          "name": "剛朕配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24786,
+          "name": "天藏太古神兵聖箱",
+          "sellPrice": 95000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30722,
+          "name": "波斯太古神兵聖箱",
+          "sellPrice": 135000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29212,
+          "name": "仙星紀念經典福袋",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30942,
+          "name": "稀奇裝備箱．丙式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25584,
+          "name": "恆彌配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23856,
+          "name": "天神符咒",
+          "sellPrice": null,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 26161,
+          "name": "帝國金幣",
+          "sellPrice": null,
+          "buyPrice": 125
+        },
+        {
+          "itemId": 26654,
+          "name": "九天霜岩",
+          "sellPrice": null,
+          "buyPrice": 30
+        },
+        {
+          "itemId": 27192,
+          "name": "無限元石",
+          "sellPrice": null,
+          "buyPrice": 160
+        },
+        {
+          "itemId": 27789,
+          "name": "御時殘晶",
+          "sellPrice": null,
+          "buyPrice": 200
+        },
+        {
+          "itemId": 27830,
+          "name": "天神符咒",
+          "sellPrice": null,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 28238,
+          "name": "虛空結晶",
+          "sellPrice": null,
+          "buyPrice": 250
+        },
+        {
+          "itemId": 28251,
+          "name": "虛焰餘燼",
+          "sellPrice": null,
+          "buyPrice": 12
+        },
+        {
+          "itemId": 29065,
+          "name": "生命源石",
+          "sellPrice": null,
+          "buyPrice": 275
+        },
+        {
+          "itemId": 23047,
+          "name": "龍脈石",
+          "sellPrice": null,
+          "buyPrice": 300
+        },
+        {
+          "itemId": 29891,
+          "name": "檀君灸草",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30540,
+          "name": "雲母岩",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30758,
+          "name": "花崗石",
+          "sellPrice": null,
+          "buyPrice": 395
+        }
+      ]
+    },
+    {
+      "shopId": 435,
+      "shopName": "統萬大營特殊商人",
+      "items": [
+        {
+          "itemId": 32179,
+          "name": "霹靂英雄戰旗",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29862,
+          "name": "武魂碎片：紅夜叉",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23019,
+          "name": "武魂碎片：慕容智",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23066,
+          "name": "五鎖仙器錦囊",
+          "sellPrice": 1000000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26911,
+          "name": "七寶仙咒",
+          "sellPrice": 7000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 27450,
+          "name": "通寶園遊券",
+          "sellPrice": 60000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 20124,
+          "name": "丹晶",
+          "sellPrice": 12000,
+          "buyPrice": 240
+        },
+        {
+          "itemId": 21410,
+          "name": "驃騎將軍印信",
+          "sellPrice": 4000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 22454,
+          "name": "修裝助手",
+          "sellPrice": 300000,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 23470,
+          "name": "幻煞符咒",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 23288,
+          "name": "玄武靈丹",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 23247,
+          "name": "水之查克拉印",
+          "sellPrice": 250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23248,
+          "name": "土之查克拉印",
+          "sellPrice": 250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23249,
+          "name": "木之查克拉印",
+          "sellPrice": 250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30006,
+          "name": "贖罪丹",
+          "sellPrice": 1000000,
+          "buyPrice": 10000
+        },
+        {
+          "itemId": 24392,
+          "name": "奇跡靈符袋",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25258,
+          "name": "七星封甕配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25289,
+          "name": "八卦封甕配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25410,
+          "name": "九如封甕配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 24543,
+          "name": "懷古法器錦囊",
+          "sellPrice": 3000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24680,
+          "name": "真知教幣",
+          "sellPrice": 1000,
+          "buyPrice": 100
+        },
+        {
+          "itemId": 24787,
+          "name": "迎龍錦囊",
+          "sellPrice": 6000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24999,
+          "name": "聖稜水晶瓶",
+          "sellPrice": 500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26424,
+          "name": "十錦集字包裹",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30096,
+          "name": "背包擴充卷",
+          "sellPrice": 15000000,
+          "buyPrice": 1500000
+        },
+        {
+          "itemId": 24658,
+          "name": "百慧靈晶",
+          "sellPrice": 1000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28266,
+          "name": "降神魂元百寶盒",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28739,
+          "name": "天俠無限經典福袋",
+          "sellPrice": 9000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28179,
+          "name": "悟心降魂玉",
+          "sellPrice": 30000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25508,
+          "name": "剛朕配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24786,
+          "name": "天藏太古神兵聖箱",
+          "sellPrice": 95000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30724,
+          "name": "九天太古神兵聖箱",
+          "sellPrice": 255000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29820,
+          "name": "煌星戰憶經典福袋",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30942,
+          "name": "稀奇裝備箱．丙式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25584,
+          "name": "恆彌配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26161,
+          "name": "帝國金幣",
+          "sellPrice": null,
+          "buyPrice": 125
+        },
+        {
+          "itemId": 26654,
+          "name": "九天霜岩",
+          "sellPrice": null,
+          "buyPrice": 30
+        },
+        {
+          "itemId": 27192,
+          "name": "無限元石",
+          "sellPrice": null,
+          "buyPrice": 160
+        },
+        {
+          "itemId": 27789,
+          "name": "御時殘晶",
+          "sellPrice": null,
+          "buyPrice": 200
+        },
+        {
+          "itemId": 28238,
+          "name": "虛空結晶",
+          "sellPrice": null,
+          "buyPrice": 250
+        },
+        {
+          "itemId": 28251,
+          "name": "虛焰餘燼",
+          "sellPrice": null,
+          "buyPrice": 12
+        },
+        {
+          "itemId": 29065,
+          "name": "生命源石",
+          "sellPrice": null,
+          "buyPrice": 275
+        },
+        {
+          "itemId": 23047,
+          "name": "龍脈石",
+          "sellPrice": null,
+          "buyPrice": 300
+        },
+        {
+          "itemId": 29891,
+          "name": "檀君灸草",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30540,
+          "name": "雲母岩",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30758,
+          "name": "花崗石",
+          "sellPrice": null,
+          "buyPrice": 395
+        }
+      ]
+    },
+    {
+      "shopId": 436,
+      "shopName": "怒雪洞府特殊商人",
+      "items": [
+        {
+          "itemId": 32179,
+          "name": "霹靂英雄戰旗",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29862,
+          "name": "武魂碎片：紅夜叉",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23019,
+          "name": "武魂碎片：慕容智",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23066,
+          "name": "五鎖仙器錦囊",
+          "sellPrice": 1000000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26911,
+          "name": "七寶仙咒",
+          "sellPrice": 7000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 27450,
+          "name": "通寶園遊券",
+          "sellPrice": 60000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 20323,
+          "name": "天神符石",
+          "sellPrice": 2000000,
+          "buyPrice": 40000
+        },
+        {
+          "itemId": 21192,
+          "name": "縮地卷軸",
+          "sellPrice": 200000,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 21410,
+          "name": "驃騎將軍印信",
+          "sellPrice": 4000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 21827,
+          "name": "狂戰符咒",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 21878,
+          "name": "水晶鑽",
+          "sellPrice": 8000000,
+          "buyPrice": 80000
+        },
+        {
+          "itemId": 21897,
+          "name": "青水晶鑽",
+          "sellPrice": 8000000,
+          "buyPrice": 80000
+        },
+        {
+          "itemId": 23289,
+          "name": "白虎靈丹",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 24223,
+          "name": "覺醒散",
+          "sellPrice": 100000,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 24392,
+          "name": "奇跡靈符袋",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25258,
+          "name": "七星封甕配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25289,
+          "name": "八卦封甕配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25410,
+          "name": "九如封甕配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 24542,
+          "name": "經典法器錦囊",
+          "sellPrice": 3000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24680,
+          "name": "真知教幣",
+          "sellPrice": 1000,
+          "buyPrice": 100
+        },
+        {
+          "itemId": 24788,
+          "name": "侯利商行獎券",
+          "sellPrice": 1250000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24999,
+          "name": "聖稜水晶瓶",
+          "sellPrice": 500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26424,
+          "name": "十錦集字包裹",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30096,
+          "name": "背包擴充卷",
+          "sellPrice": 15000000,
+          "buyPrice": 1500000
+        },
+        {
+          "itemId": 28634,
+          "name": "終末星質",
+          "sellPrice": 125000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28266,
+          "name": "降神魂元百寶盒",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28739,
+          "name": "天俠無限經典福袋",
+          "sellPrice": 9000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28179,
+          "name": "悟心降魂玉",
+          "sellPrice": 30000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25508,
+          "name": "剛朕配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24786,
+          "name": "天藏太古神兵聖箱",
+          "sellPrice": 95000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30723,
+          "name": "帝國太古神兵聖箱",
+          "sellPrice": 180000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29820,
+          "name": "煌星戰憶經典福袋",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30940,
+          "name": "稀奇裝備箱．甲式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25585,
+          "name": "恆闊配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26161,
+          "name": "帝國金幣",
+          "sellPrice": null,
+          "buyPrice": 125
+        },
+        {
+          "itemId": 26654,
+          "name": "九天霜岩",
+          "sellPrice": null,
+          "buyPrice": 30
+        },
+        {
+          "itemId": 27192,
+          "name": "無限元石",
+          "sellPrice": null,
+          "buyPrice": 160
+        },
+        {
+          "itemId": 27789,
+          "name": "御時殘晶",
+          "sellPrice": null,
+          "buyPrice": 200
+        },
+        {
+          "itemId": 28238,
+          "name": "虛空結晶",
+          "sellPrice": null,
+          "buyPrice": 250
+        },
+        {
+          "itemId": 28251,
+          "name": "虛焰餘燼",
+          "sellPrice": null,
+          "buyPrice": 12
+        },
+        {
+          "itemId": 29065,
+          "name": "生命源石",
+          "sellPrice": null,
+          "buyPrice": 275
+        },
+        {
+          "itemId": 23047,
+          "name": "龍脈石",
+          "sellPrice": null,
+          "buyPrice": 300
+        },
+        {
+          "itemId": 29891,
+          "name": "檀君灸草",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30540,
+          "name": "雲母岩",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30758,
+          "name": "花崗石",
+          "sellPrice": null,
+          "buyPrice": 395
+        }
+      ]
+    },
+    {
+      "shopId": 438,
+      "shopName": "蒼狼大營特殊商人",
+      "items": [
+        {
+          "itemId": 32179,
+          "name": "霹靂英雄戰旗",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29862,
+          "name": "武魂碎片：紅夜叉",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23019,
+          "name": "武魂碎片：慕容智",
+          "sellPrice": 1500000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23066,
+          "name": "五鎖仙器錦囊",
+          "sellPrice": 1000000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29971,
+          "name": "武冠兵甲摸彩券",
+          "sellPrice": 75000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 20132,
+          "name": "星塵",
+          "sellPrice": 12000,
+          "buyPrice": 240
+        },
+        {
+          "itemId": 21192,
+          "name": "縮地卷軸",
+          "sellPrice": 200000,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 21410,
+          "name": "驃騎將軍印信",
+          "sellPrice": 4000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 22708,
+          "name": "武神符咒",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 22860,
+          "name": "虎霸戰符",
+          "sellPrice": 500000,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 22861,
+          "name": "拉薩戰符",
+          "sellPrice": 500000,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 22413,
+          "name": "白虎釀",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 22414,
+          "name": "玄武漿",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 22415,
+          "name": "青龍涎",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 22416,
+          "name": "朱雀血",
+          "sellPrice": 100000,
+          "buyPrice": 2000
+        },
+        {
+          "itemId": 23804,
+          "name": "螣蛇靈丹",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 23361,
+          "name": "小潛龍蓄功玉",
+          "sellPrice": 50,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30006,
+          "name": "贖罪丹",
+          "sellPrice": 1000000,
+          "buyPrice": 10000
+        },
+        {
+          "itemId": 24392,
+          "name": "奇跡靈符袋",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25258,
+          "name": "七星封甕配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25289,
+          "name": "八卦封甕配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25410,
+          "name": "九如封甕配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 24543,
+          "name": "懷古法器錦囊",
+          "sellPrice": 3000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24680,
+          "name": "真知教幣",
+          "sellPrice": 1000,
+          "buyPrice": 100
+        },
+        {
+          "itemId": 24787,
+          "name": "迎龍錦囊",
+          "sellPrice": 6000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24999,
+          "name": "聖稜水晶瓶",
+          "sellPrice": 500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26424,
+          "name": "十錦集字包裹",
+          "sellPrice": 3500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30096,
+          "name": "背包擴充卷",
+          "sellPrice": 15000000,
+          "buyPrice": 1500000
+        },
+        {
+          "itemId": 24658,
+          "name": "百慧靈晶",
+          "sellPrice": 1000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28266,
+          "name": "降神魂元百寶盒",
+          "sellPrice": 2000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28739,
+          "name": "天俠無限經典福袋",
+          "sellPrice": 9000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 28179,
+          "name": "悟心降魂玉",
+          "sellPrice": 30000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25508,
+          "name": "剛朕配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24786,
+          "name": "天藏太古神兵聖箱",
+          "sellPrice": 95000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30722,
+          "name": "波斯太古神兵聖箱",
+          "sellPrice": 135000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 29212,
+          "name": "仙星紀念經典福袋",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30940,
+          "name": "稀奇裝備箱．甲式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25580,
+          "name": "耀巍配方",
+          "sellPrice": 1950000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26161,
+          "name": "帝國金幣",
+          "sellPrice": null,
+          "buyPrice": 125
+        },
+        {
+          "itemId": 26654,
+          "name": "九天霜岩",
+          "sellPrice": null,
+          "buyPrice": 30
+        },
+        {
+          "itemId": 27192,
+          "name": "無限元石",
+          "sellPrice": null,
+          "buyPrice": 160
+        },
+        {
+          "itemId": 27789,
+          "name": "御時殘晶",
+          "sellPrice": null,
+          "buyPrice": 200
+        },
+        {
+          "itemId": 28238,
+          "name": "虛空結晶",
+          "sellPrice": null,
+          "buyPrice": 250
+        },
+        {
+          "itemId": 28251,
+          "name": "虛焰餘燼",
+          "sellPrice": null,
+          "buyPrice": 12
+        },
+        {
+          "itemId": 29065,
+          "name": "生命源石",
+          "sellPrice": null,
+          "buyPrice": 275
+        },
+        {
+          "itemId": 23047,
+          "name": "龍脈石",
+          "sellPrice": null,
+          "buyPrice": 300
+        },
+        {
+          "itemId": 29891,
+          "name": "檀君灸草",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30540,
+          "name": "雲母岩",
+          "sellPrice": null,
+          "buyPrice": 350
+        },
+        {
+          "itemId": 30758,
+          "name": "花崗石",
+          "sellPrice": null,
+          "buyPrice": 395
+        }
+      ]
+    },
+    {
+      "shopId": 890,
+      "shopName": "浮世夢鄉-主事翰文欽",
+      "items": [
+        {
+          "itemId": 25456,
+          "name": "玄武真元配方",
+          "sellPrice": 10000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25457,
+          "name": "白虎真元配方",
+          "sellPrice": 10000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25458,
+          "name": "青龍真元配方",
+          "sellPrice": 10000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25459,
+          "name": "朱雀真元配方",
+          "sellPrice": 10000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25460,
+          "name": "麒麟真元配方",
+          "sellPrice": 10000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 25461,
+          "name": "螣蛇真元配方",
+          "sellPrice": 10000000,
+          "buyPrice": null
+        }
+      ]
+    },
+    {
+      "shopId": 891,
+      "shopName": "浮世夢鄉-九天珍寶商人",
+      "items": [
+        {
+          "itemId": 22097,
+          "name": "無雙神兵錦囊",
+          "sellPrice": 35000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 22664,
+          "name": "西域無雙錦囊",
+          "sellPrice": 35000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 22995,
+          "name": "東瀛無雙錦囊",
+          "sellPrice": 37500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 23655,
+          "name": "摩羅無雙錦囊",
+          "sellPrice": 37500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24101,
+          "name": "煉獄無雙錦囊",
+          "sellPrice": 40000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24560,
+          "name": "天藏無雙錦囊",
+          "sellPrice": 42500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 24998,
+          "name": "波斯無雙錦囊",
+          "sellPrice": 42500000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26540,
+          "name": "帝國無雙錦囊",
+          "sellPrice": 45000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26709,
+          "name": "九天法器錦囊",
+          "sellPrice": 50000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 26710,
+          "name": "六道碎元木盒",
+          "sellPrice": 200000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 27349,
+          "name": "修仙真選配方錦囊",
+          "sellPrice": 50000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 27229,
+          "name": "時鍛‧皇雷劍",
+          "sellPrice": null,
+          "buyPrice": 42500
+        },
+        {
+          "itemId": 27230,
+          "name": "歲鑄‧皇雷劍",
+          "sellPrice": null,
+          "buyPrice": 45000
+        },
+        {
+          "itemId": 27231,
+          "name": "恆煉‧皇雷劍",
+          "sellPrice": null,
+          "buyPrice": 47500
+        },
+        {
+          "itemId": 27232,
+          "name": "新星之驚雷劍",
+          "sellPrice": null,
+          "buyPrice": 7000
+        },
+        {
+          "itemId": 27233,
+          "name": "時鍛‧炎魄刀",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27234,
+          "name": "歲鑄‧炎魄刀",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27235,
+          "name": "恆煉‧炎魄刀",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27236,
+          "name": "新星之火魄刀",
+          "sellPrice": null,
+          "buyPrice": 7750
+        },
+        {
+          "itemId": 27237,
+          "name": "時鍛‧亂蝶花",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27238,
+          "name": "歲鑄‧亂蝶花",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27239,
+          "name": "恆煉‧亂蝶花",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27240,
+          "name": "新星之蝶穿花",
+          "sellPrice": null,
+          "buyPrice": 5000
+        },
+        {
+          "itemId": 27241,
+          "name": "時鍛‧星霜絲",
+          "sellPrice": null,
+          "buyPrice": 35000
+        },
+        {
+          "itemId": 27242,
+          "name": "歲鑄‧星霜絲",
+          "sellPrice": null,
+          "buyPrice": 37500
+        },
+        {
+          "itemId": 27243,
+          "name": "恆煉‧星霜絲",
+          "sellPrice": null,
+          "buyPrice": 40000
+        },
+        {
+          "itemId": 27244,
+          "name": "新星之露霜絲",
+          "sellPrice": null,
+          "buyPrice": 6250
+        },
+        {
+          "itemId": 27245,
+          "name": "時鍛‧釋迦杖",
+          "sellPrice": null,
+          "buyPrice": 37500
+        },
+        {
+          "itemId": 27246,
+          "name": "歲鑄‧釋迦杖",
+          "sellPrice": null,
+          "buyPrice": 40000
+        },
+        {
+          "itemId": 27247,
+          "name": "恆煉‧釋迦杖",
+          "sellPrice": null,
+          "buyPrice": 42500
+        },
+        {
+          "itemId": 27248,
+          "name": "新星之菩釋杖",
+          "sellPrice": null,
+          "buyPrice": 6500
+        },
+        {
+          "itemId": 27249,
+          "name": "時鍛‧冰王槍",
+          "sellPrice": null,
+          "buyPrice": 32500
+        },
+        {
+          "itemId": 27250,
+          "name": "歲鑄‧冰王槍",
+          "sellPrice": null,
+          "buyPrice": 35000
+        },
+        {
+          "itemId": 27251,
+          "name": "恆煉‧冰王槍",
+          "sellPrice": null,
+          "buyPrice": 37500
+        },
+        {
+          "itemId": 27252,
+          "name": "新星之冰爵槍",
+          "sellPrice": null,
+          "buyPrice": 8000
+        },
+        {
+          "itemId": 27253,
+          "name": "時鍛‧織霧棍",
+          "sellPrice": null,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 27254,
+          "name": "歲鑄‧織霧棍",
+          "sellPrice": null,
+          "buyPrice": 32500
+        },
+        {
+          "itemId": 27255,
+          "name": "恆煉‧織霧棍",
+          "sellPrice": null,
+          "buyPrice": 35000
+        },
+        {
+          "itemId": 27256,
+          "name": "新星之紡霧棍",
+          "sellPrice": null,
+          "buyPrice": 5750
+        },
+        {
+          "itemId": 27257,
+          "name": "時鍛‧龍塵斧",
+          "sellPrice": null,
+          "buyPrice": 35000
+        },
+        {
+          "itemId": 27258,
+          "name": "歲鑄‧龍塵斧",
+          "sellPrice": null,
+          "buyPrice": 37500
+        },
+        {
+          "itemId": 27259,
+          "name": "恆煉‧龍塵斧",
+          "sellPrice": null,
+          "buyPrice": 40000
+        },
+        {
+          "itemId": 27260,
+          "name": "新星之昇塵斧",
+          "sellPrice": null,
+          "buyPrice": 6250
+        },
+        {
+          "itemId": 27261,
+          "name": "時鍛‧轟雷錘",
+          "sellPrice": null,
+          "buyPrice": 27500
+        },
+        {
+          "itemId": 27262,
+          "name": "歲鑄‧轟雷錘",
+          "sellPrice": null,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 27263,
+          "name": "恆煉‧轟雷錘",
+          "sellPrice": null,
+          "buyPrice": 32500
+        },
+        {
+          "itemId": 27264,
+          "name": "新星之鳴雷錘",
+          "sellPrice": null,
+          "buyPrice": 5500
+        },
+        {
+          "itemId": 27265,
+          "name": "時鍛‧風雷盾",
+          "sellPrice": null,
+          "buyPrice": 45000
+        },
+        {
+          "itemId": 27266,
+          "name": "歲鑄‧風雷盾",
+          "sellPrice": null,
+          "buyPrice": 47500
+        },
+        {
+          "itemId": 27267,
+          "name": "恆煉‧風雷盾",
+          "sellPrice": null,
+          "buyPrice": 50000
+        },
+        {
+          "itemId": 27268,
+          "name": "新星之旭霆盾",
+          "sellPrice": null,
+          "buyPrice": 7250
+        },
+        {
+          "itemId": 27269,
+          "name": "時鍛‧劍聖盔",
+          "sellPrice": null,
+          "buyPrice": 18750
+        },
+        {
+          "itemId": 27270,
+          "name": "時鍛‧武尊盔",
+          "sellPrice": null,
+          "buyPrice": 21250
+        },
+        {
+          "itemId": 27271,
+          "name": "時鍛‧術幻紗",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27272,
+          "name": "時鍛‧道輝冠",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27273,
+          "name": "時鍛‧禪光帽",
+          "sellPrice": null,
+          "buyPrice": 17500
+        },
+        {
+          "itemId": 27274,
+          "name": "歲鑄‧劍聖盔",
+          "sellPrice": null,
+          "buyPrice": 21250
+        },
+        {
+          "itemId": 27275,
+          "name": "歲鑄‧武尊盔",
+          "sellPrice": null,
+          "buyPrice": 23750
+        },
+        {
+          "itemId": 27276,
+          "name": "歲鑄‧術幻紗",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27277,
+          "name": "歲鑄‧道輝冠",
+          "sellPrice": null,
+          "buyPrice": 25000
+        },
+        {
+          "itemId": 27278,
+          "name": "歲鑄‧禪光帽",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27279,
+          "name": "恆煉‧劍聖盔",
+          "sellPrice": null,
+          "buyPrice": 23750
+        },
+        {
+          "itemId": 27280,
+          "name": "恆煉‧武尊盔",
+          "sellPrice": null,
+          "buyPrice": 26250
+        },
+        {
+          "itemId": 27281,
+          "name": "恆煉‧術幻紗",
+          "sellPrice": null,
+          "buyPrice": 25000
+        },
+        {
+          "itemId": 27282,
+          "name": "恆煉‧道輝冠",
+          "sellPrice": null,
+          "buyPrice": 27500
+        },
+        {
+          "itemId": 27283,
+          "name": "恆煉‧禪光帽",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27284,
+          "name": "新星之劍英盔",
+          "sellPrice": null,
+          "buyPrice": 4000
+        },
+        {
+          "itemId": 27285,
+          "name": "新星之武豪盔",
+          "sellPrice": null,
+          "buyPrice": 4250
+        },
+        {
+          "itemId": 27286,
+          "name": "新星之術潛紗",
+          "sellPrice": null,
+          "buyPrice": 4125
+        },
+        {
+          "itemId": 27287,
+          "name": "新星之道明冠",
+          "sellPrice": null,
+          "buyPrice": 4375
+        },
+        {
+          "itemId": 27288,
+          "name": "新星之禪照帽",
+          "sellPrice": null,
+          "buyPrice": 3875
+        },
+        {
+          "itemId": 27289,
+          "name": "時鍛‧劍聖冑",
+          "sellPrice": null,
+          "buyPrice": 21250
+        },
+        {
+          "itemId": 27290,
+          "name": "時鍛‧武尊鎧",
+          "sellPrice": null,
+          "buyPrice": 23750
+        },
+        {
+          "itemId": 27291,
+          "name": "時鍛‧術幻裳",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27292,
+          "name": "時鍛‧道輝服",
+          "sellPrice": null,
+          "buyPrice": 25000
+        },
+        {
+          "itemId": 27293,
+          "name": "時鍛‧禪光衣",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27294,
+          "name": "歲鑄‧劍聖冑",
+          "sellPrice": null,
+          "buyPrice": 23750
+        },
+        {
+          "itemId": 27295,
+          "name": "歲鑄‧武尊鎧",
+          "sellPrice": null,
+          "buyPrice": 26250
+        },
+        {
+          "itemId": 27296,
+          "name": "歲鑄‧術幻裳",
+          "sellPrice": null,
+          "buyPrice": 25000
+        },
+        {
+          "itemId": 27297,
+          "name": "歲鑄‧道輝服",
+          "sellPrice": null,
+          "buyPrice": 27500
+        },
+        {
+          "itemId": 27298,
+          "name": "歲鑄‧禪光衣",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27299,
+          "name": "恆煉‧劍聖冑",
+          "sellPrice": null,
+          "buyPrice": 26250
+        },
+        {
+          "itemId": 27300,
+          "name": "恆煉‧武尊鎧",
+          "sellPrice": null,
+          "buyPrice": 28750
+        },
+        {
+          "itemId": 27301,
+          "name": "恆煉‧術幻裳",
+          "sellPrice": null,
+          "buyPrice": 27500
+        },
+        {
+          "itemId": 27302,
+          "name": "恆煉‧道輝服",
+          "sellPrice": null,
+          "buyPrice": 30000
+        },
+        {
+          "itemId": 27303,
+          "name": "恆煉‧禪光衣",
+          "sellPrice": null,
+          "buyPrice": 25000
+        },
+        {
+          "itemId": 27304,
+          "name": "新星之劍英冑",
+          "sellPrice": null,
+          "buyPrice": 4250
+        },
+        {
+          "itemId": 27305,
+          "name": "新星之武豪鎧",
+          "sellPrice": null,
+          "buyPrice": 4500
+        },
+        {
+          "itemId": 27306,
+          "name": "新星之術潛裳",
+          "sellPrice": null,
+          "buyPrice": 4375
+        },
+        {
+          "itemId": 27307,
+          "name": "新星之道明服",
+          "sellPrice": null,
+          "buyPrice": 4625
+        },
+        {
+          "itemId": 27308,
+          "name": "新星之禪照衣",
+          "sellPrice": null,
+          "buyPrice": 4125
+        },
+        {
+          "itemId": 27309,
+          "name": "時鍛‧劍聖腕",
+          "sellPrice": null,
+          "buyPrice": 16250
+        },
+        {
+          "itemId": 27310,
+          "name": "時鍛‧武尊臂",
+          "sellPrice": null,
+          "buyPrice": 18750
+        },
+        {
+          "itemId": 27311,
+          "name": "時鍛‧術幻指",
+          "sellPrice": null,
+          "buyPrice": 17500
+        },
+        {
+          "itemId": 27312,
+          "name": "時鍛‧道輝手",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27313,
+          "name": "時鍛‧禪光握",
+          "sellPrice": null,
+          "buyPrice": 15000
+        },
+        {
+          "itemId": 27314,
+          "name": "歲鑄‧劍聖腕",
+          "sellPrice": null,
+          "buyPrice": 18750
+        },
+        {
+          "itemId": 27315,
+          "name": "歲鑄‧武尊臂",
+          "sellPrice": null,
+          "buyPrice": 21250
+        },
+        {
+          "itemId": 27316,
+          "name": "歲鑄‧術幻指",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27317,
+          "name": "歲鑄‧道輝手",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27318,
+          "name": "歲鑄‧禪光握",
+          "sellPrice": null,
+          "buyPrice": 17500
+        },
+        {
+          "itemId": 27319,
+          "name": "新星之劍英腕",
+          "sellPrice": null,
+          "buyPrice": 3750
+        },
+        {
+          "itemId": 27320,
+          "name": "新星之武豪臂",
+          "sellPrice": null,
+          "buyPrice": 4000
+        },
+        {
+          "itemId": 27321,
+          "name": "新星之術潛指",
+          "sellPrice": null,
+          "buyPrice": 3875
+        },
+        {
+          "itemId": 27322,
+          "name": "新星之道明手",
+          "sellPrice": null,
+          "buyPrice": 4125
+        },
+        {
+          "itemId": 27323,
+          "name": "新星之禪照握",
+          "sellPrice": null,
+          "buyPrice": 3625
+        },
+        {
+          "itemId": 27324,
+          "name": "新星劍裝錦囊",
+          "sellPrice": null,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 27325,
+          "name": "新星勇裝錦囊",
+          "sellPrice": null,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 27326,
+          "name": "新星術裝錦囊",
+          "sellPrice": null,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 27327,
+          "name": "新星道裝錦囊",
+          "sellPrice": null,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 27328,
+          "name": "新星僧裝錦囊",
+          "sellPrice": null,
+          "buyPrice": 1000
+        },
+        {
+          "itemId": 27329,
+          "name": "時鍛‧劍聖靴",
+          "sellPrice": null,
+          "buyPrice": 16250
+        },
+        {
+          "itemId": 27330,
+          "name": "時鍛‧武尊踏",
+          "sellPrice": null,
+          "buyPrice": 18750
+        },
+        {
+          "itemId": 27331,
+          "name": "時鍛‧術幻履",
+          "sellPrice": null,
+          "buyPrice": 17500
+        },
+        {
+          "itemId": 27332,
+          "name": "時鍛‧道輝步",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27333,
+          "name": "時鍛‧禪光行",
+          "sellPrice": null,
+          "buyPrice": 15000
+        },
+        {
+          "itemId": 27334,
+          "name": "歲鑄‧劍聖靴",
+          "sellPrice": null,
+          "buyPrice": 18750
+        },
+        {
+          "itemId": 27335,
+          "name": "歲鑄‧武尊踏",
+          "sellPrice": null,
+          "buyPrice": 21250
+        },
+        {
+          "itemId": 27336,
+          "name": "歲鑄‧術幻履",
+          "sellPrice": null,
+          "buyPrice": 20000
+        },
+        {
+          "itemId": 27337,
+          "name": "歲鑄‧道輝步",
+          "sellPrice": null,
+          "buyPrice": 22500
+        },
+        {
+          "itemId": 27338,
+          "name": "歲鑄‧禪光行",
+          "sellPrice": null,
+          "buyPrice": 17500
+        },
+        {
+          "itemId": 27339,
+          "name": "新星之劍英靴",
+          "sellPrice": null,
+          "buyPrice": 3750
+        },
+        {
+          "itemId": 27340,
+          "name": "新星之武豪踏",
+          "sellPrice": null,
+          "buyPrice": 4000
+        },
+        {
+          "itemId": 27341,
+          "name": "新星之術潛履",
+          "sellPrice": null,
+          "buyPrice": 3875
+        },
+        {
+          "itemId": 27342,
+          "name": "新星之道明步",
+          "sellPrice": null,
+          "buyPrice": 4125
+        },
+        {
+          "itemId": 27343,
+          "name": "新星之禪照行",
+          "sellPrice": null,
+          "buyPrice": 3625
+        },
+        {
+          "itemId": 27344,
+          "name": "新星之龍戒",
+          "sellPrice": null,
+          "buyPrice": 6250
+        },
+        {
+          "itemId": 27345,
+          "name": "新星之虎玉",
+          "sellPrice": null,
+          "buyPrice": 6250
+        },
+        {
+          "itemId": 27346,
+          "name": "新星之雀環",
+          "sellPrice": null,
+          "buyPrice": 6250
+        },
+        {
+          "itemId": 27347,
+          "name": "新星之玄璧",
+          "sellPrice": null,
+          "buyPrice": 6250
+        },
+        {
+          "itemId": 27348,
+          "name": "新星耀兵寶箱",
+          "sellPrice": null,
+          "buyPrice": 1000
+        }
+      ]
+    },
+    {
+      "shopId": 893,
+      "shopName": "星群碎道-虛空龍主(免服)",
+      "items": [
+        {
+          "itemId": 25502,
+          "name": "阿薩真金配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25552,
+          "name": "創星源質配方",
+          "sellPrice": 10000000,
+          "buyPrice": 1000000
+        },
+        {
+          "itemId": 28702,
+          "name": "終末御令包裹",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 28745,
+          "name": "大秘境金鑰",
+          "sellPrice": 5000000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25553,
+          "name": "梅冠聖鑽配方",
+          "sellPrice": 20000000,
+          "buyPrice": 2000000
+        },
+        {
+          "itemId": 25554,
+          "name": "菱冠聖鑽配方",
+          "sellPrice": 20000000,
+          "buyPrice": 2000000
+        },
+        {
+          "itemId": 25555,
+          "name": "心冠聖鑽配方",
+          "sellPrice": 20000000,
+          "buyPrice": 2000000
+        },
+        {
+          "itemId": 25556,
+          "name": "桃冠聖鑽配方",
+          "sellPrice": 20000000,
+          "buyPrice": 2000000
+        },
+        {
+          "itemId": 25557,
+          "name": "同花聖鑽配方",
+          "sellPrice": 30000000,
+          "buyPrice": 3000000
+        },
+        {
+          "itemId": 25558,
+          "name": "造星煌碧配方",
+          "sellPrice": 20000000,
+          "buyPrice": 2000000
+        }
+      ]
+    },
+    {
+      "shopId": 895,
+      "shopName": "終末之塔頂樓-主宰化體",
+      "items": [
+        {
+          "itemId": 23021,
+          "name": "還眼醁",
+          "sellPrice": 880000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30114,
+          "name": "逆蠱丹",
+          "sellPrice": 880000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30115,
+          "name": "除誡水",
+          "sellPrice": 880000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30116,
+          "name": "通筋酒",
+          "sellPrice": 880000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30117,
+          "name": "祛腥粉",
+          "sellPrice": 880000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 30943,
+          "name": "稀奇裝備箱．丁式",
+          "sellPrice": 1600000000,
+          "buyPrice": null
+        },
+        {
+          "itemId": 31056,
+          "name": "絕塵神行符",
+          "sellPrice": 5000000,
+          "buyPrice": null
+        }
+      ]
+    },
+    {
+      "shopId": 911,
+      "shopName": "九曲邪徑-四海術士(需解天下奇材錄)",
+      "items": [
+        {
+          "itemId": 25382,
+          "name": "天鋼之心配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25391,
+          "name": "天神符石配方",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 25392,
+          "name": "七曜符石配方",
+          "sellPrice": 7500000,
+          "buyPrice": 750000
+        },
+        {
+          "itemId": 25301,
+          "name": "洛神劍配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25302,
+          "name": "龍泉劍配方",
+          "sellPrice": 2000000,
+          "buyPrice": 200000
+        },
+        {
+          "itemId": 25303,
+          "name": "湛盧劍配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25304,
+          "name": "湛盧神劍配方",
+          "sellPrice": 4000000,
+          "buyPrice": 400000
+        },
+        {
+          "itemId": 25305,
+          "name": "樓蘭劍配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25306,
+          "name": "樓蘭神劍配方",
+          "sellPrice": 6000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25307,
+          "name": "泉戶劍配方",
+          "sellPrice": 7000000,
+          "buyPrice": 700000
+        },
+        {
+          "itemId": 25308,
+          "name": "神隱劍配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25309,
+          "name": "村正劍配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25310,
+          "name": "赤霄劍配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25311,
+          "name": "誡罪劍配方",
+          "sellPrice": 16500000,
+          "buyPrice": 550000
+        },
+        {
+          "itemId": 25312,
+          "name": "動靜觀劍配方",
+          "sellPrice": 18000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25313,
+          "name": "蓮燁劍配方",
+          "sellPrice": 26000000,
+          "buyPrice": 1300000
+        },
+        {
+          "itemId": 25314,
+          "name": "法界皇劍配方",
+          "sellPrice": 28000000,
+          "buyPrice": 1400000
+        },
+        {
+          "itemId": 25315,
+          "name": "畫影刀配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25316,
+          "name": "蟠龍刀配方",
+          "sellPrice": 2000000,
+          "buyPrice": 200000
+        },
+        {
+          "itemId": 25317,
+          "name": "天晶刀配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25318,
+          "name": "天晶雷刀配方",
+          "sellPrice": 4000000,
+          "buyPrice": 400000
+        },
+        {
+          "itemId": 25319,
+          "name": "羅剎刀配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25320,
+          "name": "羅剎怒刀配方",
+          "sellPrice": 6000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25321,
+          "name": "鬼渡刀配方",
+          "sellPrice": 7000000,
+          "buyPrice": 700000
+        },
+        {
+          "itemId": 25322,
+          "name": "虎徹刀配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25323,
+          "name": "村雨刀配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25324,
+          "name": "昆吾刀配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25325,
+          "name": "斬業刀配方",
+          "sellPrice": 16500000,
+          "buyPrice": 550000
+        },
+        {
+          "itemId": 25326,
+          "name": "計都烈刀配方",
+          "sellPrice": 18000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25327,
+          "name": "修羅刀配方",
+          "sellPrice": 26000000,
+          "buyPrice": 1300000
+        },
+        {
+          "itemId": 25328,
+          "name": "黑天魔刀配方",
+          "sellPrice": 28000000,
+          "buyPrice": 1400000
+        },
+        {
+          "itemId": 25329,
+          "name": "七煞天羅配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25330,
+          "name": "封神針配方",
+          "sellPrice": 2000000,
+          "buyPrice": 200000
+        },
+        {
+          "itemId": 25331,
+          "name": "含沙射影配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25332,
+          "name": "暴雨梨花配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25333,
+          "name": "九轉金蓮配方",
+          "sellPrice": 6000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25334,
+          "name": "津雪刺配方",
+          "sellPrice": 7000000,
+          "buyPrice": 700000
+        },
+        {
+          "itemId": 25335,
+          "name": "絃葦飛刺配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25336,
+          "name": "若越旋配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25337,
+          "name": "筑刃旋配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25338,
+          "name": "雀屏針配方",
+          "sellPrice": 16500000,
+          "buyPrice": 550000
+        },
+        {
+          "itemId": 25339,
+          "name": "金瞳雀釵配方",
+          "sellPrice": 18000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25340,
+          "name": "飛獨鈷配方",
+          "sellPrice": 26000000,
+          "buyPrice": 1300000
+        },
+        {
+          "itemId": 25341,
+          "name": "滅神金杵配方",
+          "sellPrice": 28000000,
+          "buyPrice": 1400000
+        },
+        {
+          "itemId": 25342,
+          "name": "清虛骨杖配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25343,
+          "name": "搖光拂塵配方",
+          "sellPrice": 2000000,
+          "buyPrice": 200000
+        },
+        {
+          "itemId": 25344,
+          "name": "銀羽扇配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25345,
+          "name": "玉翎扇配方",
+          "sellPrice": 4000000,
+          "buyPrice": 400000
+        },
+        {
+          "itemId": 25346,
+          "name": "青羅蛇杖配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25347,
+          "name": "翡翠神杖配方",
+          "sellPrice": 6000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25348,
+          "name": "裂戒御祓配方",
+          "sellPrice": 7000000,
+          "buyPrice": 700000
+        },
+        {
+          "itemId": 25349,
+          "name": "平魔御祓配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25350,
+          "name": "瀧取如意配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25351,
+          "name": "御敷如意配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25352,
+          "name": "星暉拂塵配方",
+          "sellPrice": 16500000,
+          "buyPrice": 550000
+        },
+        {
+          "itemId": 25353,
+          "name": "昊陽拂塵配方",
+          "sellPrice": 18000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25354,
+          "name": "淨律羽拂配方",
+          "sellPrice": 26000000,
+          "buyPrice": 1300000
+        },
+        {
+          "itemId": 25355,
+          "name": "婆羅羽拂配方",
+          "sellPrice": 28000000,
+          "buyPrice": 1400000
+        },
+        {
+          "itemId": 25356,
+          "name": "菩提法杖配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25357,
+          "name": "達摩法杖配方",
+          "sellPrice": 2000000,
+          "buyPrice": 200000
+        },
+        {
+          "itemId": 25358,
+          "name": "光焰寶杖配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25359,
+          "name": "光焰聖杖配方",
+          "sellPrice": 4000000,
+          "buyPrice": 400000
+        },
+        {
+          "itemId": 25360,
+          "name": "羅剎禪杖配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25361,
+          "name": "大羅剎杖配方",
+          "sellPrice": 6000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25362,
+          "name": "安佐禪杖配方",
+          "sellPrice": 7000000,
+          "buyPrice": 700000
+        },
+        {
+          "itemId": 25363,
+          "name": "堀路禪杖配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25364,
+          "name": "尊能禪杖配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25365,
+          "name": "彌方禪杖配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25366,
+          "name": "彌勒禪杖配方",
+          "sellPrice": 16500000,
+          "buyPrice": 550000
+        },
+        {
+          "itemId": 25367,
+          "name": "諸法禪杖配方",
+          "sellPrice": 18000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25368,
+          "name": "如來聖杖配方",
+          "sellPrice": 26000000,
+          "buyPrice": 1300000
+        },
+        {
+          "itemId": 25369,
+          "name": "涅槃禪杖配方",
+          "sellPrice": 28000000,
+          "buyPrice": 1400000
+        },
+        {
+          "itemId": 25370,
+          "name": "斷魂槍配方",
+          "sellPrice": 1000000,
+          "buyPrice": 100000
+        },
+        {
+          "itemId": 25371,
+          "name": "霸王槍配方",
+          "sellPrice": 2000000,
+          "buyPrice": 200000
+        },
+        {
+          "itemId": 25372,
+          "name": "離火槍配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25373,
+          "name": "蛇脊矛配方",
+          "sellPrice": 3000000,
+          "buyPrice": 300000
+        },
+        {
+          "itemId": 25374,
+          "name": "天晶火槍配方",
+          "sellPrice": 4000000,
+          "buyPrice": 400000
+        },
+        {
+          "itemId": 25375,
+          "name": "地靈蛇矛配方",
+          "sellPrice": 4000000,
+          "buyPrice": 400000
+        },
+        {
+          "itemId": 25376,
+          "name": "噬魂槍配方",
+          "sellPrice": 5000000,
+          "buyPrice": 500000
+        },
+        {
+          "itemId": 25377,
+          "name": "驚邪槍配方",
+          "sellPrice": 6000000,
+          "buyPrice": 600000
+        },
+        {
+          "itemId": 25378,
+          "name": "十文字槍配方",
+          "sellPrice": 7000000,
+          "buyPrice": 700000
+        },
+        {
+          "itemId": 25379,
+          "name": "菊宗紋槍配方",
+          "sellPrice": 8000000,
+          "buyPrice": 800000
+        },
+        {
+          "itemId": 25380,
+          "name": "金龍神槍配方",
+          "sellPrice": 16500000,
+          "buyPrice": 1100000
+        },
+        {
+          "itemId": 25381,
+          "name": "伐樓拿戟配方",
+          "sellPrice": 26000000,
+          "buyPrice": 1300000
+        },
+        {
+          "itemId": 25414,
+          "name": "鋼粹還原配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25432,
+          "name": "天藥之菁配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        },
+        {
+          "itemId": 25433,
+          "name": "藥煉還原配方",
+          "sellPrice": 2500000,
+          "buyPrice": 250000
+        }
+      ]
+    }
+  ]
+}

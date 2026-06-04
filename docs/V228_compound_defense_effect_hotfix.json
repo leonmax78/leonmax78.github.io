@@ -1,0 +1,25 @@
+{
+  "version": "V228-compound-defense-effect-hotfix",
+  "date": "2026-05-24",
+  "goal": "修正裝備合成配方同時包含智慧與物防時，合成後能力只顯示智慧、漏掉物防加成的問題。",
+  "changed": [
+    {
+      "file": "js/pages/compound-page.js",
+      "notes": [
+        "讓 COMPOUND.INI 解析同時支援 DefMin/DefMax、MDefMin/MDefMax、MAttMin/MAttMax 這類舊欄位名稱。",
+        "若新解析只抓到部分能力，會從備援配方資料補回未解析到的其他能力，避免混合配方漏顯。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V228-compound-defense-effect-hotfix。"
+      ]
+    }
+  ],
+  "verified": [
+    "本機開啟裝備合成模擬。",
+    "選擇防具後加入顥鎮配方與靈彌配方。",
+    "確認合成後能力同時顯示智慧加成與物理防禦加成。"
+  ]
+}

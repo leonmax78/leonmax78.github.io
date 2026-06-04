@@ -1,0 +1,20 @@
+{
+  "siteTitle": "神州-四海同舟",
+  "version": "V352-brush-header-title",
+  "defaultPage": "home",
+  "nav": [
+    { "id": "home", "label": "首頁", "enabled": true },
+    { "id": "jiang", "label": "降神、經驗、修練試算", "enabled": true },
+    { "id": "monster", "label": "怪物查詢", "enabled": true },
+    { "id": "item", "label": "道具查詢", "enabled": true },
+    { "id": "reverse", "label": "掉落反查", "enabled": true },
+    { "id": "compound", "label": "常用裝備配方合成模擬", "enabled": true },
+    { "id": "soul", "label": "武魂能力試算", "enabled": true },
+    { "id": "collect", "label": "武冠收錄資料", "enabled": true },
+    { "id": "shop", "label": "特殊商店販賣資訊", "enabled": true }
+  ],
+  "theme": {
+    "layout": "sidebar",
+    "accent": "gold"
+  }
+}

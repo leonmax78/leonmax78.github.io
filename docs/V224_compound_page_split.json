@@ -1,0 +1,43 @@
+{
+  "version": "V224-compound-page-split",
+  "date": "2026-05-24",
+  "goal": "把裝備合成模擬從 app-core.js 正式拆到頁面模組，讓核心檔只負責導覽、資料載入與事件委派。",
+  "changed": [
+    {
+      "file": "js/core/app-core.js",
+      "notes": [
+        "移除裝備合成資料解析、頁面渲染、材料統計與亂數模擬實作。",
+        "保留導覽、資料載入、事件委派，以及對 renderEquipmentCompoundPage 等頁面函式的呼叫。"
+      ]
+    },
+    {
+      "file": "js/pages/compound-page.js",
+      "notes": [
+        "從備用拷貝轉為正式裝備合成模組。",
+        "新增 eqState 狀態，讓篩選條件、配方選擇與亂數模擬狀態集中在本模組。",
+        "補上 openEquipmentSim，讓裝備清單點選後能進入合成明細頁。"
+      ]
+    },
+    {
+      "file": "js/script-manifest.js",
+      "notes": [
+        "更新註解，標示 V224 的拆分狀態。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V224-compound-page-split。"
+      ]
+    }
+  ],
+  "result": {
+    "app_core_lines_before": 1219,
+    "app_core_lines_after": 740,
+    "removed_from_core_approx_lines": 479
+  },
+  "next_candidates": [
+    "將降神星等、經驗丹、修練計算拆到 js/pages/jiangshen-page.js 或 js/calc/jiangshen-calc.js。",
+    "整理 app-core.js 的事件委派，讓各頁面模組自行註冊事件。"
+  ]
+}

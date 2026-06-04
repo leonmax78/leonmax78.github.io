@@ -1,0 +1,16 @@
+{
+  "version": "V233-training-data-split",
+  "date": "2026-05-25",
+  "goal": "將修練資料從單一 js/data/training-data.js 拆成分組資料檔，讓修練表更容易維護。",
+  "changes": [
+    "新增 js/data/training/meta-data.js，放置修練版本、群組順序、效果欄位順序與備註。",
+    "新增 js/data/training/group-01-data.js 到 group-10-data.js，依照原本 groupOrder 拆分修練資料。",
+    "將 js/data/training-data.js 改成小型組合檔，維持原本 TRAINING_DATA 與 window.TRAINING_DATA 介面不變。",
+    "更新 js/script-manifest.js，讓修練分檔在組合檔前載入。",
+    "更新 index.html data-version 為 V233-training-data-split。"
+  ],
+  "compatibility": [
+    "保留 TRAINING_DATA.version、TRAINING_DATA.groupOrder、TRAINING_DATA.effectStatOrder、TRAINING_DATA.notes、TRAINING_DATA.data。",
+    "修練頁原本讀取 TRAINING_DATA 的方式不需要改。"
+  ]
+}

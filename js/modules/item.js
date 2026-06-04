@@ -1,0 +1,1 @@
+export async function initItem({reader}){reader.innerHTML=`<div class="card"><h1>道具查詢</h1><div class="empty">V101 已建立 item.js 模組入口。下一步可把原本 INI 解析與查詢功能搬入這裡。</div></div>`}

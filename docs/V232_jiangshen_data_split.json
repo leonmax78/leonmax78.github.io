@@ -1,0 +1,18 @@
+{
+  "version": "V232-jiangshen-data-split",
+  "date": "2026-05-25",
+  "goal": "將降神大型資料從單一 js/data/jiangshen-data.js 拆成多個資料檔，降低維護難度並讓資料類型更清楚。",
+  "changes": [
+    "新增 js/data/jiangshen/base-data.js，放置降神名稱、別名與基礎能力。",
+    "新增 js/data/jiangshen/star-multipliers-data.js，放置星等倍率。",
+    "新增 js/data/jiangshen/combo-data.js，放置連結成員與連結加成。",
+    "新增 js/data/jiangshen/progression-tables-data.js，放置 Excel 匯出的星等、靈氣與經驗表。",
+    "將 js/data/jiangshen-data.js 改成小型組合檔，維持原本 DATA 與 window.DATA 介面不變。",
+    "更新 js/script-manifest.js，讓四個降神資料分檔在組合檔前載入。",
+    "更新 index.html data-version 為 V232-jiangshen-data-split。"
+  ],
+  "compatibility": [
+    "保留 DATA.stats、DATA.baseStats、DATA.starMultipliers、DATA.comboMembers、DATA.comboBonuses、DATA.starRequirements、DATA.starSoulTable、DATA.auraTable、DATA.expTable 等原本欄位。",
+    "降神計算與頁面模組不需要改呼叫方式。"
+  ]
+}

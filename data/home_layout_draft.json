@@ -1,0 +1,37 @@
+[
+  {
+    "id": "support",
+    "title": "副降神試算",
+    "subtitle": "組合副降神並計算能力加成"
+  },
+  {
+    "id": "starAura",
+    "title": "星等與靈氣",
+    "subtitle": "計算降神數量與靈氣需求"
+  },
+  {
+    "id": "training",
+    "title": "修練機制",
+    "subtitle": "統計材料與能力提升"
+  },
+  {
+    "id": "monster",
+    "title": "怪物查詢",
+    "subtitle": "查等級、位置、技能、能力與掉落"
+  },
+  {
+    "id": "reverse",
+    "title": "掉落反查",
+    "subtitle": "輸入道具名稱，反查會掉落的怪物"
+  },
+  {
+    "id": "item",
+    "title": "道具查詢",
+    "subtitle": "查道具類型、能力與說明"
+  },
+  {
+    "id": "compound",
+    "title": "裝備合成",
+    "subtitle": "挑裝備、配方與材料清單"
+  }
+]

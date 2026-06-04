@@ -1,0 +1,3 @@
+// V233 training data part. Generated from data/training.json.
+window.SZO_TRAINING_DATA_GROUPS = window.SZO_TRAINING_DATA_GROUPS || [];
+window.SZO_TRAINING_DATA_GROUPS.push({"group":"天照珠玉","data":[{"id":"tianzhao","group":"天照珠玉","subGroup":"","name":"天照珠玉","item":"天照珠玉","stat":"自由分配能力值","maxLevel":11,"defaultCurrentLevel":0,"defaultTargetLevel":11,"costs":[5,5,5,5,5,5,5,5,5,5,5],"note":"自由分配能力值：需玩家自行分配到體魄/力量/智慧/靈敏","effectsByLevel":[{},{"自由分配能力值":2},{"自由分配能力值":4},{"自由分配能力值":6},{"自由分配能力值":8},{"自由分配能力值":10},{"自由分配能力值":12},{"自由分配能力值":14},{"自由分配能力值":16},{"自由分配能力值":18},{"自由分配能力值":20},{"自由分配能力值":22}],"fullEffects":{"自由分配能力值":22},"effectStats":["自由分配能力值"]}]});

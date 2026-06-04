@@ -1,0 +1,19 @@
+{
+  "version": "V220_CORE_SPLIT_READY",
+  "base": "SZO_V219_FORMAL_MODULE_READY",
+  "files": {
+    "index.html": "純入口，不放資料/公式/頁面內容",
+    "js/core/app-settings.js": "網站設定與資料檔候選清單",
+    "js/data/type-maps.js": "Type/Race/SubType/道具詳情欄位對照表",
+    "js/utils/common-utils.js": "DOM、文字、數字、選單等共用工具",
+    "js/core/data-loader-utils.js": "資料讀取與 INI/CSV 解析工具",
+    "js/core/app-core.js": "暫保留主流程、資料索引、主要頁面邏輯；後續再拆",
+    "js/script-manifest.js": "模組載入順序，已加入 V220 新檔案"
+  },
+  "kept_fixes": [
+    "左上角快速選單",
+    "道具反查",
+    "武魂快速數量按鈕"
+  ],
+  "next_step": "拆 data-indexer / app-init，逐步瘦身 app-core.js"
+}

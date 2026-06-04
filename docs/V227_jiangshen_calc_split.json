@@ -1,0 +1,37 @@
+{
+  "version": "V227-jiangshen-calc-split",
+  "date": "2026-05-24",
+  "goal": "先把降神相關純公式從 app-core.js 拆出，為後續頁面拆分與 Python 編輯器做準備。",
+  "changed": [
+    {
+      "file": "js/calc/jiangshen-calc.js",
+      "notes": [
+        "新增降神計算輔助模組。",
+        "集中 compactWan、breakSuggestText、canonicalName、ability、scaleAbility、activeCombos、comboBonus、comboText。",
+        "集中 STATS、DISPLAY_NAMES、EXP_ITEMS。"
+      ]
+    },
+    {
+      "file": "js/core/app-core.js",
+      "notes": [
+        "移除上述純公式與常數，只保留頁面渲染與事件流程。"
+      ]
+    },
+    {
+      "file": "js/script-manifest.js",
+      "notes": [
+        "在 app-core.js 前載入 js/calc/jiangshen-calc.js。"
+      ]
+    },
+    {
+      "file": "index.html",
+      "notes": [
+        "更新 data-version 為 V227-jiangshen-calc-split。"
+      ]
+    }
+  ],
+  "next": [
+    "將降神頁面渲染拆到 js/pages/jiangshen-page.js。",
+    "將修練機制頁拆到獨立 training page/calc 模組。"
+  ]
+}

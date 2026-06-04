@@ -1,0 +1,17 @@
+{
+  "version": "V234-lazy-jiangshen-training",
+  "date": "2026-05-25",
+  "goal": "改善第一次開啟網頁速度，將降神與修練的大型資料和功能模組延後到第一次使用時才載入。",
+  "changes": [
+    "從首頁初始載入清單移除降神資料分檔、修練資料分檔、降神計算檔與降神功能檔。",
+    "新增 script-manifest.js 的 data_jiangshen、data_training、calc_jiangshen、enhancements_jiangshen 群組，保留清楚的模組分類。",
+    "新增 ensureJiangshenToolLoaded()，第一次點選降神子功能時才依序載入降神資料、修練資料、降神計算與功能模組。",
+    "setJiang() 改為先載入降神工具，再交給最後載入的降神功能模組處理畫面。",
+    "保留星魂備援資料 soul-data.js 在初始載入中，避免星魂資料頁模組讀到空資料。",
+    "更新 index.html data-version 為 V234-lazy-jiangshen-training。"
+  ],
+  "expectedImpact": [
+    "首頁第一次載入少載入約 250KB 以上的降神/修練資料與功能檔。",
+    "第一次點降神功能會多一次短暫載入提示，之後同頁切換不會重複載入。"
+  ]
+}

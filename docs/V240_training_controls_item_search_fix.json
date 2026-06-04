@@ -1,0 +1,14 @@
+{
+  "version": "V240-training-controls-item-search-fix",
+  "goal": "Fix broken training controls and make the enhanced item search use the lightweight item data loader.",
+  "changedFiles": [
+    "index.html",
+    "js/core/app-core.js",
+    "js/pages/item-search.js"
+  ],
+  "fixes": [
+    "Training category filter, quick buttons, calculate button, and level inputs are now bound directly after the training page renders.",
+    "The enhanced item search wrapper now calls ensureItemDataLoaded() instead of ensureMainDataLoaded().",
+    "Item search no longer loads MONSTER_C.INI before opening."
+  ]
+}
