@@ -44,6 +44,7 @@
         <button class="navBtn sub" data-collect-open="beast">封獸出處 <span>›</span></button>
       </div>
       <button class="navBtn major" data-view="shop">特殊商店販賣資訊 <span>›</span></button>
+      <button class="navBtn major" data-view="downloads">工具下載區 <span>›</span></button>
     </div>
     <div class="navGroup" id="manualGroup" style="display:none">
       <div class="navTitle">備用手動載入</div>

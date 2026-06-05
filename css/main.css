@@ -2505,3 +2505,52 @@ body{
     letter-spacing:0!important;
   }
 }
+/* Tool downloads */
+.downloadsPage .downloadList{
+  display:grid;
+  gap:12px;
+  margin-top:14px;
+}
+.downloadsPage .downloadItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  border:1px solid rgba(126,166,255,.35);
+  background:rgba(7,18,36,.72);
+  border-radius:10px;
+  padding:16px;
+}
+.downloadsPage .downloadItem h2{
+  margin:0 0 8px;
+  font-size:20px;
+}
+.downloadsPage .downloadMeta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  color:#c7d5ef;
+  font-size:14px;
+}
+.downloadsPage .downloadItem p{
+  margin:10px 0 0;
+  color:#aab8d2;
+}
+.downloadsPage .downloadBtn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:92px;
+  min-height:40px;
+  border-radius:8px;
+  background:#2f6fed;
+  color:white;
+  font-weight:700;
+  text-decoration:none;
+}
+@media (max-width: 640px){
+  .downloadsPage .downloadItem{
+    align-items:stretch;
+    flex-direction:column;
+  }
+}

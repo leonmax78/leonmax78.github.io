@@ -46,7 +46,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/reverse-page.js",
     "js/pages/compound-page.js",
     "js/pages/collectbook-page.js",
-    "js/pages/shop-page.js"
+    "js/pages/shop-page.js",
+    "js/pages/downloads-page.js"
   ],
   "features_equipment": [
     "js/features/equipment/display-and-random-sim.js",

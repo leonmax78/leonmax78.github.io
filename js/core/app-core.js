@@ -202,6 +202,7 @@ async function setView(view){
  else if(view==='item'){openItemMenuOnly();}
  else if(view==='collect'){await ensurePageScriptsLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('weapon');}
  else if(view==='shop'){await ensurePageScriptsLoaded(); if(typeof renderShopPage==='function')renderShopPage();}
+ else if(view==='downloads'){await ensurePageScriptsLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='soul'){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));
@@ -1251,6 +1252,7 @@ function backLabelFor(view){
  if(view==='item')return '返回道具查詢';
  if(view==='reverse')return '返回道具反查';
  if(view==='shop')return '返回特殊商店販賣資訊';
+ if(view==='downloads')return '返回工具下載區';
  if(view==='jiang')return '返回降神、經驗、修練試算';
  return '返回首頁';
 }
