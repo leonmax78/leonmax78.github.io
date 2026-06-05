@@ -25,7 +25,7 @@
   }
 
   function renderDownloadsCard(data){
-    const displayName = asText(data.display_name || '武冠偵測Demo');
+    const displayName = asText(data.display_name || '武冠判讀DEMO');
     const version = asText(data.version);
     const published = asText(data.published_at);
     const fileName = asText(data.file_name || '武冠判讀_DEMO.exe');
