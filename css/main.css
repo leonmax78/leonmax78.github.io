@@ -2506,35 +2506,38 @@ body{
   }
 }
 /* Tool downloads */
-.downloadsPage .downloadList{
-  display:grid;
-  gap:12px;
+.downloadsPage .downloadTableWrap{
   margin-top:14px;
-}
-.downloadsPage .downloadItem{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
   border:1px solid rgba(126,166,255,.35);
   background:rgba(7,18,36,.72);
   border-radius:10px;
-  padding:16px;
+  overflow:hidden;
 }
-.downloadsPage .downloadItem h2{
-  margin:0 0 8px;
-  font-size:20px;
+.downloadsPage .downloadTable{
+  width:100%;
+  border-collapse:collapse;
+  color:#dbe7ff;
+  table-layout:fixed;
 }
-.downloadsPage .downloadMeta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px 14px;
-  color:#c7d5ef;
+.downloadsPage .downloadTable th,
+.downloadsPage .downloadTable td{
+  padding:14px 16px;
+  border-right:1px solid rgba(126,166,255,.22);
+  border-bottom:1px solid rgba(126,166,255,.22);
+  text-align:left;
+  vertical-align:middle;
+}
+.downloadsPage .downloadTable th{
+  background:rgba(44,77,134,.36);
   font-size:14px;
+  font-weight:800;
 }
-.downloadsPage .downloadItem p{
-  margin:10px 0 0;
-  color:#aab8d2;
+.downloadsPage .downloadTable th:last-child,
+.downloadsPage .downloadTable td:last-child{
+  border-right:0;
+}
+.downloadsPage .downloadTable tbody tr:last-child td{
+  border-bottom:0;
 }
 .downloadsPage .downloadBtn{
   display:inline-flex;
@@ -2549,8 +2552,33 @@ body{
   text-decoration:none;
 }
 @media (max-width: 640px){
-  .downloadsPage .downloadItem{
-    align-items:stretch;
-    flex-direction:column;
+  .downloadsPage .downloadTable,
+  .downloadsPage .downloadTable thead,
+  .downloadsPage .downloadTable tbody,
+  .downloadsPage .downloadTable tr,
+  .downloadsPage .downloadTable th,
+  .downloadsPage .downloadTable td{
+    display:block;
+    width:100%;
+  }
+  .downloadsPage .downloadTable thead tr{
+    display:none;
+  }
+  .downloadsPage .downloadTable td{
+    border-right:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+  .downloadsPage .downloadTable td::before{
+    color:#9fb7e4;
+    font-weight:800;
+  }
+  .downloadsPage .downloadTable td:nth-child(1)::before{ content:"下載"; }
+  .downloadsPage .downloadTable td:nth-child(2)::before{ content:"版本號"; }
+  .downloadsPage .downloadTable td:nth-child(3)::before{ content:"上傳時間"; }
+  .downloadsPage .downloadBtn{
+    min-width:84px;
   }
 }

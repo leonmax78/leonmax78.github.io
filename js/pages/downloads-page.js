@@ -27,23 +27,23 @@
   function renderDownloadsCard(data){
     const version = asText(data.version);
     const published = asText(data.published_at);
-    const notes = asText(data.notes, '');
     const fileName = asText(data.file_name || '武冠判讀_DEMO.exe');
     const downloadUrl = resolveUrl(data.download_url || fileName);
     return `<section class="card downloadsPage">
       <h1>工具下載區</h1>
-      <div class="downloadList">
-        <article class="downloadItem">
-          <div>
-            <h2>武冠判讀 DEMO</h2>
-            <div class="downloadMeta">
-              <span>版本號：${esc(version)}</span>
-              <span>上傳時間：${esc(published)}</span>
-            </div>
-            ${notes ? `<p>${esc(notes)}</p>` : ''}
-          </div>
-          <a class="downloadBtn" href="${esc(downloadUrl)}" download>下載</a>
-        </article>
+      <div class="downloadTableWrap">
+        <table class="downloadTable">
+          <thead>
+            <tr><th>下載</th><th>版本號</th><th>上傳時間</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a class="downloadBtn" href="${esc(downloadUrl)}" download>下載</a></td>
+              <td>${esc(version)}</td>
+              <td>${esc(published)}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>`;
   }
