@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 ROOT = Path(__file__).resolve().parents[1]
 DESKTOP = Path.home() / "Desktop"
 DEFAULT_SETTING = DESKTOP / "0525" / "SETTING"
+RAW_DIR = ROOT / "raw"
 
 UNCATEGORIZED = "\u672a\u5206\u985e"
 BEAST_SKILLS = ["\u8ff7\u60d1\u8853", "\u596a\u5fc3\u8853", "\u7e1b\u9748\u8853"]
@@ -330,8 +331,12 @@ def build(args) -> dict:
     collect_workbook = Path(args.collect_workbook) if args.collect_workbook else find_one("*2025_8_28*.xlsx", "collect workbook")
     shop_workbook = Path(args.shop_workbook) if args.shop_workbook else find_one("*2025_1_21*.xlsx", "shop workbook")
     setting_dir = Path(args.setting_dir)
-    item_ini = ROOT / "ITEM.INI" if (ROOT / "ITEM.INI").exists() else setting_dir / "ITEM.INI"
-    monster_ini = ROOT / "MONSTER_C.INI" if (ROOT / "MONSTER_C.INI").exists() else setting_dir / "MONSTER_C.INI"
+    item_ini = RAW_DIR / "ITEM.INI" if (RAW_DIR / "ITEM.INI").exists() else setting_dir / "ITEM.INI"
+    monster_ini = (
+        RAW_DIR / "MONSTER_C_MERGED.INI"
+        if (RAW_DIR / "MONSTER_C_MERGED.INI").exists()
+        else setting_dir / "MONSTER_C.INI"
+    )
     collectbook_ini = setting_dir / "COLLECTBOOKITEM.INI"
 
     items = parse_ini_records(item_ini, "ITEM")
@@ -402,7 +407,7 @@ def main() -> int:
     parser.add_argument("--collect-workbook", default="")
     parser.add_argument("--shop-workbook", default="")
     parser.add_argument("--setting-dir", default=str(DEFAULT_SETTING))
-    parser.add_argument("--locations-csv", default=str(ROOT / "\u4e00\u822c\u602a\u7269\u4f4d\u7f6e.csv"))
+    parser.add_argument("--locations-csv", default=str(RAW_DIR / "\u4e00\u822c\u602a\u7269\u4f4d\u7f6e.csv"))
     parser.add_argument("--out", default=str(ROOT / "data" / "collectbook_sources.json"))
     args = parser.parse_args()
 
