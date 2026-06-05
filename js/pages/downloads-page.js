@@ -25,6 +25,7 @@
   }
 
   function renderDownloadsCard(data){
+    const displayName = asText(data.display_name || '武冠偵測Demo');
     const version = asText(data.version);
     const published = asText(data.published_at);
     const fileName = asText(data.file_name || '武冠判讀_DEMO.exe');
@@ -34,10 +35,11 @@
       <div class="downloadTableWrap">
         <table class="downloadTable">
           <thead>
-            <tr><th>下載</th><th>版本號</th><th>上傳時間</th></tr>
+            <tr><th>檔案名稱</th><th>下載</th><th>版本號</th><th>上傳時間</th></tr>
           </thead>
           <tbody>
             <tr>
+              <td>${esc(displayName)}</td>
               <td><a class="downloadBtn" href="${esc(downloadUrl)}" download>下載</a></td>
               <td>${esc(version)}</td>
               <td>${esc(published)}</td>

@@ -2575,9 +2575,10 @@ body{
     color:#9fb7e4;
     font-weight:800;
   }
-  .downloadsPage .downloadTable td:nth-child(1)::before{ content:"下載"; }
-  .downloadsPage .downloadTable td:nth-child(2)::before{ content:"版本號"; }
-  .downloadsPage .downloadTable td:nth-child(3)::before{ content:"上傳時間"; }
+  .downloadsPage .downloadTable td:nth-child(1)::before{ content:"檔案名稱"; }
+  .downloadsPage .downloadTable td:nth-child(2)::before{ content:"下載"; }
+  .downloadsPage .downloadTable td:nth-child(3)::before{ content:"版本號"; }
+  .downloadsPage .downloadTable td:nth-child(4)::before{ content:"上傳時間"; }
   .downloadsPage .downloadBtn{
     min-width:84px;
   }
