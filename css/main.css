@@ -846,7 +846,7 @@ body[data-motion="reduced"] *,body[data-motion="reduced"] *::before,body[data-mo
 /* V288 background artwork + persistent desktop side navigation. */
 html,body{
   background:
-    url("../assets/home_bg_desktop.png?v=2606053") center top / cover fixed no-repeat,
+    url("../assets/home_bg_desktop.png?v=2606054") center top / cover fixed no-repeat,
     #07111f!important;
 }
 
@@ -1199,7 +1199,7 @@ section.card:has(.supportPlan) > .notice{
 @media(max-width:700px){
   html,body{
     background:
-      url("../assets/home_bg_mobile.png?v=2606053") center top / cover fixed no-repeat,
+      url("../assets/home_bg_mobile.png?v=2606054") center top / cover fixed no-repeat,
       #07111f!important;
   }
   .homeBlank{
@@ -1582,7 +1582,7 @@ section.card:has(.supportPlan) > .notice{
 @media(min-width:980px){
   html,body{
     background:
-      url("../assets/home_bg_desktop.png?v=2606053") calc(50% + 141px) top / cover fixed no-repeat,
+      url("../assets/home_bg_desktop.png?v=2606054") calc(50% + 141px) top / cover fixed no-repeat,
       #07111f!important;
   }
   .topbar{
@@ -1667,7 +1667,7 @@ body.isHomeView .reader{
   min-height:calc(100dvh - 60px)!important;
   height:calc(100dvh - 60px)!important;
   width:100%!important;
-  background-image:url("../assets/home_bg_desktop.png?v=2606053")!important;
+  background-image:url("../assets/home_bg_desktop.png?v=2606054")!important;
   background-size:contain!important;
   background-position:center center!important;
   background-repeat:no-repeat!important;
@@ -1764,7 +1764,7 @@ body.isHomeView .reader{
   .homeBlank{
     min-height:calc(100dvh - 128px)!important;
     height:calc(100dvh - 128px)!important;
-    background-image:url("../assets/home_bg_mobile.png?v=2606053")!important;
+    background-image:url("../assets/home_bg_mobile.png?v=2606054")!important;
     background-size:contain!important;
     background-position:center center!important;
     background-repeat:no-repeat!important;
@@ -1862,7 +1862,7 @@ body.isHomeView .reader{
   .homeBlank{
     min-height:calc(100dvh - 74px)!important;
     height:calc(100dvh - 74px)!important;
-    background-image:url("../assets/home_bg_mobile.png?v=2606053")!important;
+    background-image:url("../assets/home_bg_mobile.png?v=2606054")!important;
     background-size:contain!important;
     background-position:center center!important;
     background-repeat:no-repeat!important;
@@ -2414,15 +2414,15 @@ body{
 /* V338 faster home artwork: modern browsers use WebP, PNG remains fallback. */
 .homeBlank{
   background-image:image-set(
-    url("../assets/home_bg_desktop.webp?v=2606053") type("image/webp"),
-    url("../assets/home_bg_desktop.png?v=2606053") type("image/png")
+    url("../assets/home_bg_desktop.webp?v=2606054") type("image/webp"),
+    url("../assets/home_bg_desktop.png?v=2606054") type("image/png")
   )!important;
 }
 @media(max-width:979px){
   .homeBlank{
     background-image:image-set(
-      url("../assets/home_bg_mobile.webp?v=2606053") type("image/webp"),
-      url("../assets/home_bg_mobile.png?v=2606053") type("image/png")
+      url("../assets/home_bg_mobile.webp?v=2606054") type("image/webp"),
+      url("../assets/home_bg_mobile.png?v=2606054") type("image/png")
     )!important;
   }
 }
