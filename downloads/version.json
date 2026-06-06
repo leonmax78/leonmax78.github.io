@@ -1,9 +1,9 @@
 {
   "display_name": "武冠判讀DEMO",
-  "version": "260607-6",
-  "published_at": "2026-06-07 02:00",
-  "file_name": "Wuguan_DEMO_260607-6.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-6.zip",
+  "version": "260607-7",
+  "published_at": "2026-06-07 02:12",
+  "file_name": "Wuguan_DEMO_260607-7.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-7.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 測試版，修正自動更新相對路徑被重複拼接的問題。"
+  "notes": "武冠判讀 DEMO 測試版，新增下載後自動安裝、覆蓋更新與重新啟動功能。"
 }
