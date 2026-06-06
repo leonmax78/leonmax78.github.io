@@ -49,6 +49,25 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/shop-page.js",
     "js/pages/downloads-page.js"
   ],
+  "page_monster": [
+    "js/pages/monster-page.js"
+  ],
+  "page_item": [
+    "js/pages/item-page.js",
+    "js/pages/reverse-page.js"
+  ],
+  "page_compound": [
+    "js/pages/compound-page.js"
+  ],
+  "page_collect": [
+    "js/pages/collectbook-page.js"
+  ],
+  "page_shop": [
+    "js/pages/shop-page.js"
+  ],
+  "page_downloads": [
+    "js/pages/downloads-page.js"
+  ],
   "features_equipment": [
     "js/features/equipment/display-and-random-sim.js",
     "js/features/equipment/special-equipment-filter.js",
