@@ -1,9 +1,9 @@
 {
   "display_name": "武冠判讀DEMO",
-  "version": "260607-9",
-  "published_at": "2026-06-07 02:26",
-  "file_name": "Wuguan_DEMO_260607-9.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-9.zip",
+  "version": "260607-10",
+  "published_at": "2026-06-07 02:35",
+  "file_name": "Wuguan_DEMO_260607-10.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-10.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 測試版，修正自動安裝後重啟時 PyInstaller 暫存環境衝突問題。"
+  "notes": "武冠判讀 DEMO 測試版，新增下載進度條，並加強更新後自動重啟流程。"
 }
