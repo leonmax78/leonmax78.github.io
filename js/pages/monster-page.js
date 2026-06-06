@@ -32,7 +32,8 @@ function syncMonsterDataForPage(){
 }
 function hasMonsterData(){return syncMonsterDataForPage()}
 function monsterSearchIndexRows(){
- const data=window.SZO_DATA_BUNDLES&&window.SZO_DATA_BUNDLES.search_index;
+ const bundles=window.SZO_DATA_BUNDLES||{};
+ const data=bundles.search_monsters||bundles.search_index;
  return data&&Array.isArray(data.monsters)?data.monsters:[];
 }
 function hasMonsterSearchIndex(){return monsterSearchIndexRows().length>0}
@@ -128,9 +129,9 @@ function latestMonstersHTML(limit=260){
 
 function renderMonsterPage(){
  const q=window.v88MonsterQ||'',min=window.v88MonsterMin||'',max=window.v88MonsterMax||'',race=window.v88MonsterRace||'',subtype=window.v88MonsterSubtype||'';
- if(!hasMonsterData()&&!hasMonsterSearchIndex()&&typeof window.ensureSearchIndexLoaded==='function'){
-  byId('reader').innerHTML='<section class="card monsterSearchPage"><h1>怪物查詢</h1><div class="muted">正在載入怪物、道具與反查資料，請稍等。</div></section>';
-  window.ensureSearchIndexLoaded().then(ok=>{if(ok)renderMonsterPage();else byId('reader').innerHTML='<section class="card"><h1>怪物查詢</h1><div class="empty">怪物資料載入失敗，請重新整理一次。</div></section>';});
+ if(!hasMonsterData()&&!hasMonsterSearchIndex()&&typeof window.ensureMonsterSearchIndexLoaded==='function'){
+  byId('reader').innerHTML='<section class="card monsterSearchPage"><h1>怪物查詢</h1><div class="muted">正在載入怪物搜尋索引，請稍等。</div></section>';
+  window.ensureMonsterSearchIndexLoaded().then(ok=>{if(ok)renderMonsterPage();else byId('reader').innerHTML='<section class="card"><h1>怪物查詢</h1><div class="empty">怪物資料載入失敗，請重新整理一次。</div></section>';});
   return;
  }
  byId('reader').innerHTML=`<section class="card monsterSearchPage latestSearchPage"><h1>怪物查詢</h1>

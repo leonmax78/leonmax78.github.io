@@ -100,7 +100,7 @@ function scheduleIdleTask(fn,delay=1200){
 
 function prefetchLookupBundles(){
  const version=document.body?.dataset?.version||'dev';
- const files=['data/search_index.bundle.js','data/monsters.bundle.js','data/items.bundle.js','data/drop_reverse.bundle.js','data/magic.bundle.js','data/locations.bundle.js','data/status.bundle.js'];
+ const files=['data/search_monsters.bundle.js','data/search_items.bundle.js','data/monsters.bundle.js','data/items.bundle.js','data/drop_reverse.bundle.js','data/magic.bundle.js','data/locations.bundle.js','data/status.bundle.js'];
  files.forEach(src=>{
   const join=src.includes('?')?'&':'?';
   prefetchResourceOnce(`${src}${join}v=${encodeURIComponent(version)}`,'script');
@@ -360,6 +360,8 @@ async function loadDataBundle(key){
   locations:'data/locations.bundle.js',
   drop_reverse:'data/drop_reverse.bundle.js',
   search_index:'data/search_index.bundle.js',
+  search_monsters:'data/search_monsters.bundle.js',
+  search_items:'data/search_items.bundle.js',
   build_meta:'data/build_meta.bundle.js'
  };
  const src=fileMap[key];
@@ -639,6 +641,26 @@ async function ensureSearchIndexLoaded(){
  return !!(data&&typeof data==='object');
 }
 window.ensureSearchIndexLoaded = ensureSearchIndexLoaded;
+
+async function ensureMonsterSearchIndexLoaded(){
+ const bundles=window.SZO_DATA_BUNDLES||{};
+ if(bundles.search_monsters&&typeof bundles.search_monsters==='object')return true;
+ if(bundles.search_index&&bundles.search_index.monsters)return true;
+ if(typeof loadDataBundle!=='function')return false;
+ const data=await loadDataBundle('search_monsters');
+ return !!(data&&typeof data==='object'&&Array.isArray(data.monsters));
+}
+window.ensureMonsterSearchIndexLoaded = ensureMonsterSearchIndexLoaded;
+
+async function ensureItemSearchIndexLoaded(){
+ const bundles=window.SZO_DATA_BUNDLES||{};
+ if(bundles.search_items&&typeof bundles.search_items==='object')return true;
+ if(bundles.search_index&&bundles.search_index.items)return true;
+ if(typeof loadDataBundle!=='function')return false;
+ const data=await loadDataBundle('search_items');
+ return !!(data&&typeof data==='object'&&Array.isArray(data.items));
+}
+window.ensureItemSearchIndexLoaded = ensureItemSearchIndexLoaded;
 
 async function ensureMonsterDataLoadedOld(){
  if(monsterDataReady||mainDataReady)return true;

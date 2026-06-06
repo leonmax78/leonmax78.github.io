@@ -173,7 +173,8 @@ function hasItemData(){
  return (Array.isArray(window.items)&&window.items.length)||(window.SZO_DATA&&Array.isArray(window.SZO_DATA.items)&&window.SZO_DATA.items.length);
 }
 function itemSearchIndexRows(){
- const data=window.SZO_DATA_BUNDLES&&window.SZO_DATA_BUNDLES.search_index;
+ const bundles=window.SZO_DATA_BUNDLES||{};
+ const data=bundles.search_items||bundles.search_index;
  return data&&Array.isArray(data.items)?data.items:[];
 }
 function hasItemSearchIndex(){return itemSearchIndexRows().length>0}
@@ -298,7 +299,7 @@ async function renderItemPage(tab='item'){
   if(hasItemData()||hasItemSearchIndex())searchItems();
   else{
    byId('itemResults').innerHTML='<div class="muted">資料載入中，請稍等。</div>';
-   const loader=typeof window.ensureSearchIndexLoaded==='function'?window.ensureSearchIndexLoaded:window.ensureLookupDataLoaded;
+   const loader=typeof window.ensureItemSearchIndexLoaded==='function'?window.ensureItemSearchIndexLoaded:(typeof window.ensureSearchIndexLoaded==='function'?window.ensureSearchIndexLoaded:window.ensureLookupDataLoaded);
    if(typeof loader==='function')loader().then(ok=>{if(ok)renderItemPage('item');else byId('itemResults').innerHTML='<div class="empty">?????????</div>';});
   }
  }else if(activeReverse){
