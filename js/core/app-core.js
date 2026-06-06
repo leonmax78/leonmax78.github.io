@@ -543,7 +543,7 @@ function loadOptionalMainData(){
 }
 
 async function ensureItemDataLoaded(){
- return await ensureLookupDataLoaded();
+ return await ensureItemDataLoadedOld();
 }
 window.ensureItemDataLoaded = ensureItemDataLoaded;
 
@@ -1279,9 +1279,5 @@ async function init(){
  adoptPreloadedMonsterBundle();
  renderHome();
  const ok=initAuth();
- if(ok){
-  scheduleIdleTask(prefetchLookupBundles,600);
-  warmLookupDataInBackground();
- }
 }
 window.SZOAppInit = init;

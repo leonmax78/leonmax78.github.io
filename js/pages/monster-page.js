@@ -138,8 +138,8 @@ function renderMonsterPage(){
     <div class="latestMainPane">
       <div class="kvGrid">
         <div class="kv"><div class="k">怪物名稱 / ID / 位置 / 種族 / 子分類</div><div class="v"><input id="monsterQMain" placeholder="例如：黃帝、問頂仙龍、蜘蛛精" value="${esc(q)}" oninput="searchMonstersMain()"></div></div>
-        <div class="kv"><div class="k">種族</div><div class="v"><select id="monsterRaceMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterRaceOptionsHTML(race):'<option>資料載入中</option>'}</select></div></div>
-        <div class="kv"><div class="k">子分類</div><div class="v"><select id="monsterSubtypeMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterSubtypeOptionsHTML(subtype,race):'<option>資料載入中</option>'}</select></div></div>
+        <div class="kv"><div class="k">種族</div><div class="v"><select id="monsterRaceMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterRaceOptionsHTML(race):monsterIndexRaceOptionsHTML(race)}</select></div></div>
+        <div class="kv"><div class="k">子分類</div><div class="v"><select id="monsterSubtypeMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterSubtypeOptionsHTML(subtype,race):monsterIndexSubtypeOptionsHTML(subtype,race)}</select></div></div>
         <div class="kv"><div class="k">最低 Lv</div><div class="v"><input id="monsterMinMain" type="number" value="${esc(min)}" oninput="searchMonstersMain()"></div></div>
         <div class="kv"><div class="k">最高 Lv</div><div class="v"><input id="monsterMaxMain" type="number" value="${esc(max)}" oninput="searchMonstersMain()"></div></div>
       </div>
@@ -152,12 +152,7 @@ function renderMonsterPage(){
     </aside>
   </div>
  </section>`;
- if(hasMonsterData())searchMonstersMain();
- else{
-  byId('monsterResultsMain').innerHTML='<div class="muted">資料載入中，請稍等。</div>';
-  const loader=typeof window.ensureMonsterDataLoaded==='function'?window.ensureMonsterDataLoaded:(typeof window.ensureLookupDataLoaded==='function'?window.ensureLookupDataLoaded:window.ensureMainDataLoaded);
-  if(typeof loader==='function')loader().then(ok=>{if(ok)renderMonsterPage();else byId('monsterResultsMain').innerHTML='<div class="empty">怪物資料載入失敗，請重新整理一次。</div>';});
- }
+ searchMonstersMain();
 }
 
 function searchMonstersMain(){
@@ -174,7 +169,6 @@ function searchMonstersMain(){
   if([...subSel.options].some(o=>o.value===old))subSel.value=old;else{subSel.value='';window.v88MonsterSubtype='';}
  }
  const box=byId('monsterResultsMain'); if(!box)return;
- if(!hasMonsterData()){box.innerHTML='<div class="muted">資料載入中，請稍等。</div>';return;}
  const hasFilter=!!(String(window.v88MonsterQ||'').trim()||String(window.v88MonsterMin||'').trim()||String(window.v88MonsterMax||'').trim()||String(window.v88MonsterRace||'').trim()||String(window.v88MonsterSubtype||'').trim());
  if(!hasFilter){box.innerHTML='';return;}
  box.innerHTML=hasMonsterData()?monsterResultsHTML(filterMonsterList(window.v88MonsterQ,window.v88MonsterMin,window.v88MonsterMax,window.v88MonsterRace,window.v88MonsterSubtype)):monsterIndexResultsHTML(filterMonsterIndexList(window.v88MonsterQ,window.v88MonsterMin,window.v88MonsterMax,window.v88MonsterRace,window.v88MonsterSubtype));

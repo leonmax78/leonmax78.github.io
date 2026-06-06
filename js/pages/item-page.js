@@ -167,6 +167,7 @@ function refreshItemSeriesWhenReady(){
   itemSeriesRefreshPromise=null;
  });
 }
+window.refreshItemSeriesWhenReady=refreshItemSeriesWhenReady;
 
 function hasItemData(){
  return (Array.isArray(window.items)&&window.items.length)||(window.SZO_DATA&&Array.isArray(window.SZO_DATA.items)&&window.SZO_DATA.items.length);
@@ -276,7 +277,7 @@ async function renderItemPage(tab='item'){
         <div class="kv"><div class="k">類型</div><div class="v"><select id="itemType" onchange="searchItems()"></select></div></div>
         <div class="kv"><div class="k">最低 Lv</div><div class="v"><input id="itemMin" type="number" value="${esc(window.v86ItemMin||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">最高 Lv</div><div class="v"><input id="itemMax" type="number" value="${esc(window.v86ItemMax||'')}" oninput="searchItems()"></div></div>
-        <div class="kv"><div class="k">系列快選</div><div class="v"><select id="itemEqSeries" onchange="searchItems()"></select></div></div>
+        <div class="kv"><div class="k">系列快選</div><div class="v"><select id="itemEqSeries" onfocus="refreshItemSeriesWhenReady()" onchange="searchItems()"></select></div></div>
         <div class="kv"><div class="k">專剋屬性</div><div class="v"><select id="itemKind" onchange="searchItems()"></select></div></div>
       </div>
       <div class="notice itemFilterNote">系列快選依合成模擬清單建立；類型依 ITEM.INI 原始欄位篩選。</div>
@@ -300,7 +301,6 @@ async function renderItemPage(tab='item'){
    const loader=typeof window.ensureSearchIndexLoaded==='function'?window.ensureSearchIndexLoaded:window.ensureLookupDataLoaded;
    if(typeof loader==='function')loader().then(ok=>{if(ok)renderItemPage('item');else byId('itemResults').innerHTML='<div class="empty">?????????</div>';});
   }
-  refreshItemSeriesWhenReady();
  }else if(activeReverse){
   if(hasReverseData())searchReverseItems();
   else{
