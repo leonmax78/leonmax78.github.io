@@ -2515,9 +2515,23 @@ body{
 }
 .downloadsPage .downloadTable{
   width:100%;
+  min-width:0;
   border-collapse:collapse;
   color:#dbe7ff;
   table-layout:fixed;
+}
+.downloadsPage .downloadCellValue{
+  overflow-wrap:anywhere;
+}
+.downloadsPage .downloadNameValue{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.downloadsPage .downloadFileName{
+  color:#9fb7e4;
+  font-size:13px;
+  line-height:1.35;
 }
 .downloadsPage .downloadTable th,
 .downloadsPage .downloadTable td{
@@ -2552,6 +2566,9 @@ body{
   text-decoration:none;
 }
 @media (max-width: 640px){
+  .downloadsPage .downloadTableWrap{
+    border-radius:10px;
+  }
   .downloadsPage .downloadTable,
   .downloadsPage .downloadTable thead,
   .downloadsPage .downloadTable tbody,
@@ -2566,20 +2583,42 @@ body{
   }
   .downloadsPage .downloadTable td{
     border-right:0;
-    display:flex;
+    display:grid;
+    grid-template-columns:minmax(86px, 34%) minmax(0, 1fr);
     align-items:center;
-    justify-content:space-between;
     gap:12px;
+    min-height:58px;
   }
   .downloadsPage .downloadTable td::before{
+    content:attr(data-label);
     color:#9fb7e4;
     font-weight:800;
+    line-height:1.35;
+    white-space:nowrap;
   }
-  .downloadsPage .downloadTable td:nth-child(1)::before{ content:"檔案名稱"; }
-  .downloadsPage .downloadTable td:nth-child(2)::before{ content:"下載"; }
-  .downloadsPage .downloadTable td:nth-child(3)::before{ content:"版本號"; }
-  .downloadsPage .downloadTable td:nth-child(4)::before{ content:"上傳時間"; }
+  .downloadsPage .downloadCellValue{
+    min-width:0;
+    justify-self:end;
+    text-align:right;
+  }
+  .downloadsPage .downloadNameValue{
+    align-items:flex-end;
+  }
   .downloadsPage .downloadBtn{
     min-width:84px;
+  }
+}
+@media (max-width: 380px){
+  .downloadsPage .downloadTable td{
+    grid-template-columns:1fr;
+    align-items:start;
+    gap:6px;
+  }
+  .downloadsPage .downloadCellValue{
+    justify-self:start;
+    text-align:left;
+  }
+  .downloadsPage .downloadNameValue{
+    align-items:flex-start;
   }
 }

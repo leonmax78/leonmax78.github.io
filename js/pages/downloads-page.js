@@ -30,6 +30,9 @@
     const published = asText(data.published_at);
     const fileName = asText(data.file_name || '武冠判讀_DEMO.exe');
     const downloadUrl = resolveUrl(data.download_url || fileName);
+    const fileLabel = fileName === displayName
+      ? esc(fileName)
+      : `${esc(displayName)}<span class="downloadFileName">${esc(fileName)}</span>`;
     return `<section class="card downloadsPage">
       <h1>工具下載區</h1>
       <div class="downloadTableWrap">
@@ -39,10 +42,10 @@
           </thead>
           <tbody>
             <tr>
-              <td>${esc(displayName)}</td>
-              <td><a class="downloadBtn" href="${esc(downloadUrl)}" download>下載</a></td>
-              <td>${esc(version)}</td>
-              <td>${esc(published)}</td>
+              <td data-label="檔案名稱"><span class="downloadCellValue downloadNameValue">${fileLabel}</span></td>
+              <td data-label="下載"><span class="downloadCellValue"><a class="downloadBtn" href="${esc(downloadUrl)}" download>下載</a></span></td>
+              <td data-label="版本號"><span class="downloadCellValue">${esc(version)}</span></td>
+              <td data-label="上傳時間"><span class="downloadCellValue">${esc(published)}</span></td>
             </tr>
           </tbody>
         </table>
