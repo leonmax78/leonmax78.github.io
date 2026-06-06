@@ -1,9 +1,9 @@
 {
   "display_name": "武冠判讀DEMO",
-  "version": "260607-4",
-  "published_at": "2026-06-07 01:45",
-  "file_name": "武冠判讀_DEMO_260607-4.zip",
-  "download_url": "downloads/武冠判讀_DEMO_260607-4.zip",
+  "version": "260607-5",
+  "published_at": "2026-06-07 01:53",
+  "file_name": "Wuguan_DEMO_260607-5.zip",
+  "download_url": "downloads/Wuguan_DEMO_260607-5.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 測試版，新增精簡模式快捷鍵提示與使用說明。"
+  "notes": "武冠判讀 DEMO 測試版，修正中文下載連結造成自動更新失敗的問題。"
 }
