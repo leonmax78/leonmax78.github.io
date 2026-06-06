@@ -2437,7 +2437,10 @@ body{
   padding:14px 24px!important;
   background:
     linear-gradient(90deg,rgba(2,8,18,.92) 0%,rgba(2,8,18,.70) 34%,rgba(2,8,18,.82) 100%),
-    url("../assets/header_bg_desktop.png") center center / cover no-repeat!important;
+    image-set(
+      url("../assets/header_bg_desktop.webp?v=2606061") type("image/webp"),
+      url("../assets/header_bg_desktop.png?v=2606061") type("image/png")
+    ) center center / cover no-repeat!important;
   border-bottom:1px solid rgba(110,171,245,.56)!important;
   box-shadow:0 10px 26px rgba(0,0,0,.28)!important;
 }
@@ -2481,7 +2484,10 @@ body{
     padding:calc(12px + env(safe-area-inset-top)) 12px 12px!important;
     background:
       linear-gradient(90deg,rgba(2,8,18,.93) 0%,rgba(2,8,18,.66) 48%,rgba(2,8,18,.86) 100%),
-      url("../assets/header_bg_mobile.png") center center / cover no-repeat!important;
+      image-set(
+        url("../assets/header_bg_mobile.webp?v=2606061") type("image/webp"),
+        url("../assets/header_bg_mobile.png?v=2606061") type("image/png")
+      ) center center / cover no-repeat!important;
   }
   .topline{
     height:56px!important;
