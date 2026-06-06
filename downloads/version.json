@@ -1,9 +1,9 @@
 {
   "display_name": "武冠判讀DEMO",
-  "version": "260605-3",
-  "published_at": "2026-06-05 19:40",
-  "file_name": "武冠判讀_DEMO_260605-3.zip",
-  "download_url": "downloads/武冠判讀_DEMO_260605-3.zip",
+  "version": "260607-4",
+  "published_at": "2026-06-07 01:45",
+  "file_name": "武冠判讀_DEMO_260607-4.zip",
+  "download_url": "downloads/武冠判讀_DEMO_260607-4.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 測試版，內含 EXE、合併清冊、模型資料與線上更新設定。"
+  "notes": "武冠判讀 DEMO 測試版，新增精簡模式快捷鍵提示與使用說明。"
 }
