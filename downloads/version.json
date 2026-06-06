@@ -1,9 +1,9 @@
 {
   "display_name": "武冠判讀DEMO",
-  "version": "260607-7",
-  "published_at": "2026-06-07 02:12",
-  "file_name": "Wuguan_DEMO_260607-7.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-7.zip",
+  "version": "260607-8",
+  "published_at": "2026-06-07 02:19",
+  "file_name": "Wuguan_DEMO_260607-8.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-8.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 測試版，新增下載後自動安裝、覆蓋更新與重新啟動功能。"
+  "notes": "武冠判讀 DEMO 測試版，測試自動安裝更新流程。"
 }
