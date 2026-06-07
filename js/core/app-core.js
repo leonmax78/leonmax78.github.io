@@ -220,8 +220,9 @@ function showPageLoading(label,detail){
  const reader=byId('reader');
  if(!reader)return;
  const text=pageLoadingText(label);
+ if(reader.querySelector('.pageLoadingCard')?.dataset.loadingLabel===text.title)return;
  const safeEsc=typeof esc==='function'?esc:(s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
- reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section>`;
+ reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite" data-loading-label="${safeEsc(text.title)}"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section>`;
 }
 window.showPageLoading=showPageLoading;
 

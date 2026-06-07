@@ -2103,6 +2103,36 @@ body.isHomeView .reader{
 .siteSupportTools + .visitorCounter{
   margin-top:0!important;
 }
+/* V358 visitor counter readability. */
+.visitorCounter{
+  gap:10px!important;
+}
+.visitorCounterTitle{
+  font-size:15px!important;
+  letter-spacing:.03em!important;
+}
+.visitorCounterBadgeBox{
+  width:auto!important;
+  min-width:54px!important;
+  max-width:none!important;
+  height:30px!important;
+  flex:0 0 auto!important;
+  overflow:visible!important;
+  background:transparent!important;
+}
+.visitorCounterBadgeBox .visitorCounterBadge{
+  width:auto!important;
+  min-width:54px!important;
+  max-width:none!important;
+  height:30px!important;
+  object-fit:contain!important;
+  transform:none!important;
+}
+@media(max-width:979px){
+  .visitorCounterTitle{font-size:15px!important}
+  .visitorCounterBadgeBox,
+  .visitorCounterBadgeBox .visitorCounterBadge{height:32px!important;min-width:58px!important}
+}
 .siteSupportBtn{
   border:1px solid color-mix(in srgb,var(--accent2) 38%,var(--line));
   background:linear-gradient(135deg,rgba(96,165,250,.12),rgba(45,212,191,.06));

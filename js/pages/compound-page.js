@@ -430,7 +430,8 @@ function renderEquipmentCompoundPage(){
    !(typeof itemIndex!=='undefined'&&itemIndex&&Object.keys(itemIndex).length)
   )
  ){
-  byId('reader').innerHTML='<section class="card"><h1>合成資料讀取中</h1><div class="muted">正在載入道具、怪物與合成資料，請稍等。</div></section>';
+  if(typeof showPageLoading==='function')showPageLoading('常用裝備配方合成模擬');
+  else byId('reader').innerHTML='<section class="card"><h1>常用裝備配方合成模擬讀取中</h1><div class="muted">正在載入道具、怪物與合成資料，請稍等。</div></section>';
   ensureCompoundDataLoaded().then(ok=>{if(ok)renderEquipmentCompoundPage();});
   return;
  }
