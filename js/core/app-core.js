@@ -209,6 +209,54 @@ function renderJiangHome(){
  byId('reader').innerHTML='';
 }
 
+function pageLoadingText(label){
+ const name=String(label||'頁面').trim()||'頁面';
+ return {
+  title:name+'讀取中',
+  body:'正在載入 '+name+' 所需資料，請稍候。'
+ };
+}
+function showPageLoading(label,detail){
+ const reader=byId('reader');
+ if(!reader)return;
+ const text=pageLoadingText(label);
+ const safeEsc=typeof esc==='function'?esc:(s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
+ reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section>`;
+}
+window.showPageLoading=showPageLoading;
+
+function viewLoadingLabel(view){
+ const labels={
+  monster:'怪物查詢',
+  collect:'武冠收錄資料',
+  shop:'特殊商店販賣資訊',
+  downloads:'工具下載區',
+  soul:'武魂能力試算',
+  reverse:'掉落反查'
+ };
+ return labels[view]||'頁面';
+}
+function itemSubLoadingLabel(kind){
+ const labels={
+  item:'道具查詢',
+  reverse:'掉落反查',
+  compound:'常用裝備配方合成模擬'
+ };
+ return labels[kind]||'道具功能';
+}
+function jiangLoadingLabel(kind){
+ const labels={
+  support:'副降神模擬',
+  supportCompare:'副降神存檔比較',
+  compare:'主降神比較',
+  stars:'20星等',
+  starAura:'星等 / 靈氣',
+  expPill:'等級 / 經驗丹',
+  training:'修練機制'
+ };
+ return labels[kind]||'降神、經驗、修練試算';
+}
+
 function adoptPreloadedMonsterBundle(){
  const bundle=window.SZO_DATA_BUNDLES&&window.SZO_DATA_BUNDLES.monsters;
  if(Array.isArray(bundle)&&bundle.length&&!monsters.length){
@@ -234,23 +282,27 @@ async function setView(view){
  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
  if(view==='home'){renderHome(); closeDrawer();}
  else if(view==='jiang'){openJiangMenuOnly();}
- else if(view==='monster'){await ensureMonsterPageLoaded(); renderMonsterPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='item'){openItemMenuOnly();}
- else if(view==='collect'){await ensureCollectPageLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('weapon');}
- else if(view==='shop'){await ensureShopPageLoaded(); if(typeof renderShopPage==='function')renderShopPage();}
- else if(view==='downloads'){await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='monster'){showPageLoading(viewLoadingLabel(view)); await ensureMonsterPageLoaded(); renderMonsterPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='item'){openItemMenuOnly(); showPageLoading('道具查詢'); await ensureItemPageLoaded(); await renderItemPage('item'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='collect'){showPageLoading(viewLoadingLabel(view)); await ensureCollectPageLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('weapon');}
+ else if(view==='shop'){showPageLoading(viewLoadingLabel(view)); await ensureShopPageLoaded(); if(typeof renderShopPage==='function')renderShopPage();}
+ else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='soul'){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));
   document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
+  showPageLoading(viewLoadingLabel(view));
   await ensureSoulDataLoaded();
   if(typeof window.renderSoulCalcPage==='function') window.renderSoulCalcPage();
   closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
  }
- else if(view==='reverse'){await ensureItemPageLoaded(); await renderItemPage('reverse'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='reverse'){showPageLoading(viewLoadingLabel(view)); await ensureItemPageLoaded(); await renderItemPage('reverse'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
 }
 function setJiang(kind){
  openJiangMenuOnly();
+ const loadingLabel=jiangLoadingLabel(kind);
+ window.SZO_PENDING_JIANG_LABEL=loadingLabel;
+ showPageLoading(loadingLabel);
  (async()=>{
   if(!(await ensureJiangshenToolLoaded()))return;
   if(!jiangshenSetDelegating && window.setJiang && window.setJiang !== setJiang){
@@ -265,7 +317,7 @@ function setJiang(kind){
 async function renderItemPage(tab='item'){
  const activeItem=tab==='item';
  const activeReverse=tab==='reverse';
- if(tab==='compound'){if(await ensureCompoundDataLoaded())renderEquipmentCompoundPage();return;}
+ if(tab==='compound'){showPageLoading(itemSubLoadingLabel('compound')); if(await ensureCompoundDataLoaded())renderEquipmentCompoundPage();return;}
  byId('reader').innerHTML=activeItem?`<section class="card"><h1>??亥岷</h1>
   <div class="kvGrid">
     <div class="kv"><div class="k">??迂 / ID / 憿?</div><div class="v"><input id="itemQ" placeholder="靘?嚗蟡???77" value="${esc(window.v86ItemQ||'')}"></div></div>
@@ -303,6 +355,7 @@ function openItemMenuOnly(){
 }
 async function setItemSub(kind){
  openItemMenuOnly();
+ showPageLoading(itemSubLoadingLabel(kind));
  if(kind==='compound'){if(await ensureCompoundDataLoaded())renderEquipmentCompoundPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'}); return;}
  await ensureItemPageLoaded();
  if(kind==='item'){await renderItemPage('item'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
@@ -323,7 +376,7 @@ function loadLine(msg,type='info'){
   card=document.createElement('section');
   card.className='card';
   card.id='loadCard';
-  card.innerHTML="<h1>Data load failed</h1><div id=\"loadLines\" class=\"muted\"></div>";
+  card.innerHTML="<h1>資料讀取失敗</h1><div id=\"loadLines\" class=\"muted\"></div>";
   byId('reader').prepend(card);
  }
  const el=byId('loadLines');
@@ -792,7 +845,7 @@ async function ensureJiangshenToolLoaded(){
   ];
   try{
    setTopStatus("Loading jiangshen tool");
-   byId("reader").innerHTML="<section class=\"card\"><h1>Jiangshen tool loading</h1><div class=\"muted\">Loading jiangshen data and calculator.</div></section>";
+   showPageLoading(window.SZO_PENDING_JIANG_LABEL||'降神、經驗、修練試算');
    for(const src of list)await loadScriptOnce(src);
    jiangshenToolReady=true;
    setTopStatus("Ready");
@@ -816,10 +869,10 @@ async function ensureSoulDataLoaded(){
    const groups=window.SZO_SCRIPT_GROUPS||{};
    const list=[
     ...(groups.data_soul||[]),
-    ...(groups.features_soul||[])
-   ];
-   byId('reader').innerHTML='<section class="card"><h1>Soul tool loading</h1><div class="muted">Loading soul data only when this tool is opened.</div></section>';
-   for(const src of list)await loadScriptOnce(src);
+     ...(groups.features_soul||[])
+    ];
+    showPageLoading('武魂能力試算');
+    for(const src of list)await loadScriptOnce(src);
    if(typeof buildSoulDataFromChangeBodyIni!=='function')throw new Error('Soul data tool is not loaded');
    const cb=await fetchFirst(FILES.changebody||[],'甇阡? INI');
    changeBodyIniSouls=cb.missing?[]:buildSoulDataFromChangeBodyIni(cb.text);
@@ -1321,7 +1374,7 @@ function backButtonHTML(view){
 function initEvents(){
  byId('openMenuBtn').onclick=openDrawer;byId('closeMenuBtn').onclick=closeDrawer;byId('backdrop').onclick=closeDrawer;
  document.addEventListener('change',e=>{if(e.target.classList&&e.target.classList.contains('jsSupportName'))updateSupportOptions(); if(e.target.classList&&(e.target.classList.contains('trainCur')||e.target.classList.contains('trainTar'))){clampTrainingInputs(); updateTrainingNeeds();}});
- document.addEventListener('click',e=>{const v=e.target.closest('[data-view]')?.dataset.view;if(v){if(v==='jiang')openJiangMenuOnly();else setView(v);}const o=e.target.closest('[data-open]')?.dataset.open;if(o){setView(o);if(window.innerWidth<980)openDrawer()}const jo=e.target.closest('[data-jiang-open]')?.dataset.jiangOpen;if(jo){setJiang(jo)}const io=e.target.closest('[data-item-open]')?.dataset.itemOpen;if(io){setItemSub(io)}const co=e.target.closest('[data-collect-open]')?.dataset.collectOpen;if(co){ensureCollectPageLoaded().then(()=>{if(typeof renderCollectBookPage==='function')renderCollectBookPage(co);});}const jk=e.target.closest('[data-jiang]')?.dataset.jiang;if(jk)setJiang(jk);const mid=e.target.closest('[data-monster]')?.dataset.monster;if(mid){e.preventDefault();e.stopPropagation();showMonster(mid);return;}const iid=e.target.closest('[data-item]')?.dataset.item;if(iid)showItem(iid);const rid=e.target.closest('[data-rev]')?.dataset.rev;if(rid)showReverse(rid);const rr=e.target.closest('[data-reverse-item]')?.dataset.reverseItem;if(rr)showReverse(rr);const equid=e.target.closest('[data-eq-uid]')?.dataset.eqUid;if(equid){openEquipmentSim(equid);}const eg=e.target.closest('[data-eq-group]')?.dataset.eqGroup;if(eg){eqRenderPreview();}const er=e.target.closest('[data-eq-recipe]')?.dataset.eqRecipe;if(er){eqToggleRecipe(er);}const esr=e.target.closest('[data-eq-sim-recipe]')?.dataset.eqSimRecipe;if(esr){eqSimToggleRecipe(esr);}if(e.target.classList&&e.target.classList.contains('jsSupportName'))updateSupportOptions();if(e.target.id==='calcSupport')calcSupport();if(e.target.id==='calcCompare')calcCompare();if(e.target.id==='calcStars')calcStars();if(e.target.id==='calcNeeds')calcNeeds();if(e.target.id==='calcStarAura')calcStarAura();if(e.target.id==='calcExpNeed')calcExpNeed();if(e.target.id==='calcEatPill')calcEatPill();if(e.target.id==='calcTraining')calcTraining();if(e.target.id==='eqShowMaterials')showEquipmentMaterials();if(e.target.id==='eqBackToSim')eqRenderPreview();if(e.target.id==='eqBackToList')renderEquipmentCompoundPage();if(e.target.id==='eqOpenRandom')renderEquipmentRandomPage();if(e.target.id==='eqSimOnce'){eqRandomOnce();renderEquipmentRandomPage(true);}if(e.target.id==='eqSimClear'){const keep=Object.assign({},eqState.simSelectedRecipes||{});eqResetRandom(false);eqState.simSelectedRecipes=keep;renderEquipmentRandomPage(true);}if(e.target.id==='trainCurrentZero'||e.target.id==='trainAllMax')setTrainingCurrentZero();if(e.target.id==='trainCurrentMax'||e.target.id==='trainClear')setTrainingCurrentMax();const et=e.target.closest('[data-exp-tab]');if(et){document.querySelectorAll('.calcTab').forEach(b=>b.classList.remove('active'));et.classList.add('active');byId('expTabNeed').style.display=et.dataset.expTab==='need'?'block':'none';byId('expTabEat').style.display=et.dataset.expTab==='eat'?'block':'none';}});
+ document.addEventListener('click',e=>{const v=e.target.closest('[data-view]')?.dataset.view;if(v){if(v==='jiang')openJiangMenuOnly();else setView(v);}const o=e.target.closest('[data-open]')?.dataset.open;if(o){setView(o);if(window.innerWidth<980)openDrawer()}const jo=e.target.closest('[data-jiang-open]')?.dataset.jiangOpen;if(jo){setJiang(jo)}const io=e.target.closest('[data-item-open]')?.dataset.itemOpen;if(io){setItemSub(io)}const co=e.target.closest('[data-collect-open]')?.dataset.collectOpen;if(co){showPageLoading('武冠收錄資料');ensureCollectPageLoaded().then(()=>{if(typeof renderCollectBookPage==='function')renderCollectBookPage(co);});}const jk=e.target.closest('[data-jiang]')?.dataset.jiang;if(jk)setJiang(jk);const mid=e.target.closest('[data-monster]')?.dataset.monster;if(mid){e.preventDefault();e.stopPropagation();showMonster(mid);return;}const iid=e.target.closest('[data-item]')?.dataset.item;if(iid)showItem(iid);const rid=e.target.closest('[data-rev]')?.dataset.rev;if(rid)showReverse(rid);const rr=e.target.closest('[data-reverse-item]')?.dataset.reverseItem;if(rr)showReverse(rr);const equid=e.target.closest('[data-eq-uid]')?.dataset.eqUid;if(equid){openEquipmentSim(equid);}const eg=e.target.closest('[data-eq-group]')?.dataset.eqGroup;if(eg){eqRenderPreview();}const er=e.target.closest('[data-eq-recipe]')?.dataset.eqRecipe;if(er){eqToggleRecipe(er);}const esr=e.target.closest('[data-eq-sim-recipe]')?.dataset.eqSimRecipe;if(esr){eqSimToggleRecipe(esr);}if(e.target.classList&&e.target.classList.contains('jsSupportName'))updateSupportOptions();if(e.target.id==='calcSupport')calcSupport();if(e.target.id==='calcCompare')calcCompare();if(e.target.id==='calcStars')calcStars();if(e.target.id==='calcNeeds')calcNeeds();if(e.target.id==='calcStarAura')calcStarAura();if(e.target.id==='calcExpNeed')calcExpNeed();if(e.target.id==='calcEatPill')calcEatPill();if(e.target.id==='calcTraining')calcTraining();if(e.target.id==='eqShowMaterials')showEquipmentMaterials();if(e.target.id==='eqBackToSim')eqRenderPreview();if(e.target.id==='eqBackToList')renderEquipmentCompoundPage();if(e.target.id==='eqOpenRandom')renderEquipmentRandomPage();if(e.target.id==='eqSimOnce'){eqRandomOnce();renderEquipmentRandomPage(true);}if(e.target.id==='eqSimClear'){const keep=Object.assign({},eqState.simSelectedRecipes||{});eqResetRandom(false);eqState.simSelectedRecipes=keep;renderEquipmentRandomPage(true);}if(e.target.id==='trainCurrentZero'||e.target.id==='trainAllMax')setTrainingCurrentZero();if(e.target.id==='trainCurrentMax'||e.target.id==='trainClear')setTrainingCurrentMax();const et=e.target.closest('[data-exp-tab]');if(et){document.querySelectorAll('.calcTab').forEach(b=>b.classList.remove('active'));et.classList.add('active');byId('expTabNeed').style.display=et.dataset.expTab==='need'?'block':'none';byId('expTabEat').style.display=et.dataset.expTab==='eat'?'block':'none';}});
  ['monsterQ','monsterMin','monsterMax'].forEach(id=>{const el=byId(id); if(el)el.addEventListener('input',searchMonsters);});
  
  
