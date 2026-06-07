@@ -2555,6 +2555,53 @@ body{
     letter-spacing:0!important;
   }
 }
+
+/* V361 image title logo. */
+.brand{
+  display:flex!important;
+  align-items:center!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+}
+.brandTitle{
+  display:block!important;
+  width:clamp(260px,34vw,500px)!important;
+  height:58px!important;
+  max-width:100%!important;
+  font-size:0!important;
+  line-height:0!important;
+  color:transparent!important;
+  letter-spacing:0!important;
+  -webkit-text-stroke:0 transparent!important;
+  text-shadow:none!important;
+  overflow:hidden!important;
+  background-image:image-set(
+    url("../assets/title_logo_desktop.webp?v=2606071") type("image/webp"),
+    url("../assets/title_logo_desktop.png?v=2606071") type("image/png")
+  )!important;
+  background-repeat:no-repeat!important;
+  background-position:left center!important;
+  background-size:contain!important;
+  filter:invert(1) sepia(.18) saturate(1.2) brightness(1.28) drop-shadow(0 2px 2px rgba(0,0,0,.92)) drop-shadow(0 0 10px rgba(255,247,214,.34))!important;
+}
+@media(max-width:979px){
+  .brandTitle{
+    width:clamp(160px,42vw,260px)!important;
+    height:52px!important;
+    background-image:image-set(
+      url("../assets/title_logo_mobile.webp?v=2606071") type("image/webp"),
+      url("../assets/title_logo_mobile.png?v=2606071") type("image/png")
+    )!important;
+    background-position:left center!important;
+    background-size:contain!important;
+  }
+}
+@media(max-width:390px){
+  .brandTitle{
+    width:clamp(145px,40vw,210px)!important;
+    height:48px!important;
+  }
+}
 /* Tool downloads */
 .downloadsPage .downloadTableWrap{
   margin-top:14px;
