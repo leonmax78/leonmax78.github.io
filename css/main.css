@@ -2458,6 +2458,7 @@ body{
 /* V338 faster home artwork: modern browsers use WebP, PNG remains fallback. */
 .homeBlank{
   background-image:image-set(
+    url("../assets/home_bg_desktop_fast.webp?v=2606081") type("image/webp"),
     url("../assets/home_bg_desktop.webp?v=2606054") type("image/webp"),
     url("../assets/home_bg_desktop.png?v=2606054") type("image/png")
   )!important;
@@ -2465,6 +2466,7 @@ body{
 @media(max-width:979px){
   .homeBlank{
     background-image:image-set(
+      url("../assets/home_bg_mobile_fast.webp?v=2606081") type("image/webp"),
       url("../assets/home_bg_mobile.webp?v=2606054") type("image/webp"),
       url("../assets/home_bg_mobile.png?v=2606054") type("image/png")
     )!important;
@@ -2482,6 +2484,7 @@ body{
   background:
     linear-gradient(90deg,rgba(2,8,18,.92) 0%,rgba(2,8,18,.70) 34%,rgba(2,8,18,.82) 100%),
     image-set(
+      url("../assets/header_bg_desktop_fast.webp?v=2606081") type("image/webp"),
       url("../assets/header_bg_desktop.webp?v=2606061") type("image/webp"),
       url("../assets/header_bg_desktop.png?v=2606061") type("image/png")
     ) center center / cover no-repeat!important;
@@ -2529,6 +2532,7 @@ body{
     background:
       linear-gradient(90deg,rgba(2,8,18,.93) 0%,rgba(2,8,18,.66) 48%,rgba(2,8,18,.86) 100%),
       image-set(
+        url("../assets/header_bg_mobile_fast.webp?v=2606081") type("image/webp"),
         url("../assets/header_bg_mobile.webp?v=2606061") type("image/webp"),
         url("../assets/header_bg_mobile.png?v=2606061") type("image/png")
       ) center center / cover no-repeat!important;
