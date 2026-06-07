@@ -58,7 +58,7 @@
     <div class="visitorCounter" aria-label="網頁瀏覽人數">
       <div class="visitorCounterTitle">網頁瀏覽人數</div>
       <span class="visitorCounterBadgeBox">
-        <img class="visitorCounterBadge" src="https://visitor-badge.laobi.icu/badge?page_id=leonmax78.test&left_text=%E2%80%8B&left_color=%230b84dc&right_color=%230b84dc&height=30&radius=999" alt="網頁瀏覽人數" loading="lazy">
+        <img class="visitorCounterBadge" src="https://visitor-badge.laobi.icu/badge?page_id=leonmax78.test&left_text=%E2%80%8B&left_color=%23040605&right_color=%23040605&height=34&radius=999" alt="網頁瀏覽人數" loading="lazy">
       </span>
     </div>
   </div>

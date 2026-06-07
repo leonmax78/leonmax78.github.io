@@ -282,7 +282,8 @@
       typeof ensureCompoundDataLoaded==='function' &&
       (typeof compoundDataReady==='undefined'||!compoundDataReady)
     ){
-      byId('reader').innerHTML='<section class="card"><h1>合成資料讀取中</h1><div class="muted">第一次進入裝備合成模擬時會載入配方與裝備資料。</div></section>';
+      if(typeof showPageLoading==='function')showPageLoading('常用裝備配方合成模擬');
+      else byId('reader').innerHTML='<section class="card pageLoadingCard"><h1>常用裝備配方合成模擬讀取中</h1><div class="muted">第一次進入常用裝備配方合成模擬時會載入配方與裝備資料。</div></section>';
       ensureCompoundDataLoaded().then(ok=>{if(ok)window.renderEquipmentCompoundPage();});
       return;
     }
