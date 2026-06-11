@@ -213,4 +213,39 @@
     if(st) st.textContent = '模組載入中，請稍候再點一次';
   }, true);
 
+  // V365：手機瀏覽器可能把已開啟的 SPA 分頁放回前景，卻保留舊資料陣列。
+  // 回到分頁時檢查 build_meta；若線上資料較新，重新整理一次拿最新 bundle。
+  (function bindDataFreshnessGuard(){
+    const currentBuild = document.body?.dataset?.buildAt || '';
+    if(!currentBuild || !window.fetch) return;
+    let checking = false;
+    let lastCheck = 0;
+    async function checkFreshData(){
+      const now = Date.now();
+      if(checking || now - lastCheck < 15000) return;
+      checking = true;
+      lastCheck = now;
+      try{
+        const res = await fetch('data/build_meta.json?fresh=' + now, { cache: 'no-store' });
+        if(!res.ok) return;
+        const meta = await res.json();
+        const remoteBuild = String(meta && meta.built_at || '');
+        if(!remoteBuild || remoteBuild === currentBuild) return;
+        const reloadKey = 'szo_reloaded_build_' + remoteBuild;
+        if(sessionStorage.getItem(reloadKey)) return;
+        sessionStorage.setItem(reloadKey, '1');
+        location.reload();
+      }catch(err){
+        // Ignore network failures; normal navigation still works.
+      }finally{
+        checking = false;
+      }
+    }
+    window.addEventListener('focus', checkFreshData);
+    window.addEventListener('pageshow', checkFreshData);
+    document.addEventListener('visibilitychange', () => {
+      if(document.visibilityState === 'visible') checkFreshData();
+    });
+  })();
+
 })();
