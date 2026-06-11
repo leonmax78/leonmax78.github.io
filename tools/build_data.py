@@ -419,6 +419,8 @@ def main() -> None:
     write_data_bundle_js(DATA / "locations.bundle.js", "locations", locations)
     write_data_bundle_js(DATA / "drop_reverse.bundle.js", "drop_reverse", drop_reverse)
     write_data_bundle_js(DATA / "search_index.bundle.js", "search_index", search_index)
+    write_data_bundle_js(DATA / "search_items.bundle.js", "search_items", {"items": search_index["items"]})
+    write_data_bundle_js(DATA / "search_monsters.bundle.js", "search_monsters", {"monsters": search_index["monsters"]})
     write_data_bundle_js(DATA / "build_meta.bundle.js", "build_meta", build_meta)
     write_runtime_data_js(
         DATA / "runtime-data.js",
