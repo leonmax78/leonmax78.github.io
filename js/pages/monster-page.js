@@ -67,7 +67,7 @@ function monsterIndexRaceOptionsHTML(selected){
 function monsterIndexSubtypeOptionsHTML(selected,race){
  const order=Object.values(SUBTYPE_MAP);
  const vals=uniqueMonsterIndexValues(m=>race&&monsterIndexRace(m)!==race?'':monsterIndexSubtype(m)).sort((a,b)=>(order.indexOf(a)<0?9999:order.indexOf(a))-(order.indexOf(b)<0?9999:order.indexOf(b))||a.localeCompare(b,'zh-Hant'));
- return `<option value="">?全部種族</option>`+vals.map(v=>`<option value="${esc(v)}" ${v===selected?'selected':''}>${esc(v)}</option>`).join('');
+ return `<option value="">全部子分類</option>`+vals.map(v=>`<option value="${esc(v)}" ${v===selected?'selected':''}>${esc(v)}</option>`).join('');
 }
 
 function filterMonsterIndexList(q,min,max,race,subtype){
