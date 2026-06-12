@@ -1,9 +1,9 @@
 {
   "display_name": "武冠判讀DEMO",
-  "version": "260607-13",
-  "published_at": "2026-06-07 03:01",
-  "file_name": "Wuguan_DEMO_260607-13.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260607-13.zip",
+  "version": "260613-1",
+  "published_at": "2026-06-13 01:22",
+  "file_name": "Wuguan_DEMO_260613-1.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260613-1.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 測試版，新增單一實例鎖，啟動預設完整模式，並優化更新安裝提示。"
+  "notes": "武冠判讀 DEMO 測試版，新增圖片式使用說明，說明視窗可直接查看操作流程。"
 }
