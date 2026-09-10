@@ -546,7 +546,7 @@
         if(region !== previousRegion){
           previousRegion = region;
           const count = rows.filter(row => (row.pingxiRegion || 0) === region).length;
-          heading = `<h3 class="mapRegionHeading">${region ? `第 ${region} 區 · ${count} 隻` : '一般怪物'}</h3>`;
+          heading = `<h3 class="mapRegionHeading" data-region="${region}">${region ? `第${['', '一', '二', '三', '四'][region]}區 · ${count} 隻` : '一般怪物'}</h3>`;
         }
       }
       const key = markerKey(marker);
@@ -565,6 +565,14 @@
   }
 
   function areaLabels(stage){
+    if(Number(stage.stageId) === 15){
+      return [
+        {name:'第一區', x:82, y:61},
+        {name:'第二區', x:59, y:29},
+        {name:'第三區', x:43, y:49},
+        {name:'第四區', x:17, y:60}
+      ].map((area, i) => `<span class="mapAreaLabel mapPingxiRegion" data-region="${i + 1}" style="left:${area.x}%;top:${area.y}%;">${area.name}</span>`).join('');
+    }
     return (stage.areas || []).map(area => {
       const left = Math.max(0, Math.min(100, Number(area.x || 0) / (Number(stage.width) || 1) * 100));
       const top = Math.max(0, Math.min(100, Number(area.y || 0) / (Number(stage.height) || 1) * 100));

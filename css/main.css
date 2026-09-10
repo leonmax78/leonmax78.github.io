@@ -3561,7 +3561,12 @@ body{
 .mapEmptyLine{padding:8px}
 .mapCanvasWrap{position:relative;height:clamp(420px,70vh,760px);min-height:0;border:1px solid rgba(245,158,11,.35);border-radius:16px;background:#020817;overflow:auto;cursor:grab;touch-action:none;user-select:none;overscroll-behavior:contain}
 .mapCanvasWrap.dragging{cursor:grabbing}
-.mapRegionHeading{margin:14px 0 8px;font-size:14px;line-height:1.5;color:#8ad9de}
+.mapRegionHeading{position:sticky;top:0;z-index:3;margin:12px 0 4px;padding:10px 12px;border-left:4px solid var(--region-color,#9ca3af);border-bottom:1px solid #394354;background:#18202b;font-size:16px;line-height:1.5;color:var(--region-color,#e5e7eb)}
+.mapRegionHeading[data-region="1"],.mapPingxiRegion[data-region="1"]{--region-color:#ffb86b}
+.mapRegionHeading[data-region="2"],.mapPingxiRegion[data-region="2"]{--region-color:#80e2cf}
+.mapRegionHeading[data-region="3"],.mapPingxiRegion[data-region="3"]{--region-color:#f2a9d3}
+.mapRegionHeading[data-region="4"],.mapPingxiRegion[data-region="4"]{--region-color:#c7dc86}
+.mapAreaLabel.mapPingxiRegion{height:32px;padding:0 10px;border-radius:4px;border:2px solid var(--region-color);background:rgba(18,22,27,.94);color:var(--region-color);font-size:17px;font-weight:800}
 .mapZoomBar{position:sticky;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:10px;justify-content:flex-end;width:100%;min-width:100%;box-sizing:border-box;padding:10px 12px;background:linear-gradient(180deg,rgba(2,8,23,.92),rgba(2,8,23,.62));backdrop-filter:blur(8px)}
 .mapZoomBar label{display:flex;align-items:center;gap:8px;color:#a7f3d0;font-size:12px;font-weight:1000}
 .mapZoomBar input{width:180px;accent-color:#2dd4bf}
