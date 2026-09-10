@@ -79,6 +79,8 @@ def main() -> None:
     parser.add_argument("--base-root", type=Path, default=Path(r"C:\Users\leonm\Desktop\0702"))
     parser.add_argument("--previous-root", type=Path, default=Path(r"C:\Users\leonm\Desktop\0827"))
     parser.add_argument("--overlay", type=Path, default=DEFAULT_OVERLAY)
+    parser.add_argument("--stages", type=int, nargs="+", default=[15, 347, 348, 393])
+    parser.add_argument("--version", default="0903")
     args = parser.parse_args()
 
     site_root = args.site_root.resolve()
@@ -170,7 +172,7 @@ def main() -> None:
             tower_marker["floor"] = 36
             tower_marker["tower_floors"] = [36]
             tower_marker["areaName"] = "終末之塔第36層"
-    tower_stage_ids = set(range(284, 295)) | set(range(342, 348))
+    tower_stage_ids = set(range(284, 295)) | set(range(342, 349))
     tower_monster_ids = {
         int(monster["id"])
         for stage_id, stage in by_id.items()
@@ -193,7 +195,7 @@ def main() -> None:
     webp_dir.mkdir(parents=True, exist_ok=True)
 
     report = []
-    for stage_id in (15, 347, 348, 393):
+    for stage_id in args.stages:
         canvas, _ = overlay.compose_stage_map(
             stage_id,
             context,
@@ -290,21 +292,21 @@ def main() -> None:
         by_id[stage_id] = entry
         report.append({"stageId": stage_id, "width": width, "height": height, "monsters": len(monster_rows), "npcs": len(npc_rows)})
 
-    payload["version"] = "stage-map-0903-tower-xviii"
+    payload["version"] = f"stage-map-{args.version}-tower-xviii"
     payload["excludedStageIds"] = [sid for sid in payload.get("excludedStageIds", []) if sid != 348]
     payload["stages"] = [by_id[sid] for sid in sorted(by_id)]
     data_path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
     index_path = site_root / "data" / "stage_map_index.json"
     index = json.loads(index_path.read_text(encoding="utf-8"))
-    index["version"] = "stage-map-index-0903"
+    index["version"] = f"stage-map-index-{args.version}"
     index["stages"] = [
         {"stageId": int(stage["stageId"]), "stageName": str(stage["stageName"])}
         for stage in payload["stages"]
     ]
     index_path.write_text(json.dumps(index, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
-    report_path = site_root / "reports" / "stage_map_0903_update.json"
+    report_path = site_root / "reports" / f"stage_map_{args.version}_update.json"
     report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, ensure_ascii=False, indent=2))
 

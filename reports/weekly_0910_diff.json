@@ -1,0 +1,276 @@
+{
+  "date": "2026-09-10",
+  "baseline": "2026-09-03",
+  "files": {
+    "MONSTER_C.INI": {
+      "removedRecords": [
+        {
+          "AI": "35",
+          "AIClass": "101",
+          "AfraidRes": "100",
+          "Attack": "4",
+          "AttackRange": "3",
+          "AxeDef": "50",
+          "BladeDef": "90",
+          "BlindRes": "100",
+          "Blood": "2",
+          "Break": "16",
+          "Catch": "-1",
+          "Con": "100",
+          "ConfuseRes": "100",
+          "DamageMax": "671",
+          "DamageMin": "399",
+          "DarkDef": "80",
+          "Dex": "59200",
+          "DropExp": "9990000",
+          "DropMoneyMax": "3200",
+          "DropMoneyMin": "800",
+          "ExtraDef": "111500",
+          "ExtraStatus": "54",
+          "FireDef": "20",
+          "Flag": "CHAR_F_NPC, CHAR_NO_STUN, CHAR_FACE_OFF",
+          "HP": "28750000",
+          "HammerDef": "60",
+          "ID": "18187",
+          "IceAttack": "30",
+          "IceDef": "100",
+          "IceProb": "35",
+          "Int": "58800",
+          "Level": "1930",
+          "LightningDef": "60",
+          "LvCorrect": "1",
+          "MP": "999900",
+          "MagicAttack": "2600",
+          "MagicDef": "113000",
+          "Move": "4",
+          "MoveRange": "10",
+          "Name": "裂笞阿羅邏",
+          "ParalysisRes": "100",
+          "Pic": "6494",
+          "PosionRes": "100",
+          "ShootDef": "70",
+          "SilentRes": "100",
+          "Skill2": "504,505,506",
+          "Skill3": "556",
+          "Skill4": "728,731,751",
+          "Sound2": "atta_m733",
+          "Sound3": "hurt_m733",
+          "Sound4": "dead_m733",
+          "StatusParam": "EFFECT_SELF",
+          "StatusProb": "20",
+          "Str": "58100",
+          "SubType": "0x00000010",
+          "SwordDef": "80",
+          "Type": "0x00002000",
+          "Volume": "1",
+          "_section": "NPC"
+        }
+      ],
+      "addedRecords": [
+        {
+          "AI": "35",
+          "AIClass": "101",
+          "AfraidRes": "100",
+          "Attack": "4",
+          "AttackRange": "3",
+          "AxeDef": "50",
+          "BladeDef": "90",
+          "BlindRes": "100",
+          "Blood": "2",
+          "Break": "16",
+          "Catch": "-1",
+          "Con": "100",
+          "ConfuseRes": "100",
+          "DamageMax": "671",
+          "DamageMin": "399",
+          "DarkDef": "80",
+          "Dex": "59200",
+          "DropExp": "9990000",
+          "DropMoneyMax": "3200",
+          "DropMoneyMin": "800",
+          "ExtraDef": "111500",
+          "ExtraStatus": "54",
+          "FireDef": "20",
+          "Flag": "CHAR_F_NPC, CHAR_NO_STUN, CHAR_FACE_OFF",
+          "HP": "28750000",
+          "HammerDef": "60",
+          "ID": "18187",
+          "IceAttack": "30",
+          "IceDef": "100",
+          "IceProb": "35",
+          "Int": "58800",
+          "Level": "1930",
+          "LightningDef": "60",
+          "LvCorrect": "1",
+          "MP": "999900",
+          "MagicAttack": "2600",
+          "MagicDef": "113000",
+          "Move": "4",
+          "MoveRange": "10",
+          "Name": "裂笞阿羅邏",
+          "ParalysisRes": "100",
+          "Pic": "6494",
+          "PosionRes": "100",
+          "ShootDef": "70",
+          "SilentRes": "100",
+          "Skill2": "504,505,506",
+          "Skill3": "556",
+          "Skill4": "825,893,909",
+          "Sound2": "atta_m733",
+          "Sound3": "hurt_m733",
+          "Sound4": "dead_m733",
+          "StatusParam": "EFFECT_SELF",
+          "StatusProb": "20",
+          "Str": "58100",
+          "SubType": "0x00000010",
+          "SwordDef": "80",
+          "Type": "0x00002000",
+          "Volume": "1",
+          "_section": "NPC"
+        }
+      ]
+    },
+    "MAGIC.INI": {
+      "removedRecords": [],
+      "addedRecords": []
+    },
+    "STATUS.INI": {
+      "removedRecords": [
+        {
+          "Group": "23",
+          "ID": "74",
+          "Name": "鐵皮",
+          "Order": "2",
+          "Param1": "-35",
+          "Param2": "-45",
+          "_section": "STATUS"
+        },
+        {
+          "Group": "23",
+          "ID": "187",
+          "Name": "鐵皮",
+          "Order": "1",
+          "Param1": "-15",
+          "Param2": "-15",
+          "_section": "STATUS"
+        },
+        {
+          "Group": "39",
+          "ID": "206",
+          "Name": "鏡花水月",
+          "Order": "1",
+          "Param2": "10",
+          "_section": "STATUS"
+        }
+      ],
+      "addedRecords": [
+        {
+          "Group": "5",
+          "ID": "74",
+          "Name": "鐵皮",
+          "Order": "2",
+          "Param1": "-35",
+          "Param2": "-45",
+          "_section": "STATUS"
+        },
+        {
+          "Group": "5",
+          "ID": "187",
+          "Name": "鐵皮",
+          "Order": "1",
+          "Param1": "-15",
+          "Param2": "-15",
+          "_section": "STATUS"
+        }
+      ]
+    },
+    "STAGE.INI": {
+      "removedRecords": [],
+      "addedRecords": []
+    }
+  },
+  "pingxi": {
+    "added": [
+      {
+        "kind": "monster",
+        "id": 18181,
+        "name": "寒懸烏竟都",
+        "pic": 6530,
+        "level": 1875,
+        "x": 203,
+        "y": 360,
+        "rawX": 1622,
+        "rawY": 2876,
+        "coordX": 101,
+        "coordY": 180,
+        "tower_floors": [
+          175
+        ],
+        "floor": 175,
+        "areaName": "終末之塔第175層",
+        "activity": "虛空群魔大遊行"
+      },
+      {
+        "kind": "monster",
+        "id": 18188,
+        "name": "驚宇鬱嶓羅",
+        "pic": 8710,
+        "level": 1980,
+        "x": 488,
+        "y": 253,
+        "rawX": 3900,
+        "rawY": 2023,
+        "coordX": 244,
+        "coordY": 126,
+        "tower_floors": [
+          180
+        ],
+        "floor": 180,
+        "areaName": "終末之塔第180層",
+        "activity": "虛空群魔大遊行"
+      },
+      {
+        "kind": "monster",
+        "id": 18184,
+        "name": "尼羅浮陀王",
+        "pic": 6611,
+        "level": 1900,
+        "x": 579,
+        "y": 194,
+        "rawX": 4630,
+        "rawY": 1551,
+        "coordX": 289,
+        "coordY": 97,
+        "tower_floors": [
+          178
+        ],
+        "floor": 178,
+        "areaName": "終末之塔第178層",
+        "activity": "虛空群魔大遊行"
+      },
+      {
+        "kind": "monster",
+        "id": 18187,
+        "name": "裂笞阿羅邏",
+        "pic": 6494,
+        "level": 1930,
+        "x": 756,
+        "y": 379,
+        "rawX": 6046,
+        "rawY": 3032,
+        "coordX": 378,
+        "coordY": 190,
+        "tower_floors": [
+          179
+        ],
+        "floor": 179,
+        "areaName": "終末之塔第179層",
+        "activity": "虛空群魔大遊行"
+      }
+    ],
+    "removed": [],
+    "eventBosses": 74,
+    "monsterPoints": 97,
+    "npcPoints": 25
+  }
+}
