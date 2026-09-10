@@ -32,6 +32,17 @@
         })
         .then(data => {
           mapData = data || { stages: [] };
+          const pingxi = (mapData.stages || []).find(stage => Number(stage.stageId) === 15);
+          if(pingxi){
+            for(const marker of pingxi.monsters || []){
+              if(marker.activity !== '虛空群魔大遊行') continue;
+              // The four spawn clusters follow the owner's annotated map.
+              const x = Number(marker.x) * 960 / Number(pingxi.width);
+              if(!Number.isFinite(x)) continue;
+              marker.pingxiRegion = x < 250 ? 4 : x < 510 ? 3 : x < 650 ? 2 : 1;
+              marker.areaKey = `pingxi-region-${marker.pingxiRegion}`;
+            }
+          }
           return mapData;
         });
     }
@@ -495,7 +506,11 @@
       groups.get(key).points.push(marker);
     });
     return [...groups.values()].sort((a, b) => {
-      const fa = floorSortValue(a), fb = floorSortValue(b);
+      if(Number(stage.stageId) === 15){
+        const region = (a.pingxiRegion || 99) - (b.pingxiRegion || 99);
+        if(region) return region;
+      }
+      const fa = Number(stage.stageId) === 15 ? 0 : floorSortValue(a), fb = Number(stage.stageId) === 15 ? 0 : floorSortValue(b);
       if(fa !== fb) return fa - fb;
       const la = Number(a.level) || 0, lb = Number(b.level) || 0;
       return la - lb || String(a.name || '').localeCompare(String(b.name || ''), 'zh-Hant') || Number(a.id) - Number(b.id);
@@ -523,10 +538,20 @@
     const rows = kind === 'monster' ? monsterGroups(stage) : (stage.npcs || []).map(n => Object.assign({ kind: 'npc' }, n));
     const checked = kind === 'monster' ? state.monsters : state.npcs;
     if(!rows.length) return '<div class="muted mapEmptyLine">沒有資料</div>';
+    let previousRegion = null;
     return rows.map(marker => {
+      let heading = '';
+      if(kind === 'monster' && Number(stage.stageId) === 15){
+        const region = marker.pingxiRegion || 0;
+        if(region !== previousRegion){
+          previousRegion = region;
+          const count = rows.filter(row => (row.pingxiRegion || 0) === region).length;
+          heading = `<h3 class="mapRegionHeading">${region ? `第 ${region} 區 · ${count} 隻` : '一般怪物'}</h3>`;
+        }
+      }
       const key = markerKey(marker);
       const label = kind === 'monster' ? monsterGroupLabel(marker) : `${marker.name || '未命名'}${roleLabel(marker.role) ? ' / ' + roleLabel(marker.role) : ''}`;
-      return `<label class="mapMarkerChoice">
+      return `${heading}<label class="mapMarkerChoice">
         <input type="checkbox" data-map-${kind}="${htmlEscape(key)}" ${checked.has(key) ? 'checked' : ''}>
         <span>${htmlEscape(label)}</span>
       </label>`;
