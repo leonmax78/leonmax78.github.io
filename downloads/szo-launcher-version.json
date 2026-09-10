@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.25",
-  "published_at": "2026-09-03 13:49",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.25.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.25.7z",
+  "version": "2.5.26",
+  "published_at": "2026-09-10 13:01",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.26.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.26.7z",
   "page_url": "downloads/",
-  "notes": "修正 Excel 新增空白列時前導零被吃掉：整個帳密表格欄位固定為文字格式，輸入 09、001234 等內容都會完整保留。"
+  "notes": "修正部分 Win10 電腦只輸入密碼、帳號欄漏輸入：帳號與密碼欄點擊前後都會快速確認遊戲前景焦點，焦點被搶走時才重試；LOG 同時記錄干擾程序與視窗標題。"
 }
