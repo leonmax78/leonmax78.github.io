@@ -204,10 +204,10 @@
         "coordX": 101,
         "coordY": 180,
         "tower_floors": [
-          175
+          173
         ],
-        "floor": 175,
-        "areaName": "終末之塔第175層",
+        "floor": 173,
+        "areaName": "終末之塔第173層",
         "activity": "虛空群魔大遊行"
       },
       {
@@ -242,10 +242,10 @@
         "coordX": 289,
         "coordY": 97,
         "tower_floors": [
-          178
+          176
         ],
-        "floor": 178,
-        "areaName": "終末之塔第178層",
+        "floor": 176,
+        "areaName": "終末之塔第176層",
         "activity": "虛空群魔大遊行"
       },
       {
