@@ -14,6 +14,7 @@
     stageId: null,
     monsters: new Set(),
     npcs: new Set(),
+    panels: { monster: true, npc: true },
     composing: false,
     zoom: 1
   };
@@ -690,20 +691,20 @@
       ${renderMapSuggestions()}
       <div class="mapLayout">
         <aside class="mapLeftPane">
-        <section class="mapSide mapMonsterSide">
-          <div class="mapSideHead">
+        <details class="mapSide mapMonsterSide" data-map-panel="monster" ${state.panels.monster ? 'open' : ''}>
+          <summary class="mapSideHead">
             <h2>怪物</h2>
             <div><button type="button" class="ghost mapMiniBtn" data-map-all="monster">全選</button><button type="button" class="ghost mapMiniBtn" data-map-none="monster">全不選</button></div>
-          </div>
+          </summary>
           <div class="mapChoiceList">${markerList(stage, 'monster')}</div>
-        </section>
-        <section class="mapSide mapNpcSide">
-          <div class="mapSideHead">
+        </details>
+        <details class="mapSide mapNpcSide" data-map-panel="npc" ${state.panels.npc ? 'open' : ''}>
+          <summary class="mapSideHead">
             <h2>NPC</h2>
             <div><button type="button" class="ghost mapMiniBtn" data-map-all="npc">全選</button><button type="button" class="ghost mapMiniBtn" data-map-none="npc">全不選</button></div>
-          </div>
+          </summary>
           <div class="mapChoiceList">${markerList(stage, 'npc')}</div>
-        </section>
+        </details>
         </aside>
         <div class="mapCanvasWrap">
           <div class="mapZoomBar">
@@ -723,6 +724,17 @@
         </div>
       </div>
     </section>`;
+    reader.querySelectorAll('[data-map-panel]').forEach(panel => {
+      panel.querySelector('summary').addEventListener('click', event => {
+        if(event.target.closest('button')) return;
+        event.preventDefault();
+        panel.open = !panel.open;
+        state.panels[panel.dataset.mapPanel] = panel.open;
+      });
+      panel.addEventListener('toggle', () => {
+        state.panels[panel.dataset.mapPanel] = panel.open;
+      });
+    });
     const img = byId('mapImage');
     const loading = byId('mapImageLoading');
     if(img && loading){
