@@ -673,7 +673,6 @@
         </section>
         </aside>
         <div class="mapCanvasWrap">
-          ${Number(stage.stageId) === 15 ? '<p class="mapEventNotice">虛空群魔大遊行（2026/09/03 更新後至 10/01 維護前）：9/10 起共 74 隻終末之塔頭目隨機出現；點位為遊戲檔設定位置，非即時出怪。活動期間限制護法仙靈、封獸、護駕。壓軸級頭目不提供最後一擊專屬經驗、名聲與塔內寶箱。</p>' : ''}
           <div class="mapZoomBar">
             <label>縮放
               <input id="mapZoomInput" type="range" min="0.5" max="5" step="0.05" value="${zoomValue()}">
