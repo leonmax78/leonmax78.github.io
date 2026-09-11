@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.27",
-  "published_at": "2026-09-11 11:25",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.27.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.27.7z",
+  "version": "2.5.28",
+  "published_at": "2026-09-11 11:52",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.28.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.28.7z",
   "page_url": "downloads/",
-  "notes": "解除啟動器六開選取上限並標示同 IP 限制六開；新增帳號工具列分區（預設／1～5），可混合使用重疊與分開顯示；自動更新完成後會顯示一次版本更新公告。"
+  "notes": "解除啟動器六開選取上限並標示同 IP 限制六開；新增帳號工具列分區（預設／1～5），可混合使用重疊與分開顯示；自動更新完成後會顯示一次版本更新公告；修正伺服器、角色欄位與工具列分區的欄位寬度。"
 }
