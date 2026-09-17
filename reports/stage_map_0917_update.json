@@ -1,0 +1,44 @@
+[
+  {
+    "stageId": 7,
+    "width": 1080,
+    "height": 700,
+    "monsters": 0,
+    "npcs": 331
+  },
+  {
+    "stageId": 8,
+    "width": 960,
+    "height": 600,
+    "monsters": 16,
+    "npcs": 219
+  },
+  {
+    "stageId": 12,
+    "width": 1200,
+    "height": 600,
+    "monsters": 95,
+    "npcs": 7
+  },
+  {
+    "stageId": 13,
+    "width": 608,
+    "height": 680,
+    "monsters": 89,
+    "npcs": 7
+  },
+  {
+    "stageId": 42,
+    "width": 960,
+    "height": 600,
+    "monsters": 68,
+    "npcs": 6
+  },
+  {
+    "stageId": 158,
+    "width": 1040,
+    "height": 540,
+    "monsters": 43,
+    "npcs": 2
+  }
+]

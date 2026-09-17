@@ -706,6 +706,8 @@
     return Array.isArray(bonus.rows) ? bonus.rows : [];
   }
   function collectScoreTotal(){
+    const official = Number(state.data?.meta?.officialScoreTotal);
+    if(Number.isFinite(official) && official > 0) return official;
     return ['weapon', 'artifact', 'recipe', 'beast'].reduce((sum, kind) => {
       return sum + getRows(kind).reduce((part, row) => part + (Number(row.score) || 0), 0);
     }, 0);

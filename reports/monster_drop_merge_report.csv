@@ -6129,8 +6129,8 @@
 18131,絕代花無缺錦囊,,1,0,new_drop_kept,new monster row already has DropItem
 18132,絕代燕南天錦囊,,1,0,new_drop_kept,new monster row already has DropItem
 18133,絕代鐵心蘭錦囊,,1,0,new_drop_kept,new monster row already has DropItem
-18134,？？？,,0,0,no_old_drop,old monster row missing or has no valid DropItem
-18135,？？？,,0,0,no_old_drop,old monster row missing or has no valid DropItem
+18134,絕代張菁錦囊,,0,0,no_old_drop,old monster row missing or has no valid DropItem
+18135,絕代蘇櫻錦囊,,0,0,no_old_drop,old monster row missing or has no valid DropItem
 18136,？？？,,0,0,no_old_drop,old monster row missing or has no valid DropItem
 18137,綠林強盜,,0,0,no_old_drop,old monster row missing or has no valid DropItem
 18138,尋寶無賴,,0,0,no_old_drop,old monster row missing or has no valid DropItem
@@ -6186,3 +6186,7 @@
 18188,驚宇鬱嶓羅,,1,0,new_drop_kept,new monster row already has DropItem
 18189,終塔之寶<XVIII>,,1,0,new_drop_kept,new monster row already has DropItem
 18190,終末支龍柱,,0,0,no_old_drop,old monster row missing or has no valid DropItem
+18191,花月香囊,,1,0,new_drop_kept,new monster row already has DropItem
+18192,觴月錦囊,,1,0,new_drop_kept,new monster row already has DropItem
+18193,荒月山精,,0,0,no_old_drop,old monster row missing or has no valid DropItem
+18194,鎏月花姬,,0,0,no_old_drop,old monster row missing or has no valid DropItem

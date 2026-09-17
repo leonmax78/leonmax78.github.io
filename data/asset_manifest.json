@@ -1,5 +1,5 @@
 {
-  "version": "assets-0827-v520-item-icon-colors",
+  "version": "assets-0917-v540",
   "base": "assets/test-media",
   "itemIcons": [
     "0000",
@@ -4308,7 +4308,12 @@
     "6884",
     "6885",
     "6886",
-    "6887"
+    "6887",
+    "6896",
+    "6891",
+    "6894",
+    "6893",
+    "6892"
   ],
   "monsterPics": [
     "5001",
@@ -6216,7 +6221,8 @@
     "8917",
     "8918",
     "8919",
-    "15714"
+    "15714",
+    "8950"
   ],
   "soulIds": [
     "1",
@@ -6286,8 +6292,8 @@
     "69"
   ],
   "counts": {
-    "itemIcons": 4307,
-    "monsterPics": 1906,
+    "itemIcons": 4312,
+    "monsterPics": 1907,
     "soulPortraits": 65,
     "itemMissing": 0,
     "monsterMissing": 1,
