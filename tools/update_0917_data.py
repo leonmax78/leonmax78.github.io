@@ -82,6 +82,8 @@ def main():
         order=list(dict.fromkeys(x['category'] for x in data[kind]))
         data[kind].sort(key=lambda x:(order.index(x['category']),int(x.get('collectIndex') or 99999)))
     data['meta'].update(sourceCollectBook='raw/latest_setting/COLLECTBOOKITEM.INI',updatedAt='2026-09-17',itemRecords=len(items),monsterRecords=len(monsters),officialScoreTotal=sum(int(r['Cost']) for r in official))
+    from collectbook_task_sources import apply_task_sources
+    apply_task_sources(data)
     (ROOT/'data/collectbook_sources.json').write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
     report={'date':'2026-09-17','addedCounts':dict(counts),'added':added,
             'displayScoreTotal':sum(int(x.get('score') or 0) for k in ('weapon','artifact','recipe','beast') for x in data[k]),

@@ -1,0 +1,9 @@
+{
+  "32187": {"location": "祁州城", "quest": "二十終局", "npc": "霍真郡主", "minimumLevel": 35},
+  "32182": {"location": "塞北關", "quest": "踏雪探龍", "npc": "龍袖女", "minimumLevel": 10},
+  "32183": {"location": "玄州城", "quest": "武神會戰神", "npc": "武論神", "minimumLevel": 15},
+  "32184": {"location": "祁州城", "quest": "劍狼傳說", "npc": "劍問一先", "minimumLevel": 20},
+  "32185": {"location": "望星坡", "quest": "明夷尋往記", "npc": "天道老師", "minimumLevel": 25},
+  "32186": {"location": "京城", "quest": "推我本空", "npc": "活心佛", "minimumLevel": 30},
+  "31544": {"location": "", "quest": "龍川事變主線任務獎勵", "npc": "", "minimumLevel": null}
+}
