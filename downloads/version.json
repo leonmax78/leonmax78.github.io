@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "260919-43",
-  "published_at": "2026-09-19 16:06",
-  "file_name": "Wuguan_260919-43.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_260919-43.zip",
+  "version": "260919-44",
+  "published_at": "2026-09-19 16:26",
+  "file_name": "Wuguan_260919-44.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_260919-44.zip",
   "page_url": "downloads/",
-  "notes": "正式版附20260917新清冊；可匯出總表與未收清單（含出處），縮窄欄位、精簡操作說明並移除教導。更新保留角色存檔與校正設定。",
-  "sha256": "3dea7b576bf4018acc8bff5098a8d32e3e0a992daae0b25058ccf17637c4fd78"
+  "notes": "更新包只保留「武冠判讀_正式版.exe」，不再附DEMO。保留角色存檔、校正設定及新版Excel清冊。43版以前首次更新後若仍開啟舊程式，請關閉並手動執行同資料夾的「武冠判讀_正式版.exe」；44版起後續更新會自動啟動正式版。",
+  "sha256": "353dcf04886d6508a330449fc1e57894d3c5bd284e39060e224e587040b87798"
 }
