@@ -780,14 +780,13 @@
   }
   function segmentLabelBase(kind){
     if(kind === 'weapon'){
-      return state.category.weapon !== 'all' ? state.category.weapon : '武防';
+      return state.category.weapon !== 'all' ? state.category.weapon + '類' : '武防';
     }
     if(kind === 'artifact') return '法器';
     if(kind === 'recipe') return '配方';
     return '封獸';
   }
   function segments(kind){
-    if(kind === 'beast') return [];
     if(kind === 'weapon' && state.category.weapon === 'all') return [];
     const rows = baseRowsForSegment(kind);
     const base = segmentLabelBase(kind);

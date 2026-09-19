@@ -495,6 +495,8 @@ def main() -> int:
     data = build(args)
     from collectbook_task_sources import apply_task_sources
     apply_task_sources(data)
+    from order_collectbook import order_collectbook
+    order_collectbook(data)
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
