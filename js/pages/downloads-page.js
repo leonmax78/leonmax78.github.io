@@ -2,7 +2,8 @@
 (function(){
   const MANIFEST_URLS = [
     'downloads/version.json',
-    'downloads/szo-launcher-version.json'
+    'downloads/szo-launcher-version.json',
+    'downloads/collectbook-version.json'
   ];
 
   function esc(value){
