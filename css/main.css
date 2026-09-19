@@ -3415,6 +3415,16 @@ body{
 .downloadsPage .downloadCellValue{
   overflow-wrap:anywhere;
 }
+@media (min-width: 641px){
+  .downloadsPage .downloadTable th:nth-child(1){width:25%;}
+  .downloadsPage .downloadTable th:nth-child(2){width:80px;}
+  .downloadsPage .downloadTable th:nth-child(3){width:96px;}
+  .downloadsPage .downloadTable th:nth-child(4){width:140px;}
+  .downloadsPage table.downloadTable th,
+  .downloadsPage table.downloadTable td{padding:12px 10px;}
+  .downloadsPage .downloadTable td:last-child{line-height:1.65;}
+  .downloadsPage .downloadTable .downloadBtn{min-width:60px;min-height:36px;}
+}
 .downloadsPage .downloadNameValue{
   display:flex;
   flex-direction:column;

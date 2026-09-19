@@ -5,6 +5,11 @@
     'downloads/szo-launcher-version.json',
     'downloads/collectbook-version.json'
   ];
+  const DESCRIPTIONS = [
+    '快速記錄武冠收納進度，匯出未收清單與道具出處，方便補齊收藏。',
+    '管理遊戲帳號與密碼，整合遊戲更新、啟動及帳號登入，省去重複操作。',
+    '彙整武冠道具與出處資料，離線也能查找掉落位置與取得方式。'
+  ];
 
   function esc(value){
     return String(value ?? '').replace(/[&<>"']/g, c => ({
@@ -26,7 +31,7 @@
     return await Promise.all(MANIFEST_URLS.map(async url => {
       const res = await fetch(url, { cache: 'no-store' });
       if(!res.ok) throw new Error('下載資訊讀取失敗');
-      return await res.json();
+      return { ...await res.json(), description: DESCRIPTIONS[MANIFEST_URLS.indexOf(url)] };
     }));
   }
 
@@ -42,9 +47,10 @@
         : `${esc(displayName)}<span class="downloadFileName">${esc(fileName)}</span>`;
       return `<tr>
         <td data-label="檔案名稱"><span class="downloadCellValue downloadNameValue">${fileLabel}</span></td>
-        <td data-label="下載"><span class="downloadCellValue"><a class="downloadBtn" href="${esc(downloadUrl)}" download>下載</a></span></td>
+        <td data-label="載點"><span class="downloadCellValue"><a class="downloadBtn" href="${esc(downloadUrl)}" download>載點</a></span></td>
         <td data-label="版本號"><span class="downloadCellValue">${esc(version)}</span></td>
         <td data-label="上傳時間"><span class="downloadCellValue">${esc(published)}</span></td>
+        <td data-label="說明"><span class="downloadCellValue">${esc(data.description)}</span></td>
       </tr>`;
     }).join('');
     return `<section class="card downloadsPage">
@@ -52,7 +58,7 @@
       <div class="downloadTableWrap">
         <table class="downloadTable">
           <thead>
-            <tr><th>檔案名稱</th><th>下載</th><th>版本號</th><th>上傳時間</th></tr>
+            <tr><th>檔案名稱</th><th>載點</th><th>版本號</th><th>上傳時間</th><th>說明</th></tr>
           </thead>
           <tbody>${rows}</tbody>
         </table>
