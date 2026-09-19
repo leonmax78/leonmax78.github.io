@@ -1,9 +1,10 @@
 {
-  "display_name": "武冠判讀 DEMO",
-  "version": "260614-16",
-  "published_at": "2026-06-14 01:04",
-  "file_name": "Wuguan_DEMO_260614-16.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_DEMO_260614-16.zip",
+  "display_name": "武冠判讀_正式版",
+  "version": "260919-43",
+  "published_at": "2026-09-19 16:06",
+  "file_name": "Wuguan_260919-43.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_260919-43.zip",
   "page_url": "downloads/",
-  "notes": "武冠判讀 DEMO 六月穩定版：合併掉落位置清冊並更新本機教導模型，修正匯出未收錄時掉落位置空白。"
+  "notes": "正式版：每次啟動全部未收，按讀檔才還原角色紀錄。附20260917新清冊；可匯出總表與未收清單（含出處），縮窄欄位、精簡操作說明並移除教導。更新保留角色存檔與校正設定。",
+  "sha256": "3dea7b576bf4018acc8bff5098a8d32e3e0a992daae0b25058ccf17637c4fd78"
 }
