@@ -8,6 +8,10 @@ def apply_task_sources(data):
     sources = json.loads((ROOT / 'config/collectbook_task_sources.json').read_text(encoding='utf-8'))
     for kind in ('weapon', 'artifact', 'recipe'):
         for row in data.get(kind, []):
+            # Nanliao rewards belong to the twentieth-anniversary main quest.
+            if str(row.get('itemId')) in {'30553', '30554', '30555', '30556', '30557', '30558'}:
+                row['taskNames'] = [name.replace('神州2主線', '神州20主線') for name in row.get('taskNames', [])]
+                row['searchText'] = row.get('searchText', '').replace('神州2主線', '神州20主線')
             source = sources.get(str(row.get('itemId')))
             if not source:
                 continue
