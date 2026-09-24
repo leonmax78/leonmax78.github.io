@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.31",
-  "published_at": "2026-09-17 15:08",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.31.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.31.7z",
+  "version": "2.5.32",
+  "published_at": "2026-09-25 07:52",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.32.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.32.7z",
   "page_url": "downloads/",
-  "notes": "調整啟動器更新機制，只使用更新包內建並經 SHA-256 驗證的官方 7-Zip，不再於執行期間下載外部解壓工具，降低被防毒軟體誤判的風險；保留後續版本線上自動更新；背景化運行可套用於啟動器開啟前已存在的神州 ONLINE 視窗。"
+  "notes": "配合即將到來的年度改版，調整遊戲版本偵測與更新判斷邏輯；新增 27 版後續自動更新支援；當偵測到從 26 版跨至 27 版時，將停止套用更新檔，並提醒使用者先至官網下載最新版完整主程式。"
 }
