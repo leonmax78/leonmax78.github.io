@@ -404,6 +404,58 @@
     choose(0, []);
     return seeds;
   }
+  function completeComboSeeds(mainName,kind,stars,allNames,supportSlots){
+    const count=supportSlots.length;
+    if(!count)return [];
+    const valid=new Set(allNames);
+    const groups=Object.values(D().comboMembers || {}).map(m=>m.map(n=>typeof canonicalName==='function' ? canonicalName(n) : n))
+      .filter(m=>m.length && m.every(n=>n && valid.has(n)))
+      .map(m=>Array.from(new Set(m.filter(n=>n!==mainName))))
+      .filter(m=>m.length && m.length<=count);
+    // Include complete links among supports too, not just links containing the main.
+    const unions=[[]],seen=new Set(['']);
+    for(let i=0;i<unions.length;i++){
+      for(const group of groups){
+        const merged=Array.from(new Set(unions[i].concat(group))).sort();
+        if(merged.length>count)continue;
+        const key=merged.join('|');
+        if(!seen.has(key)){seen.add(key);unions.push(merged);}
+      }
+    }
+    const cache=supportSlots.map(slot=>new Map(allNames.filter(n=>n!==mainName).map(n=>[n,metricScore(abilityPart(n,stars[slot],0.1),kind)])));
+    const ranked=cache.map(c=>Array.from(c.keys()).sort((a,b)=>c.get(b)-c.get(a)));
+    const seeds=[];
+    for(const required of unions){
+      let states=[{order:[],remaining:required,score:0}];
+      for(let slot=0;slot<count;slot++){
+        const next=[];
+        for(const state of states){
+          const spare=count-slot-state.remaining.length;
+          const options=Array.from(new Set(state.remaining.concat(spare>0 ? ranked[slot].filter(n=>!state.order.includes(n)).slice(0,count+3) : [])));
+          for(const name of options){
+            if(state.order.includes(name))continue;
+            next.push({order:state.order.concat(name),remaining:state.remaining.filter(n=>n!==name),score:state.score+cache[slot].get(name)});
+          }
+        }
+        // Keep the best three assignments for each used set; equivalent partial
+        // assignments have identical remaining choices and possible link bonuses.
+        const buckets=new Map();
+        for(const state of next){
+          const key=state.order.slice().sort().join('|');
+          const bucket=buckets.get(key) || [];bucket.push(state);bucket.sort((a,b)=>b.score-a.score);
+          buckets.set(key,bucket.slice(0,3));
+        }
+        states=Array.from(buckets.values()).flat();
+      }
+      const assignments=new Set();
+      states.sort((a,b)=>b.score-a.score).filter(state=>{
+        const key=state.order.map((n,i)=>`${n}:${stars[supportSlots[i]]}`).sort().join('|');
+        if(assignments.has(key))return false;
+        assignments.add(key);return true;
+      }).slice(0,3).forEach(s=>seeds.push(buildState(mainName,s.order,stars,supportSlots)));
+    }
+    return seeds;
+  }
   function topRecommendPlans(kind, stars, fixedMain=''){
     const allNames = names().filter(n => n && D().baseStats && D().baseStats[n]);
     const supportSlots = activeRecommendSupportSlots(stars);
@@ -428,20 +480,11 @@
         next.sort((a,b)=>b.quickScore-a.quickScore);
         states = next.slice(0, beamLimit);
       }
-      const finalStates = states.concat(comboSeedStatesForMain(mainName, kind, stars, allNames, supportSlots));
+      const finalStates = states.concat(fixedMain ? completeComboSeeds(mainName,kind,stars,allNames,supportSlots) : comboSeedStatesForMain(mainName, kind, stars, allNames, supportSlots));
       const ranked = finalStates.map(state=>{
         const res = recommendTotal(state.picks);
         return {...state, total:res.total, combos:res.combos, score:metricScore(res.total, kind)};
-      }).map(plan=>{
-        const connected=new Set([mainName]);
-        for(let round=0;round<plan.picks.length;round++){
-          for(const combo of plan.combos){
-            const members=(D().comboMembers[combo] || []).map(n=>typeof canonicalName==='function' ? canonicalName(n) : n);
-            if(members.some(n=>connected.has(n)))members.forEach(n=>connected.add(n));
-          }
-        }
-        return {...plan,linkedCount:plan.picks.filter(p=>connected.has(p.n)).length-1};
-      }).sort((a,b)=>(fixedMain ? b.linkedCount-a.linkedCount : 0) || b.score-a.score);
+      }).sort((a,b)=>(fixedMain ? Number(b.combos.length>0)-Number(a.combos.length>0) : 0) || b.score-a.score);
       const seen = new Set();
       const unique = ranked.filter(plan=>{
         const key = plan.picks.map(p=>`${p.n}:${p.s}`).sort().join('|');
@@ -450,7 +493,7 @@
       });
       bestByMain.push(...unique.slice(0,fixedMain ? 3 : 1));
     }
-    return bestByMain.sort((a,b)=>(fixedMain ? b.linkedCount-a.linkedCount : 0) || b.score-a.score).slice(0,3);
+    return bestByMain.sort((a,b)=>(fixedMain ? Number(b.combos.length>0)-Number(a.combos.length>0) : 0) || b.score-a.score).slice(0,3);
   }
   function statLine(total, keys){
     return keys.map(k=>`${E(k)} ${fmt(total[k] || 0)}`).join('　');
