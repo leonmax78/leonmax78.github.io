@@ -1,5 +1,5 @@
 {
-  "version": "assets-0919-v546-yellow-talisman",
+  "version": "assets-0924-v550",
   "base": "assets/test-media",
   "itemIcons": [
     "0000",
@@ -6288,13 +6288,15 @@
     "61",
     "62",
     "63",
+    "64",
+    "65",
     "66",
     "69"
   ],
   "counts": {
     "itemIcons": 4312,
     "monsterPics": 1907,
-    "soulPortraits": 65,
+    "soulPortraits": 67,
     "itemMissing": 0,
     "monsterMissing": 1,
     "soulMissing": 0
