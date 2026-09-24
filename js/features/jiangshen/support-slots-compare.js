@@ -5,6 +5,49 @@
   const D = () => { try{ if(typeof DATA !== 'undefined') return DATA; }catch(e){} return window.DATA || {}; };
   const stats = () => (D().stats && D().stats.length ? D().stats : ['血量','精力','體魄','力量','智慧','靈敏','術攻','防禦','術防']);
   const names = () => (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats || {}));
+  function addHeroSearch(){
+    const valid = new Set(names());
+    document.querySelectorAll('#reader select').forEach(select=>{
+      if(select.dataset.searchReady || !Array.from(select.options).some(o=>valid.has(o.value))) return;
+      select.dataset.searchReady='1';
+      const input=document.createElement('input');
+      input.type='search'; input.className='heroNameSearch';
+      input.placeholder='搜尋降神名稱'; input.setAttribute('aria-label','搜尋降神名稱');
+      input.setAttribute('aria-controls',select.id);
+      if(select.id==='recMain'){
+        const list=document.createElement('datalist');
+        list.id='recMainChoices';
+        Array.from(select.options).forEach(o=>{
+          const option=document.createElement('option');
+          option.value=o.value || '預設'; list.append(option);
+        });
+        input.type='text'; input.setAttribute('list',list.id);
+        input.id='recMainSearch'; input.placeholder='預設（自動推薦主降神）';
+        input.value=select.value; input.style.marginBottom='0';
+        select.hidden=true;
+        document.querySelector('label[for="recMain"]')?.setAttribute('for',input.id);
+        input.addEventListener('input',()=>{
+          const value=input.value.trim();
+          const known=!value || value==='預設' || valid.has(value);
+          input.setCustomValidity(known ? '' : '請選擇清單中的降神名稱');
+          if(known){select.value=valid.has(value) ? value : ''; select.dispatchEvent(new Event('change',{bubbles:true}));}
+        });
+        input.addEventListener('change',()=>{
+          if(!input.checkValidity())input.value=select.value;
+          input.setCustomValidity('');
+        });
+        select.before(input,list);
+        return;
+      }
+      input.addEventListener('input',()=>{
+        const query=input.value.trim();
+        Array.from(select.options).forEach(o=>{o.hidden=!!query && !!o.value && !o.textContent.includes(query) && !o.selected;});
+      });
+      select.before(input);
+    });
+  }
+  new MutationObserver(addHeroSearch).observe(document.getElementById('reader'),{childList:true,subtree:true});
+  addHeroSearch();
   const fmt = n => {
     const x = Math.ceil(Number(n || 0));
     try { return x.toLocaleString('zh-Hant'); } catch(e){ return String(x); }
@@ -335,12 +378,12 @@
     choose(0, []);
     return seeds;
   }
-  function topRecommendPlans(kind, stars){
+  function topRecommendPlans(kind, stars, fixedMain=''){
     const allNames = names().filter(n => n && D().baseStats && D().baseStats[n]);
     const supportSlots = activeRecommendSupportSlots(stars);
     const beamLimit = 48;
     const bestByMain = [];
-    for(const mainName of allNames){
+    for(const mainName of (fixedMain ? allNames.filter(n=>n===fixedMain) : allNames)){
       const mainAbility = abilityPart(mainName, stars[0], REC_RATE[0]);
       let states = [{picks:[{n:mainName, s:stars[0]}], total:mainAbility, quickScore:metricScore(mainAbility, kind)}];
       for(const slot of supportSlots){
@@ -360,11 +403,17 @@
         states = next.slice(0, beamLimit);
       }
       const finalStates = states.concat(comboSeedStatesForMain(mainName, kind, stars, allNames, supportSlots));
-      const best = finalStates.map(state=>{
+      const ranked = finalStates.map(state=>{
         const res = recommendTotal(state.picks);
         return {...state, total:res.total, combos:res.combos, score:metricScore(res.total, kind)};
-      }).sort((a,b)=>b.score-a.score)[0];
-      if(best) bestByMain.push(best);
+      }).sort((a,b)=>b.score-a.score);
+      const seen = new Set();
+      const unique = ranked.filter(plan=>{
+        const key = plan.picks.map(p=>`${p.n}:${p.s}`).sort().join('|');
+        if(seen.has(key)) return false;
+        seen.add(key); return true;
+      });
+      bestByMain.push(...unique.slice(0,fixedMain ? 3 : 1));
     }
     return bestByMain.sort((a,b)=>b.score-a.score).slice(0,3);
   }
@@ -406,10 +455,11 @@
     const box = $('jiangRecommendResults');
     if(!box) return;
     const kind = $('recMetric')?.value || 'physicalStr';
+    const fixedMain = $('recMain')?.value || '';
     const metric = REC_METRICS.find(m => m.kind === kind) || REC_METRICS[0];
     box.innerHTML = '<div class="notice">正在計算推薦組合...</div>';
     setTimeout(()=>{
-      const plans = topRecommendPlans(metric.kind, stars);
+      const plans = topRecommendPlans(metric.kind, stars, fixedMain);
       const html = `<section class="card supportChoiceCard" style="box-shadow:none;margin-top:18px;border-color:rgba(54,211,207,.55)">
         <h2>${E(metric.title)}</h2>
         <div class="muted">${E(metric.desc)}，列出前 3 個候補。</div>
@@ -426,6 +476,7 @@
       <h1>副降神組合推薦方案</h1>
       <div class="notice">手動設定主降神與 4 個副降神的星等後，系統會推薦物理、術法、防禦三種方向各 1 ~ 3 個候補組合。副降神能力依 10% 納入，若組合成立也會納入連結加成。</div>
       <div class="kvGrid">
+        <div class="kv"><label class="k" for="recMain">主降神</label><div class="v"><select id="recMain" data-hero-search><option value="">預設（自動推薦主降神）</option>${names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('')}</select></div></div>
         ${REC_SLOTS.map((label,i)=>`<div class="kv"><div class="k">${E(label)}星等</div><div class="v"><select id="recStar${i}">${recommendStarOptions(stars[i], i > 0)}</select></div></div>`).join('')}
         <div class="kv"><div class="k">推薦方向</div><div class="v"><select id="recMetric">${REC_METRICS.map(m=>`<option value="${E(m.kind)}">${E(m.title)}</option>`).join('')}</select></div></div>
       </div>

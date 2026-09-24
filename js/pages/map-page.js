@@ -589,10 +589,10 @@
     return visibleMarkers(stage).map(marker => {
       const left = Math.max(0, Math.min(100, Number(marker.x || 0) / w * 100));
       const top = Math.max(0, Math.min(100, Number(marker.y || 0) / h * 100));
-      const cls = marker.kind === 'npc' ? 'npc' : 'monster';
+      const cls = marker.role === 'trap' ? 'npc trapLight' : marker.kind === 'npc' ? 'npc' : 'monster';
       const src = markerImage(marker);
       const fallback = marker.kind === 'npc' ? 'N' : 'M';
-      const inner = src ? `<img src="${htmlEscape(src)}" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.parentElement.classList.remove('withImage')"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
+      const inner = marker.role === 'trap' ? '<span class="trapSpark" aria-hidden="true">✦</span>' : src ? `<img src="${htmlEscape(src)}" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.parentElement.classList.remove('withImage')"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
       const shopAttrs = marker.kind === 'npc' && marker.shop ? ` data-map-shop="${htmlEscape(marker.shop)}" data-map-shop-stage="${htmlEscape(stage.stageId)}" data-map-shop-stage-name="${htmlEscape(stage.stageName || '')}" data-map-shop-npc="${htmlEscape(marker.id || '')}" data-map-shop-name="${htmlEscape(marker.name || '')}" data-map-shop-x="${htmlEscape(marker.x ?? '')}" data-map-shop-y="${htmlEscape(marker.y ?? '')}" data-map-shop-coord-x="${htmlEscape(marker.coordX ?? marker.x ?? '')}" data-map-shop-coord-y="${htmlEscape(marker.coordY ?? marker.y ?? '')}"` : '';
       const monsterAttrs = marker.kind === 'monster' ? ` data-map-monster-dot="1" data-map-monster="${htmlEscape(marker.id || '')}" data-map-monster-stage="${htmlEscape(stage.stageId)}" data-map-monster-stage-name="${htmlEscape(stage.stageName || '')}" data-map-monster-name="${htmlEscape(marker.name || '')}" data-map-monster-level="${htmlEscape(marker.level || '')}" data-map-monster-pic="${htmlEscape(marker.pic || '')}" data-map-monster-area="${htmlEscape(markerAreaLabel(marker))}"` : '';
       return `<button type="button" class="mapDot ${cls}${src ? ' withImage' : ''}${marker.shop ? ' shopNpcDot' : ''}" style="left:${left}%;top:${top}%;" title="${htmlEscape(markerLabel(marker))}"${shopAttrs}${monsterAttrs}>
@@ -652,6 +652,7 @@
   }
 
   function markerImage(marker){
+    if(marker.role === 'trap') return '';
     const pic = marker.pic;
     if(pic === undefined || pic === null || pic === '') return '';
     const base = assetBase();
