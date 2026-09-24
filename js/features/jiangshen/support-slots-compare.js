@@ -14,21 +14,44 @@
       input.type='search'; input.className='heroNameSearch';
       input.placeholder='搜尋降神名稱'; input.setAttribute('aria-label','搜尋降神名稱');
       input.setAttribute('aria-controls',select.id);
-      if(select.id==='recMain'){
-        const list=document.createElement('datalist');
-        list.id='recMainChoices';
-        Array.from(select.options).forEach(o=>{
-          const option=document.createElement('option');
-          option.value=o.value || '預設'; list.append(option);
+      {
+        const wrap=document.createElement('div'); wrap.className='heroCombobox';
+        const list=document.createElement('div'); list.className='heroChoices'; list.hidden=true;
+        list.id=select.id+'Choices';
+        const toggle=document.createElement('button'); toggle.type='button'; toggle.className='heroChoiceToggle';
+        toggle.textContent='▾'; toggle.title='展開降神名單'; toggle.setAttribute('aria-label','展開降神名單');
+        const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');};
+        const show=(query='')=>{
+          list.replaceChildren();
+          Array.from(select.options).filter(o=>!query || o.textContent.includes(query)).forEach(o=>{
+            const option=document.createElement('button'); option.type='button'; option.textContent=o.textContent;
+            option.setAttribute('role','option'); option.setAttribute('aria-selected',String(o.value===select.value));
+            option.addEventListener('click',()=>{select.value=o.value;input.value=o.value;select.dispatchEvent(new Event('change',{bubbles:true}));close();input.focus();});
+            list.append(option);
+          });
+          list.hidden=false;input.setAttribute('aria-expanded','true');
+        };
+        list.setAttribute('role','listbox'); list.setAttribute('aria-label','主降神');
+        toggle.addEventListener('click',()=>show());
+        input.addEventListener('click',()=>show());
+        input.addEventListener('keydown',e=>{
+          if(e.key==='ArrowDown'){e.preventDefault();if(list.hidden)show();list.querySelector('button')?.focus();}
+          if(e.key==='Escape')close();
         });
-        input.type='text'; input.setAttribute('list',list.id);
-        input.id='recMainSearch'; input.placeholder='預設（自動推薦主降神）';
+        list.addEventListener('keydown',e=>{
+          if(e.key==='Escape'){close();input.focus();}
+          if(e.key==='ArrowDown' || e.key==='ArrowUp'){e.preventDefault();(e.key==='ArrowDown' ? e.target.nextElementSibling : e.target.previousElementSibling)?.focus();}
+        });
+        wrap.addEventListener('focusout',e=>{if(!wrap.contains(e.relatedTarget))close();});
+        input.type='text'; input.setAttribute('role','combobox');input.setAttribute('aria-controls',list.id);input.setAttribute('aria-expanded','false');input.setAttribute('aria-autocomplete','list');
+        input.id=select.id+'Search'; input.placeholder=select.id==='recMain' ? '預設（自動推薦主降神）' : '搜尋或選擇降神';
         input.value=select.value; input.style.marginBottom='0';
         select.hidden=true;
-        document.querySelector('label[for="recMain"]')?.setAttribute('for',input.id);
+        document.querySelector(`label[for="${select.id}"]`)?.setAttribute('for',input.id);
         input.addEventListener('input',()=>{
           const value=input.value.trim();
-          const known=!value || value==='預設' || valid.has(value);
+          show(value);
+          const known=!value || value==='預設' || Array.from(select.options).some(o=>o.value===value);
           input.setCustomValidity(known ? '' : '請選擇清單中的降神名稱');
           if(known){select.value=valid.has(value) ? value : ''; select.dispatchEvent(new Event('change',{bubbles:true}));}
         });
@@ -36,7 +59,9 @@
           if(!input.checkValidity())input.value=select.value;
           input.setCustomValidity('');
         });
-        select.before(input,list);
+        select.before(wrap);wrap.append(input,toggle,list);
+        select.addEventListener('change',()=>{input.value=select.value;});
+        new MutationObserver(()=>{input.value=select.value;close();}).observe(select,{childList:true});
         return;
       }
       input.addEventListener('input',()=>{
@@ -352,13 +377,14 @@
     const supportCount = (supportSlots || []).length;
     if(supportCount <= 0) return [];
     const cluster = comboClusterNames(mainName, allNames);
-    if(cluster.length < supportCount) return [];
+    if(!cluster.length) return [];
     const ranked = cluster.map(n=>{
       const a = abilityPart(n, stars[supportSlots[0]] || 1, 0.1);
       const comboTouch = Object.values(D().comboMembers || {}).filter(m => (m || []).includes(n)).length;
       return {n, score:metricScore(a, kind) + comboTouch * 500};
     }).sort((a,b)=>b.score-a.score).slice(0, 12).map(x=>x.n);
-    const pool = ranked.length >= supportCount ? ranked : Array.from(new Set(ranked.concat(allNames.filter(n => n !== mainName)))).slice(0, 12);
+    const fillers=allNames.filter(n=>n!==mainName && !ranked.includes(n)).sort((a,b)=>metricScore(abilityPart(b,stars[supportSlots[0]],0.1),kind)-metricScore(abilityPart(a,stars[supportSlots[0]],0.1),kind));
+    const pool = ranked.length >= supportCount ? ranked : ranked.concat(fillers).slice(0, 12);
     const supportStars = supportSlots.map(i => stars[i] || 1);
     const seeds = [];
     function choose(start, picked){
@@ -406,7 +432,16 @@
       const ranked = finalStates.map(state=>{
         const res = recommendTotal(state.picks);
         return {...state, total:res.total, combos:res.combos, score:metricScore(res.total, kind)};
-      }).sort((a,b)=>b.score-a.score);
+      }).map(plan=>{
+        const connected=new Set([mainName]);
+        for(let round=0;round<plan.picks.length;round++){
+          for(const combo of plan.combos){
+            const members=(D().comboMembers[combo] || []).map(n=>typeof canonicalName==='function' ? canonicalName(n) : n);
+            if(members.some(n=>connected.has(n)))members.forEach(n=>connected.add(n));
+          }
+        }
+        return {...plan,linkedCount:plan.picks.filter(p=>connected.has(p.n)).length-1};
+      }).sort((a,b)=>(fixedMain ? b.linkedCount-a.linkedCount : 0) || b.score-a.score);
       const seen = new Set();
       const unique = ranked.filter(plan=>{
         const key = plan.picks.map(p=>`${p.n}:${p.s}`).sort().join('|');
@@ -415,7 +450,7 @@
       });
       bestByMain.push(...unique.slice(0,fixedMain ? 3 : 1));
     }
-    return bestByMain.sort((a,b)=>b.score-a.score).slice(0,3);
+    return bestByMain.sort((a,b)=>(fixedMain ? b.linkedCount-a.linkedCount : 0) || b.score-a.score).slice(0,3);
   }
   function statLine(total, keys){
     return keys.map(k=>`${E(k)} ${fmt(total[k] || 0)}`).join('　');
@@ -446,7 +481,7 @@
       <div class="kvGrid" style="margin-top:10px">
         ${plan.picks.map((p,i)=>`<div class="kv"><div class="k">${E(REC_SLOTS[i])}</div><div class="v"><b>${E(p.n)}</b><br><span class="muted">${p.s} 星${i===0?' / 100%':' / 10%'}</span></div></div>`).join('')}
       </div>
-      ${plan.combos && plan.combos.length ? `<div class="muted" style="margin-top:10px">連結：${plan.combos.map(E).join('、')}</div>` : ''}
+      <div class="muted" style="margin-top:10px">成立連結：${plan.combos?.length ? plan.combos.map(E).join('、') : '無'}</div>
     </article>`;
   }
   function renderRecommendResults(){

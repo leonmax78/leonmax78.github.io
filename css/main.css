@@ -10,6 +10,17 @@ select{color-scheme:dark}
 select option{background:#101722;color:#edf2f7}
 select option:checked{background:#245750;color:#fff6b3}
 .heroNameSearch{margin-bottom:6px}
+.heroCombobox{position:relative;width:100%}
+.kv:has(.heroCombobox){position:relative;z-index:2}
+.kv:has(.heroCombobox):focus-within{z-index:3}
+.supportPlan .v:has(.heroNameSearch){grid-template-columns:minmax(0,1fr)}
+.supportPlan .heroNameSearch{width:100%;min-width:0;margin:0}
+.supportPlan .v:has(.heroNameSearch) select{width:100%;min-width:0}
+.heroCombobox input{padding-right:40px}
+.heroChoiceToggle{position:absolute;right:1px;top:1px;bottom:1px;width:36px;padding:0;border:0;background:transparent;box-shadow:none;color:#edf2f7}
+.heroChoices{position:absolute;top:100%;left:0;right:0;z-index:100;max-height:260px;overflow:auto;background:#101722;border:1px solid #657c92;border-radius:6px}
+.heroChoices button{display:block;width:100%;text-align:left;border:0;border-radius:0;background:transparent;padding:8px 12px;color:#edf2f7}
+.heroChoices button:hover,.heroChoices button:focus,.heroChoices button[aria-selected="true"]{background:#245750;color:#fff6b3}
 .mapDot.npc.trapLight{border:0;padding:0;background:transparent;box-shadow:none;width:32px;height:32px;overflow:visible;transform:translate(-50%,-50%)}
 .mapDot.trapLight .trapSpark{display:block;font-size:30px;line-height:32px;color:#fff3ab;text-shadow:0 0 4px #fff,0 0 10px #ffd54f}
 button{cursor:pointer}
