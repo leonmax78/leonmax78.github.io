@@ -437,13 +437,13 @@
             next.push({order:state.order.concat(name),remaining:state.remaining.filter(n=>n!==name),score:state.score+cache[slot].get(name)});
           }
         }
-        // Keep the best three assignments for each used set; equivalent partial
+        // Keep the best five assignments for each used set; equivalent partial
         // assignments have identical remaining choices and possible link bonuses.
         const buckets=new Map();
         for(const state of next){
           const key=state.order.slice().sort().join('|');
           const bucket=buckets.get(key) || [];bucket.push(state);bucket.sort((a,b)=>b.score-a.score);
-          buckets.set(key,bucket.slice(0,3));
+          buckets.set(key,bucket.slice(0,5));
         }
         states=Array.from(buckets.values()).flat();
       }
@@ -452,7 +452,7 @@
         const key=state.order.map((n,i)=>`${n}:${stars[supportSlots[i]]}`).sort().join('|');
         if(assignments.has(key))return false;
         assignments.add(key);return true;
-      }).slice(0,3).forEach(s=>seeds.push(buildState(mainName,s.order,stars,supportSlots)));
+      }).slice(0,5).forEach(s=>seeds.push(buildState(mainName,s.order,stars,supportSlots)));
     }
     return seeds;
   }
@@ -491,9 +491,9 @@
         if(seen.has(key)) return false;
         seen.add(key); return true;
       });
-      bestByMain.push(...unique.slice(0,fixedMain ? 3 : 1));
+      bestByMain.push(...unique.slice(0,fixedMain ? 5 : 1));
     }
-    return bestByMain.sort((a,b)=>(fixedMain ? Number(b.combos.length>0)-Number(a.combos.length>0) : 0) || b.score-a.score).slice(0,3);
+    return bestByMain.sort((a,b)=>(fixedMain ? Number(b.combos.length>0)-Number(a.combos.length>0) : 0) || b.score-a.score).slice(0,5);
   }
   function statLine(total, keys){
     return keys.map(k=>`${E(k)} ${fmt(total[k] || 0)}`).join('　');
@@ -540,7 +540,7 @@
       const plans = topRecommendPlans(metric.kind, stars, fixedMain);
       const html = `<section class="card supportChoiceCard" style="box-shadow:none;margin-top:18px;border-color:rgba(54,211,207,.55)">
         <h2>${E(metric.title)}</h2>
-        <div class="muted">${E(metric.desc)}，列出前 3 個候補。</div>
+        <div class="muted">${E(metric.desc)}，列出前 5 個候補。</div>
         ${recommendCompareTable(plans)}
         ${plans.map((p,i)=>recommendCard(metric,p,i)).join('')}
       </section>`;
@@ -552,7 +552,7 @@
     const stars = recommendStars();
     reader.innerHTML = `<section class="card">
       <h1>副降神組合推薦方案</h1>
-      <div class="notice">手動設定主降神與 4 個副降神的星等後，系統會推薦物理、術法、防禦三種方向各 1 ~ 3 個候補組合。副降神能力依 10% 納入，若組合成立也會納入連結加成。</div>
+      <div class="notice">手動設定主降神與 4 個副降神的星等後，系統會推薦物理、術法、防禦三種方向各 1 ~ 5 個候補組合。副降神能力依 10% 納入，若組合成立也會納入連結加成。</div>
       <div class="kvGrid">
         <div class="kv"><label class="k" for="recMain">主降神</label><div class="v"><select id="recMain" data-hero-search><option value="">預設（自動推薦主降神）</option>${names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('')}</select></div></div>
         ${REC_SLOTS.map((label,i)=>`<div class="kv"><div class="k">${E(label)}星等</div><div class="v"><select id="recStar${i}">${recommendStarOptions(stars[i], i > 0)}</select></div></div>`).join('')}

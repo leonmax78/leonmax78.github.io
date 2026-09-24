@@ -25,7 +25,7 @@ const results=vm.runInContext(`(()=>{
    walk([{n:'孟祈',s:stars[0]}]);
    plans.sort((a,b)=>Number(b.combos.length>0)-Number(a.combos.length>0)||b.score-a.score);
    const seen=new Set();
-   const expected=plans.filter(p=>{const key=p.picks.map(x=>x.n+':'+x.s).sort().join('|');if(seen.has(key))return false;seen.add(key);return true;}).slice(0,3);
+   const expected=plans.filter(p=>{const key=p.picks.map(x=>x.n+':'+x.s).sort().join('|');if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);
    const actual=api.topRecommendPlans(kind,stars,'孟祈');
    checks.push({kind,stars,expected:expected.map(p=>p.score),actual:actual.map(p=>p.score)});
   }
@@ -40,4 +40,4 @@ assert.equal(results.after.total['防禦'],24797);
 assert(results.full[0].score>=36190.75);
 assert(results.full[0].combos.includes('如親似故'));
 for(const c of results.checks)assert.deepStrictEqual(Array.from(c.actual),Array.from(c.expected),JSON.stringify(c));
-console.log('PASS screenshot totals, support-only links, top-three exhaustive oracle for 12 metric/star cases');
+console.log('PASS screenshot totals, support-only links, top-five exhaustive oracle for 12 metric/star cases');
