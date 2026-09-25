@@ -25,10 +25,10 @@
         <button class="navBtn sub" data-jiang="support">副降神模擬 <span>›</span></button>
         <button class="navBtn sub" data-jiang="recommend">副降神組合推薦方案 <span>›</span></button>
         <button class="navBtn sub" data-jiang="compare">主降神比較 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="stars">20星等 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="starAura">星等 / 靈氣 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="expPill">等級 / 經驗丹 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="training">修練機制 <span>›</span></button>
+        <button class="navBtn sub" data-jiang="stars">降神20星能力總表 <span>›</span></button>
+        <button class="navBtn sub" data-jiang="starAura">星等/靈氣試算 <span>›</span></button>
+        <button class="navBtn sub" data-jiang="expPill">等級/經驗丹試算 <span>›</span></button>
+        <button class="navBtn sub" data-jiang="training">修練機制試算 <span>›</span></button>
         <div id="jiangFields"></div>
       </div>
       <button class="navBtn major" data-view="monster">怪物、封獸查詢 <span>›</span></button>

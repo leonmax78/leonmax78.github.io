@@ -237,9 +237,9 @@ function renderJiangHome(){
   {title:'副降神模擬',desc:'試算副降神能力與需求',attr:'data-jiang="support"'},
   {title:'副降神組合推薦方案',desc:'依星等推薦物理、術法、防禦組合',attr:'data-jiang="recommend"'},
   {title:'主降神比較',desc:'比較主降神能力差異',attr:'data-jiang="compare"'},
-  {title:'20星等',desc:'星等資料與累積需求',attr:'data-jiang="stars"'},
-  {title:'星等 / 靈氣',desc:'星等與靈氣相關試算',attr:'data-jiang="starAura"'},
-  {title:'等級 / 經驗丹',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
+  {title:'降神20星能力總表',desc:'星等資料與累積需求',attr:'data-jiang="stars"'},
+  {title:'星等/靈氣試算',desc:'星等與靈氣相關試算',attr:'data-jiang="starAura"'},
+  {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
   {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'}
  ]);
 }
@@ -288,10 +288,10 @@ function jiangLoadingLabel(kind){
   recommend:'副降神組合推薦方案',
   supportCompare:'副降神存檔比較',
   compare:'主降神比較',
-  stars:'20星等',
-  starAura:'星等 / 靈氣',
-  expPill:'等級 / 經驗丹',
-  training:'修練機制'
+  stars:'降神20星能力總表',
+  starAura:'星等/靈氣試算',
+  expPill:'等級/經驗丹試算',
+  training:'修練機制試算'
  };
  return labels[kind]||'降神、經驗、修練試算';
 }
@@ -338,10 +338,10 @@ function jiangLoadingLabel(kind){
   recommend:'副降神組合推薦方案',
   supportCompare:'副降神存檔比較',
   compare:'主降神比較',
-  stars:'20星等',
-  starAura:'星等 / 靈氣',
-  expPill:'等級 / 經驗丹',
-  training:'修練機制'
+  stars:'降神20星能力總表',
+  starAura:'星等/靈氣試算',
+  expPill:'等級/經驗丹試算',
+  training:'修練機制試算'
  };
  return labels[kind]||'降神、經驗、修練試算';
 }
@@ -1075,7 +1075,7 @@ function fillJiangFields(kind){
  if(kind==='starAura'){
   const starOptions=Array.from({length:21},(_,i)=>`<option value="${i}" ${i===20?'selected':''}>${i} 星</option>`).join('');
   const starOptionsZero=Array.from({length:21},(_,i)=>`<option value="${i}">${i} 星</option>`).join('');
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>星等 / 靈氣計算</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>星等/靈氣試算</h2>
   <div class="calcTabs"><button class="calcTab active" type="button" data-star-tab="star">星等計算</button><button class="calcTab" type="button" data-star-tab="aura">靈氣計算</button></div>
   <div id="starTabNeed">
     <h3>星等：需要的降神數量</h3>
@@ -1103,7 +1103,7 @@ function fillJiangFields(kind){
  }
 
  if(kind==='expPill'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>等級 / 經驗丹</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>等級/經驗丹試算</h2>
   <div class="calcTabs"><button class="calcTab active" type="button" data-exp-tab="need">等級經驗</button><button class="calcTab" type="button" data-exp-tab="eat">經驗丹升等</button></div>
   <div id="expTabNeed">
     <h3>等級：需要的經驗值</h3>
@@ -1150,7 +1150,7 @@ function fillJiangFields(kind){
  }
 
  if(kind==='stars'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>20 星等</h2><div class="muted">選擇降神後，產生 0 到 20 星的能力總表。</div><div class="kvGrid">
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>降神20星能力總表</h2><div class="muted">選擇降神後，產生 0 到 20 星的能力總表。</div><div class="kvGrid">
   <div class="kv"><div class="k">選擇降神</div><div class="v"><select id="jsStarName">${opts}</select></div></div>
   </div><div class="quick"><button id="calcStars">產生 0 ~ 20 星能力總表<small>完整顯示各星等能力</small></button></div></section>`;
  }
@@ -1326,7 +1326,7 @@ function renderTrainingCalc(){
     </div>
   </div>`;
  }
- byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>修練機制</h2>
+ byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>修練機制試算</h2>
  <div class="notice">選擇目前階與目標階，會計算需要材料，以及從目前階提升到目標階增加的能力。計算結果預設隱藏，按下「計算修練」後才會顯示。</div>
  <div class="kvGrid">
   <div class="kv"><div class="k">分類篩選</div><div class="v"><select id="trainGroupFilter">${groupOpts}</select></div></div>

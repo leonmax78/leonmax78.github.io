@@ -30,7 +30,7 @@
   }
   function backBtn(kind){
     const target = kind === 'stars' ? 'stars' : 'compare';
-    const label = target === 'stars' ? '返回20星等選取' : '返回主降神比較選取';
+    const label = target === 'stars' ? '返回降神20星能力總表選取' : '返回主降神比較選取';
     return `<button class="backBtn" type="button" onclick="setJiang('${target}')">← ${label}</button>`;
   }
 
@@ -50,7 +50,7 @@
     const r = $('reader'); if(!r) return;
     r.innerHTML = `<section class="card">
       <h1>降神、經驗、修練試算</h1>
-      <h2>20 星等</h2>
+      <h2>降神20星能力總表</h2>
       <div class="kvGrid"><div class="kv"><div class="k">選擇降神</div><div class="v"><select id="jsStarName">${optionsNames(false)}</select></div></div></div>
       <div class="quick"><button id="calcStars" type="button">產生 0 ~ 20 星能力總表<small>完整顯示各星等能力</small></button></div>
     </section>`;
