@@ -660,6 +660,51 @@
     return withAssetVersion(`${base}/npc-portraits/n${pic}.png`);
   }
 
+  function mountMapSelector(){
+    const select=byId('mapStageSelect');
+    if(!select)return;
+    const wrap=document.createElement('div');wrap.className='heroCombobox mapStageCombobox';
+    const input=document.createElement('input');input.id='mapStageSearch';input.type='text';
+    input.value=select.selectedOptions[0]?.textContent || '';
+    input.placeholder='搜尋地圖名稱或編號';input.autocomplete='off';
+    input.setAttribute('role','combobox');input.setAttribute('aria-label','地圖名稱或編號');
+    input.setAttribute('aria-controls','mapStageChoices');input.setAttribute('aria-expanded','false');input.setAttribute('aria-autocomplete','list');
+    const toggle=document.createElement('button');toggle.type='button';toggle.className='heroChoiceToggle';toggle.textContent='▾';
+    toggle.title='展開地圖名單';toggle.setAttribute('aria-label','展開地圖名單');
+    const list=document.createElement('div');list.id='mapStageChoices';list.className='heroChoices';list.hidden=true;
+    list.setAttribute('role','listbox');list.setAttribute('aria-label','地圖');
+    const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');input.value=select.selectedOptions[0]?.textContent || '';};
+    const show=(query='')=>{
+      list.replaceChildren();
+      for(const option of select.options){
+        if(query && !option.textContent.toLowerCase().includes(query.trim().toLowerCase()))continue;
+        const button=document.createElement('button');button.type='button';button.textContent=option.textContent;
+        button.setAttribute('role','option');button.setAttribute('aria-selected',String(option.selected));
+        button.addEventListener('click',()=>{
+          select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));byId('mapStageSearch')?.focus();
+        });
+        list.append(button);
+      }
+      if(!list.childElementCount){const empty=document.createElement('div');empty.className='muted';empty.textContent='找不到符合的地圖';list.append(empty);}
+      list.hidden=false;input.setAttribute('aria-expanded','true');
+    };
+    toggle.addEventListener('click',()=>show());input.addEventListener('click',()=>{show();input.select();});
+    input.addEventListener('input',e=>{if(!e.isComposing)show(input.value);});
+    input.addEventListener('compositionend',()=>show(input.value));
+    input.addEventListener('keydown',e=>{
+      if(e.isComposing)return;
+      if(e.key==='ArrowDown'){e.preventDefault();if(list.hidden)show();list.querySelector('button')?.focus();}
+      if(e.key==='Enter' && !list.hidden){e.preventDefault();list.querySelector('button')?.click();}
+      if(e.key==='Escape')close();
+    });
+    list.addEventListener('keydown',e=>{
+      if(e.key==='Escape'){close();input.focus();}
+      if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();(e.key==='ArrowDown' ? e.target.nextElementSibling : e.target.previousElementSibling)?.focus();}
+    });
+    wrap.addEventListener('focusout',e=>{if(!wrap.contains(e.relatedTarget))close();});
+    select.hidden=true;select.before(wrap);wrap.append(input,toggle,list);
+  }
+
   function renderLoaded(){
     const reader = byId('reader');
     if(!reader) return;
@@ -725,6 +770,7 @@
         </div>
       </div>
     </section>`;
+    mountMapSelector();
     reader.querySelectorAll('[data-map-panel]').forEach(panel => {
       panel.querySelector('summary').addEventListener('click', event => {
         if(event.target.closest('button')) return;

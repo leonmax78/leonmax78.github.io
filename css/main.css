@@ -11,6 +11,9 @@ select option{background:#101722;color:#edf2f7}
 select option:checked{background:#245750;color:#fff6b3}
 .heroNameSearch{margin-bottom:6px}
 .heroCombobox{position:relative;width:100%}
+.mapToolbar:has(.mapStageCombobox){position:relative;z-index:30}
+.mapToolbar .mapStageCombobox input{padding-right:40px}
+.mapStageCombobox .heroChoices{font-size:14px;font-weight:400}
 .kv:has(.heroCombobox){position:relative;z-index:2}
 .kv:has(.heroCombobox):focus-within{z-index:3}
 .supportPlan .v:has(.heroNameSearch){grid-template-columns:minmax(0,1fr)}
