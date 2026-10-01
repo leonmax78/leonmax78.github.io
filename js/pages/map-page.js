@@ -542,7 +542,7 @@
     let previousRegion = null;
     return rows.map(marker => {
       let heading = '';
-      if(kind === 'monster' && Number(stage.stageId) === 15){
+      if(kind === 'monster' && Number(stage.stageId) === 15 && stage.monsters.some(m => m.activity === '虛空群魔大遊行')){
         const region = marker.pingxiRegion || 0;
         if(region !== previousRegion){
           previousRegion = region;
@@ -566,7 +566,7 @@
   }
 
   function areaLabels(stage){
-    if(Number(stage.stageId) === 15){
+    if(Number(stage.stageId) === 15 && (stage.monsters || []).some(m => m.activity === '虛空群魔大遊行')){
       return [
         {name:'第一區', x:82, y:61},
         {name:'第二區', x:59, y:29},

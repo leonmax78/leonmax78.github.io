@@ -1,5 +1,5 @@
 {
-  "version": "assets-0924-v550",
+  "version": "assets-1001-v561",
   "base": "assets/test-media",
   "itemIcons": [
     "0000",
@@ -4309,11 +4309,12 @@
     "6885",
     "6886",
     "6887",
-    "6896",
     "6891",
-    "6894",
+    "6892",
     "6893",
-    "6892"
+    "6894",
+    "6896",
+    "6897"
   ],
   "monsterPics": [
     "5001",
@@ -6294,7 +6295,7 @@
     "69"
   ],
   "counts": {
-    "itemIcons": 4312,
+    "itemIcons": 4313,
     "monsterPics": 1907,
     "soulPortraits": 67,
     "itemMissing": 0,
