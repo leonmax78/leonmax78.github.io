@@ -5,6 +5,10 @@
   const D = () => { try{ if(typeof DATA !== 'undefined') return DATA; }catch(e){} return window.DATA || {}; };
   const stats = () => (D().stats && D().stats.length ? D().stats : ['血量','精力','體魄','力量','智慧','靈敏','術攻','防禦','術防']);
   const names = () => (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats || {}));
+  let activeHeroMenu=null;
+  document.addEventListener('pointerdown',e=>{
+    if(activeHeroMenu && !activeHeroMenu.wrap.contains(e.target))activeHeroMenu.close();
+  },true);
   function addHeroSearch(){
     const valid = new Set(names());
     document.querySelectorAll('#reader select').forEach(select=>{
@@ -20,9 +24,11 @@
         list.id=select.id+'Choices';
         const toggle=document.createElement('button'); toggle.type='button'; toggle.className='heroChoiceToggle';
         toggle.textContent='▾'; toggle.title='展開降神名單'; toggle.setAttribute('aria-label','展開降神名單');
-        const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');};
+        const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');if(activeHeroMenu?.wrap===wrap)activeHeroMenu=null;};
         const choices=new WeakMap();
         const show=(query='')=>{
+          if(activeHeroMenu?.wrap!==wrap)activeHeroMenu?.close();
+          activeHeroMenu={wrap,close};
           list.replaceChildren();
           Array.from(select.options).filter(o=>!query || o.textContent.includes(query)).forEach(o=>{
             const option=document.createElement('button'); option.type='button'; option.textContent=o.textContent;
