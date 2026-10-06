@@ -26,12 +26,28 @@
           Array.from(select.options).filter(o=>!query || o.textContent.includes(query)).forEach(o=>{
             const option=document.createElement('button'); option.type='button'; option.textContent=o.textContent;
             option.setAttribute('role','option'); option.setAttribute('aria-selected',String(o.value===select.value));
-            option.addEventListener('click',()=>{select.value=o.value;input.value=o.value;select.dispatchEvent(new Event('change',{bubbles:true}));close();input.focus();});
+            option.addEventListener('click',e=>{select.value=o.value;input.value=o.value;input.setCustomValidity('');select.dispatchEvent(new Event('change',{bubbles:true}));close();if(e.detail===0)input.focus();else input.blur();});
             list.append(option);
           });
           list.hidden=false;input.setAttribute('aria-expanded','true');
         };
         list.setAttribute('role','listbox'); list.setAttribute('aria-label','主降神');
+        // Safari can blur the input before a tapped option receives its click.
+        let touchPick=null;
+        list.addEventListener('pointerdown',e=>{
+          const button=e.target.closest('button');
+          if(!button)return;
+          e.preventDefault();
+          touchPick=e.pointerType==='touch' ? {button,x:e.clientX,y:e.clientY,scroll:list.scrollTop} : null;
+        });
+        list.addEventListener('pointercancel',()=>{touchPick=null;});
+        list.addEventListener('pointerup',e=>{
+          const pick=touchPick;touchPick=null;
+          if(!pick || Math.hypot(e.clientX-pick.x,e.clientY-pick.y)>10 || list.scrollTop!==pick.scroll)return;
+          // WebKit may suppress the compatibility click after preventDefault.
+          e.preventDefault();
+          pick.button.dispatchEvent(new MouseEvent('click',{bubbles:true,detail:1}));
+        });
         toggle.addEventListener('click',()=>show());
         input.addEventListener('click',()=>show());
         input.addEventListener('keydown',e=>{
