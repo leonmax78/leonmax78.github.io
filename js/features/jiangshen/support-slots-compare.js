@@ -21,12 +21,15 @@
         const toggle=document.createElement('button'); toggle.type='button'; toggle.className='heroChoiceToggle';
         toggle.textContent='▾'; toggle.title='展開降神名單'; toggle.setAttribute('aria-label','展開降神名單');
         const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');};
+        const choices=new WeakMap();
         const show=(query='')=>{
           list.replaceChildren();
           Array.from(select.options).filter(o=>!query || o.textContent.includes(query)).forEach(o=>{
             const option=document.createElement('button'); option.type='button'; option.textContent=o.textContent;
             option.setAttribute('role','option'); option.setAttribute('aria-selected',String(o.value===select.value));
-            option.addEventListener('click',e=>{select.value=o.value;input.value=o.value;input.setCustomValidity('');select.dispatchEvent(new Event('change',{bubbles:true}));close();if(e.detail===0)input.focus();else input.blur();});
+            const choose=keyboard=>{select.value=o.value;input.value=o.value;input.setCustomValidity('');select.dispatchEvent(new Event('change',{bubbles:true}));close();if(keyboard)input.focus();else input.blur();};
+            choices.set(option,choose);
+            option.addEventListener('click',e=>{e.stopPropagation();choose(e.detail===0);});
             list.append(option);
           });
           list.hidden=false;input.setAttribute('aria-expanded','true');
@@ -41,13 +44,17 @@
           touchPick=e.pointerType==='touch' ? {button,x:e.clientX,y:e.clientY,scroll:list.scrollTop} : null;
         });
         list.addEventListener('pointercancel',()=>{touchPick=null;});
-        list.addEventListener('pointerup',e=>{
+        list.addEventListener('touchend',e=>{
           const pick=touchPick;touchPick=null;
-          if(!pick || Math.hypot(e.clientX-pick.x,e.clientY-pick.y)>10 || list.scrollTop!==pick.scroll)return;
-          // WebKit may suppress the compatibility click after preventDefault.
+          const touch=e.changedTouches[0];
+          if(!pick || !touch || Math.hypot(touch.clientX-pick.x,touch.clientY-pick.y)>10 || list.scrollTop!==pick.scroll)return;
+          // Cancel the native compatibility click before hiding its target.
+          // Selecting on pointerup lets iOS retarget that click underneath the list.
           e.preventDefault();
-          pick.button.dispatchEvent(new MouseEvent('click',{bubbles:true,detail:1}));
-        });
+          e.stopPropagation();
+          choices.get(pick.button)?.(false);
+        },{passive:false});
+        list.addEventListener('touchcancel',()=>{touchPick=null;});
         toggle.addEventListener('click',()=>show());
         input.addEventListener('click',()=>show());
         input.addEventListener('keydown',e=>{
