@@ -30,6 +30,11 @@ function itemStatus(it){
 function itemDetailRows(it){
  const rows=[];
  for(const k of ITEM_DETAIL_ORDER){
+  if(k==='DamageMin'&&ITEM_DETAIL_ORDER.includes('DamageMax')&&it.DamageMin!==undefined&&it.DamageMax!==undefined){
+   rows.push([window.SZO_DISPLAY.label('Damage'),`${it.DamageMin}-${it.DamageMax}`]);
+   continue;
+  }
+  if(k==='DamageMax'&&ITEM_DETAIL_ORDER.includes('DamageMin')&&it.DamageMin!==undefined&&it.DamageMax!==undefined)continue;
   if(k==='Damage'){
    if(it.DamageMin||it.DamageMax)rows.push([window.SZO_DISPLAY.label('Damage'),`${it.DamageMin||''}~${it.DamageMax||''}`]);
    continue;
@@ -427,7 +432,7 @@ function clearItemSearchFilters(){
 function itemDetailBodyHTML(it){
  const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
  const labels=keys=>new Set(keys.map(k=>window.SZO_DISPLAY.label(k)));
- const ability=labels(['HP','MP','Con','Str','Int','Dex','DamageMin','DamageMax','MagicAttack','ExtraDef','MagicDef']);
+ const ability=labels(['HP','MP','Con','Str','Int','Dex','Damage','DamageMin','DamageMax','MagicAttack','ExtraDef','MagicDef']);
  const element=labels(['IceAttack','FireAttack','LightningAttack','DarkAttack','IceProb','FireProb','LightningProb','DarkProb','IceDef','FireDef','LightningDef','DarkDef','ParalysisRes','PosionRes','BlindRes','SilentRes']);
  const special=labels(['ExtraStatus','StatusProb']);
  const helpLabel=window.SZO_DISPLAY.label('Help'),groups={basic:[],ability:[],element:[],help:[],special:[]};

@@ -24,7 +24,8 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(async()=>{await showShopItem('20469');});const status=await rows(page);
   await page.evaluate(()=>showItem('20469'));assert.deepEqual(await rows(page),status);
   const reviewedRows=await page.evaluate(()=>itemDetailRows({ID:'test',Type:'ITEM_ENCHANT',Class:'CLASS_SWORDMAN,CLASS_PET',Attack:'5',AttackRange:'7',ExpireDate:'0-7 11:50',Time:'60',DamageMin:'3',DamageMax:'9',FireAttack:'20',FireProb:'30',Value:'999',Flag:'ITEM_TEST',Magic:'123'}));
-  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、寵物'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間(秒)','60'],['傷害下限','3'],['傷害上限','9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
+  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、寵物'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間(秒)','60'],['傷害','3-9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
+  assert(!reviewedRows.some(r=>['傷害下限','傷害上限'].includes(r[0])));
   assert(!reviewedRows.some(r=>['價值','道具旗標','關聯技能'].includes(r[0])));
   await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));
   await page.evaluate(()=>showShopItem('23640'));assert.deepEqual(await rows(page),enchantRows);
