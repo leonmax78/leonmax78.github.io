@@ -9,7 +9,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
  try{
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await route(page);await ready(page);
   const approved=JSON.parse(fs.readFileSync(path.join(root,'planning/approved-display-review.json'),'utf8'));
-  approved.confirmedValueChanges.Type.BONUS='錦囊類';
+  approved.confirmedValueChanges.Type.BONUS='錦囊';
   const actual=await page.evaluate(()=>({labels:SZO_DISPLAY.fields,visible:SZO_DISPLAY.itemVisible,values:SZO_DISPLAY.values}));
   const typeOptions=await page.evaluate(()=>Object.entries(ITEM_TYPE_MAP));
   assert.equal(typeOptions.filter(([,label])=>label==='暗器').length,1);assert(typeOptions.some(([key])=>key==='HIDDEN_WEAPON'));assert(!typeOptions.some(([key])=>key==='HIDDEN_WEAPON2'));
@@ -53,7 +53,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   const heads=await page.locator('#reader th').allTextContents();assert(heads.includes('術法攻擊'));assert(heads.includes('物理防禦'));assert(!heads.includes('術攻'));
   assert.deepEqual(errors,[]);
   const check=await browser.newPage({viewport:{width:1366,height:900}});await route(check);await check.goto('https://preview.test/planning/item-fields.html');await check.waitForSelector('[data-visible="Attack"]');
-  assert.equal(await check.locator('[data-visible]').count(),66);assert.equal(await check.locator('[data-visible]:checked').count(),approved.fields.filter(f=>f.visible).length);
+  assert.equal(await check.locator('[data-visible]').count(),65);assert.equal(await check.locator('[data-visible]:checked').count(),approved.fields.filter(f=>f.visible).length-1);
   await check.locator('[data-visible="Attack"]').check();await check.locator('[data-label="Attack"]').first().fill('攻擊速度');
   await check.locator('[data-values="Attack"]').click();await check.waitForSelector('[data-value-index]');
   assert.equal(await check.locator('#valueRows tr').count(),5);assert((await check.locator('#valueRows').innerText()).includes('最慢'));
@@ -71,7 +71,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   for(const [raw,label] of previews)if(raw.split(',').includes('CLASS_SWORDMAN'))assert(label.includes('custom sword'));
   assert(!previews.some(([,label])=>label==='legacy combination'));
   await check.screenshot({path:path.join(root,'outputs/class-combination-preview.png'),fullPage:true});await check.locator('#closeValues').click();
-  const download=check.waitForEvent('download');await check.locator('#export').click();const d=await download;const json=JSON.parse(fs.readFileSync(await d.path(),'utf8'));assert.equal(json.fields.length,66);assert.equal(json.confirmedValueChanges.Attack['1'],'最慢（確認）');assert.equal(json.status,'draft-not-applied');
+  const download=check.waitForEvent('download');await check.locator('#export').click();const d=await download;const json=JSON.parse(fs.readFileSync(await d.path(),'utf8'));assert.equal(json.fields.length,65);assert.equal(json.confirmedValueChanges.Attack['1'],'最慢（確認）');assert.equal(json.status,'draft-not-applied');
   assert.equal(json.legacyClassCombinations['CLASS_SWORDMAN,CLASS_ASSASSIN'],'legacy combination');assert.equal(json.confirmedValueChanges.Class.CLASS_SWORDMAN,'custom sword');assert(!Object.keys(json.confirmedValueChanges.Class).some(k=>k.includes(',')));assert.equal(Object.keys(json.resolvedClassMappings).length,6);assert.equal(json.resolvedClassMappings.CLASS_PET,'寵物');
   await check.reload();await check.locator('[data-values="Class"]').click();await check.waitForSelector('[data-value-index]');assert.equal(await sword.locator('input').inputValue(),'custom sword');await check.locator('#closeValues').click();
   assert.equal(await check.evaluate(()=>SZO_DISPLAY.value('Class','CLASS_UNKNOWN, CLASS_PET')),'CLASS_UNKNOWN、寵物');

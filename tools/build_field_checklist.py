@@ -13,8 +13,14 @@ def write(path, value):
 
 def main():
     items = json.loads((ROOT/'data/items.json').read_text(encoding='utf-8'))
+    for item in items:
+        if 'DamageMin' in item or 'DamageMax' in item:
+            item['Damage'] = f"{item.pop('DamageMin', '')}-{item.pop('DamageMax', '')}"
     source = (ROOT/'js/data/display-dictionary.js').read_text(encoding='utf-8')
     visible = set(ast.literal_eval(re.search(r'const itemVisible=(\[.*?\]);',source).group(1)))
+    if 'DamageMin' in visible or 'DamageMax' in visible:
+        visible.difference_update({'DamageMin','DamageMax'})
+        visible.add('Damage')
     OUT.mkdir(parents=True, exist_ok=True)
     fields = []
     statuses = {str(r['ID']):r.get('Name','') for r in json.loads((ROOT/'data/status.json').read_text(encoding='utf-8')) if 'ID' in r}
@@ -40,7 +46,7 @@ def main():
         write(OUT/f'field-{key}.json',{'field':key,'values':values,'tokens':token_values,'currentMappings':mappings})
         fields.append({'key':key,'present':len(rows),'distinct':len(counts),'tokens':len(tokens),'visible':key in visible,
                        'examples':values[:2],'data':f'item-values/field-{key}.json'})
-    write(ROOT/'planning/item-fields.json',{'schemaVersion':1,'sourceVersion':'V570','totalItems':len(items),'fields':fields})
+    write(ROOT/'planning/item-fields.json',{'schemaVersion':1,'sourceVersion':'V577','totalItems':len(items),'fields':fields})
     print(f'Wrote {len(fields)} field inventories for {len(items)} items')
 
 if __name__=='__main__':main()

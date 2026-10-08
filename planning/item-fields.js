@@ -10,6 +10,7 @@
   const isVisible=f=>fieldDraft(f.key).visible??f.visible;
   const isChanged=f=>fieldLabel(f.key)!==D.label(f.key)||isVisible(f)!==f.visible||Object.keys(draft.values[f.key]||{}).length>0;
   function save(){
+    draft.baseVersion='V577';
     try{localStorage.setItem(KEY,JSON.stringify(draft));$('save').textContent='草稿已儲存在此瀏覽器';}
     catch(e){$('save').textContent='無法儲存本機草稿，請匯出保留';}
   }
@@ -95,14 +96,22 @@
   $('valueSearch').addEventListener('input',()=>{page=0;renderValues();});$('valueMode').addEventListener('change',()=>{page=0;renderValues();});
   $('prev').onclick=()=>{page--;renderValues();};$('next').onclick=()=>{page++;renderValues();};
   $('closeValues').onclick=()=>$('valuesDialog').close();$('valuesDialog').addEventListener('close',()=>{request++;render();});
-  function switchTab(value){shared=value;$('items').hidden=shared;$('shared').hidden=!shared;$('itemTab').setAttribute('aria-pressed',String(!shared));$('sharedTab').setAttribute('aria-pressed',String(shared));$('filter').disabled=shared;render();}
+  function switchTab(value){$('statusPanel').hidden=true;$('statusTab').setAttribute('aria-pressed','false');shared=value;$('items').hidden=shared;$('shared').hidden=!shared;$('itemTab').setAttribute('aria-pressed',String(!shared));$('sharedTab').setAttribute('aria-pressed',String(shared));$('filter').disabled=shared;render();}
   $('itemTab').onclick=()=>switchTab(false);$('sharedTab').onclick=()=>switchTab(true);
+  $('statusTab').onclick=()=>{$('items').hidden=true;$('shared').hidden=true;$('statusPanel').hidden=false;['itemTab','sharedTab'].forEach(id=>$(id).setAttribute('aria-pressed','false'));$('statusTab').setAttribute('aria-pressed','true');};
   $('reset').onclick=()=>{if(confirm('還原目前網站設定，並清除本次草稿？')){draft={fields:{},values:{}};save();render();}};
-  $('export').onclick=()=>{
+  $('export').onclick=async()=>{
     if(Object.keys(D.fields).some(k=>!fieldLabel(k).trim())){alert('中文名稱不能留空，請補上名稱後再匯出。');return;}
     const classChanges=Object.fromEntries(Object.entries(draft.values.Class||{}).filter(([raw])=>!raw.includes(',')));
     const legacyClassCombinations=Object.fromEntries(Object.entries(draft.values.Class||{}).filter(([raw])=>raw.includes(',')));
-    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V570',createdAt:new Date().toISOString(),status:'draft-not-applied',
+    let statusReviews;
+    try{
+      const response=await fetch('status-review.json');if(!response.ok)throw Error('狀態清單載入失敗');
+      const data=await response.json(),stored=JSON.parse(localStorage.getItem('sihai-status-review-v1')||'{}');
+      statusReviews=data.entries.map(e=>({id:e.id,name:e.name,source:e.raw,description:typeof stored[e.id]?.description==='string'?stored[e.id].description:e.description,approved:stored[e.id]?.approved===true}));
+    }catch(e){$('error').textContent='無法匯出特殊能力草稿，請稍後重試。';return;}
+    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V577',createdAt:new Date().toISOString(),status:'draft-not-applied',
+      statusReviews,combinedFields:{Damage:['DamageMin','DamageMax']},
       fields:fields.map(f=>({key:f.key,label:fieldLabel(f.key),visible:isVisible(f)})),
       sharedLabels:Object.fromEntries(Object.keys(D.fields).map(k=>[k,fieldLabel(k)])),
       confirmedValueChanges:{...draft.values,Class:classChanges},legacyClassCombinations,
@@ -123,7 +132,18 @@
   (async()=>{
     try{
       const res=await fetch('item-fields.json');if(!res.ok)throw Error('HTTP '+res.status);fields=(await res.json()).fields;
-      try{validateStored(JSON.parse(localStorage.getItem(KEY)||'null'));}catch(e){}
+      try{
+        const stored=JSON.parse(localStorage.getItem(KEY)||'null');
+        if(stored&&stored.baseVersion!=='V577'){
+          localStorage.setItem(KEY+'-pre-V577',JSON.stringify(stored));
+          const response=await fetch('approved-display-review.json');if(!response.ok)throw Error('基準載入失敗');const applied=await response.json();
+          for(const f of applied.fields){const d=stored.fields?.[f.key];if(d){if(d.label===f.label)delete d.label;if(d.visible===f.visible)delete d.visible;}}
+          for(const [key,values] of Object.entries(applied.confirmedValueChanges))for(const [raw,text] of Object.entries(values))if(stored.values?.[key]?.[raw]===text)delete stored.values[key][raw];
+          if(['獎勵禮包','錦囊類'].includes(stored.values?.Type?.BONUS))delete stored.values.Type.BONUS;
+          if(stored.fields){delete stored.fields.DamageMin;delete stored.fields.DamageMax;}
+        }
+        validateStored(stored);draft.baseVersion='V577';save();
+      }catch(e){$('error').textContent='舊草稿未能遷移，原草稿保留，請勿覆蓋。';}
       render();
     }catch(e){$('error').textContent='清單載入失敗，請重新整理。';$('count').textContent='載入失敗';}
   })();
