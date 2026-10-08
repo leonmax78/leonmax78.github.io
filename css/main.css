@@ -4067,14 +4067,15 @@ body{
 .itemGroupedDetail .kv .k{font-size:12px;line-height:1.4;margin-bottom:3px}
 .itemGroupedDetail .kv .v{font-size:15px;line-height:1.5;max-height:none;overflow:visible;overflow-wrap:anywhere}
 .itemSection-help .itemSectionGrid,.itemSection-special .itemSectionGrid{grid-template-columns:1fr}
-.itemSection-special{border-top:2px solid #e3bd55;border-left:4px solid #e3bd55;padding:14px 16px;margin-top:12px;background:#c49b2014}
-.itemSection-special h2{color:#e3bd55;font-size:18px}
-.itemSection-special .kv .v{font-size:20px;font-weight:700}
-.itemSection-special .kv{border:0}
+.itemSection-special{border-top:0;border-left:3px solid #e3bd55;padding:8px 12px;margin:8px 0 12px;background:#c49b2014}
+.itemSection-special h2{color:#e3bd55;font-size:14px;margin-bottom:4px}
+.itemSection-special .kv .v{font-size:16px;font-weight:700}
+.itemSection-special .kv{border:0;padding:0}
+.itemSection-special .itemRepeatedLabel{display:none}
 @media(max-width:700px){
  .itemSectionGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
  .itemIdentity h1{font-size:20px}
  .itemIdentity{gap:12px}
  .itemDetailSection{padding:12px 0}
- .itemSection-special{padding:12px}
+ .itemSection-special{padding:8px 12px}
 }

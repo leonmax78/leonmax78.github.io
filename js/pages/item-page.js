@@ -440,9 +440,9 @@ function itemDetailBodyHTML(it){
   const label=row[0];
   groups[label===helpLabel?'help':special.has(label)?'special':ability.has(label)?'ability':element.has(label)?'element':'basic'].push(row);
  }
- const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div></section>`:'';
+ const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div></section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('help','道具說明')}${section('special','特殊能力')}</div>`;
+ return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special','特殊能力')}${section('help','道具說明')}</div>`;
 }
 
 function showItem(id,skipPush){

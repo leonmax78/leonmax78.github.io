@@ -30,7 +30,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));
   await page.evaluate(()=>showShopItem('23640'));assert.deepEqual(await rows(page),enchantRows);
   await page.evaluate(()=>showItem('29917'));
-  assert.deepEqual(await page.locator('[data-item-section]').evaluateAll(nodes=>nodes.map(n=>n.dataset.itemSection)),['basic','ability','element','help','special']);
+  assert.deepEqual(await page.locator('[data-item-section]').evaluateAll(nodes=>nodes.map(n=>n.dataset.itemSection)),['basic','ability','element','special','help']);
   assert((await page.locator('[data-item-section="special"]').innerText()).includes('不死身'));
   await page.screenshot({path:path.join(root,'outputs/item-sections-desktop.png'),fullPage:true});
   await page.setViewportSize({width:390,height:844});await page.evaluate(()=>{closeDrawer();showItem('29918');});await page.waitForTimeout(300);
