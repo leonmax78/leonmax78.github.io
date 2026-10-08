@@ -38,18 +38,22 @@
     stats();
   }
   function currentValue(key,raw){
+    if(key==='Class')return D.value(key,raw);
     if(key==='Type')return ITEM_TYPE_MAP[raw]||'';
     if(key==='Kind')return RACE_MAP[raw.toLowerCase()]||'';
     if(key==='ExtraStatus')return rawData?.currentMappings?.[raw]||'';
     return D.values[key]?.[raw]||'';
   }
-  function meaning(raw){return draft.values[active]?.[raw]??currentValue(active,raw);}
+  function classMeaning(raw){
+    return raw.split(',').map(code=>code.trim()).filter(Boolean).map(code=>draft.values.Class?.[code]?.trim()||D.values.Class[code]||code).join('、');
+  }
+  function meaning(raw){return active==='Class'?classMeaning(raw):draft.values[active]?.[raw]??currentValue(active,raw);}
   function renderValues(){
     if(!rawData)return;
     const q=$('valueSearch').value.toLowerCase().trim(),mode=$('valueMode').value;
     const all=(rawData[mode]||[]).filter(v=>(v.raw+' '+meaning(v.raw)+' '+(v.examples||[]).map(e=>e.id+' '+e.name).join(' ')).toLowerCase().includes(q));
     const pages=Math.max(1,Math.ceil(all.length/PAGE_SIZE));page=Math.min(page,pages-1);
-    $('valueRows').innerHTML=all.slice(page*PAGE_SIZE,(page+1)*PAGE_SIZE).map((v,i)=>`<tr><td><div class="rawValue">${esc(v.raw||'（空字串）')}</div><small>${v.count.toLocaleString()} 筆</small></td><td>${esc(currentValue(active,v.raw)||'未建立值對照')}</td><td><input type="text" maxlength="1000" data-value-index="${i}" aria-label="原值${esc(v.raw.slice(0,40))}的中文對照" placeholder="待確認／保留原值" value="${esc(meaning(v.raw))}"></td><td>${(v.examples||[]).map(e=>`<small>${esc(e.id)} ${esc(e.name)}</small>`).join('')||'拆分代碼'}</td></tr>`).join('')||'<tr><td colspan="4">沒有符合的原值</td></tr>';
+    $('valueRows').innerHTML=all.slice(page*PAGE_SIZE,(page+1)*PAGE_SIZE).map((v,i)=>`<tr><td><div class="rawValue">${esc(v.raw||'（空字串）')}</div><small>${v.count.toLocaleString()} 筆</small></td><td>${esc(currentValue(active,v.raw)||'未建立值對照')}</td><td>${active==='Class'&&mode==='values'?`<span data-class-preview>${esc(meaning(v.raw))}</span>`:`<input type="text" maxlength="1000" data-value-index="${i}" aria-label="原值${esc(v.raw.slice(0,40))}的中文對照" placeholder="待確認／保留原值" value="${esc(meaning(v.raw))}">`}</td><td>${(v.examples||[]).map(e=>`<small>${esc(e.id)} ${esc(e.name)}</small>`).join('')||'拆分代碼'}</td></tr>`).join('')||'<tr><td colspan="4">沒有符合的原值</td></tr>';
     $('valueRows')._values=all.slice(page*PAGE_SIZE,(page+1)*PAGE_SIZE);
     $('pageCount').textContent=`${page+1} / ${pages} 頁 · ${all.length.toLocaleString()} 個值`;
     $('prev').disabled=page===0;$('next').disabled=page>=pages-1;
@@ -58,7 +62,11 @@
     const token=++request;active=key;rawData=null;page=0;
     $('valuesTitle').textContent=key+' · '+fieldLabel(key);
     $('valuesNote').textContent='完整原值保留原始內容；旗標可切換成拆分代碼。未建立對照不代表數值無效。';
-    $('valueSearch').value='';$('valueMode').value='values';$('valueRows').innerHTML='<tr><td colspan="4">載入中</td></tr>';
+    $('valueSearch').value='';$('valueMode').value=key==='Class'?'tokens':'values';
+    $('valueMode').options[0].textContent=key==='Class'?'組合預覽':'完整原值';
+    $('valueMode').options[1].textContent=key==='Class'?'職業設定':'拆分代碼';
+    if(key==='Class')$('valuesNote').textContent='職業設定 · 組合自動對照 · 舊組合草稿保留於匯出備份';
+    $('valueRows').innerHTML='<tr><td colspan="4">載入中</td></tr>';
     $('prev').disabled=true;$('next').disabled=true;$('valuesDialog').showModal();
     try{
       if(!cache.has(key)){
@@ -92,10 +100,14 @@
   $('reset').onclick=()=>{if(confirm('還原目前網站設定，並清除本次草稿？')){draft={fields:{},values:{}};save();render();}};
   $('export').onclick=()=>{
     if(Object.keys(D.fields).some(k=>!fieldLabel(k).trim())){alert('中文名稱不能留空，請補上名稱後再匯出。');return;}
-    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V568',createdAt:new Date().toISOString(),status:'draft-not-applied',
+    const classChanges=Object.fromEntries(Object.entries(draft.values.Class||{}).filter(([raw])=>!raw.includes(',')));
+    const legacyClassCombinations=Object.fromEntries(Object.entries(draft.values.Class||{}).filter(([raw])=>raw.includes(',')));
+    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V569',createdAt:new Date().toISOString(),status:'draft-not-applied',
       fields:fields.map(f=>({key:f.key,label:fieldLabel(f.key),visible:isVisible(f)})),
       sharedLabels:Object.fromEntries(Object.keys(D.fields).map(k=>[k,fieldLabel(k)])),
-      confirmedValueChanges:draft.values,existingValueMappings:{...D.values,Type:ITEM_TYPE_MAP}};
+      confirmedValueChanges:{...draft.values,Class:classChanges},legacyClassCombinations,
+      resolvedClassMappings:Object.fromEntries(Object.keys(D.values.Class).map(code=>[code,classMeaning(code)])),
+      existingValueMappings:{...D.values,Type:ITEM_TYPE_MAP}};
     const url=URL.createObjectURL(new Blob([JSON.stringify(result,null,2)],{type:'application/json'}));
     const a=document.createElement('a');a.href=url;a.download='四海同舟-欄位與中文對照確認.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('save').textContent='已匯出草稿；尚未套用正式站';
   };
@@ -103,7 +115,9 @@
     const lines=['四海同舟欄位／翻譯修改草稿'];
     fields.filter(isChanged).forEach(f=>lines.push(`${isVisible(f)?'顯示':'隱藏'} ${f.key} → ${fieldLabel(f.key)}`));
     Object.entries(draft.fields).filter(([k])=>!fields.some(f=>f.key===k)).forEach(([k])=>lines.push(`${k} → ${fieldLabel(k)}`));
-    Object.entries(draft.values).forEach(([k,values])=>Object.entries(values).forEach(([v,t])=>lines.push(`${k}：${v} → ${t||'保留原值'}`)));
+    Object.entries(draft.values).forEach(([k,values])=>Object.entries(values).filter(([v])=>k!=='Class'||!v.includes(',')).forEach(([v,t])=>lines.push(`${k}：${v} → ${t||'保留原值'}`)));
+    lines.push('Class 組合依六個職業代碼自動對照');
+    Object.keys(D.values.Class).forEach(code=>lines.push(`${code} → ${classMeaning(code)}`));
     try{await navigator.clipboard.writeText(lines.join('\n'));$('save').textContent='變更摘要已複製';}catch(e){$('save').textContent='無法使用剪貼簿，請改用匯出確認清單';}
   };
   (async()=>{

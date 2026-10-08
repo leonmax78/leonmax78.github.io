@@ -30,12 +30,13 @@
     '等級':'Level','職等':'CLevel','攻速':'Attack','耐久':'Durabulity','重量':'Weight',
     '術攻':'MagicAttack','術防':'MagicDef','物防':'ExtraDef','防禦':'ExtraDef','生命':'HP','電防':'LightningDef','暗防':'DarkDef','職等(CL)':'CLevel'
   };
-  const values = {Attack:{'1':'最慢','2':'次慢','3':'普通','4':'次快','5':'最快'},CLevel:{'0':'無','1':'一轉','2':'二轉','3':'三轉','4':'四轉','5':'五轉'}};
+  const values = {Attack:{'1':'最慢','2':'次慢','3':'普通','4':'次快','5':'最快'},CLevel:{'0':'無','1':'一轉','2':'二轉','3':'三轉','4':'四轉','5':'五轉'},Class:{CLASS_SWORDMAN:'劍俠',CLASS_WARRIOR:'勇士',CLASS_ASSASSIN:'術者',CLASS_TAOIST:'道人',CLASS_PRIEST:'僧侶',CLASS_PET:'寵物'}};
   function label(key,fallback){
     const raw=String(key??'');
     return fields[aliases[raw]||raw] || fields[aliases[String(fallback??'')]||String(fallback??'')] || fallback || raw;
   }
   function value(key,raw){
+    if(key==='Class')return String(raw??'').split(',').map(code=>code.trim()).filter(Boolean).map(code=>values.Class[code]||code).join('、');
     return values[aliases[key]||key]?.[String(raw)] ?? String(raw??'');
   }
   window.SZO_DISPLAY=Object.freeze({fields:Object.freeze(fields),aliases:Object.freeze(aliases),values,label,value});
