@@ -1,0 +1,2518 @@
+[
+  {
+    "directory": "M01",
+    "sequences": [
+      "5001"
+    ],
+    "records": [
+      {
+        "id": "5001",
+        "name": "惡犬",
+        "pic": "5001"
+      },
+      {
+        "id": "5460",
+        "name": "大惡犬",
+        "pic": "5001"
+      },
+      {
+        "id": "5536",
+        "name": "惡犬",
+        "pic": "5001"
+      },
+      {
+        "id": "5777",
+        "name": "惡犬",
+        "pic": "5001"
+      },
+      {
+        "id": "16861",
+        "name": "狂怒野犬",
+        "pic": "5001"
+      },
+      {
+        "id": "17762",
+        "name": "蜀犬",
+        "pic": "5001"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 6,
+        "stageName": "祁州城",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "6245",
+            "name": "小黃狗"
+          },
+          {
+            "id": "6250",
+            "name": "黃狗"
+          },
+          {
+            "id": "6254",
+            "name": "黃狗"
+          },
+          {
+            "id": "6255",
+            "name": "黃狗"
+          }
+        ]
+      },
+      {
+        "stageId": 7,
+        "stageName": "京城",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "6024",
+            "name": "黃狗"
+          },
+          {
+            "id": "6058",
+            "name": "小黃狗"
+          },
+          {
+            "id": "6059",
+            "name": "黃狗"
+          },
+          {
+            "id": "6060",
+            "name": "靈犬來福"
+          },
+          {
+            "id": "8101",
+            "name": "土狗"
+          }
+        ]
+      },
+      {
+        "stageId": 8,
+        "stageName": "玄州城",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "6535",
+            "name": "小黃狗"
+          },
+          {
+            "id": "6561",
+            "name": "黃狗"
+          },
+          {
+            "id": "6562",
+            "name": "黃狗"
+          },
+          {
+            "id": "6563",
+            "name": "黃狗"
+          },
+          {
+            "id": "6564",
+            "name": "黃狗"
+          }
+        ]
+      },
+      {
+        "stageId": 10,
+        "stageName": "塞北關",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5001",
+            "name": "惡犬"
+          }
+        ]
+      },
+      {
+        "stageId": 12,
+        "stageName": "古皇陵近郊",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5001",
+            "name": "惡犬"
+          },
+          {
+            "id": "5460",
+            "name": "大惡犬"
+          }
+        ]
+      },
+      {
+        "stageId": 14,
+        "stageName": "釣日村",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5001",
+            "name": "惡犬"
+          }
+        ]
+      },
+      {
+        "stageId": 15,
+        "stageName": "平西關",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5001",
+            "name": "惡犬"
+          }
+        ]
+      },
+      {
+        "stageId": 16,
+        "stageName": "望星坡",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5001",
+            "name": "惡犬"
+          }
+        ]
+      },
+      {
+        "stageId": 31,
+        "stageName": "試煉之窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5536",
+            "name": "惡犬"
+          }
+        ]
+      },
+      {
+        "stageId": 314,
+        "stageName": "溥山新郡",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "11819",
+            "name": "玄直"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5001",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M01W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M05",
+    "sequences": [
+      "5005",
+      "5161"
+    ],
+    "records": [
+      {
+        "id": "5005",
+        "name": "野狼",
+        "pic": "5005"
+      },
+      {
+        "id": "5234",
+        "name": "野狼幻影",
+        "pic": "5161"
+      },
+      {
+        "id": "5464",
+        "name": "天山惡狼",
+        "pic": "5005"
+      },
+      {
+        "id": "5542",
+        "name": "野狼",
+        "pic": "5005"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 7,
+        "stageName": "京城",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "8105",
+            "name": "奔馳"
+          }
+        ]
+      },
+      {
+        "stageId": 9,
+        "stageName": "入雲道",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5005",
+            "name": "野狼"
+          }
+        ]
+      },
+      {
+        "stageId": 10,
+        "stageName": "塞北關",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5005",
+            "name": "野狼"
+          }
+        ]
+      },
+      {
+        "stageId": 11,
+        "stageName": "惡狼林",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5005",
+            "name": "野狼"
+          }
+        ]
+      },
+      {
+        "stageId": 31,
+        "stageName": "試煉之窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5542",
+            "name": "野狼"
+          }
+        ]
+      },
+      {
+        "stageId": 70,
+        "stageName": "義勇軍校場",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5234",
+            "name": "野狼幻影"
+          }
+        ]
+      },
+      {
+        "stageId": 105,
+        "stageName": "天山冰池",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5464",
+            "name": "天山惡狼"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5005",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M05W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5161",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M05W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M06",
+    "sequences": [
+      "5006"
+    ],
+    "records": [
+      {
+        "id": "5006",
+        "name": "雪狼",
+        "pic": "5006"
+      },
+      {
+        "id": "5465",
+        "name": "天山雪狼",
+        "pic": "5006"
+      },
+      {
+        "id": "9306",
+        "name": "小野狼",
+        "pic": "5006"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 7,
+        "stageName": "京城",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "8106",
+            "name": "小雪"
+          }
+        ]
+      },
+      {
+        "stageId": 9,
+        "stageName": "入雲道",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5006",
+            "name": "雪狼"
+          }
+        ]
+      },
+      {
+        "stageId": 10,
+        "stageName": "塞北關",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5006",
+            "name": "雪狼"
+          }
+        ]
+      },
+      {
+        "stageId": 11,
+        "stageName": "惡狼林",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5006",
+            "name": "雪狼"
+          }
+        ]
+      },
+      {
+        "stageId": 42,
+        "stageName": "天山雪道",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5006",
+            "name": "雪狼"
+          }
+        ]
+      },
+      {
+        "stageId": 105,
+        "stageName": "天山冰池",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5465",
+            "name": "天山雪狼"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5006",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M06W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M12",
+    "sequences": [
+      "5012"
+    ],
+    "records": [
+      {
+        "id": "5067",
+        "name": "狂猴",
+        "pic": "5012"
+      },
+      {
+        "id": "5062",
+        "name": "大狂猴",
+        "pic": "5012"
+      },
+      {
+        "id": "5534",
+        "name": "大狂猴",
+        "pic": "5012"
+      },
+      {
+        "id": "5775",
+        "name": "大狂猴",
+        "pic": "5012"
+      },
+      {
+        "id": "5795",
+        "name": "大狂猴",
+        "pic": "5012"
+      },
+      {
+        "id": "17761",
+        "name": "巴猿",
+        "pic": "5012"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 2,
+        "stageName": "葬劍崖護法院",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5067",
+            "name": "狂猴"
+          }
+        ]
+      },
+      {
+        "stageId": 8,
+        "stageName": "玄州城",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "6565",
+            "name": "猿猴"
+          },
+          {
+            "id": "6566",
+            "name": "猿猴"
+          }
+        ]
+      },
+      {
+        "stageId": 12,
+        "stageName": "古皇陵近郊",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5062",
+            "name": "大狂猴"
+          }
+        ]
+      },
+      {
+        "stageId": 18,
+        "stageName": "猢猻嶺",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5062",
+            "name": "大狂猴"
+          }
+        ]
+      },
+      {
+        "stageId": 31,
+        "stageName": "試煉之窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5067",
+            "name": "狂猴"
+          },
+          {
+            "id": "5534",
+            "name": "大狂猴"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5012",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M12W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M214",
+    "sequences": [
+      "5214",
+      "6750"
+    ],
+    "records": [
+      {
+        "id": "5304",
+        "name": "大力熊",
+        "pic": "5214"
+      },
+      {
+        "id": "15472",
+        "name": "聖誕大熊",
+        "pic": "6750"
+      },
+      {
+        "id": "16789",
+        "name": "落羽棕熊",
+        "pic": "5214"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 76,
+        "stageName": "桃花林西方",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5304",
+            "name": "大力熊"
+          }
+        ]
+      },
+      {
+        "stageId": 78,
+        "stageName": "桃花林南方",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5304",
+            "name": "大力熊"
+          }
+        ]
+      },
+      {
+        "stageId": 84,
+        "stageName": "不老峰",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5304",
+            "name": "大力熊"
+          }
+        ]
+      },
+      {
+        "stageId": 104,
+        "stageName": "封獸擂台",
+        "kind": "npcs",
+        "records": [
+          {
+            "id": "8330",
+            "name": "大熊"
+          }
+        ]
+      },
+      {
+        "stageId": 318,
+        "stageName": "殊雁峽",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16789",
+            "name": "落羽棕熊"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5214",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M214W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6750",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M214W016.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M401",
+    "sequences": [
+      "5401",
+      "5441",
+      "5929"
+    ],
+    "records": [
+      {
+        "id": "5684",
+        "name": "紫靈貂",
+        "pic": "5401"
+      },
+      {
+        "id": "5710",
+        "name": "白貂",
+        "pic": "5441"
+      },
+      {
+        "id": "14059",
+        "name": "小灰貂",
+        "pic": "5929"
+      },
+      {
+        "id": "15987",
+        "name": "罣基妖犬",
+        "pic": "5929"
+      },
+      {
+        "id": "16106",
+        "name": "舞蹤秘貂",
+        "pic": "5441"
+      },
+      {
+        "id": "16514",
+        "name": "長疆靈貂",
+        "pic": "5441"
+      },
+      {
+        "id": "18077",
+        "name": "紫水貂",
+        "pic": "5401"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 10,
+        "stageName": "塞北關",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "15987",
+            "name": "罣基妖犬"
+          }
+        ]
+      },
+      {
+        "stageId": 125,
+        "stageName": "呼倫草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5684",
+            "name": "紫靈貂"
+          }
+        ]
+      },
+      {
+        "stageId": 126,
+        "stageName": "貝爾草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5684",
+            "name": "紫靈貂"
+          }
+        ]
+      },
+      {
+        "stageId": 127,
+        "stageName": "亂石林",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5684",
+            "name": "紫靈貂"
+          }
+        ]
+      },
+      {
+        "stageId": 131,
+        "stageName": "疾風谷",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5684",
+            "name": "紫靈貂"
+          }
+        ]
+      },
+      {
+        "stageId": 310,
+        "stageName": "山海長疆",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16514",
+            "name": "長疆靈貂"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5401",
+        "exists": true,
+        "matchingRestoredFile": "M401W018.SHP",
+        "sameSilhouetteSource": "M401W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": false
+      },
+      {
+        "pic": "5441",
+        "exists": true,
+        "matchingRestoredFile": "M401W018.SHP",
+        "sameSilhouetteSource": "M401W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": false
+      },
+      {
+        "pic": "5929",
+        "exists": true,
+        "matchingRestoredFile": "M401W018.SHP",
+        "sameSilhouetteSource": "M401W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": false
+      }
+    ]
+  },
+  {
+    "directory": "M402",
+    "sequences": [
+      "5402",
+      "8610"
+    ],
+    "records": [
+      {
+        "id": "5680",
+        "name": "山羊",
+        "pic": "5402"
+      },
+      {
+        "id": "9899",
+        "name": "盈月白羊",
+        "pic": "5402"
+      },
+      {
+        "id": "9967",
+        "name": "山羊",
+        "pic": "5402"
+      },
+      {
+        "id": "17077",
+        "name": "鬃公羊",
+        "pic": "8610"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 124,
+        "stageName": "塞北草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5680",
+            "name": "山羊"
+          }
+        ]
+      },
+      {
+        "stageId": 125,
+        "stageName": "呼倫草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5680",
+            "name": "山羊"
+          }
+        ]
+      },
+      {
+        "stageId": 126,
+        "stageName": "貝爾草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5680",
+            "name": "山羊"
+          }
+        ]
+      },
+      {
+        "stageId": 158,
+        "stageName": "河西谷地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5680",
+            "name": "山羊"
+          }
+        ]
+      },
+      {
+        "stageId": 330,
+        "stageName": "琉瑯岩灣",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "17077",
+            "name": "鬃公羊"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5402",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M402W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "8610",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M402W018.SHP",
+        "preservedMissingPalette": true,
+        "updated": false
+      }
+    ]
+  },
+  {
+    "directory": "M403",
+    "sequences": [
+      "5403",
+      "6729"
+    ],
+    "records": [
+      {
+        "id": "5682",
+        "name": "黃牛",
+        "pic": "5403"
+      },
+      {
+        "id": "9962",
+        "name": "黃牛",
+        "pic": "5403"
+      },
+      {
+        "id": "14417",
+        "name": "黑筋牛",
+        "pic": "5403"
+      },
+      {
+        "id": "15413",
+        "name": "安革司牛",
+        "pic": "6729"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 124,
+        "stageName": "塞北草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5682",
+            "name": "黃牛"
+          }
+        ]
+      },
+      {
+        "stageId": 125,
+        "stageName": "呼倫草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5682",
+            "name": "黃牛"
+          }
+        ]
+      },
+      {
+        "stageId": 126,
+        "stageName": "貝爾草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5682",
+            "name": "黃牛"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5403",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M403W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6729",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": null,
+        "preservedMissingPalette": true,
+        "updated": false
+      }
+    ]
+  },
+  {
+    "directory": "M404",
+    "sequences": [
+      "5404",
+      "8899",
+      "8900"
+    ],
+    "records": [
+      {
+        "id": "5681",
+        "name": "野馬",
+        "pic": "5404"
+      },
+      {
+        "id": "9966",
+        "name": "野馬",
+        "pic": "5404"
+      },
+      {
+        "id": "16357",
+        "name": "東陣悍馬",
+        "pic": "5404"
+      },
+      {
+        "id": "16865",
+        "name": "狂怒野馬",
+        "pic": "5404"
+      },
+      {
+        "id": "17082",
+        "name": "後里駿馬",
+        "pic": "5404"
+      },
+      {
+        "id": "17836",
+        "name": "龍川飛駿",
+        "pic": "5404"
+      },
+      {
+        "id": "18000",
+        "name": "玫瑰棕馬",
+        "pic": "5404"
+      },
+      {
+        "id": "18001",
+        "name": "輝毛馬",
+        "pic": "8899"
+      },
+      {
+        "id": "18002",
+        "name": "金毛馬",
+        "pic": "8900"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 110,
+        "stageName": "東校場",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16357",
+            "name": "東陣悍馬"
+          }
+        ]
+      },
+      {
+        "stageId": 122,
+        "stageName": "八達嶺",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5681",
+            "name": "野馬"
+          }
+        ]
+      },
+      {
+        "stageId": 123,
+        "stageName": "古北口",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5681",
+            "name": "野馬"
+          }
+        ]
+      },
+      {
+        "stageId": 124,
+        "stageName": "塞北草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5681",
+            "name": "野馬"
+          }
+        ]
+      },
+      {
+        "stageId": 158,
+        "stageName": "河西谷地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5681",
+            "name": "野馬"
+          }
+        ]
+      },
+      {
+        "stageId": 331,
+        "stageName": "臺興中州",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "17082",
+            "name": "後里駿馬"
+          }
+        ]
+      },
+      {
+        "stageId": 383,
+        "stageName": "東駿徑",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "17836",
+            "name": "龍川飛駿"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5404",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M404W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "8899",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M404W016.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "8900",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M404W016.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M405",
+    "sequences": [
+      "5405",
+      "5442",
+      "6404",
+      "6783",
+      "8621"
+    ],
+    "records": [
+      {
+        "id": "5683",
+        "name": "獵鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "5711",
+        "name": "灰鷹",
+        "pic": "5442"
+      },
+      {
+        "id": "5714",
+        "name": "獵鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "9094",
+        "name": "[獵鷹]",
+        "pic": "5405"
+      },
+      {
+        "id": "9488",
+        "name": "獵鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "14137",
+        "name": "波斯蒼鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "14217",
+        "name": "鷹翔金爪",
+        "pic": "5405"
+      },
+      {
+        "id": "14861",
+        "name": "獵鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "15425",
+        "name": "獵鷹‧強",
+        "pic": "5405"
+      },
+      {
+        "id": "15506",
+        "name": "渡宇鷹",
+        "pic": "6783"
+      },
+      {
+        "id": "16358",
+        "name": "東陣獵鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "16375",
+        "name": "干戈鷹",
+        "pic": "6404"
+      },
+      {
+        "id": "16863",
+        "name": "狂怒野鷹",
+        "pic": "5405"
+      },
+      {
+        "id": "17098",
+        "name": "神谷藍鵲",
+        "pic": "8621"
+      },
+      {
+        "id": "18147",
+        "name": "干戈鷹",
+        "pic": "6404"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 110,
+        "stageName": "東校場",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16358",
+            "name": "東陣獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 122,
+        "stageName": "八達嶺",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 124,
+        "stageName": "塞北草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 125,
+        "stageName": "呼倫草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 126,
+        "stageName": "貝爾草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 129,
+        "stageName": "黑城遺跡",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 131,
+        "stageName": "疾風谷",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 134,
+        "stageName": "關外草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5714",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 135,
+        "stageName": "關外草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5714",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 138,
+        "stageName": "古北大營",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5683",
+            "name": "獵鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 216,
+        "stageName": "飛簷頂徑",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "14137",
+            "name": "波斯蒼鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 257,
+        "stageName": "殘雲天境",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "15425",
+            "name": "獵鷹‧強"
+          }
+        ]
+      },
+      {
+        "stageId": 278,
+        "stageName": "覺無洋宇",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "15506",
+            "name": "渡宇鷹"
+          }
+        ]
+      },
+      {
+        "stageId": 333,
+        "stageName": "泰源大社",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "17098",
+            "name": "神谷藍鵲"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5405",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M405W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5442",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M405W016.SHP",
+        "preservedMissingPalette": true,
+        "updated": false
+      },
+      {
+        "pic": "6404",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M405W016.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6783",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M405W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "8621",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M405W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M408",
+    "sequences": [
+      "5408",
+      "5827"
+    ],
+    "records": [
+      {
+        "id": "5686",
+        "name": "白鹿",
+        "pic": "5408"
+      },
+      {
+        "id": "5716",
+        "name": "白鹿",
+        "pic": "5408"
+      },
+      {
+        "id": "9486",
+        "name": "白鹿",
+        "pic": "5408"
+      },
+      {
+        "id": "9722",
+        "name": "聖誕麋鹿",
+        "pic": "5827"
+      },
+      {
+        "id": "14653",
+        "name": "聖誕拾鑽鹿",
+        "pic": "5827"
+      },
+      {
+        "id": "14656",
+        "name": "神鄉天鹿子",
+        "pic": "5827"
+      },
+      {
+        "id": "14859",
+        "name": "白鹿",
+        "pic": "5408"
+      },
+      {
+        "id": "14942",
+        "name": "聖誕鴻麟鹿",
+        "pic": "5827"
+      },
+      {
+        "id": "15158",
+        "name": "聖誕謎鹿",
+        "pic": "5827"
+      },
+      {
+        "id": "15470",
+        "name": "聖誕巡鹿",
+        "pic": "5827"
+      },
+      {
+        "id": "16864",
+        "name": "狂怒野鹿",
+        "pic": "5408"
+      },
+      {
+        "id": "17080",
+        "name": "梅花鹿",
+        "pic": "5827"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 125,
+        "stageName": "呼倫草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5686",
+            "name": "白鹿"
+          }
+        ]
+      },
+      {
+        "stageId": 126,
+        "stageName": "貝爾草原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5686",
+            "name": "白鹿"
+          }
+        ]
+      },
+      {
+        "stageId": 140,
+        "stageName": "蒼狼大營",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5686",
+            "name": "白鹿"
+          }
+        ]
+      },
+      {
+        "stageId": 331,
+        "stageName": "臺興中州",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "17080",
+            "name": "梅花鹿"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5408",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M408W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5827",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M408W018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M43",
+    "sequences": [
+      "5043",
+      "5323",
+      "5430",
+      "6755"
+    ],
+    "records": [
+      {
+        "id": "5043",
+        "name": "士兵俑",
+        "pic": "5043"
+      },
+      {
+        "id": "5086",
+        "name": "士兵俑",
+        "pic": "5043"
+      },
+      {
+        "id": "5598",
+        "name": "石窟劍俑",
+        "pic": "5323"
+      },
+      {
+        "id": "5665",
+        "name": "屍靈劍俑",
+        "pic": "5430"
+      },
+      {
+        "id": "9548",
+        "name": "衰神護駕劍像",
+        "pic": "5323"
+      },
+      {
+        "id": "15478",
+        "name": "魔劍鐵傀",
+        "pic": "6755"
+      },
+      {
+        "id": "16427",
+        "name": "雷武機關兵",
+        "pic": "5043"
+      },
+      {
+        "id": "16603",
+        "name": "虛士兵俑",
+        "pic": "5430"
+      },
+      {
+        "id": "17786",
+        "name": "刀盾士兵俑",
+        "pic": "5043"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 25,
+        "stageName": "古皇陵第一層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5043",
+            "name": "士兵俑"
+          },
+          {
+            "id": "5086",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 26,
+        "stageName": "古皇陵第二層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5043",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 71,
+        "stageName": "古皇陵第三層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5043",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 112,
+        "stageName": "藏意武窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16427",
+            "name": "雷武機關兵"
+          }
+        ]
+      },
+      {
+        "stageId": 116,
+        "stageName": "五派禁地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5598",
+            "name": "石窟劍俑"
+          }
+        ]
+      },
+      {
+        "stageId": 143,
+        "stageName": "古皇陵密室",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5665",
+            "name": "屍靈劍俑"
+          }
+        ]
+      },
+      {
+        "stageId": 276,
+        "stageName": "音無晶宇",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "15478",
+            "name": "魔劍鐵傀"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5043",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M43W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5323",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M43W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5430",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M43W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6755",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M43W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M44",
+    "sequences": [
+      "5044",
+      "5324",
+      "5431",
+      "6756"
+    ],
+    "records": [
+      {
+        "id": "5044",
+        "name": "士兵俑",
+        "pic": "5044"
+      },
+      {
+        "id": "5599",
+        "name": "石窟戈俑",
+        "pic": "5324"
+      },
+      {
+        "id": "5666",
+        "name": "屍靈戈俑",
+        "pic": "5431"
+      },
+      {
+        "id": "15479",
+        "name": "血戈鐵傀",
+        "pic": "6756"
+      },
+      {
+        "id": "16428",
+        "name": "火武機關兵",
+        "pic": "5044"
+      },
+      {
+        "id": "17787",
+        "name": "大戟士兵俑",
+        "pic": "5044"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 26,
+        "stageName": "古皇陵第二層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5044",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 71,
+        "stageName": "古皇陵第三層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5044",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 112,
+        "stageName": "藏意武窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16428",
+            "name": "火武機關兵"
+          }
+        ]
+      },
+      {
+        "stageId": 116,
+        "stageName": "五派禁地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5599",
+            "name": "石窟戈俑"
+          }
+        ]
+      },
+      {
+        "stageId": 143,
+        "stageName": "古皇陵密室",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5666",
+            "name": "屍靈戈俑"
+          }
+        ]
+      },
+      {
+        "stageId": 276,
+        "stageName": "音無晶宇",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "15479",
+            "name": "血戈鐵傀"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5044",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M44W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5324",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M44W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5431",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M44W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6756",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M44W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M45",
+    "sequences": [
+      "5045",
+      "5325",
+      "5432",
+      "6635",
+      "6757"
+    ],
+    "records": [
+      {
+        "id": "5045",
+        "name": "士兵俑",
+        "pic": "5045"
+      },
+      {
+        "id": "5600",
+        "name": "石窟箭俑",
+        "pic": "5325"
+      },
+      {
+        "id": "5667",
+        "name": "屍靈箭俑",
+        "pic": "5432"
+      },
+      {
+        "id": "9549",
+        "name": "衰神護駕弓像",
+        "pic": "5325"
+      },
+      {
+        "id": "14797",
+        "name": "太古射俑",
+        "pic": "6635"
+      },
+      {
+        "id": "15480",
+        "name": "裂箭鐵傀",
+        "pic": "6757"
+      },
+      {
+        "id": "16429",
+        "name": "遠襲機關兵",
+        "pic": "5045"
+      },
+      {
+        "id": "17788",
+        "name": "長弓士兵俑",
+        "pic": "5045"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 26,
+        "stageName": "古皇陵第二層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5045",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 71,
+        "stageName": "古皇陵第三層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5045",
+            "name": "士兵俑"
+          }
+        ]
+      },
+      {
+        "stageId": 112,
+        "stageName": "藏意武窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16429",
+            "name": "遠襲機關兵"
+          }
+        ]
+      },
+      {
+        "stageId": 116,
+        "stageName": "五派禁地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5600",
+            "name": "石窟箭俑"
+          }
+        ]
+      },
+      {
+        "stageId": 143,
+        "stageName": "古皇陵密室",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5667",
+            "name": "屍靈箭俑"
+          }
+        ]
+      },
+      {
+        "stageId": 251,
+        "stageName": "紫雷轟原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "14797",
+            "name": "太古射俑"
+          }
+        ]
+      },
+      {
+        "stageId": 276,
+        "stageName": "音無晶宇",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "15480",
+            "name": "裂箭鐵傀"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5045",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M45W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5325",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M45W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5432",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M45W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6635",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M45W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6757",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M45W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M46",
+    "sequences": [
+      "5046",
+      "5326",
+      "5433"
+    ],
+    "records": [
+      {
+        "id": "5046",
+        "name": "力士俑",
+        "pic": "5046"
+      },
+      {
+        "id": "5437",
+        "name": "{力士俑}",
+        "pic": "5046"
+      },
+      {
+        "id": "5601",
+        "name": "石窟雙錘俑",
+        "pic": "5326"
+      },
+      {
+        "id": "5668",
+        "name": "屍靈雙錘俑",
+        "pic": "5433"
+      },
+      {
+        "id": "16430",
+        "name": "雷霸機關長",
+        "pic": "5046"
+      },
+      {
+        "id": "16607",
+        "name": "虛力士俑",
+        "pic": "5433"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 26,
+        "stageName": "古皇陵第二層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5046",
+            "name": "力士俑"
+          }
+        ]
+      },
+      {
+        "stageId": 71,
+        "stageName": "古皇陵第三層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5046",
+            "name": "力士俑"
+          }
+        ]
+      },
+      {
+        "stageId": 112,
+        "stageName": "藏意武窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16430",
+            "name": "雷霸機關長"
+          }
+        ]
+      },
+      {
+        "stageId": 116,
+        "stageName": "五派禁地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5601",
+            "name": "石窟雙錘俑"
+          }
+        ]
+      },
+      {
+        "stageId": 143,
+        "stageName": "古皇陵密室",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5437",
+            "name": "{力士俑}"
+          },
+          {
+            "id": "5668",
+            "name": "屍靈雙錘俑"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5046",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M46W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5326",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M46W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5433",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M46W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M47",
+    "sequences": [
+      "5047",
+      "5327",
+      "5434",
+      "6634"
+    ],
+    "records": [
+      {
+        "id": "5047",
+        "name": "力士俑",
+        "pic": "5047"
+      },
+      {
+        "id": "5602",
+        "name": "石窟雙斧俑",
+        "pic": "5327"
+      },
+      {
+        "id": "5669",
+        "name": "屍靈雙斧俑",
+        "pic": "5434"
+      },
+      {
+        "id": "9550",
+        "name": "衰神護駕斧像",
+        "pic": "5327"
+      },
+      {
+        "id": "14796",
+        "name": "太古戰俑",
+        "pic": "6634"
+      },
+      {
+        "id": "16431",
+        "name": "火霸機關長",
+        "pic": "5047"
+      },
+      {
+        "id": "16608",
+        "name": "虛力士俑",
+        "pic": "6634"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 26,
+        "stageName": "古皇陵第二層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5047",
+            "name": "力士俑"
+          }
+        ]
+      },
+      {
+        "stageId": 71,
+        "stageName": "古皇陵第三層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5047",
+            "name": "力士俑"
+          }
+        ]
+      },
+      {
+        "stageId": 112,
+        "stageName": "藏意武窟",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "16431",
+            "name": "火霸機關長"
+          }
+        ]
+      },
+      {
+        "stageId": 116,
+        "stageName": "五派禁地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5602",
+            "name": "石窟雙斧俑"
+          }
+        ]
+      },
+      {
+        "stageId": 143,
+        "stageName": "古皇陵密室",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5669",
+            "name": "屍靈雙斧俑"
+          }
+        ]
+      },
+      {
+        "stageId": 251,
+        "stageName": "紫雷轟原",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "14796",
+            "name": "太古戰俑"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5047",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M47W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5327",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M47W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5434",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M47W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "6634",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M47W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "M48",
+    "sequences": [
+      "5048",
+      "5328",
+      "5435",
+      "5436"
+    ],
+    "records": [
+      {
+        "id": "5048",
+        "name": "將軍俑",
+        "pic": "5048"
+      },
+      {
+        "id": "5603",
+        "name": "石窟武士俑",
+        "pic": "5328"
+      },
+      {
+        "id": "5670",
+        "name": "屍靈武士俑",
+        "pic": "5435"
+      },
+      {
+        "id": "5671",
+        "name": "屍靈將軍俑",
+        "pic": "5436"
+      },
+      {
+        "id": "9570",
+        "name": "[將軍俑]",
+        "pic": "5048"
+      },
+      {
+        "id": "17789",
+        "name": "將軍俑",
+        "pic": "5048"
+      }
+    ],
+    "locations": [
+      {
+        "stageId": 71,
+        "stageName": "古皇陵第三層",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5048",
+            "name": "將軍俑"
+          }
+        ]
+      },
+      {
+        "stageId": 116,
+        "stageName": "五派禁地",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5603",
+            "name": "石窟武士俑"
+          }
+        ]
+      },
+      {
+        "stageId": 143,
+        "stageName": "古皇陵密室",
+        "kind": "monsters",
+        "records": [
+          {
+            "id": "5670",
+            "name": "屍靈武士俑"
+          },
+          {
+            "id": "5671",
+            "name": "屍靈將軍俑"
+          }
+        ]
+      }
+    ],
+    "portraitChecks": [
+      {
+        "pic": "5048",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M48W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5328",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M48W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5435",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M48W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      },
+      {
+        "pic": "5436",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "M48W1018.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  },
+  {
+    "directory": "X01",
+    "sequences": [
+      "5233",
+      "5555"
+    ],
+    "records": [
+      {
+        "id": "5337",
+        "name": "緞帶兔",
+        "pic": "5233"
+      },
+      {
+        "id": "5664",
+        "name": "小玉兔",
+        "pic": "5233"
+      },
+      {
+        "id": "5925",
+        "name": "玉雷兔",
+        "pic": "5555"
+      },
+      {
+        "id": "9235",
+        "name": "月宮玉兔",
+        "pic": "5233"
+      },
+      {
+        "id": "9970",
+        "name": "狂暴兔精",
+        "pic": "5233"
+      },
+      {
+        "id": "14393",
+        "name": "小玉兔",
+        "pic": "5233"
+      },
+      {
+        "id": "14774",
+        "name": "幻終小玉兔",
+        "pic": "5233"
+      },
+      {
+        "id": "14775",
+        "name": "幻終幼玉兔",
+        "pic": "5555"
+      },
+      {
+        "id": "15050",
+        "name": "小玉兔",
+        "pic": "5233"
+      },
+      {
+        "id": "16999",
+        "name": "葵花黃金兔",
+        "pic": "5233"
+      },
+      {
+        "id": "17387",
+        "name": "影咒獸．脫兔",
+        "pic": "5555"
+      },
+      {
+        "id": "17932",
+        "name": "中秋黃金兔",
+        "pic": "5233"
+      }
+    ],
+    "locations": [],
+    "portraitChecks": [
+      {
+        "pic": "5233",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "X01W1016.SHP",
+        "preservedMissingPalette": true,
+        "updated": false
+      },
+      {
+        "pic": "5555",
+        "exists": true,
+        "matchingRestoredFile": null,
+        "sameSilhouetteSource": "X01W1016.SHP",
+        "preservedMissingPalette": false,
+        "updated": true
+      }
+    ]
+  }
+]
