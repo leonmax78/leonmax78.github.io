@@ -1,7 +1,8 @@
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('assert');
 const root=path.resolve(__dirname,'..');
-const ctx=vm.createContext({window:{},document:{querySelectorAll:()=>[],getElementById:()=>({})},MutationObserver:class{observe(){}},setTimeout});
+const ctx=vm.createContext({window:{},document:{querySelectorAll:()=>[],getElementById:()=>({}),addEventListener:()=>{}},MutationObserver:class{observe(){}},setTimeout});
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+vm.runInContext(read('js/data/display-dictionary.js'),ctx);
 for(const name of ['base-data','combo-data','star-multipliers-data'])vm.runInContext(read(`js/data/jiangshen/${name}.js`),ctx);
 vm.runInContext('const DATA=window.SZO_JIANGSHEN_DATA_PARTS;',ctx);
 vm.runInContext(read('js/calc/jiangshen-calc.js'),ctx);

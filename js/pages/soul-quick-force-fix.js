@@ -78,14 +78,14 @@
       const base = num(soul[key], 0);
       if (!base) return '';
       const bonus = Math.floor(base * rate);
-      return '<div class="soulStat"><div class="k">' + esc(label) + '</div><div class="base">' + fmt(base) + (bonus > 0 ? '<span class="bonus">(+ ' + fmt(bonus) + ')</span>' : '') + '</div></div>';
+      return '<div class="soulStat"><div class="k">' + esc(window.SZO_DISPLAY.label(key,label)) + '</div><div class="base">' + fmt(base) + (bonus > 0 ? '<span class="bonus">(+ ' + fmt(bonus) + ')</span>' : '') + '</div></div>';
     }).join('');
     const totalRows = FIELD_MAP.map(function(pair){
       const key = pair[0], label = pair[1];
       const base = num(soul[key], 0);
       if (!base) return '';
       const bonus = Math.floor(base * rate);
-      return '<tr><td>' + esc(label) + '</td><td>' + fmt(base) + '</td><td style="color:#facc15;font-weight:1000">+' + fmt(bonus) + '</td><td>' + fmt(base + bonus) + '</td></tr>';
+      return '<tr><td>' + esc(window.SZO_DISPLAY.label(key,label)) + '</td><td>' + fmt(base) + '</td><td style="color:#facc15;font-weight:1000">+' + fmt(bonus) + '</td><td>' + fmt(base + bonus) + '</td></tr>';
     }).join('');
     out.innerHTML = '<div class="soulPreviewPanel"><div class="notice soulNotice"><div class="assetDetailHead">' + soulPortraitHTML(soul) + '<div><b>' + esc(soul.Name || '') + '</b><span class="soulMetaLine">收藏數：' + fmt(count) + '</span><span class="soulMetaLine">加成：' + (rate * 100).toFixed(1).replace(/\.0$/, '') + '%</span></div></div></div><div class="soulPreviewStats"><h3>能力預覽</h3><div class="soulStats">' + rows + '</div></div></div><h3>詳細表</h3><div class="tableWrap"><table><thead><tr><th>能力</th><th>原始能力</th><th>收藏加成</th><th>合計</th></tr></thead><tbody>' + totalRows + '</tbody></table></div>';
     return true;

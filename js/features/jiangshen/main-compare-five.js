@@ -101,7 +101,7 @@
     const rows = stats.map(stat => {
       const values = picks.map(pick => Number(pick.ability[stat] || 0));
       const max = Math.max(...values);
-      return `<tr><td>${E(stat)}</td>${picks.map((pick, index) => `<td class="${values[index] === max && max > 0 ? 'supportBest' : ''}">${fmt(values[index])}</td>`).join('')}</tr>`;
+      return `<tr><td>${E(window.SZO_DISPLAY.label(stat))}</td>${picks.map((pick, index) => `<td class="${values[index] === max && max > 0 ? 'supportBest' : ''}">${fmt(values[index])}</td>`).join('')}</tr>`;
     }).join('');
     reader.innerHTML = `<section class="card mainComparePage">${backButton()}
       <h1>主降神比較</h1>

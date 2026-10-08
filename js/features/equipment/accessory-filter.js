@@ -273,7 +273,7 @@
     const base=eqBaseStatsWithRaw(eq);
     const level=base.level?.value||eq?.raw_item?.Level||'';
     const clevel=base.clevel?.value??eq?.raw_item?.CLevel??'';
-    const main=['等級 '+(level||'-'),'職等(CL) '+eqCLevelText(clevel)];
+    const main=['等級 '+(level||'-'),window.SZO_DISPLAY.label('CLevel')+' '+eqCLevelText(clevel)];
     const rest=[eq.item_id?('ID '+eq.item_id):'',eqKind88(eq),eqSeriesVal88(eq)||eq.series_group,eqTierVal88(eq),eqTypeVal88(eq)].filter(Boolean);
     return `<div class="eqTopMeta">${main.map(x=>`<span class="pill" style="font-size:14px;border-color:#60a5fa;color:#e0f2fe">${esc(x)}</span>`).join('')}${rest.map(x=>`<span class="pill">${esc(x)}</span>`).join('')}</div>`;
   };

@@ -1,13 +1,8 @@
 // V246: equipment display helpers and random-material simulation.
 (function(){
   function eqPrimitiveLabel(k){
-    if(k==='m_attack')return '術攻';
-    if(k==='def')return '物理防禦';
-    if(k==='m_def')return '術法防禦';
-    if(k==='level')return '等級';
-    if(k==='clevel')return '職等(CL)';
     const labels=(typeof eqData==='function' && eqData().stat_labels)||{};
-    return labels[k]||k;
+    return window.SZO_DISPLAY.label(k,labels[k]||k);
   }
 
   window.eqBaseStatsWithRaw=function(eq){
@@ -48,7 +43,7 @@
     const base=eqBaseStatsWithRaw(eq);
     const level=base.level?.value||eq?.raw_item?.Level||'';
     const clevel=base.clevel?.value??eq?.raw_item?.CLevel??'';
-    const main=['等級 '+(level||'-'),'職等(CL) '+eqCLevelText(clevel)];
+    const main=['等級 '+(level||'-'),window.SZO_DISPLAY.label('CLevel')+' '+eqCLevelText(clevel)];
     const rest=['ID '+eq.item_id,eq.main_category,eq.series||eq.series_group,eq.display_type].filter(Boolean);
     return `<div class="eqTopMeta">${main.map(x=>`<span class="pill" style="font-size:14px;border-color:#60a5fa;color:#e0f2fe">${esc(x)}</span>`).join('')}${rest.map(x=>`<span class="pill">${esc(x)}</span>`).join('')}</div>`;
   };

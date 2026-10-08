@@ -31,27 +31,27 @@ function itemDetailRows(it){
  const rows=[];
  for(const k of ITEM_DETAIL_ORDER){
   if(k==='Damage'){
-   if(it.DamageMin||it.DamageMax)rows.push(['傷害',`${it.DamageMin||''}~${it.DamageMax||''}`]);
+   if(it.DamageMin||it.DamageMax)rows.push([window.SZO_DISPLAY.label('Damage'),`${it.DamageMin||''}~${it.DamageMax||''}`]);
    continue;
   }
   if(k==='Type'){
    const typeName=itemTypeName(it.Type)||it.Type;
-   if(typeName)rows.push(['類型',typeName]);
+   if(typeName)rows.push([window.SZO_DISPLAY.label('Type'),typeName]);
    continue;
   }
   if(k==='Kind'){
    const kindName=itemKind(it);
-   if(kindName)rows.push(['專剋',kindName]);
+   if(kindName)rows.push([window.SZO_DISPLAY.label('Kind'),kindName]);
    continue;
   }
   if(k==='ExtraStatus'){
    const st=itemStatus(it);
-   if(st)rows.push(['特殊能力',st]);
+   if(st)rows.push([window.SZO_DISPLAY.label('ExtraStatus'),st]);
    continue;
   }
-  if(k in it&&String(it[k]??'').trim()!=='')rows.push([ITEM_DETAIL_RENAME[k]||k,it[k]]);
+  if(k in it&&String(it[k]??'').trim()!=='')rows.push([window.SZO_DISPLAY.label(k,ITEM_DETAIL_RENAME[k]||k),window.SZO_DISPLAY.value(k,it[k])]);
  }
- if(it.Help)rows.push(['說明',it.Help]);
+ if(it.Help)rows.push([window.SZO_DISPLAY.label('Help'),it.Help]);
  return rows;
 }
 
@@ -59,7 +59,7 @@ function itemAbilityFields(it){
  const abilityKeys=new Set(['CLevel','HP','MP','Con','Str','Int','Dex','ExtraDef','Damage','MagicAttack','MagicDef','IceDef','FireDef','LightningDef','DarkDef','ParalysisRes','PosionRes','BlindRes','SilentRes','Value']);
  return itemDetailRows(it).filter(([label])=>{
   const reverse=Object.entries(ITEM_DETAIL_RENAME).find(([,v])=>v===label)?.[0];
-  if(label==='傷害')return true;
+  if(label===window.SZO_DISPLAY.label('Damage'))return true;
   return abilityKeys.has(reverse||label);
  });
 }
@@ -424,6 +424,22 @@ function clearItemSearchFilters(){
  searchItems();
 }
 
+function itemDetailBodyHTML(it){
+ const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
+ const helpLabel=window.SZO_DISPLAY.label('Help');
+ const compactRows=rows.filter(([k,v])=>k!==helpLabel&&String(v).length<=32);
+ const fullRows=rows.filter(([k,v])=>k===helpLabel||String(v).length>32);
+ const kvHtml=compactRows.map(([k,v])=>{
+  return `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`;
+ }).join('');
+ const fullHtml=fullRows.map(([k,v])=>{
+  const cls=k===helpLabel?' itemFullRow itemHelpRow':' itemFullRow';
+  return `<div class="kv${cls}"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`;
+ }).join('');
+ const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
+ return `<div class="assetPreviewPanel itemPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(nameOf(it))}</h1></div><div class="assetInfoPanel"><div class="kvGrid itemDataGrid">${kvHtml}</div></div></div>${fullHtml?`<div class="kvGrid itemDetailExtra">${fullHtml}</div>`:''}`;
+}
+
 function showItem(id,skipPush){
  window.v86LastView='item';
  if(!skipPush){try{history.pushState({app:'detail',view:'item'},'','#item-'+id);}catch(e){}}
@@ -434,18 +450,7 @@ function showItem(id,skipPush){
  }
  const it=itemIndex[String(id).trim()]; if(!it)return;
  ensureItemOptionalData(String(id));
- const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
- const compactRows=rows.filter(([k,v])=>k!=='說明'&&String(v).length<=32);
- const fullRows=rows.filter(([k,v])=>k==='說明'||String(v).length>32);
- const kvHtml=compactRows.map(([k,v])=>{
-  return `<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`;
- }).join('');
- const fullHtml=fullRows.map(([k,v])=>{
-  const cls=k==='說明'?' itemFullRow itemHelpRow':' itemFullRow';
-  return `<div class="kv${cls}"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`;
- }).join('');
- const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- byId('reader').innerHTML=`<section class="card itemCompact itemDetailCompact"><button class="backBtn" type="button" onclick="goBackToPrevious('item')">← 返回道具查詢</button><div class="assetPreviewPanel itemPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(nameOf(it))}</h1></div><div class="assetInfoPanel"><div class="kvGrid itemDataGrid">${kvHtml}</div></div></div>${fullHtml?`<div class="kvGrid itemDetailExtra">${fullHtml}</div>`:''}<div class="quick"><button type="button" data-reverse-item="${esc(it.ID)}">反查掉落怪物<small>查看哪些怪物會掉這個道具</small></button></div></section>`;
+ byId('reader').innerHTML=`<section class="card itemCompact itemDetailCompact"><button class="backBtn" type="button" onclick="goBackToPrevious('item')">← 返回道具查詢</button>${itemDetailBodyHTML(it)}<div class="quick"><button type="button" data-reverse-item="${esc(it.ID)}">反查掉落怪物<small>查看哪些怪物會掉這個道具</small></button></div></section>`;
  closeDrawer();window.scrollTo({top:0,behavior:'smooth'});
 }
 

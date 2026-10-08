@@ -83,7 +83,7 @@
       ${stats().map(st=>{
         const av = Number(A[st] || 0), bv = Number(B[st] || 0);
         const max = Math.max(av, bv);
-        return `<tr><td>${E(st)}</td><td class="${av===max&&max>0?'supportBest':''}">${fmt(av)}</td><td class="${bv===max&&max>0?'supportBest':''}">${fmt(bv)}</td><td>${fmt(av-bv)}</td></tr>`;
+        return `<tr><td>${E(window.SZO_DISPLAY.label(st))}</td><td class="${av===max&&max>0?'supportBest':''}">${fmt(av)}</td><td class="${bv===max&&max>0?'supportBest':''}">${fmt(bv)}</td><td>${fmt(av-bv)}</td></tr>`;
       }).join('')}
       </tbody></table></div>
     </section>`;
@@ -96,7 +96,7 @@
     const r = $('reader'); if(!r) return;
     r.innerHTML = `<section class="card">${backBtn('stars')}
       <h1>${E(n)}｜0 ~ 20 星能力總表</h1>
-      <div class="tableWrap"><table><thead><tr><th>星等</th>${stats().map(st=>`<th>${E(st)}</th>`).join('')}</tr></thead><tbody>
+      <div class="tableWrap"><table><thead><tr><th>星等</th>${stats().map(st=>`<th>${E(window.SZO_DISPLAY.label(st))}</th>`).join('')}</tr></thead><tbody>
       ${Array.from({length:21},(_,lv)=>{
         const a = intAbility(getAbility(n,lv));
         return `<tr><td>${lv} 星</td>${stats().map(st=>`<td>${fmt(a[st])}</td>`).join('')}</tr>`;

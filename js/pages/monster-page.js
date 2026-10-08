@@ -500,7 +500,7 @@ async function showMonsterMapLocations(id, name){
 
 function monsterRowsHTML(rows,cls=''){
  const show=rows.filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
- return `<div class="kvGrid ${cls}">${show.map(([k,v])=>`<div class="kv"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>`;
+ return `<div class="kvGrid ${cls}">${show.map(([k,v])=>`<div class="kv"><div class="k">${esc(window.SZO_DISPLAY.label(k))}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>`;
 }
 
 function showMonster(id,skipPush){

@@ -5,4 +5,5 @@ const RACE_MAP={"0x00000001":"正道系","0x00000002":"惡人系","0x00000004":"
 
 const ITEM_DETAIL_ORDER=['ID','Name','Type','Kind','ExtraStatus','Level','CLevel','HP','MP','Con','Str','Int','Dex','ExtraDef','Damage','MagicAttack','MagicDef','IceDef','FireDef','LightningDef','DarkDef','ParalysisRes','PosionRes','BlindRes','SilentRes','Value'];
 const ITEM_DETAIL_RENAME={'Name':'名稱','Type':'類型','Kind':'專剋','ExtraStatus':'特殊能力','Level':'等級','CLevel':'職等','HP':'血量','MP':'精力','Con':'體魄','Str':'力量','Int':'智慧','Dex':'靈敏','ExtraDef':'物理防禦','MagicAttack':'術法攻擊','MagicDef':'術法防禦','IceDef':'冰防','FireDef':'火防','LightningDef':'電防','DarkDef':'冥防','ParalysisRes':'抗定身','PosionRes':'抗毒','BlindRes':'抗盲目','SilentRes':'抗禁咒','Value':'價值'};
+Object.keys(ITEM_DETAIL_RENAME).forEach(key=>{ITEM_DETAIL_RENAME[key]=window.SZO_DISPLAY.label(key,ITEM_DETAIL_RENAME[key]);});
 

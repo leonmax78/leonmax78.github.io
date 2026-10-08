@@ -116,7 +116,7 @@
   function getAbility(name,star){ if(typeof ability === 'function') return ability(name,star) || {}; return {}; }
   function scale(a,rate=1){ const out={}; for(const st of stats()) out[st] = Math.ceil(Number(a?.[st] || 0) * rate); return out; }
   function add(a,b){ const out={}; for(const st of stats()) out[st] = Math.ceil(Number(a?.[st] || 0) + Number(b?.[st] || 0)); return out; }
-  function kvGrid(obj){ return `<div class="kvGrid">${stats().map(st=>`<div class="kv"><div class="k">${E(st)}</div><div class="v">${fmt(obj?.[st] || 0)}</div></div>`).join('')}</div>`; }
+  function kvGrid(obj){ return `<div class="kvGrid">${stats().map(st=>`<div class="kv"><div class="k">${E(window.SZO_DISPLAY.label(st))}</div><div class="v">${fmt(obj?.[st] || 0)}</div></div>`).join('')}</div>`; }
   function emptyMsg(msg){ if(typeof empty === 'function') empty(msg); else alert(msg); }
   function supportBackBtn(){ return '<button class="backBtn" type="button" onclick="setJiang(\'support\')">← 返回副降神試算</button>'; }
   function defaultSet(){ return Array.from({length:5},()=>({n:'',s:1})); }
@@ -280,7 +280,7 @@
       ${stats().map(st=>{
         const vals = cols.map(c=>Number(c.res.total[st] || 0));
         const max = Math.max(...vals);
-        return `<tr><td>${E(st)}</td>${cols.map((c,i)=>`<td class="${max>0 && vals[i]===max ? 'supportBest' : ''}">${fmt(vals[i])}</td>`).join('')}</tr>`;
+        return `<tr><td>${E(window.SZO_DISPLAY.label(st))}</td>${cols.map((c,i)=>`<td class="${max>0 && vals[i]===max ? 'supportBest' : ''}">${fmt(vals[i])}</td>`).join('')}</tr>`;
       }).join('')}
     </tbody></table></div>${cols.map(c=>`<h3>${E(c.label)} 成立連結</h3>${comboTextBlock(c.res)}`).join('')}`;
   }
@@ -289,10 +289,10 @@
   const REC_SLOTS = ['主降神', '副降1', '副降2', '副降3', '副降4'];
   const REC_RATE = [1, 0.1, 0.1, 0.1, 0.1];
   const REC_METRICS = [
-    {kind:'physicalStr', title:'物理職業（力）', desc:'依 力量 * 2 + 靈敏 / 2 + 防禦 * 0.25 排序', keys:['力量','靈敏','防禦']},
-    {kind:'physicalDex', title:'物理職業（敏）', desc:'依 靈敏 * 2 + 力量 / 2 + 防禦 * 0.25 排序', keys:['靈敏','力量','防禦']},
-    {kind:'spell', title:'術法職業', desc:'依 智慧 + 術攻 + 防禦 * 0.25 + 術防 * 0.25 排序', keys:['智慧','術攻','防禦','術防']},
-    {kind:'defense', title:'防禦向', desc:'依 防禦 + 術防 排序', keys:['防禦','術防']}
+    {kind:'physicalStr', title:'物理職業（力）', desc:'依 力量 * 2 + 靈敏 / 2 + 物理防禦 * 0.25 排序', keys:['力量','靈敏','防禦']},
+    {kind:'physicalDex', title:'物理職業（敏）', desc:'依 靈敏 * 2 + 力量 / 2 + 物理防禦 * 0.25 排序', keys:['靈敏','力量','防禦']},
+    {kind:'spell', title:'術法職業', desc:'依 智慧 + 術法攻擊 + 物理防禦 * 0.25 + 術法防禦 * 0.25 排序', keys:['智慧','術攻','防禦','術防']},
+    {kind:'defense', title:'防禦向', desc:'依 物理防禦 + 術法防禦 排序', keys:['防禦','術防']}
   ];
 
   function recommendStars(){
@@ -525,7 +525,7 @@
     return bestByMain.sort((a,b)=>(fixedMain ? Number(b.combos.length>0)-Number(a.combos.length>0) : 0) || b.score-a.score).slice(0,5);
   }
   function statLine(total, keys){
-    return keys.map(k=>`${E(k)} ${fmt(total[k] || 0)}`).join('　');
+    return keys.map(k=>`${E(window.SZO_DISPLAY.label(k))} ${fmt(total[k] || 0)}`).join('　');
   }
   function recommendCompareTable(plans){
     if(!plans || !plans.length) return '';
@@ -541,7 +541,7 @@
     const statRows = stats().map(st=>{
       const vals = plans.map(p=>Number(p.total?.[st] || 0));
       const max = Math.max(...vals);
-      return `<tr><td>${E(st)}</td>${vals.map(v=>`<td class="${max>0 && v===max?'supportBest':''}">${fmt(v)}</td>`).join('')}</tr>`;
+      return `<tr><td>${E(window.SZO_DISPLAY.label(st))}</td>${vals.map(v=>`<td class="${max>0 && v===max?'supportBest':''}">${fmt(v)}</td>`).join('')}</tr>`;
     }).join('');
     return `<h3>候補數值比較</h3><div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${plans.map((p,i)=>`<th>${E(planTitle(p,i))}</th>`).join('')}</tr></thead><tbody>${scoreRow}${statRows}</tbody></table></div>`;
   }

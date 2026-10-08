@@ -353,30 +353,19 @@ function eqBaseStatsWithRaw(eq){
 }
 
 function eqCLevelText(v){
- const n=Number(v);
- const map={0:'無',1:'一轉',2:'二轉',3:'三轉',4:'四轉',5:'五轉'};
- return map[n]||String(v||'');
+ return window.SZO_DISPLAY.value('CLevel',v);
 }
 
 function eqStatLabel(k,o,e){
- if(k==='m_attack')return '術法攻擊';
- if(k==='def')return '物理防禦';
- if(k==='m_def')return '術法防禦';
- if(k==='ice_def')return '冰防';
- if(k==='fire_def')return '火防';
- if(k==='lightning_def')return '雷防';
- if(k==='dark_def')return '冥防';
- if(k==='paralysis_res')return '抗定身';
- if(k==='poison_res')return '抗毒';
- if(k==='blind_res')return '抗盲目';
- if(k==='silent_res')return '抗禁咒';
- if(k==='level')return '等級';
- if(k==='clevel')return '職等(CL)';
- return o?.label||e?.label||eqData().stat_labels?.[k]||k;
+ return window.SZO_DISPLAY.label(k,o?.label||e?.label||eqData().stat_labels?.[k]||k);
 }
 
 function eqDisplayStatText(k,o){
  if(k==='clevel' && o)return eqCLevelText(o.value);
+ if(k==='attack' && o){
+  if(o.min!==undefined||o.max!==undefined)return `${window.SZO_DISPLAY.value('Attack',o.min)}～${window.SZO_DISPLAY.value('Attack',o.max)}`;
+  return window.SZO_DISPLAY.value('Attack',o.value);
+ }
  return eqStatValueText(o)||'-';
 }
 
@@ -384,7 +373,7 @@ function eqMetaLine(eq){
  const base=eqBaseStatsWithRaw(eq);
  const level=base.level?.value||eq?.raw_item?.Level||'';
  const clevel=base.clevel?.value??eq?.raw_item?.CLevel??'';
- const main=['等級 '+(level||'-'),'職等(CL) '+eqCLevelText(clevel)];
+ const main=['等級 '+(level||'-'),window.SZO_DISPLAY.label('CLevel')+' '+eqCLevelText(clevel)];
  const rest=['ID '+eq.item_id,eq.main_category,eq.series||eq.series_group,eq.display_type,(eq._stats_source||'內嵌備援')].filter(Boolean);
  return `<div class="eqTopMeta">${main.map(x=>`<span class="pill" style="font-size:14px;border-color:#60a5fa;color:#e0f2fe">${esc(x)}</span>`).join('')}${rest.map(x=>`<span class="pill">${esc(x)}</span>`).join('')}</div>`;
 }

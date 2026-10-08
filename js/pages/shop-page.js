@@ -386,31 +386,21 @@
     try{ if(typeof closeDrawer === 'function') closeDrawer(); }catch(e){}
     try{ window.scrollTo({top:0,behavior:'smooth'}); }catch(e){}
   }
-  function detailRows(it){
-    if(!it) return [];
-    try{
-      if(typeof itemDetailRows === 'function') return itemDetailRows(it).filter(x => x[1] !== '' && x[1] !== undefined && x[1] !== null && String(x[1]).trim() !== '0');
-    }catch(e){}
-    return Object.entries(it).filter(([,v]) => v !== '' && v !== undefined && v !== null && String(v).trim() !== '0');
-  }
   async function showShopItem(id, fallbackName){
     window.v86LastView = 'shop';
     const itemId = String(id || '').trim();
     const reader = by('reader');
     if(reader) reader.innerHTML = '<section class="card itemCompact"><button class="backBtn" type="button" data-shop-back>← 返回商店</button><h1>資料載入中...</h1></section>';
+    // Load the same renderer and status names regardless of entry order.
+    if(typeof window.ensureItemPageLoaded === 'function') await window.ensureItemPageLoaded();
     if(typeof window.ensureLookupDataLoaded === 'function') await window.ensureLookupDataLoaded();
+    if(typeof ensureItemOptionalData === 'function') await ensureItemOptionalData();
     const it = getItemIndex()[itemId];
     const title = it ? nameOfSafe(it) : (fallbackName || ('ID ' + itemId));
-    const kv = detailRows(it).map(([k,v]) => {
-      const cls = String(v).length > 34 ? ' itemFullRow' : '';
-      return `<div class="kv${cls}"><div class="k">${escHtml(k)}</div><div class="v">${escHtml(v)}</div></div>`;
-    }).join('');
     if(reader){
-      reader.innerHTML = `<section class="card itemCompact shopItemDetail">
+      reader.innerHTML = `<section class="card itemCompact itemDetailCompact shopItemDetail">
         <button class="backBtn" type="button" data-shop-back>← 返回商店</button>
-        <h1>${escHtml(title)}</h1>
-        <div class="muted">商店商品 ID ${escHtml(itemId)}</div>
-        ${it ? `<div class="kvGrid">${kv}</div>` : '<div class="empty">ITEM 資料不存在。</div>'}
+        ${it ? itemDetailBodyHTML(it) : `<h1>${escHtml(title)}</h1><div class="empty">ITEM 資料不存在。</div>`}
       </section>`;
     }
     try{ history.pushState({app:'detail',view:'shopItem'}, '', '#shop-item-' + encodeURIComponent(itemId)); }catch(e){}
