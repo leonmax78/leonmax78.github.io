@@ -9,6 +9,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
  try{
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await route(page);await ready(page);
   const approved=JSON.parse(fs.readFileSync(path.join(root,'planning/approved-display-review.json'),'utf8'));
+  approved.confirmedValueChanges.Type.BONUS='錦囊類';
   const actual=await page.evaluate(()=>({labels:SZO_DISPLAY.fields,visible:SZO_DISPLAY.itemVisible,values:SZO_DISPLAY.values}));
   assert.deepEqual([...actual.visible].sort(),approved.fields.filter(f=>f.visible).map(f=>f.key).sort());
   for(const [k,v] of Object.entries(approved.sharedLabels))assert.equal(actual.labels[k],v,k);
@@ -27,6 +28,15 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   assert(!reviewedRows.some(r=>['價值','道具旗標','關聯技能'].includes(r[0])));
   await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));
   await page.evaluate(()=>showShopItem('23640'));assert.deepEqual(await rows(page),enchantRows);
+  await page.evaluate(()=>showItem('29917'));
+  assert.deepEqual(await page.locator('[data-item-section]').evaluateAll(nodes=>nodes.map(n=>n.dataset.itemSection)),['basic','ability','element','help','special']);
+  assert((await page.locator('[data-item-section="special"]').innerText()).includes('不死身'));
+  await page.screenshot({path:path.join(root,'outputs/item-sections-desktop.png'),fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.evaluate(()=>{closeDrawer();showItem('29918');});await page.waitForTimeout(300);
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  assert((await page.locator('[data-item-section="special"]').innerText()).includes('吸血'));
+  await page.screenshot({path:path.join(root,'outputs/item-sections-mobile.png'),fullPage:true});
+  await page.setViewportSize({width:1280,height:720});
   const translated=await page.evaluate(()=>({labels:['m_attack','術攻','MagicAttack','m_def','術防','防禦','LightningDef','暗防'].map(k=>SZO_DISPLAY.label(k)),speed:[1,2,3,4,5].map(n=>SZO_DISPLAY.value('Attack',n))}));
   assert.deepEqual(translated.speed,['最慢','次慢','普通','次快','最快']);assert.deepEqual(translated.labels,['術法攻擊','術法攻擊','術法攻擊','術法防禦','術法防禦','物理防禦','雷防','冥防']);
   await page.evaluate(async()=>{await ensureCompoundDataLoaded();});

@@ -4054,3 +4054,27 @@ body{
     height:calc(100dvh - 128px)!important;
   }
 }
+
+.itemGroupedDetail{min-width:0;letter-spacing:0}
+.itemIdentity{display:flex;align-items:center;gap:18px;padding:16px 0}
+.itemIdentity .itemHero{width:88px;height:88px;flex:0 0 88px;border-radius:8px}
+.itemIdentity .itemHero img{max-width:80px;max-height:80px;object-fit:contain}
+.itemIdentity h1{font-size:24px;margin:0;overflow-wrap:anywhere}
+.itemDetailSection{padding:16px 0;border-top:1px solid #526477}
+.itemDetailSection h2{font-size:16px;margin:0 0 10px;color:var(--text,#e9f0fa)}
+.itemSectionGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 18px}
+.itemGroupedDetail .kv{background:transparent;border:0;border-bottom:1px solid #52647755;border-radius:0;padding:8px 0;min-width:0;min-height:0;overflow:visible}
+.itemGroupedDetail .kv .k{font-size:12px;line-height:1.4;margin-bottom:3px}
+.itemGroupedDetail .kv .v{font-size:15px;line-height:1.5;max-height:none;overflow:visible;overflow-wrap:anywhere}
+.itemSection-help .itemSectionGrid,.itemSection-special .itemSectionGrid{grid-template-columns:1fr}
+.itemSection-special{border-top:2px solid #e3bd55;border-left:4px solid #e3bd55;padding:14px 16px;margin-top:12px;background:#c49b2014}
+.itemSection-special h2{color:#e3bd55;font-size:18px}
+.itemSection-special .kv .v{font-size:20px;font-weight:700}
+.itemSection-special .kv{border:0}
+@media(max-width:700px){
+ .itemSectionGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+ .itemIdentity h1{font-size:20px}
+ .itemIdentity{gap:12px}
+ .itemDetailSection{padding:12px 0}
+ .itemSection-special{padding:12px}
+}
