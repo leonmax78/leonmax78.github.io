@@ -362,9 +362,9 @@ function eqStatLabel(k,o,e){
 
 function eqDisplayStatText(k,o){
  if(k==='clevel' && o)return eqCLevelText(o.value);
- if(k==='attack' && o){
-  if(o.min!==undefined||o.max!==undefined)return `${window.SZO_DISPLAY.value('Attack',o.min)}～${window.SZO_DISPLAY.value('Attack',o.max)}`;
-  return window.SZO_DISPLAY.value('Attack',o.value);
+ if((k==='attack'||k==='attack_range') && o){
+  if(o.min!==undefined||o.max!==undefined)return `${window.SZO_DISPLAY.value(k,o.min)}～${window.SZO_DISPLAY.value(k,o.max)}`;
+  return window.SZO_DISPLAY.value(k,o.value);
  }
  return eqStatValueText(o)||'-';
 }

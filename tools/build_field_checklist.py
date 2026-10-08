@@ -13,9 +13,8 @@ def write(path, value):
 
 def main():
     items = json.loads((ROOT/'data/items.json').read_text(encoding='utf-8'))
-    source = (ROOT/'js/data/type-maps.js').read_text(encoding='utf-8')
-    order = ast.literal_eval(re.search(r'const ITEM_DETAIL_ORDER=(\[.*?\]);',source).group(1))
-    visible = set(order) | {'Help','Icon','DamageMin','DamageMax'}
+    source = (ROOT/'js/data/display-dictionary.js').read_text(encoding='utf-8')
+    visible = set(ast.literal_eval(re.search(r'const itemVisible=(\[.*?\]);',source).group(1)))
     OUT.mkdir(parents=True, exist_ok=True)
     fields = []
     statuses = {str(r['ID']):r.get('Name','') for r in json.loads((ROOT/'data/status.json').read_text(encoding='utf-8')) if 'ID' in r}
@@ -41,7 +40,7 @@ def main():
         write(OUT/f'field-{key}.json',{'field':key,'values':values,'tokens':token_values,'currentMappings':mappings})
         fields.append({'key':key,'present':len(rows),'distinct':len(counts),'tokens':len(tokens),'visible':key in visible,
                        'examples':values[:2],'data':f'item-values/field-{key}.json'})
-    write(ROOT/'planning/item-fields.json',{'schemaVersion':1,'sourceVersion':'V568','totalItems':len(items),'fields':fields})
+    write(ROOT/'planning/item-fields.json',{'schemaVersion':1,'sourceVersion':'V570','totalItems':len(items),'fields':fields})
     print(f'Wrote {len(fields)} field inventories for {len(items)} items')
 
 if __name__=='__main__':main()

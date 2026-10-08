@@ -102,7 +102,7 @@
     if(Object.keys(D.fields).some(k=>!fieldLabel(k).trim())){alert('中文名稱不能留空，請補上名稱後再匯出。');return;}
     const classChanges=Object.fromEntries(Object.entries(draft.values.Class||{}).filter(([raw])=>!raw.includes(',')));
     const legacyClassCombinations=Object.fromEntries(Object.entries(draft.values.Class||{}).filter(([raw])=>raw.includes(',')));
-    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V569',createdAt:new Date().toISOString(),status:'draft-not-applied',
+    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V570',createdAt:new Date().toISOString(),status:'draft-not-applied',
       fields:fields.map(f=>({key:f.key,label:fieldLabel(f.key),visible:isVisible(f)})),
       sharedLabels:Object.fromEntries(Object.keys(D.fields).map(k=>[k,fieldLabel(k)])),
       confirmedValueChanges:{...draft.values,Class:classChanges},legacyClassCombinations,

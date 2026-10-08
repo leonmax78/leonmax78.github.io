@@ -1,0 +1,507 @@
+{
+  "schemaVersion": 1,
+  "kind": "sihai-display-review",
+  "baseVersion": "V569",
+  "createdAt": "2026-10-08T08:02:44.532Z",
+  "status": "draft-not-applied",
+  "fields": [
+    {
+      "key": "Attack",
+      "label": "攻速",
+      "visible": true
+    },
+    {
+      "key": "AttackRange",
+      "label": "攻擊距離",
+      "visible": true
+    },
+    {
+      "key": "BlindRes",
+      "label": "抗盲目",
+      "visible": true
+    },
+    {
+      "key": "Break",
+      "label": "Break 參數（待確認）",
+      "visible": false
+    },
+    {
+      "key": "CLevel",
+      "label": "職等",
+      "visible": true
+    },
+    {
+      "key": "Class",
+      "label": "職業限制",
+      "visible": true
+    },
+    {
+      "key": "Con",
+      "label": "體魄",
+      "visible": true
+    },
+    {
+      "key": "ConFlag",
+      "label": "體魄作用方式",
+      "visible": false
+    },
+    {
+      "key": "DamageMax",
+      "label": "傷害上限",
+      "visible": true
+    },
+    {
+      "key": "DamageMin",
+      "label": "傷害下限",
+      "visible": true
+    },
+    {
+      "key": "DarkAttack",
+      "label": "冥傷",
+      "visible": true
+    },
+    {
+      "key": "DarkDef",
+      "label": "冥防",
+      "visible": true
+    },
+    {
+      "key": "DarkProb",
+      "label": "冥傷機率",
+      "visible": true
+    },
+    {
+      "key": "Dex",
+      "label": "靈敏",
+      "visible": true
+    },
+    {
+      "key": "DexFlag",
+      "label": "靈敏作用方式",
+      "visible": false
+    },
+    {
+      "key": "Durabulity",
+      "label": "耐久",
+      "visible": true
+    },
+    {
+      "key": "Effect",
+      "label": "效果代碼",
+      "visible": false
+    },
+    {
+      "key": "Encumbrance",
+      "label": "負重加成",
+      "visible": true
+    },
+    {
+      "key": "ExpireDate",
+      "label": "回收時間",
+      "visible": true
+    },
+    {
+      "key": "ExtraDef",
+      "label": "物理防禦",
+      "visible": true
+    },
+    {
+      "key": "ExtraStatus",
+      "label": "特殊能力",
+      "visible": true
+    },
+    {
+      "key": "Fill",
+      "label": "Fill 參數（待確認）",
+      "visible": false
+    },
+    {
+      "key": "FireAttack",
+      "label": "火傷",
+      "visible": true
+    },
+    {
+      "key": "FireDef",
+      "label": "火防",
+      "visible": true
+    },
+    {
+      "key": "FireProb",
+      "label": "火傷機率",
+      "visible": true
+    },
+    {
+      "key": "Flag",
+      "label": "道具旗標",
+      "visible": false
+    },
+    {
+      "key": "GIcon",
+      "label": "GIcon 圖示代碼",
+      "visible": false
+    },
+    {
+      "key": "HP",
+      "label": "血量",
+      "visible": true
+    },
+    {
+      "key": "HPFlag",
+      "label": "血量作用方式",
+      "visible": false
+    },
+    {
+      "key": "Help",
+      "label": "說明",
+      "visible": true
+    },
+    {
+      "key": "ID",
+      "label": "ID",
+      "visible": true
+    },
+    {
+      "key": "IceAttack",
+      "label": "冰傷",
+      "visible": true
+    },
+    {
+      "key": "IceDef",
+      "label": "冰防",
+      "visible": true
+    },
+    {
+      "key": "IceProb",
+      "label": "冰傷機率",
+      "visible": true
+    },
+    {
+      "key": "Icon",
+      "label": "道具圖示",
+      "visible": true
+    },
+    {
+      "key": "Identify",
+      "label": "Identify 參數（待確認）",
+      "visible": false
+    },
+    {
+      "key": "Int",
+      "label": "智慧",
+      "visible": true
+    },
+    {
+      "key": "IntFlag",
+      "label": "智慧作用方式",
+      "visible": false
+    },
+    {
+      "key": "Kind",
+      "label": "專剋",
+      "visible": true
+    },
+    {
+      "key": "Level",
+      "label": "等級",
+      "visible": true
+    },
+    {
+      "key": "LightningAttack",
+      "label": "雷傷",
+      "visible": true
+    },
+    {
+      "key": "LightningDef",
+      "label": "雷防",
+      "visible": true
+    },
+    {
+      "key": "LightningProb",
+      "label": "雷傷機率",
+      "visible": true
+    },
+    {
+      "key": "Log",
+      "label": "Log 參數（待確認）",
+      "visible": false
+    },
+    {
+      "key": "MP",
+      "label": "精力",
+      "visible": true
+    },
+    {
+      "key": "MPFlag",
+      "label": "精力作用方式",
+      "visible": false
+    },
+    {
+      "key": "Magic",
+      "label": "關聯技能",
+      "visible": false
+    },
+    {
+      "key": "MagicAttack",
+      "label": "術法攻擊",
+      "visible": true
+    },
+    {
+      "key": "MagicDef",
+      "label": "術法防禦",
+      "visible": true
+    },
+    {
+      "key": "MsgID",
+      "label": "訊息索引",
+      "visible": false
+    },
+    {
+      "key": "Name",
+      "label": "名稱",
+      "visible": true
+    },
+    {
+      "key": "OIcon",
+      "label": "OIcon 參數",
+      "visible": false
+    },
+    {
+      "key": "OIcon2",
+      "label": "OIcon2 參數",
+      "visible": false
+    },
+    {
+      "key": "ParalysisRes",
+      "label": "抗定身",
+      "visible": true
+    },
+    {
+      "key": "PosionRes",
+      "label": "抗毒",
+      "visible": true
+    },
+    {
+      "key": "Repletion",
+      "label": "飽食數值",
+      "visible": true
+    },
+    {
+      "key": "SilentRes",
+      "label": "抗禁咒",
+      "visible": true
+    },
+    {
+      "key": "StatusParam",
+      "label": "狀態作用方式",
+      "visible": false
+    },
+    {
+      "key": "StatusProb",
+      "label": "狀態機率",
+      "visible": true
+    },
+    {
+      "key": "Str",
+      "label": "力量",
+      "visible": true
+    },
+    {
+      "key": "StrFlag",
+      "label": "力量作用方式",
+      "visible": false
+    },
+    {
+      "key": "SubType",
+      "label": "子分類",
+      "visible": false
+    },
+    {
+      "key": "Time",
+      "label": "作用時間(秒)",
+      "visible": true
+    },
+    {
+      "key": "Type",
+      "label": "類型",
+      "visible": true
+    },
+    {
+      "key": "Value",
+      "label": "價值",
+      "visible": false
+    },
+    {
+      "key": "Weight",
+      "label": "重量",
+      "visible": true
+    }
+  ],
+  "sharedLabels": {
+    "ID": "ID",
+    "Name": "名稱",
+    "Type": "類型",
+    "SubType": "子分類",
+    "Level": "等級",
+    "CLevel": "職等",
+    "Kind": "專剋",
+    "ExtraStatus": "特殊能力",
+    "Help": "說明",
+    "HP": "血量",
+    "MP": "精力",
+    "Con": "體魄",
+    "Str": "力量",
+    "Int": "智慧",
+    "Dex": "靈敏",
+    "Damage": "傷害",
+    "DamageMin": "傷害下限",
+    "DamageMax": "傷害上限",
+    "MagicAttack": "術法攻擊",
+    "ExtraDef": "物理防禦",
+    "MagicDef": "術法防禦",
+    "IceAttack": "冰傷",
+    "FireAttack": "火傷",
+    "LightningAttack": "雷傷",
+    "DarkAttack": "冥傷",
+    "IceProb": "冰傷機率",
+    "FireProb": "火傷機率",
+    "LightningProb": "雷傷機率",
+    "DarkProb": "冥傷機率",
+    "IceDef": "冰防",
+    "FireDef": "火防",
+    "LightningDef": "雷防",
+    "DarkDef": "冥防",
+    "ParalysisRes": "抗定身",
+    "PosionRes": "抗毒",
+    "BlindRes": "抗盲目",
+    "SilentRes": "抗禁咒",
+    "Value": "價值",
+    "Attack": "攻速",
+    "AttackRange": "攻擊距離",
+    "Durabulity": "耐久",
+    "Weight": "重量",
+    "Class": "職業限制",
+    "HPFlag": "血量作用方式",
+    "MPFlag": "精力作用方式",
+    "ConFlag": "體魄作用方式",
+    "StrFlag": "力量作用方式",
+    "IntFlag": "智慧作用方式",
+    "DexFlag": "靈敏作用方式",
+    "Flag": "道具旗標",
+    "Magic": "關聯技能",
+    "StatusParam": "狀態作用方式",
+    "StatusProb": "狀態機率",
+    "Time": "作用時間(秒)",
+    "ExpireDate": "回收時間",
+    "Encumbrance": "負重加成",
+    "Repletion": "飽食數值",
+    "Break": "Break 參數（待確認）",
+    "Fill": "Fill 參數（待確認）",
+    "Identify": "Identify 參數（待確認）",
+    "Effect": "效果代碼",
+    "MsgID": "訊息索引",
+    "Log": "Log 參數（待確認）",
+    "Icon": "道具圖示",
+    "GIcon": "GIcon 圖示代碼",
+    "OIcon": "OIcon 參數",
+    "OIcon2": "OIcon2 參數",
+    "Pic": "圖像編號",
+    "DropExp": "經驗值",
+    "DropMoney": "掉落金錢",
+    "DropItem": "掉落道具"
+  },
+  "confirmedValueChanges": {
+    "AttackRange": {
+      "1": "1格距離",
+      "2": "2格距離",
+      "6": "6格距離",
+      "7": "7格距離",
+      "8": "8格距離",
+      "9": "9格距離",
+      "10": "10格距離"
+    },
+    "Class": {
+      "CLASS_PET": "寵物",
+      "CLASS_ASSASSIN": "術者",
+      "CLASS_PRIEST": "僧侶",
+      "CLASS_SWORDMAN": "劍俠"
+    },
+    "Type": {
+      "TALISMAN": "法器",
+      "SUMMON_TOOL": "封甕",
+      "PRESCRIPTION": "配方",
+      "POTION": "藥品",
+      "MATERIAL": "道具",
+      "MAGIC_FIGURE": "符咒",
+      "BODY_CHANGE": "武魂",
+      "ITEM_ENCHANT": "特殊功能道具",
+      "BONUS": "獎勵禮包"
+    },
+    "ExpireDate": {
+      "0-1 12:00": "星期一、12點",
+      "0-2 12:00": "星期二、12點",
+      "0-3 12:00": "星期三、12點",
+      "0-4 12:00": "星期四、12點",
+      "0-5 12:00": "星期五、12點",
+      "0-6 12:00": "星期六、12點",
+      "0-7 11:50": "星期日、11點50分",
+      "0-7 12:00": "星期日、12點"
+    }
+  },
+  "legacyClassCombinations": {
+    "CLASS_PRIEST,CLASS_ASSASSIN": "僧侶、術者",
+    "CLASS_SWORDMAN,CLASS_ASSASSIN": "劍俠、術者",
+    "CLASS_SWORDMAN,CLASS_TAOIST,CLASS_PRIEST": "劍俠、道人、僧侶"
+  },
+  "resolvedClassMappings": {
+    "CLASS_SWORDMAN": "劍俠",
+    "CLASS_WARRIOR": "勇士",
+    "CLASS_ASSASSIN": "術者",
+    "CLASS_TAOIST": "道人",
+    "CLASS_PRIEST": "僧侶",
+    "CLASS_PET": "寵物"
+  },
+  "existingValueMappings": {
+    "Attack": {
+      "1": "最慢",
+      "2": "次慢",
+      "3": "普通",
+      "4": "次快",
+      "5": "最快"
+    },
+    "CLevel": {
+      "0": "無",
+      "1": "一轉",
+      "2": "二轉",
+      "3": "三轉",
+      "4": "四轉",
+      "5": "五轉"
+    },
+    "Class": {
+      "CLASS_SWORDMAN": "劍俠",
+      "CLASS_WARRIOR": "勇士",
+      "CLASS_ASSASSIN": "術者",
+      "CLASS_TAOIST": "道人",
+      "CLASS_PRIEST": "僧侶",
+      "CLASS_PET": "寵物"
+    },
+    "Type": {
+      "SWORD": "劍",
+      "BLADE": "刀",
+      "WHISK": "拂塵",
+      "STAFF": "禪杖",
+      "HIDDEN_WEAPON": "暗器",
+      "HIDDEN_WEAPON2": "暗器",
+      "SPEAR": "槍",
+      "ROD": "棍",
+      "AXE": "斧頭",
+      "HAMMER": "錘",
+      "SHIELD": "盾",
+      "HELMET": "頭盔",
+      "ARMOR": "鎧甲",
+      "BRACER": "護腕",
+      "BOOT": "靴",
+      "ORNAMENT": "飾品",
+      "UNDER_BOOT": "仙器"
+    }
+  }
+}

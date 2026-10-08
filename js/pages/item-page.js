@@ -51,7 +51,7 @@ function itemDetailRows(it){
   }
   if(k in it&&String(it[k]??'').trim()!=='')rows.push([window.SZO_DISPLAY.label(k,ITEM_DETAIL_RENAME[k]||k),window.SZO_DISPLAY.value(k,it[k])]);
  }
- if(it.Help)rows.push([window.SZO_DISPLAY.label('Help'),it.Help]);
+ if(window.SZO_DISPLAY.itemVisible.includes('Help')&&it.Help)rows.push([window.SZO_DISPLAY.label('Help'),it.Help]);
  return rows;
 }
 

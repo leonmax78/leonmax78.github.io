@@ -8,6 +8,11 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
  const browser=await chromium.launch({channel:'msedge'});
  try{
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await route(page);await ready(page);
+  const approved=JSON.parse(fs.readFileSync(path.join(root,'planning/approved-display-review.json'),'utf8'));
+  const actual=await page.evaluate(()=>({labels:SZO_DISPLAY.fields,visible:SZO_DISPLAY.itemVisible,values:SZO_DISPLAY.values}));
+  assert.deepEqual([...actual.visible].sort(),approved.fields.filter(f=>f.visible).map(f=>f.key).sort());
+  for(const [k,v] of Object.entries(approved.sharedLabels))assert.equal(actual.labels[k],v,k);
+  for(const [k,values] of Object.entries(approved.confirmedValueChanges))for(const [raw,label] of Object.entries(values))assert.equal(actual.values[k][raw],label,k+':'+raw);
   await page.evaluate(async()=>{await ensureShopPageLoaded();await showShopItem('20399');});
   const shop=await rows(page);assert(!shop.some(r=>['Flag','GIcon','Log','Attack'].includes(r[0])));
   await page.waitForFunction(()=>[...document.querySelectorAll('#reader img')].some(img=>img.naturalWidth>0));
@@ -17,16 +22,22 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(()=>showItem('20399'));assert.deepEqual(await rows(page),shop);
   await page.evaluate(async()=>{await showShopItem('20469');});const status=await rows(page);
   await page.evaluate(()=>showItem('20469'));assert.deepEqual(await rows(page),status);
+  const reviewedRows=await page.evaluate(()=>itemDetailRows({ID:'test',Type:'ITEM_ENCHANT',Class:'CLASS_SWORDMAN,CLASS_PET',Attack:'5',AttackRange:'7',ExpireDate:'0-7 11:50',Time:'60',DamageMin:'3',DamageMax:'9',FireAttack:'20',FireProb:'30',Value:'999',Flag:'ITEM_TEST',Magic:'123'}));
+  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、寵物'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間(秒)','60'],['傷害下限','3'],['傷害上限','9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
+  assert(!reviewedRows.some(r=>['價值','道具旗標','關聯技能'].includes(r[0])));
+  await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));
+  await page.evaluate(()=>showShopItem('23640'));assert.deepEqual(await rows(page),enchantRows);
   const translated=await page.evaluate(()=>({labels:['m_attack','術攻','MagicAttack','m_def','術防','防禦','LightningDef','暗防'].map(k=>SZO_DISPLAY.label(k)),speed:[1,2,3,4,5].map(n=>SZO_DISPLAY.value('Attack',n))}));
   assert.deepEqual(translated.speed,['最慢','次慢','普通','次快','最快']);assert.deepEqual(translated.labels,['術法攻擊','術法攻擊','術法攻擊','術法防禦','術法防禦','物理防禦','雷防','冥防']);
   await page.evaluate(async()=>{await ensureCompoundDataLoaded();});
   const compound=await page.evaluate(()=>({labels:['m_attack','m_def','dark_def','lightning_def','hp'].map(k=>eqStatLabel(k)),speed:[1,2,3,4,5].map(n=>eqDisplayStatText('attack',{value:n})),rank:eqCLevelText(3)}));
   assert.deepEqual(compound.labels,['術法攻擊','術法防禦','冥防','雷防','血量']);assert.deepEqual(compound.speed,translated.speed);assert.equal(compound.rank,'三轉');
+  assert.equal(await page.evaluate(()=>eqDisplayStatText('attack_range',{value:7})),'7格距離');
   await page.evaluate(async()=>{await ensureJiangshenToolLoaded();calcStars();});
   const heads=await page.locator('#reader th').allTextContents();assert(heads.includes('術法攻擊'));assert(heads.includes('物理防禦'));assert(!heads.includes('術攻'));
   assert.deepEqual(errors,[]);
   const check=await browser.newPage({viewport:{width:1366,height:900}});await route(check);await check.goto('https://preview.test/planning/item-fields.html');await check.waitForSelector('[data-visible="Attack"]');
-  assert.equal(await check.locator('[data-visible]').count(),66);assert.equal(await check.locator('[data-visible]:checked').count(),29);
+  assert.equal(await check.locator('[data-visible]').count(),66);assert.equal(await check.locator('[data-visible]:checked').count(),approved.fields.filter(f=>f.visible).length);
   await check.locator('[data-visible="Attack"]').check();await check.locator('[data-label="Attack"]').first().fill('攻擊速度');
   await check.locator('[data-values="Attack"]').click();await check.waitForSelector('[data-value-index]');
   assert.equal(await check.locator('#valueRows tr').count(),5);assert((await check.locator('#valueRows').innerText()).includes('最慢'));
