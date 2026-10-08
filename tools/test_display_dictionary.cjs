@@ -11,6 +11,8 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   const approved=JSON.parse(fs.readFileSync(path.join(root,'planning/approved-display-review.json'),'utf8'));
   approved.confirmedValueChanges.Type.BONUS='錦囊類';
   const actual=await page.evaluate(()=>({labels:SZO_DISPLAY.fields,visible:SZO_DISPLAY.itemVisible,values:SZO_DISPLAY.values}));
+  const typeOptions=await page.evaluate(()=>Object.entries(ITEM_TYPE_MAP));
+  assert.equal(typeOptions.filter(([,label])=>label==='暗器').length,1);assert(typeOptions.some(([key])=>key==='HIDDEN_WEAPON'));assert(!typeOptions.some(([key])=>key==='HIDDEN_WEAPON2'));
   assert.deepEqual([...actual.visible].sort(),approved.fields.filter(f=>f.visible).map(f=>f.key).sort());
   for(const [k,v] of Object.entries(approved.sharedLabels))assert.equal(actual.labels[k],v,k);
   for(const [k,values] of Object.entries(approved.confirmedValueChanges))for(const [raw,label] of Object.entries(values))assert.equal(actual.values[k][raw],label,k+':'+raw);
