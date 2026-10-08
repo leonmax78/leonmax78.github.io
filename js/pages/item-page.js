@@ -433,13 +433,15 @@ function itemDetailBodyHTML(it){
  const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
  const labels=keys=>new Set(keys.map(k=>window.SZO_DISPLAY.label(k)));
  const ability=labels(['HP','MP','Con','Str','Int','Dex','Damage','DamageMin','DamageMax','MagicAttack','ExtraDef','MagicDef']);
- const element=labels(['IceAttack','FireAttack','LightningAttack','DarkAttack','IceProb','FireProb','LightningProb','DarkProb','IceDef','FireDef','LightningDef','DarkDef','ParalysisRes','PosionRes','BlindRes','SilentRes']);
+ const element=labels(['IceAttack','IceProb','FireAttack','FireProb','LightningAttack','LightningProb','DarkAttack','DarkProb','IceDef','FireDef','LightningDef','DarkDef','ParalysisRes','PosionRes','BlindRes','SilentRes']);
  const special=labels(['ExtraStatus','StatusProb']);
  const helpLabel=window.SZO_DISPLAY.label('Help'),groups={basic:[],ability:[],element:[],help:[],special:[]};
  for(const row of rows){
   const label=row[0];
   groups[label===helpLabel?'help':special.has(label)?'special':ability.has(label)?'ability':element.has(label)?'element':'basic'].push(row);
  }
+ const elementOrder=[...element];
+ groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
  const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div></section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
  return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special','特殊能力')}${section('help','道具說明')}</div>`;

@@ -32,6 +32,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(()=>showItem('29917'));
   assert.deepEqual(await page.locator('[data-item-section]').evaluateAll(nodes=>nodes.map(n=>n.dataset.itemSection)),['basic','ability','element','special','help']);
   assert((await page.locator('[data-item-section="special"]').innerText()).includes('不死身'));
+  assert.deepEqual((await page.locator('[data-item-section="element"] .k').allTextContents()).slice(0,4),['雷傷','雷傷機率','冥傷','冥傷機率']);
   await page.screenshot({path:path.join(root,'outputs/item-sections-desktop.png'),fullPage:true});
   await page.setViewportSize({width:390,height:844});await page.evaluate(()=>{closeDrawer();showItem('29918');});await page.waitForTimeout(300);
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
