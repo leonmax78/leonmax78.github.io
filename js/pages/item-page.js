@@ -54,7 +54,11 @@ function itemDetailRows(it){
    if(st)rows.push([window.SZO_DISPLAY.label('ExtraStatus'),st]);
    continue;
   }
-  if(k in it&&String(it[k]??'').trim()!=='')rows.push([window.SZO_DISPLAY.label(k,ITEM_DETAIL_RENAME[k]||k),window.SZO_DISPLAY.value(k,it[k])]);
+  if(k in it&&String(it[k]??'').trim()!==''){
+   let value=window.SZO_DISPLAY.value(k,it[k]);
+   if((k==='HP'||k==='MP')&&['AFFECT_MAX_RATIO','AFFECT_RATIO'].includes(it[k+'Flag'])&&!value.endsWith('%'))value+='%';
+   rows.push([window.SZO_DISPLAY.label(k,ITEM_DETAIL_RENAME[k]||k),value]);
+  }
  }
  if(window.SZO_DISPLAY.itemVisible.includes('Help')&&it.Help)rows.push([window.SZO_DISPLAY.label('Help'),it.Help]);
  return rows;

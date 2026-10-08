@@ -30,6 +30,8 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));
   await page.evaluate(()=>showShopItem('23640'));assert.deepEqual(await rows(page),enchantRows);
   await page.evaluate(()=>showItem('29917'));
+  const staffRows=await rows(page);assert(staffRows.some(r=>r[0]==='血量'&&r[1]==='55%'));assert(staffRows.some(r=>r[0]==='精力'&&r[1]==='57%'));
+  const fixed=await page.evaluate(()=>itemDetailRows({HP:'30',HPFlag:'AFFECT_NUMBER',MP:'40',MPFlag:'AFFECT_MAX_NUMBER'}));assert.deepEqual(fixed,[['血量','30'],['精力','40']]);
   assert.deepEqual(await page.locator('[data-item-section]').evaluateAll(nodes=>nodes.map(n=>n.dataset.itemSection)),['basic','ability','element','special','help']);
   assert((await page.locator('[data-item-section="special"]').innerText()).includes('不死身'));
   assert.deepEqual((await page.locator('[data-item-section="element"] .k').allTextContents()).slice(0,4),['雷傷','雷傷機率','冥傷','冥傷機率']);
