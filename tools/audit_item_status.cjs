@@ -24,7 +24,9 @@ for(const [id,used] of [...refs].sort((a,b)=>Number(a[0])-Number(b[0]))){
 }
 fs.writeFileSync(path.join(root,'reports/item-status-analysis-20261008.md'),lines.join('\n')+'\n');
 const entries=[...refs].sort((a,b)=>Number(a[0])-Number(b[0])).map(([id,used])=>{
- const raw=index.get(id)||{ID:id},draft=context.window.SZO_STATUS_DESCRIPTIONS.describe(raw);
+ const raw=index.get(id)||{ID:id};
+ const removalOnly=used.every(i=>String(i.StatusParam).split(',').includes('EFFECT_REMOVE'));
+ const draft=context.window.SZO_STATUS_DESCRIPTIONS.describe(raw,removalOnly?used[0]:{});
  return {id,name:raw.Name||'未找到',raw,description:draft.lines.join('\n'),basis:draft.basis,items:used.map(i=>({id:i.ID,name:i.Name,mode:i.StatusParam||'',probability:i.StatusProb||'',help:i.Help||''}))};
 });
 fs.writeFileSync(path.join(root,'planning/status-review.json'),JSON.stringify({schemaVersion:1,sourceVersion:'V577',entries},null,2)+'\n');

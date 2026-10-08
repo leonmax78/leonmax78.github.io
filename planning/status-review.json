@@ -13,8 +13,8 @@
         "Param1": "-30",
         "Param2": "1"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "使目標陷入麻痺狀態；觸發機率依道具設定，移動影響與持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "20401",
@@ -112,8 +112,8 @@
         "Name": "定身",
         "Param1": "-60"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "使目標陷入定身狀態；移動限制的程度與持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "20765",
@@ -177,8 +177,8 @@
         "Param1": "10",
         "Param2": "5"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "提高移動速度；實際速度與持續時間依道具說明，勿直接將 Param1 當成持續秒數。",
+      "basis": "item-help",
       "items": [
         {
           "id": "20375",
@@ -2823,8 +2823,8 @@
         "Name": "盲目",
         "Param1": "-40"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "使目標陷入盲目狀態；命中影響與持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "20767",
@@ -2887,8 +2887,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "使目標陷入封咒狀態；受限制的施法範圍與持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "20766",
@@ -2959,8 +2959,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "使敵人不分敵我胡亂攻擊；持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "21843",
@@ -2981,8 +2981,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "附加友善狀態；對怪物敵意與主動攻擊的影響範圍待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "20346",
@@ -3470,8 +3470,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "使敵人逃竄；持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "21844",
@@ -3665,8 +3665,8 @@
         "Param1": "3",
         "Param2": "150"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「四階重擊」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "23755",
@@ -3688,8 +3688,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "附加淨心效果，不能與淨心術共存；實際防護範圍待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "21747",
@@ -3745,8 +3745,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「黑蝶」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "21259",
@@ -3767,8 +3767,8 @@
         "Param1": "*",
         "Param2": "*"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「詛咒」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "21260",
@@ -4451,8 +4451,8 @@
         "Name": "大盲目",
         "Param1": "-40"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「大盲目」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "23021",
@@ -4518,8 +4518,8 @@
         "Param1": "-100",
         "Param2": "-100"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "獲得刀槍不入的保護效果；完整減傷範圍與持續時間待確認。",
+      "basis": "item-help",
       "items": [
         {
           "id": "23727",
@@ -5407,8 +5407,8 @@
         "Param1": "3",
         "Param2": "-6"
       },
-      "description": "附加中毒狀態；傷害量與作用對象請參照道具說明。",
-      "basis": "pending",
+      "description": "解除「萬蠱噬魂」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "30113",
@@ -5645,8 +5645,8 @@
         "Param1": "50",
         "Param2": "50"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「武器枷鎖」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "30115",
@@ -5765,8 +5765,8 @@
         "Order": "1",
         "Name": "武器變緩"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「武器變緩」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "30116",
@@ -5787,8 +5787,8 @@
         "Name": "回氣變緩",
         "Param1": "20"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "解除「回氣變緩」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "30117",
@@ -6713,8 +6713,8 @@
         "Param1": "3",
         "Param2": "-15"
       },
-      "description": "附加中毒狀態；傷害量與作用對象請參照道具說明。",
-      "basis": "pending",
+      "description": "解除「逆元咒神毒」狀態；解除範圍以道具說明為準。",
+      "basis": "item-removal",
       "items": [
         {
           "id": "30114",
@@ -8604,8 +8604,8 @@
         "Param1": "10",
         "Param2": "6"
       },
-      "description": "詳細作用與參數換算待確認，請參照下方道具說明。",
-      "basis": "pending",
+      "description": "獲得真．神行狀態，移動速度提高至 210%。",
+      "basis": "item-help",
       "items": [
         {
           "id": "28644",
