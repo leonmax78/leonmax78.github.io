@@ -30,6 +30,10 @@ def norm(value):
 
 def category(item):
     t=item.get('Type')
+    if t=='ORNAMENT' and 'CLASS_PET' in item.get('Class','').split(','):
+        flags=set(item.get('Flag','').split(','))
+        if flags & {'ITEM_HAND_R','ITEM_HAND_L'}: return '武器'
+        if flags & {'ITEM_BODY','ITEM_HEAD','ITEM_FOOT','ITEM_ARM'}: return '防具'
     return '武器' if t in WEAPONS else '防具' if t in ARMOR else '仙器' if t=='UNDER_BOOT' else '特殊飾品' if t=='ORNAMENT' else '其他道具'
 
 def main():
@@ -102,6 +106,8 @@ def main():
     statuses={s['ID']:s for s in json.loads((ROOT/'data/status.json').read_text(encoding='utf-8'))}
     for item in items:
         id=item['ID'];r=records[id]
+        if item.get('Type')=='ORNAMENT' and 'CLASS_PET' in item.get('Class','').split(','):
+            tag(id,'寵物裝備','','ITEM.Class / ITEM.Flag')
         if r['category']=='特殊飾品':
             group=statuses.get(item.get('ExtraStatus'),{}).get('Group')
             family={'25':'經驗加倍','21':'轉運加倍'}.get(group)

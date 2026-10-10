@@ -477,8 +477,9 @@ function itemDetailBodyHTML(it){
 }
 
 function showItem(id,skipPush){
+ const returnKey=!skipPush?window.SZO_DETAIL_NAV?.capture():null;
  window.v86LastView='item';
- if(!skipPush){try{history.pushState({app:'detail',view:'item'},'','#item-'+id);}catch(e){}}
+ if(!skipPush){try{history.pushState({app:'detail',view:'item',szoReturn:returnKey,szoDetail:{kind:'item',id}},'','#item-'+id);}catch(e){}}
  if(!hasItemData()&&typeof window.ensureItemDataLoaded==='function'){
   byId('reader').innerHTML=`<section class="card"><button class="backBtn" type="button" onclick="goBackToPrevious('item')">← 返回道具查詢</button><h1>道具資料讀取中</h1><div class="muted">正在載入完整道具資料，請稍等。</div></section>`;
   window.ensureItemDataLoaded().then(ok=>{if(ok)showItem(id,true);});

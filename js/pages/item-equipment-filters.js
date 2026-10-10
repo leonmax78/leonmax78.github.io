@@ -19,7 +19,9 @@
    if(state.target==='person'&&r.class.includes('CLASS_PET')||state.target==='pet'&&!r.class.includes('CLASS_PET'))return false;
    return state.mode==='remove'?special(it).some(s=>s.key.startsWith('remove:')):effects(it).length>0;
   }
-  return (!state.family&&!state.collection||tagsMatch(r,state.family,state.collection))&&(!state.profession||equipment(r)&&(state.profession==='unrestricted'?!r.class:!r.class||r.class.split(',').map(s=>s.trim()).includes(state.profession)));
+  const classes=r.class.split(',').map(s=>s.trim());
+  const professionMatch=!state.profession||(state.profession==='CLASS_PET'?classes.includes('CLASS_PET'):state.profession==='unrestricted'?!r.class:!r.class||classes.includes(state.profession));
+  return (!state.family&&!state.collection||tagsMatch(r,state.family,state.collection))&&(!state.profession||equipment(r)&&professionMatch);
  }
  function fill(id,values,selected,all){const el=document.getElementById(id);if(!el)return selected;el.replaceChildren(new Option(all,''),...values.map(v=>new Option(v.label||v,v.value||v)));el.value=selected;return el.value;}
  function show(id,visible){const el=document.getElementById(id);if(el)el.closest('.kv').hidden=!visible;}

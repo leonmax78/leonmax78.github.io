@@ -1,0 +1,44 @@
+const fs=require('fs'),path=require('path'),assert=require('assert');
+const {chromium,webkit}=require(process.env.PLAYWRIGHT_PATH||'C:/Users/leonm/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const root=path.resolve(__dirname,'..');
+async function run(engine,mobile){
+ const browser=await engine.launch(engine===chromium?{channel:'msedge'}:{});
+ try{
+  const page=await browser.newPage({viewport:mobile?{width:390,height:844}:{width:1440,height:1000},isMobile:mobile,hasTouch:mobile}),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));const base=process.env.PREVIEW_BASE||'https://preview.test';
+  if(!process.env.PREVIEW_BASE)await page.route(base+'/**',r=>{const file=path.join(root,decodeURIComponent(new URL(r.request().url()).pathname).replace(/^\//,'')||'index.html');return fs.existsSync(file)&&fs.statSync(file).isFile()?r.fulfill({path:file}):r.fulfill({status:404,body:''});});
+  await page.goto(base);await page.waitForFunction(()=>window.SZO_READY);await page.waitForTimeout(1800);
+  await page.evaluate(async()=>{await ensureItemPageLoaded();await ensureItemDataLoaded();await renderItemPage('item');closeDrawer();});
+  await page.selectOption('#itemCategory','武器');await page.selectOption('#itemProfession','CLASS_PET');
+  const names=await page.locator('#itemResults').innerText();
+  await page.locator('#itemResults [data-item="21181"]').click();
+  await page.locator('#detailPreview h1').filter({hasText:'銳利之牙'}).waitFor();
+  const scroll=await page.evaluate(()=>({x:scrollX,y:scrollY,results:document.getElementById('itemResults').scrollTop}));
+  assert.equal(await page.locator('#itemResults').innerText(),names);
+  await page.locator('[data-preview-close]').click();await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  assert.equal(await page.locator('#itemProfession').inputValue(),'CLASS_PET');
+  assert.deepEqual(await page.evaluate(()=>({x:scrollX,y:scrollY,results:document.getElementById('itemResults').scrollTop})),scroll);
+  await page.locator('#itemResults [data-item="21181"]').click();await page.locator('[data-preview-full="item"]').waitFor();
+  await page.locator('[data-preview-full="item"]').click();await page.locator('#reader h1').filter({hasText:'銳利之牙'}).waitFor();
+  await page.locator('#reader .backBtn').click();await page.locator('#itemProfession').waitFor();assert.equal(await page.locator('#itemResults').innerText(),names);
+  await page.goForward();await page.locator('#reader h1').filter({hasText:'銳利之牙'}).waitFor();
+  await page.goBack();await page.locator('#itemProfession').waitFor();
+  await page.evaluate(()=>showReverse('24540'));await page.locator('.reverseDropName').filter({hasText:'天龍獻瑞錦囊'}).waitFor();
+  assert.equal(await page.locator('.reverseDropAction').textContent(),'取得來源');
+  await page.locator('.reverseDropName').click();await page.locator('#detailPreview h1').filter({hasText:'天龍獻瑞錦囊'}).waitFor();
+  assert((await page.locator('#detailPreview').innerText()).includes('龍年春節'));
+  assert.equal(await page.locator('#reader h1').textContent(),'魔劍血飲');
+  await page.screenshot({path:path.join(root,`outputs/preview-item-${mobile?'mobile':'desktop'}.png`)});
+  await page.goBack();await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  assert.equal(await page.locator('#reader h1').textContent(),'魔劍血飲');
+  await page.evaluate(async()=>{await ensureMonsterPageLoaded();await ensureMonsterDataLoaded();const m=monsters.find(x=>parseDrop(x.DropItem).length);window.testMonsterId=m.ID;await SZO_PREVIEW.open('monster',m.ID);});
+  await page.locator('[data-preview-full="monster"]').waitFor();assert(await page.locator('#detailPreview [data-item]').count()>0);
+  await page.locator('#detailPreview [data-item]').first().click();await page.locator('[data-preview-full="item"]').waitFor();
+  await page.locator('[data-preview-back]').click();await page.locator('[data-preview-full="monster"]').waitFor();
+  assert(await page.evaluate(()=>document.getElementById('detailPreview').scrollWidth<=document.getElementById('detailPreview').clientWidth));
+  await page.screenshot({path:path.join(root,`outputs/preview-monster-${mobile?'mobile':'desktop'}.png`)});
+  await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  assert.deepEqual(errors,[]);console.log(`${mobile?'WebKit mobile':'Chromium desktop'} preview, nested drops, back preservation and source links passed.`);
+ }finally{await browser.close();}
+}
+(async()=>{await run(chromium,false);await run(webkit,true);})().catch(e=>{console.error(e);process.exit(1);});

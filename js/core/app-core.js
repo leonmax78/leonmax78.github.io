@@ -1483,8 +1483,8 @@ function clearSearchStateForReturn(view){
  }
 }
 function goBackToPrevious(targetView){
+ if(window.SZO_DETAIL_NAV?.back())return;
  const v=targetView||window.v86LastView||currentView||'home';
- clearSearchStateForReturn(v);
  if(v==='monster'){
   try{history.replaceState(history.state,'',location.pathname+location.search);}catch(e){}
  }
@@ -1507,7 +1507,7 @@ function goBackToPrevious(targetView){
  else if(v==='jiang')setView('jiang');
  else setView('home');
 }
-window.addEventListener('popstate',()=>goBackToPrevious());
+window.addEventListener('popstate',event=>{if(!window.SZO_DETAIL_NAV?.pop(event))goBackToPrevious();});
 
 
 function backLabelFor(view){

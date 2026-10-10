@@ -40,6 +40,7 @@ window.SZO_SCRIPT_GROUPS = {
     "js/utils/common-utils.js",
     "js/core/data-loader-utils.js",
     "js/core/app-core.js",
+    "js/core/detail-preview.js",
     "js/core/config-loader.js",
     "js/core/ui-settings.js"
   ],

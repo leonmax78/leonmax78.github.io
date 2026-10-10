@@ -2,7 +2,7 @@ const fs=require('fs'),path=require('path');
 const root=path.resolve(__dirname,'..');
 const read=name=>JSON.parse(fs.readFileSync(path.join(root,'data',name+'.json'),'utf8'));
 const items=read('items'),magic=new Map(read('magic').map(x=>[x.ID,x])),status=new Map(read('status').map(x=>[x.ID,x]));
-const fields={All:'全屬性',Str:'力量',Dex:'靈敏（敏捷）',Con:'體魄',Int:'智慧',HP:'最大生命',MP:'最大精力',ExtraDef:'物理防禦',MagicDef:'術法防禦',MagicAttack:'術法攻擊',Experience:'經驗值',Drop:'掉寶率'};
+const fields={All:'全屬性',Str:'力量',Dex:'靈敏',Con:'體魄',Int:'智慧',HP:'最大生命',MP:'最大精力',ExtraDef:'物理防禦',MagicDef:'術法防禦',MagicAttack:'術法攻擊',Experience:'經驗值',Drop:'掉寶率'};
 const byId={},audit=[],specialById={};
 for(const item of items){
  const entries=[],spell=magic.get(item.Magic);

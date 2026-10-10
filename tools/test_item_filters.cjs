@@ -3,6 +3,9 @@ const {chromium,webkit}=require(process.env.PLAYWRIGHT_PATH||'C:/Users/leonm/.ca
 const root=path.resolve(__dirname,'..'),context={window:{}};
 for(const name of ['equipment-taxonomy','item-buffs'])vm.runInNewContext(fs.readFileSync(path.join(root,'data',name+'.js'),'utf8'),context);
 const taxonomy=context.window.SZO_EQUIPMENT_TAXONOMY,buffs=context.window.SZO_ITEM_BUFFS;
+assert.equal(buffs.fields.Dex,'靈敏');
+assert.equal(taxonomy.byId['21182'].category,'防具');
+assert.equal(taxonomy.byId['21183'].category,'特殊飾品');
 assert.equal(Object.keys(taxonomy.byId).length,require('../data/items.json').length);
 assert.equal(new Set(taxonomy.sources.filter(x=>x.family==='世貿系列').map(x=>x.collection)).size,18);
 assert(taxonomy.sources.every(s=>!s.error&&s.matchedIds.length));
@@ -25,6 +28,11 @@ async function run(engine,mobile){
   assert(await page.locator('#itemSpecial').isVisible());
   await page.screenshot({path:path.join(root,`outputs/filter-initial-${mobile?'mobile':'desktop'}.png`),fullPage:true});
   await select('itemCategory','武器');assert(await page.locator('#itemFamily').isVisible());
+  await select('itemProfession','CLASS_PET');
+  const pets=await page.evaluate(()=>itemResultRows.map(i=>({id:i.ID,class:i.Class})));
+  assert(pets.length>0&&pets.every(i=>i.class?.split(',').includes('CLASS_PET')));
+  assert(pets.some(i=>i.id==='21181'));assert(!pets.some(i=>i.id==='20792'));
+  await select('itemProfession','');
   await select('itemFamily','世貿系列');
   await select('itemCollection','300級龍涉大川繼鱗武匣');
   assert.equal(await page.locator('#itemResults [data-item]').count(),20);

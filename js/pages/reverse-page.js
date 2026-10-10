@@ -392,8 +392,8 @@
     if(linkedItem){
       return '<div class="reverseDropCard reverseDropCardLinked">'
         + '<div class="reverseDropMain">'
-        + '<button type="button" class="reverseDropName reverseDropLink" data-reverse-item="'+escHtml(linkedItem.ID||linkedItem.id||'')+'" data-reverse-context="nested" data-reverse-parent="'+escHtml(currentItemId||'')+'" data-reverse-back="'+escHtml(backView||'reverse')+'">'+escHtml(name)+'</button>'
-        + '<button type="button" class="reverseDropAction" data-reverse-item="'+escHtml(linkedItem.ID||linkedItem.id||'')+'" data-reverse-context="nested" data-reverse-parent="'+escHtml(currentItemId||'')+'" data-reverse-back="'+escHtml(backView||'reverse')+'">掉落位置</button>'
+        + '<button type="button" class="reverseDropName reverseDropLink" data-item="'+escHtml(linkedItem.ID||linkedItem.id||'')+'">'+escHtml(name)+'</button>'
+        + '<button type="button" class="reverseDropAction" data-reverse-item="'+escHtml(linkedItem.ID||linkedItem.id||'')+'" data-reverse-context="nested" data-reverse-parent="'+escHtml(currentItemId||'')+'" data-reverse-back="'+escHtml(backView||'reverse')+'">取得來源</button>'
         + '</div>'
         + '<div class="reverseDropRate">'+escHtml(rate)+'</div>'
         + '</div>';
@@ -412,7 +412,8 @@
       + '</div>';
   }
 
-  window.showReverse=async function(id,returnView,parentItemId){
+  window.showReverse=async function(id,returnView,parentItemId,skipPush){
+    const returnKey=!skipPush?window.SZO_DETAIL_NAV?.capture():null;
     const itemId=String(id||'').trim();
     const backView=returnView||'reverse';
     const reader=by('reader');
@@ -425,7 +426,7 @@
     }
     const arr=(getDropReverse()[itemId]||[]).slice().sort(function(a,b){return (Number(b.rate)||0)-(Number(a.rate)||0)});
     window.v86LastView=backView;
-    try{history.pushState({app:'detail',view:'reverse'},'',location.pathname+location.search);}catch(e){}
+    if(!skipPush)try{history.pushState({app:'detail',view:'reverse',szoReturn:returnKey,szoDetail:{kind:'reverse',id:itemId}},'',location.pathname+location.search);}catch(e){}
     let parentButton='';
     const parentToken=String(parentItemId||'').trim();
     if(parentToken.indexOf('collect:')===0){

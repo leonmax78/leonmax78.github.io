@@ -504,8 +504,9 @@ function monsterRowsHTML(rows,cls=''){
 }
 
 function showMonster(id,skipPush){
+ const returnKey=!skipPush?window.SZO_DETAIL_NAV?.capture():null;
  window.v86LastView='monster';
- if(!skipPush){try{history.pushState({app:'detail',view:'monster'},'','#monster-'+id);}catch(e){}}
+ if(!skipPush){try{history.pushState({app:'detail',view:'monster',szoReturn:returnKey,szoDetail:{kind:'monster',id}},'','#monster-'+id);}catch(e){}}
  if(!hasMonsterData()&&typeof window.ensureMonsterDataLoaded==='function'){
   byId('reader').innerHTML=`<section class="card"><button class="backBtn" type="button" onclick="goBackToPrevious('monster')">← 返回怪物、封獸查詢</button><h1>怪物資料讀取中</h1><div class="muted">正在載入完整怪物資料，請稍等。</div></section>`;
   window.ensureMonsterDataLoaded().then(ok=>{if(ok&&location.hash==='#monster-'+id)showMonster(id,true);});
