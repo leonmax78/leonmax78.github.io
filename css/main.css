@@ -4073,6 +4073,35 @@ body{
 .itemSection-special .kv{border:0;padding:0}
 .itemSection-special .itemRepeatedLabel{display:none}
 .itemStatusDescription{margin-top:6px;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.itemFilterCombo{position:relative;min-width:0}
+.itemFilterCombo input{width:100%;padding-right:36px!important}
+.itemFilterCombo>button{position:absolute;right:0;top:0;bottom:0;width:34px;border:0;background:transparent;color:inherit;padding:0}
+.itemFilterCombo .itemFilterNative{position:absolute;left:0;top:0;width:1px!important;height:1px!important;min-height:0;opacity:0;pointer-events:none;padding:0;border:0}
+.itemFilterChoices{position:fixed;z-index:10000;overflow:auto;overscroll-behavior:contain;background:#101923;color:#e6edf5;border:1px solid #7593aa;border-radius:6px;box-shadow:0 8px 24px #0008;box-sizing:border-box}
+.itemFilterChoices button{display:block;width:100%;min-height:40px;text-align:left;padding:9px 12px;border:0;border-radius:0;background:transparent;color:inherit;white-space:normal;overflow-wrap:anywhere}
+.itemFilterChoices button:hover,.itemFilterChoices button:focus-visible,.itemFilterChoices button[aria-selected="true"]{background:#235b57;color:#fff}
+.itemFilterEmpty{padding:12px}
+.equipmentCompareTools{padding:10px 0;border-bottom:1px solid #64748b;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.equipmentCompareTools>div{display:flex;flex-wrap:wrap;gap:6px}
+.equipmentCompareTools button{padding:6px 10px}
+.equipmentSaveFeedback{flex-basis:100%;font-size:13px;color:#8ce3c3;overflow-wrap:anywhere}
+.equipmentSaveFeedback:empty{display:none}
+.equipmentCompareDialog{width:min(1040px,calc(100vw - 24px));max-height:calc(100dvh - 32px);box-sizing:border-box;margin:auto;padding:16px;border:1px solid #71889e;border-radius:8px;background:#101923;color:#e6edf5;overflow:auto}
+.equipmentCompareDialog::backdrop{background:#0009}
+.equipmentCompareDialog>header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.equipmentCompareDialog h2{font-size:20px;margin:0}
+.equipmentCompareDialog header button,.equipmentSlotTitle button{width:32px;height:32px;padding:0}
+.equipmentDifferenceToggle{display:flex;gap:8px;align-items:center;margin:12px 0}
+.equipmentDifferenceToggle input{width:18px;height:18px}
+.equipmentCompareScroll{overflow:auto;max-height:70dvh}
+.equipmentCompareDialog table{width:100%;min-width:680px;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:14px}
+.equipmentCompareDialog th,.equipmentCompareDialog td{padding:10px;border-bottom:1px solid #45596b;text-align:left;vertical-align:top;overflow-wrap:anywhere;white-space:pre-wrap}
+.equipmentCompareDialog th:first-child{width:110px}
+.equipmentCompareDialog thead th{position:sticky;top:0;background:#192735;z-index:1}
+.equipmentSlotTitle{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.equipmentCompareDialog .assetThumb{width:48px;height:48px;object-fit:contain}
+.equipmentDifference td{background:#24443855}
+.equipmentCompareDialog .itemStatusDescription{margin:0}
 .detailPreview{width:min(900px,calc(100vw - 24px));max-width:none;max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line,#526477);border-radius:8px;background:var(--panel,#101827);color:var(--text,#e9f0fa)}
 .detailPreview[open]{display:flex;flex-direction:column}
 .detailPreview button{background:var(--panel2,#172538);color:var(--text,#e9f0fa);border:1px solid #526477;border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit}

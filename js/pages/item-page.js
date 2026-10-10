@@ -361,7 +361,7 @@ async function renderItemPage(tab='item'){
         <div class="kv"><div class="k">專剋屬性</div><div class="v"><select id="itemKind" onchange="searchItems()"></select></div></div>
         <div class="kv"><div class="k">特殊效果</div><div class="v"><select id="itemSpecial" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
       </div>
-      <div class="itemFilterActions"><button type="button" onclick="clearItemSearchFilters()">清空篩選</button></div>
+      <div class="itemFilterActions"><button type="button" data-equipment-compare>裝備比較</button><button type="button" onclick="clearItemSearchFilters()">清空篩選</button></div>
       <div class="results" id="itemResults"></div>
     </div>
     <aside class="latestSidePane">
@@ -375,6 +375,7 @@ async function renderItemPage(tab='item'){
   <div class="results" id="reverseResults"></div>
  </section>`;
  fillItemAdvancedFilters();
+ if(activeItem)window.SZO_ITEM_FILTER_SEARCH?.enhance();
  if(activeItem){
   startItemFullDataLoad();
   if(hasItemData()||hasItemSearchIndex())searchItems();
@@ -500,7 +501,7 @@ function itemDetailBodyHTML(it){
  groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
  const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>${key==='special'?itemApprovedStatusHTML(it):''}</section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}</div>`;
+ return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}</div>`;
 }
 
 function showItem(id,skipPush){

@@ -34,7 +34,7 @@ def category(item):
         flags=set(item.get('Flag','').split(','))
         if flags & {'ITEM_HAND_R','ITEM_HAND_L'}: return '武器'
         if flags & {'ITEM_BODY','ITEM_HEAD','ITEM_FOOT','ITEM_ARM'}: return '防具'
-    return '武器' if t in WEAPONS else '防具' if t in ARMOR else '仙器' if t=='UNDER_BOOT' else '特殊飾品' if t=='ORNAMENT' else '其他道具'
+    return '武器' if t in WEAPONS else '防具' if t in ARMOR else '仙器' if t=='UNDER_BOOT' else '特殊飾品' if t=='ORNAMENT' else '法器' if t=='TALISMAN' else '其他道具'
 
 def collaboration_name(name):
     name=norm(name).strip('【】')
@@ -134,8 +134,18 @@ def main():
             before=len(r['tags'])
             tag(id,'聯動／NFT',collection,'confirmed collaboration / normalized equipment name')
             if len(r['tags'])>before:additions.append({'id':id,'name':name,'family':'聯動／NFT','collection':collection})
+        seven_sins=re.fullmatch(r'(真|超|絕|無|帝|終|創|星|皇|終極)?[．‧]?七宗神愆',name) if item.get('Type')=='ORNAMENT' else None
+        if seven_sins:
+            tag(id,'六滅化神',(seven_sins.group(1) or '初代')+'系列','user-confirmed 七宗神愆 accessory family')
         if '六滅' in name:
-            tag(id,'六滅系列','','ITEM.Name contains 六滅')
+            stage=re.sub(r'[．‧]', '', name.split('六滅')[0]) or '初代'
+            tag(id,'六滅系列',stage+'系列','ITEM.Name contains 六滅')
+        for entry in r['tags']:
+            if entry['family']=='六滅化神':entry['family']='六滅系列'
+        unique=[]
+        for entry in r['tags']:
+            if not any(t['family']==entry['family'] and t['collection']==entry['collection'] for t in unique):unique.append(entry)
+        r['tags']=unique
         if item.get('Type') in {'HIDDEN_WEAPON','HIDDEN_WEAPON2'} and float(item.get('Durabulity') or 0)==0 and 'ITEM_COMBINED' not in {flag.strip() for flag in item.get('Flag','').split(',')}:
             tag(id,'無限暗器','','ITEM.Type / absent or zero Durabulity / not ITEM_COMBINED')
     (ROOT/'reports/equipment-classification-additions.json').write_text(json.dumps(additions,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
@@ -150,7 +160,7 @@ def main():
             family={'25':'經驗加倍','21':'轉運加倍'}.get(group)
             if family: tag(id,family,'','STATUS.Group='+group)
         if not r['tags']:tag(id,'其他／未分類','','ITEM.Type')
-    result={'version':'V593','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
+    result={'version':'V599','categories':['武器','防具','仙器','特殊飾品','法器','其他道具'],'byId':records,'sources':audit}
     (ROOT/'data/equipment-taxonomy.js').write_text('window.SZO_EQUIPMENT_TAXONOMY='+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
     (ROOT/'reports/equipment-taxonomy-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 

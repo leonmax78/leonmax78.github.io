@@ -5,11 +5,12 @@
  const id=it=>String(it.ID||it.id);
  const record=it=>data().byId[id(it)]||{category:'其他道具',class:'',type:it.Type||it.type,tags:[]};
  const equipment=r=>r.category!=='其他道具';
- const isPet=r=>equipment(r)&&r.class.split(',').map(s=>s.trim()).includes('CLASS_PET');
- const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='道具'?!equipment(r):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
+ const isPet=r=>equipment(r)&&r.type!=='TALISMAN'&&r.class.split(',').map(s=>s.trim()).includes('CLASS_PET');
+ const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='道具'?(!equipment(r)||state.mode==='experience'&&r.type==='TALISMAN'):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
  const tagsMatch=(r,family,collection)=>r.tags.some(t=>(!family||t.family===family)&&(!collection||t.collection===collection));
  const special=it=>buffs().specialById[id(it)]||[];
  const experience=it=>buffs().experienceById?.[id(it)];
+ const excluded=key=>String(key)==='30003'&&(state.category==='法器'||state.mode==='experience');
  function effects(it,ignoreUnit=false){
   const all=buffs().byId[id(it)]||[];
   if(state.mode==='buff'&&['Str','Dex','Con','Int'].includes(state.effect)&&all.some(e=>e.key==='All'))return [];
@@ -18,6 +19,7 @@
   return (state.mode!=='buff'||!e.key.startsWith('Restore'))&&(!key||e.key===key)&&(ignoreUnit||!state.unit||e.unit===state.unit);
  });}
  function matches(it,ignoreUnit=false){
+  if(excluded(id(it)))return false;
   const r=record(it);
   if(!categoryMatch(r)||state.special&&!special(it).some(s=>s.label===state.special))return false;
   if(state.category==='寵物裝備')return !state.collection||r.category===state.collection;
@@ -34,13 +36,14 @@
  function show(id,visible){const el=document.getElementById(id);if(el)el.closest('.kv').hidden=!visible;}
  function refresh(){
   if(['藥品','符咒'].includes(state.category))state.category='道具';
+  if(state.family==='六滅化神')state.family='六滅系列';
   const petEquipment=state.category==='寵物裝備';
-  const isEquipment=['武器','防具','仙器','特殊飾品'].includes(state.category);
+  const isEquipment=['武器','防具','仙器','特殊飾品','法器'].includes(state.category);
   const consumable=['道具','藥品','符咒'].includes(state.category);
   show('itemKind',state.category==='武器');
   if(state.category!=='武器'){window.v110ItemKind='';const kind=document.getElementById('itemKind');if(kind)kind.value='';}
   if(!isEquipment&&!petEquipment){state.family='';state.collection='';state.profession='';fill('itemFamily',[],'','全部系列');fill('itemCollection',[],'','全部細分類');}
-  fill('itemCategory',['武器','防具','仙器','特殊飾品',{value:'寵物裝備',label:'封獸裝備'},'配方',{value:'道具',label:'藥品／道具／符咒'}],state.category,'全部大類');
+  fill('itemCategory',['武器','防具','仙器',{value:'特殊飾品',label:'飾品'},'法器',{value:'寵物裝備',label:'封獸裝備'},'配方',{value:'道具',label:'藥品／道具／符咒'}],state.category,'全部大類');
   const collectionLabel=document.getElementById('itemCollection')?.closest('.kv').querySelector('.k');
   if(collectionLabel)collectionLabel.textContent=petEquipment?'部位':'細分類 / 武匣';
   for(const field of ['itemFamily','itemCollection','itemProfession'])show(field,isEquipment);
@@ -50,17 +53,18 @@
   fill('itemMode',[{value:'hp',label:'補血'},{value:'mp',label:'補精'},{value:'buff',label:'增益'},{value:'experience',label:'經驗丹'},{value:'remove',label:'解除異常'}],state.mode,'全部用途');
   state.effect=fill('itemBuffEffect',Object.entries(buffs().fields).map(([value,label])=>({value,label})),state.effect,'全部增益');
   fill('itemBuffTarget',[{value:'person',label:'人物'},{value:'pet',label:'封獸'}],state.target,'全部使用對象');
-  let rows=Object.entries(data().byId).filter(([,r])=>categoryMatch(r));
+  let rows=Object.entries(data().byId).filter(([key,r])=>!excluded(key)&&categoryMatch(r));
   const unique=v=>[...new Set(v.filter(Boolean))];
   if(isEquipment){
    const families=unique(rows.flatMap(([,r])=>r.tags.map(t=>t.family))).filter(f=>f!=='寵物裝備');
-   const order=['世貿系列','玄宙','旭品','帝星流','煌星流','仙星流','聯動／NFT','無限暗器','六滅系列','聖甲','潮服','特殊系列','九日系列','王狼系列','南遼系列','虛化系列','太極系列','星陣系列','兇星系列','狼牙系列','五蛇系列','五鎖系列','經驗加倍','轉運加倍','五佐天座','聖獸之心','六滅化神','其他／未分類'];
+   const order=['世貿系列','玄宙','旭品','帝星流','煌星流','仙星流','聯動／NFT','無限暗器','六滅系列','聖甲','潮服','特殊系列','九日系列','王狼系列','南遼系列','虛化系列','太極系列','星陣系列','兇星系列','狼牙系列','五蛇系列','五鎖系列','經驗加倍','轉運加倍','五佐天座','聖獸之心','其他／未分類'];
    state.family=fill('itemFamily',families.sort((a,b)=>order.indexOf(a)-order.indexOf(b)),state.family,'全部系列');
    if(!state.family)state.collection='';
    rows=rows.filter(([,r])=>!state.family||tagsMatch(r,state.family,''));
    const collectionOrder=new Map();
    for(const [,r] of rows)for(const t of r.tags)if(t.family===state.family&&t.collection)collectionOrder.set(t.collection,Math.max(collectionOrder.get(t.collection)??-1,r.order??-1));
-   state.collection=fill('itemCollection',unique(rows.flatMap(([,r])=>r.tags.filter(t=>!state.family||t.family===state.family).map(t=>t.collection))).sort((a,b)=>state.family==='聖甲'?(collectionOrder.get(b)??-1)-(collectionOrder.get(a)??-1):a.localeCompare(b,'zh-Hant',{numeric:true})*-1),state.collection,'全部細分類');
+   const sixOrder=['終極系列','皇系列','星系列','創系列','終系列','帝系列','無系列','絕系列','超系列','真系列','初代系列'];
+   state.collection=fill('itemCollection',unique(rows.flatMap(([,r])=>r.tags.filter(t=>!state.family||t.family===state.family).map(t=>t.collection))).sort((a,b)=>state.family==='六滅系列'?sixOrder.indexOf(a)-sixOrder.indexOf(b):['聖甲','聖獸之心'].includes(state.family)?(collectionOrder.get(b)??-1)-(collectionOrder.get(a)??-1):a.localeCompare(b,'zh-Hant',{numeric:true})*-1),state.collection,'全部細分類');
    rows=rows.filter(([,r])=>!state.collection||tagsMatch(r,state.family,state.collection));
    show('itemCollection',!!state.family&&rows.some(([,r])=>r.tags.some(t=>t.family===state.family&&t.collection)));
   }

@@ -23,7 +23,9 @@ for(const item of allItems){
  const r=taxonomy.byId[item.ID];
  assert(!r.tags.some(t=>t.family==='暗器'));
  assert.equal(r.tags.some(t=>t.family==='無限暗器'),['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(item.Type)&&Number(item.Durabulity||0)===0&&!String(item.Flag||'').split(',').map(s=>s.trim()).includes('ITEM_COMBINED'));
- assert.equal(r.tags.some(t=>t.family==='六滅系列'),r.category!=='其他道具'&&item.Name.includes('六滅'));
+ assert.equal(r.tags.some(t=>t.family==='六滅系列'),r.category!=='其他道具'&&(item.Name.includes('六滅')||item.Name.includes('七宗神愆')));
+ assert(!r.tags.some(t=>t.family==='六滅化神'));
+ if(item.Type==='ORNAMENT'&&item.Name.includes('七宗神愆')){assert(r.tags.some(t=>t.family==='六滅系列'));assert(!r.tags.some(t=>t.family==='其他／未分類'));}
 }
 async function run(engine,mobile){
  const browser=await engine.launch(engine===chromium?{channel:'msedge'}:{});
@@ -48,10 +50,23 @@ async function run(engine,mobile){
   await select('itemFamily','六滅系列');assert(await page.locator('#itemResults [data-item="29943"]').count()>0);
   await select('itemFamily','聯動／NFT');assert((await page.locator('#itemCollection option').allTextContents()).includes('NFT'));assert(!(await page.locator('#itemCollection option').allTextContents()).includes('nft'));await select('itemCollection','東離');assert(await page.locator('#itemResults [data-item="31607"]').count()>0);
   await select('itemFamily','');
+  await select('itemCategory','特殊飾品');await select('itemFamily','六滅系列');
+  assert.deepEqual(await page.locator('#itemCollection option').allTextContents(),['全部細分類','終極系列','皇系列','星系列','創系列','終系列','帝系列','無系列','絕系列','超系列','真系列','初代系列']);
+  assert(!(await page.locator('#itemFamily option').allTextContents()).includes('六滅化神'));
+  await select('itemCollection','終系列');assert(await page.locator('#itemResults [data-item="28709"]').count()>0);
+  await select('itemFamily','聖獸之心');
+  assert.deepEqual(await page.locator('#itemCollection option').allTextContents(),['全部細分類','終極系列','開皇系列','翼世系列','星聖系列','絕聖系列','超聖系列','真聖系列']);
+  await select('itemCategory','武器');
   assert(await page.locator('#itemKind').isVisible());
   await page.locator('#itemKind').selectOption({index:1});
   await select('itemCategory','道具');assert(!await page.locator('#itemKind').isVisible());assert.equal(await page.locator('#itemKind').inputValue(),'');
   const categories=await page.locator('#itemCategory option').allTextContents();
+  assert(categories.includes('飾品'));assert(!categories.includes('特殊飾品'));
+  assert.equal(categories[categories.indexOf('飾品')+1],'法器');
+  assert(await page.evaluate(()=>itemResultRows.every(i=>i.Type!=='TALISMAN')));
+  await select('itemCategory','法器');
+  assert(await page.evaluate(()=>itemResultRows.length===items.filter(i=>i.Type==='TALISMAN'&&String(i.ID)!=='30003').length&&itemResultRows.every(i=>i.Type==='TALISMAN'&&String(i.ID)!=='30003')));
+  assert(await page.evaluate(()=>itemResultRows.some(i=>i.ID==='20134')));
   assert(categories.includes('藥品／道具／符咒'));assert(!categories.includes('藥品')&&!categories.includes('符咒')&&!categories.includes('道具'));
   await select('itemCategory','武器');
   for(const category of ['武器','防具','仙器','特殊飾品']){
@@ -128,7 +143,8 @@ async function run(engine,mobile){
   await page.screenshot({path:path.join(root,`outputs/filter-special-${mobile?'mobile':'desktop'}.png`)});
   await select('itemCategory','道具');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
   await select('itemMode','experience');
-  assert.equal(await page.locator('#itemResults [data-item]').count(),35);
+  assert.equal(await page.locator('#itemResults [data-item]').count(),34);
+  assert.equal(await page.locator('#itemResults [data-item="30003"]').count(),0);
   assert((await page.locator('#itemResults [data-item]').first().innerText()).includes('極‧名星真驗丹'));
   assert(await page.evaluate(()=>itemResultRows.every((it,i)=>i===0||(SZO_ITEM_BUFFS.experienceById[it.ID].value??-1)<=(SZO_ITEM_BUFFS.experienceById[itemResultRows[i-1].ID].value??-1))));
   assert.equal(await page.evaluate(()=>SZO_ITEM_BUFFS.experienceById['26322'].value),250000000);
