@@ -680,6 +680,7 @@
         if(query && !option.textContent.toLowerCase().includes(query.trim().toLowerCase()))continue;
         const button=document.createElement('button');button.type='button';button.textContent=option.textContent;
         button.setAttribute('role','option');button.setAttribute('aria-selected',String(option.selected));
+        button.addEventListener('pointerdown',e=>e.preventDefault());
         button.addEventListener('click',()=>{
           select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));byId('mapStageSearch')?.focus();
         });
@@ -687,13 +688,17 @@
       }
       if(!list.childElementCount){const empty=document.createElement('div');empty.className='muted';empty.textContent='找不到符合的地圖';list.append(empty);}
       list.hidden=false;input.setAttribute('aria-expanded','true');
+      const selected=list.querySelector('[aria-selected="true"]');
+      if(!query.trim()&&selected){
+        list.scrollTop+=selected.getBoundingClientRect().top-list.getBoundingClientRect().top-(list.clientHeight-selected.offsetHeight)/2;
+      }else list.scrollTop=0;
     };
     toggle.addEventListener('click',()=>show());input.addEventListener('click',()=>{show();input.select();});
     input.addEventListener('input',e=>{if(!e.isComposing)show(input.value);});
     input.addEventListener('compositionend',()=>show(input.value));
     input.addEventListener('keydown',e=>{
       if(e.isComposing)return;
-      if(e.key==='ArrowDown'){e.preventDefault();if(list.hidden)show();list.querySelector('button')?.focus();}
+      if(e.key==='ArrowDown'){e.preventDefault();if(list.hidden)show();(list.querySelector('[aria-selected="true"]')||list.querySelector('button'))?.focus();}
       if(e.key==='Enter' && !list.hidden){e.preventDefault();list.querySelector('button')?.click();}
       if(e.key==='Escape')close();
     });
