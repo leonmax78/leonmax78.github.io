@@ -15,6 +15,9 @@
  function render(){
   const saved=read(),entries=slots.map(s=>item(saved[s])),maps=entries.map(it=>new Map(it?itemDetailRows(it).filter(([label,value])=>label!==SZO_DISPLAY.label('Name')&&String(value??'').trim()!==''&&String(value)!=='0'):[]));
   const labels=[...new Set(maps.flatMap(m=>[...m.keys()]))];
+  const order=[...new Set(ITEM_DETAIL_ORDER.map(k=>SZO_DISPLAY.label(k==='DamageMin'?'Damage':k,ITEM_DETAIL_RENAME[k]||k)))];
+  const rank=label=>label===SZO_DISPLAY.label('Help')?Infinity:order.includes(label)?order.indexOf(label):order.length;
+  labels.sort((a,b)=>rank(a)-rank(b));
   const body=labels.map(label=>{
    const values=maps.map(m=>m.get(label)??'-'),present=entries.map((it,i)=>it?values[i]:null).filter(v=>v!==null),different=new Set(present).size>1;
    if(onlyDifferences&&!different)return '';
