@@ -31,7 +31,9 @@ async function run(engine,mobile){
   await select('itemCategory','武器');assert(await page.locator('#itemFamily').isVisible());
   assert(await page.locator('#itemKind').isVisible());
   await page.locator('#itemKind').selectOption({index:1});
-  await select('itemCategory','藥品');assert(!await page.locator('#itemKind').isVisible());assert.equal(await page.locator('#itemKind').inputValue(),'');
+  await select('itemCategory','道具');assert(!await page.locator('#itemKind').isVisible());assert.equal(await page.locator('#itemKind').inputValue(),'');
+  const categories=await page.locator('#itemCategory option').allTextContents();
+  assert(categories.includes('藥品／道具／符咒'));assert(!categories.includes('藥品')&&!categories.includes('符咒')&&!categories.includes('道具'));
   await select('itemCategory','武器');
   for(const category of ['武器','防具','仙器','特殊飾品']){
    await select('itemCategory',category);
@@ -91,7 +93,7 @@ async function run(engine,mobile){
   assert(await page.locator('#itemResults [data-item]').count()>0);
   assert(await page.evaluate(()=>itemResultRows.every(i=>SZO_EQUIPMENT_TAXONOMY.byId[i.ID].tags.some(t=>t.family==='玄宙'&&t.collection==='特仕'&&t.variant==='靜月'))));
   await page.screenshot({path:path.join(root,`outputs/filter-special-${mobile?'mobile':'desktop'}.png`)});
-  await select('itemCategory','藥品');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
+  await select('itemCategory','道具');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
   await select('itemMode','hp');assert(!await page.locator('#itemBuffEffect').isVisible());
   assert.equal(await page.locator('#itemBuffUnit').inputValue(),'number');
   assert(!(await page.locator('#itemBuffUnit option').allTextContents()).some(t=>t.includes('分組')||t==='倍率'));
@@ -106,7 +108,7 @@ async function run(engine,mobile){
    assert.equal(await page.evaluate(()=>SZO_ITEM_FILTERS.target),'');
   }
   await select('itemMode','buff');
-  assert((await page.locator('#itemResults [data-item]').first().innerText()).includes('行家強身藥酒'));
+  assert(await page.locator('#itemResults [data-item]').count()>0);
   await select('itemCategory','道具');await select('itemMode','buff');
   const result=await page.evaluate(()=>({names:itemResultRows.map(i=>i.Name),types:[...new Set(itemResultRows.map(i=>i.Type))]}));
   assert(result.types.includes('POTION')&&result.types.includes('MAGIC_FIGURE')&&result.types.includes('MATERIAL'));
@@ -119,8 +121,13 @@ async function run(engine,mobile){
   await select('itemBuffTarget','person');await select('itemBuffEffect','Str');await select('itemBuffUnit','number');
   const values=await page.evaluate(()=>itemResultRows.map(i=>Math.max(...SZO_ITEM_BUFFS.byId[i.ID].filter(e=>e.key==='Str'&&e.unit==='number').map(e=>e.value))));
   assert(values.length>10&&values.every((v,i)=>i===0||v<=values[i-1]));
+  for(const attribute of ['Str','Dex','Con','Int']){
+   await select('itemBuffEffect',attribute);
+   assert(await page.evaluate(()=>itemResultRows.length>0&&itemResultRows.every(i=>!SZO_ITEM_BUFFS.byId[i.ID].some(e=>e.key==='All'))));
+  }
   await select('itemBuffEffect','');assert.equal(await page.locator('#itemBuffEffect').inputValue(),'');
   await select('itemBuffEffect','All');
+  assert(await page.evaluate(()=>itemResultRows.length>0&&itemResultRows.every(i=>SZO_ITEM_BUFFS.byId[i.ID].some(e=>e.key==='All'))));
   await page.screenshot({path:path.join(root,`outputs/filter-buffs-${mobile?'mobile':'desktop'}.png`),fullPage:false});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await select('itemMode','remove');assert((await page.locator('#itemResults').innerText()).includes('解除萬蠱毒'));

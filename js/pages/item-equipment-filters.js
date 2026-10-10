@@ -9,7 +9,10 @@
  const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='道具'?!equipment(r):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
  const tagsMatch=(r,family,collection)=>r.tags.some(t=>(!family||t.family===family)&&(!collection||t.collection===collection));
  const special=it=>buffs().specialById[id(it)]||[];
- function effects(it,ignoreUnit=false){return (buffs().byId[id(it)]||[]).filter(e=>{
+ function effects(it,ignoreUnit=false){
+  const all=buffs().byId[id(it)]||[];
+  if(state.mode==='buff'&&['Str','Dex','Con','Int'].includes(state.effect)&&all.some(e=>e.key==='All'))return [];
+  return all.filter(e=>{
   const key=state.mode==='hp'?'RestoreHP':state.mode==='mp'?'RestoreMP':state.effect;
   return (state.mode!=='buff'||!e.key.startsWith('Restore'))&&(!key||e.key===key)&&(ignoreUnit||!state.unit||e.unit===state.unit);
  });}
@@ -28,13 +31,14 @@
  function fill(id,values,selected,all){const el=document.getElementById(id);if(!el)return selected;el.replaceChildren(new Option(all,''),...values.map(v=>new Option(v.label||v,v.value||v)));el.value=selected;return el.value;}
  function show(id,visible){const el=document.getElementById(id);if(el)el.closest('.kv').hidden=!visible;}
  function refresh(){
+  if(['藥品','符咒'].includes(state.category))state.category='道具';
   const petEquipment=state.category==='寵物裝備';
   const isEquipment=['武器','防具','仙器','特殊飾品'].includes(state.category);
   const consumable=['道具','藥品','符咒'].includes(state.category);
   show('itemKind',state.category==='武器');
   if(state.category!=='武器'){window.v110ItemKind='';const kind=document.getElementById('itemKind');if(kind)kind.value='';}
   if(!isEquipment&&!petEquipment){state.family='';state.collection='';state.profession='';fill('itemFamily',[],'','全部系列');fill('itemCollection',[],'','全部細分類');}
-  fill('itemCategory',['武器','防具','仙器','特殊飾品',{value:'寵物裝備',label:'封獸裝備'},'配方','藥品','符咒','道具'],state.category,'全部大類');
+  fill('itemCategory',['武器','防具','仙器','特殊飾品',{value:'寵物裝備',label:'封獸裝備'},'配方',{value:'道具',label:'藥品／道具／符咒'}],state.category,'全部大類');
   const collectionLabel=document.getElementById('itemCollection')?.closest('.kv').querySelector('.k');
   if(collectionLabel)collectionLabel.textContent=petEquipment?'部位':'細分類 / 武匣';
   for(const field of ['itemFamily','itemCollection','itemProfession'])show(field,isEquipment);
