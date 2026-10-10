@@ -10,6 +10,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await route(page);await ready(page);
   const approved=JSON.parse(fs.readFileSync(path.join(root,'planning/approved-display-review.json'),'utf8'));
   approved.confirmedValueChanges.Type.BONUS='錦囊';
+  approved.sharedLabels.Time='作用時間';
   const actual=await page.evaluate(()=>({labels:SZO_DISPLAY.fields,visible:SZO_DISPLAY.itemVisible,values:SZO_DISPLAY.values}));
   const typeOptions=await page.evaluate(()=>Object.entries(ITEM_TYPE_MAP));
   assert.equal(typeOptions.filter(([,label])=>label==='暗器').length,1);assert(typeOptions.some(([key])=>key==='HIDDEN_WEAPON'));assert(!typeOptions.some(([key])=>key==='HIDDEN_WEAPON2'));
@@ -26,7 +27,8 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(async()=>{await showShopItem('20469');});const status=await rows(page);
   await page.evaluate(()=>showItem('20469'));assert.deepEqual(await rows(page),status);
   const reviewedRows=await page.evaluate(()=>itemDetailRows({ID:'test',Type:'ITEM_ENCHANT',Class:'CLASS_SWORDMAN,CLASS_PET',Attack:'5',AttackRange:'7',ExpireDate:'0-7 11:50',Time:'60',DamageMin:'3',DamageMax:'9',FireAttack:'20',FireProb:'30',Value:'999',Flag:'ITEM_TEST',Magic:'123'}));
-  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、寵物'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間(秒)','60'],['傷害','3-9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
+  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、寵物'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間','1 分鐘'],['傷害','3-9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
+  assert.deepEqual(await page.evaluate(()=>[0,30,59,60,90,1800,3600,60.5,'',null,-1,'unknown'].map(SZO_DISPLAY.duration)),['0 秒','30 秒','59 秒','1 分鐘','1 分 30 秒','30 分鐘','60 分鐘','1 分 0.5 秒','','','-1','unknown']);
   assert(!reviewedRows.some(r=>['傷害下限','傷害上限'].includes(r[0])));
   assert(!reviewedRows.some(r=>['價值','道具旗標','關聯技能'].includes(r[0])));
   await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));

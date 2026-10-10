@@ -10,7 +10,7 @@
     ParalysisRes:'抗定身',PosionRes:'抗毒',BlindRes:'抗盲目',SilentRes:'抗禁咒',
     Value:'價值',Attack:'攻速',AttackRange:'攻擊距離',Durabulity:'耐久',Weight:'重量',Class:'職業限制',
     HPFlag:'血量作用方式',MPFlag:'精力作用方式',ConFlag:'體魄作用方式',StrFlag:'力量作用方式',IntFlag:'智慧作用方式',DexFlag:'靈敏作用方式',
-    Flag:'道具旗標',Magic:'關聯技能',StatusParam:'狀態作用方式',StatusProb:'狀態機率',Time:'作用時間(秒)',ExpireDate:'回收時間',
+    Flag:'道具旗標',Magic:'關聯技能',StatusParam:'狀態作用方式',StatusProb:'狀態機率',Time:'作用時間',ExpireDate:'回收時間',
     Encumbrance:'負重加成',Repletion:'飽食數值',Break:'Break 參數（待確認）',Fill:'Fill 參數（待確認）',Identify:'Identify 參數（待確認）',
     Effect:'效果代碼',MsgID:'訊息索引',Log:'Log 參數（待確認）',Icon:'道具圖示',GIcon:'GIcon 圖示代碼',OIcon:'OIcon 參數',OIcon2:'OIcon2 參數',
     Pic:'圖像編號',DropExp:'經驗值',DropMoney:'掉落金錢',DropItem:'掉落道具'
@@ -40,7 +40,13 @@
     const raw=String(key??'');
     return fields[aliases[raw]||raw] || fields[aliases[String(fallback??'')]||String(fallback??'')] || fallback || raw;
   }
+  function duration(raw){
+    if(String(raw??'').trim()===''||!Number.isFinite(Number(raw))||Number(raw)<0)return String(raw??'');
+    const seconds=Number(raw),minutes=Math.floor(seconds/60),rest=Number((seconds%60).toFixed(6));
+    return minutes?(rest?`${minutes} 分 ${rest} 秒`:`${minutes} 分鐘`):`${seconds} 秒`;
+  }
   function value(key,raw){
+    if((aliases[key]||key)==='Time'&&Number(raw)>0)return duration(raw);
     if((aliases[key]||key)==='Weight'&&String(raw??'').trim()!==''&&Number.isFinite(Number(raw))){
       const weight=Number(raw)/100;
       return weight<1?'小於1':String(weight);
@@ -48,5 +54,5 @@
     if(key==='Class')return String(raw??'').split(',').map(code=>code.trim()).filter(Boolean).map(code=>values.Class[code]||code).join('、');
     return values[aliases[key]||key]?.[String(raw)] ?? String(raw??'');
   }
-  window.SZO_DISPLAY=Object.freeze({fields:Object.freeze(fields),aliases:Object.freeze(aliases),values,itemVisible:Object.freeze(itemVisible),label,value});
+  window.SZO_DISPLAY=Object.freeze({fields:Object.freeze(fields),aliases:Object.freeze(aliases),values,itemVisible:Object.freeze(itemVisible),label,value,duration});
 })();

@@ -25,9 +25,14 @@ async function run(engine,mobile){
   await page.evaluate(async()=>{await ensureItemPageLoaded();await ensureItemDataLoaded();await renderItemPage('item');closeDrawer();});
   const select=(id,value)=>page.selectOption('#'+id,value);
   assert(!await page.locator('#itemFamily').isVisible());assert(!await page.locator('#itemMode').isVisible());
+  assert(!await page.locator('#itemKind').isVisible());
   assert(await page.locator('#itemSpecial').isVisible());
   await page.screenshot({path:path.join(root,`outputs/filter-initial-${mobile?'mobile':'desktop'}.png`),fullPage:true});
   await select('itemCategory','武器');assert(await page.locator('#itemFamily').isVisible());
+  assert(await page.locator('#itemKind').isVisible());
+  await page.locator('#itemKind').selectOption({index:1});
+  await select('itemCategory','藥品');assert(!await page.locator('#itemKind').isVisible());assert.equal(await page.locator('#itemKind').inputValue(),'');
+  await select('itemCategory','武器');
   await select('itemProfession','CLASS_PET');
   const pets=await page.evaluate(()=>itemResultRows.map(i=>({id:i.ID,class:i.Class})));
   assert(pets.length>0&&pets.every(i=>i.class?.split(',').includes('CLASS_PET')));
@@ -47,6 +52,8 @@ async function run(engine,mobile){
   const result=await page.evaluate(()=>({names:itemResultRows.map(i=>i.Name),types:[...new Set(itemResultRows.map(i=>i.Type))]}));
   assert(result.types.includes('POTION')&&result.types.includes('MAGIC_FIGURE')&&result.types.includes('MATERIAL'));
   assert(!result.names.includes('激獸源符'));assert(result.names.includes('仙帝十倍練功符'));
+  await select('itemBuffEffect','Drop');assert((await page.locator('#itemResults').innerText()).includes('30 分鐘'));assert(!(await page.locator('#itemResults').innerText()).includes('1800 秒'));
+  await select('itemBuffEffect','All');
   await select('itemBuffTarget','pet');assert((await page.locator('#itemResults [data-item]').first().innerText()).includes('激獸源符'));
   await select('itemBuffTarget','person');await select('itemBuffEffect','Str');await select('itemBuffUnit','number');
   const values=await page.evaluate(()=>itemResultRows.map(i=>Math.max(...SZO_ITEM_BUFFS.byId[i.ID].filter(e=>e.key==='Str'&&e.unit==='number').map(e=>e.value))));

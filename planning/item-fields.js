@@ -6,7 +6,7 @@
   const cache=new Map();
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fieldDraft=k=>draft.fields[k]||{};
-  const fieldLabel=k=>fieldDraft(k).label??D.label(k);
+  const fieldLabel=k=>k==='Time'&&fieldDraft(k).label==='作用時間(秒)'?D.label(k):fieldDraft(k).label??D.label(k);
   const isVisible=f=>fieldDraft(f.key).visible??f.visible;
   const isChanged=f=>fieldLabel(f.key)!==D.label(f.key)||isVisible(f)!==f.visible||Object.keys(draft.values[f.key]||{}).length>0;
   function save(){
@@ -39,7 +39,7 @@
     stats();
   }
   function currentValue(key,raw){
-    if(key==='Weight')return D.value(key,raw);
+    if(key==='Weight'||key==='Time')return D.value(key,raw);
     if(key==='Class')return D.value(key,raw);
     if(key==='Type')return ITEM_TYPE_MAP[raw]||'';
     if(key==='Kind')return RACE_MAP[raw.toLowerCase()]||'';
@@ -111,8 +111,8 @@
       const data=await response.json(),stored=JSON.parse(localStorage.getItem('sihai-status-review-v1')||'{}');
       statusReviews=data.entries.map(e=>({id:e.id,name:e.name,source:e.raw,description:typeof stored[e.id]?.description==='string'?stored[e.id].description:e.description,approved:stored[e.id]?.approved===true}));
     }catch(e){$('error').textContent='無法匯出特殊能力草稿，請稍後重試。';return;}
-    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V578',createdAt:new Date().toISOString(),status:'draft-not-applied',
-      displayRules:{Weight:{divisor:100,lessThan:1,lessThanText:'小於1'}},
+    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V582',createdAt:new Date().toISOString(),status:'draft-not-applied',
+      displayRules:{Weight:{divisor:100,lessThan:1,lessThanText:'小於1'},Time:{sourceUnit:'seconds',minuteThreshold:60,remainder:'seconds'}},
       statusReviews,combinedFields:{Damage:['DamageMin','DamageMax']},
       fields:fields.map(f=>({key:f.key,label:fieldLabel(f.key),visible:isVisible(f)})),
       sharedLabels:Object.fromEntries(Object.keys(D.fields).map(k=>[k,fieldLabel(k)])),

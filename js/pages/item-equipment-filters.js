@@ -28,6 +28,8 @@
  function refresh(){
   const isEquipment=['武器','防具','仙器','特殊飾品'].includes(state.category);
   const consumable=['道具','藥品','符咒'].includes(state.category);
+  show('itemKind',state.category==='武器');
+  if(state.category!=='武器'){window.v110ItemKind='';const kind=document.getElementById('itemKind');if(kind)kind.value='';}
   if(!isEquipment){state.family='';state.collection='';state.profession='';fill('itemFamily',[],'','全部系列');fill('itemCollection',[],'','全部細分類');}
   fill('itemCategory',['武器','防具','仙器','特殊飾品','配方','藥品','符咒','道具'],state.category,'全部大類');
   for(const field of ['itemFamily','itemCollection','itemProfession'])show(field,isEquipment);
@@ -59,7 +61,7 @@
  function modeChanged(){state.mode=document.getElementById('itemMode').value;state.effect='All';state.unit='';state.target='person';state.special='';window.v86ItemType='';refresh();window.searchItems();}
  function best(it){return effects(it).slice().sort((a,b)=>a.key.localeCompare(b.key)||a.unit.localeCompare(b.unit)||b.value-a.value)[0];}
  function sort(rows){if(!['buff','hp','mp'].includes(state.mode))return rows;return rows.slice().sort((a,b)=>{const x=best(a),y=best(b);return x.key.localeCompare(y.key)||x.unit.localeCompare(y.unit)||y.value-x.value||y.seconds-x.seconds||Number(b.ID||b.id)-Number(a.ID||a.id);});}
- function summary(it){if(!state.mode)return '';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'寵物／封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+e.seconds+' 秒）':''}`).join('；');}
+ function summary(it){if(!state.mode)return '';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'寵物／封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+SZO_DISPLAY.duration(e.seconds)+'）':''}`).join('；');}
  function clear(){Object.keys(state).forEach(k=>state[k]='');state.effect='All';refresh();}
  window.SZO_ITEM_TAXONOMY={matches,refresh,changed,categoryChanged,modeChanged,sort,summary,clear,active:()=>[state.category,state.special,state.mode].some(Boolean)};
 })();
