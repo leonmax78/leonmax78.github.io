@@ -100,6 +100,10 @@
  function modeChanged(){state.mode=document.getElementById('itemMode').value;state.effect='All';state.unit='';state.target=state.mode==='buff'?'person':'';state.special='';window.v86ItemType='';refresh();window.searchItems();}
  function best(it){return effects(it).slice().sort((a,b)=>a.key.localeCompare(b.key)||a.unit.localeCompare(b.unit)||b.value-a.value)[0];}
  function sort(rows){
+  if(state.special==='匯神'){
+   const bonus=it=>Math.max(-Infinity,...special(it).filter(s=>s.label===state.special&&Number.isFinite(s.magicDamageBonus)).map(s=>s.magicDamageBonus));
+   return rows.slice().sort((a,b)=>{const x=bonus(a),y=bonus(b);return (x===y?0:y-x)||(record(b).order??-1)-(record(a).order??-1);});
+  }
   if(state.mode==='experience')return rows.slice().sort((a,b)=>(experience(b)?.value??-1)-(experience(a)?.value??-1)||(record(b).order??-1)-(record(a).order??-1));
   if(!['buff','hp','mp'].includes(state.mode)){
    const types=Object.keys(ITEM_TYPE_MAP);

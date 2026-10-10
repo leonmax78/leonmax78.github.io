@@ -19,7 +19,7 @@ for(const item of items){
   for(const id of String(raw.ExtraStatus||'').split(/[,;\s]+/)){
    const s=status.get(id);if(!s)continue;
    const key=(removal?'remove:':'give:')+id;
-   if(!entries.some(e=>e.key===key))entries.push({key,label:(removal?'解除':'')+s.Name});
+   if(!entries.some(e=>e.key===key))entries.push({key,label:(removal?'解除':'')+s.Name,...(!removal&&s.Group==='28'&&s.Param1!==undefined&&Number.isFinite(Number(s.Param1))?{magicDamageBonus:Number(s.Param1)}:{})});
   }
  }
  if(entries.length)specialById[item.ID]=entries;
