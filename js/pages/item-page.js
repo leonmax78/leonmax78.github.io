@@ -195,6 +195,7 @@ function fillItemAdvancedFilters(){
   const series=itemSeriesOptions();
   seriesSel.innerHTML=optionHtml(series,window.v110ItemEqSeries||'',series.length?'全部系列':'系列載入中');
  }
+ window.SZO_ITEM_TAXONOMY?.refresh();
 }
 
 function itemMatchesSeries(it,series){
@@ -240,14 +241,16 @@ function filterItemIndexList(q,type,min,max,series,kind){
  const qText=(q||'').trim().toLowerCase();
  const minLv=min?intOf(min):null;
  const maxLv=max?intOf(max):null;
- return itemSearchIndexRows().filter(it=>
+ const rows=itemSearchIndexRows().filter(it=>
+  (!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it))&&
   (!qText||itemIndexSearchText(it).includes(qText))&&
   (!type||it.type===type)&&
   (minLv===null||intOf(it.level)>=minLv)&&
   (maxLv===null||intOf(it.level)<=maxLv)&&
   (!series||itemMatchesSeries({ID:it.id},series))&&
   itemMatchesKind({ID:it.id},kind)
- ).slice(0,180);
+ );
+ return window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(rows):rows;
 }
 function itemIndexResultsHTML(arr){
  return arr.map(it=>`<button class="resultItem" data-item="${esc(it.id)}"><div class="rName">${esc(it.name)}</div><div class="rSub">Lv.${esc(it.level||'')} / ${esc(itemIndexTypeName(it))} / ID ${esc(it.id||'')}</div></button>`).join('')||'<div class="muted">找不到符合條件的道具。</div>';
@@ -333,15 +336,22 @@ async function renderItemPage(tab='item'){
   <div class="latestQueryLayout">
     <div class="latestMainPane">
       <div class="kvGrid">
+        <div class="kv"><div class="k">大類</div><div class="v"><select id="itemCategory" onchange="SZO_ITEM_TAXONOMY.categoryChanged()"></select></div></div>
+        <div class="kv" hidden><div class="k">用途</div><div class="v"><select id="itemMode" onchange="SZO_ITEM_TAXONOMY.modeChanged()"></select></div></div>
+        <div class="kv" hidden><div class="k">增益效果</div><div class="v"><select id="itemBuffEffect" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
+        <div class="kv" hidden><div class="k">效果單位 / 排序</div><div class="v"><select id="itemBuffUnit" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
+        <div class="kv" hidden><div class="k">使用對象</div><div class="v"><select id="itemBuffTarget" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">道具名稱 / ID / 類型</div><div class="v"><input id="itemQ" placeholder="例如：經驗丹、藥草、277、火傷" value="${esc(window.v86ItemQ||'')}" oninput="searchItems()"></div></div>
+        <div class="kv"><div class="k">系列</div><div class="v"><select id="itemFamily" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
+        <div class="kv"><div class="k">細分類 / 武匣</div><div class="v"><select id="itemCollection" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
+        <div class="kv"><div class="k">可使用職業</div><div class="v"><select id="itemProfession" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">類型</div><div class="v"><select id="itemType" onchange="searchItems()"></select></div></div>
         <div class="kv"><div class="k">最低 Lv</div><div class="v"><input id="itemMin" type="number" value="${esc(window.v86ItemMin||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">最高 Lv</div><div class="v"><input id="itemMax" type="number" value="${esc(window.v86ItemMax||'')}" oninput="searchItems()"></div></div>
-        <div class="kv"><div class="k">系列快選</div><div class="v"><select id="itemEqSeries" onfocus="refreshItemSeriesWhenReady()" onchange="searchItems()"></select></div></div>
         <div class="kv"><div class="k">專剋屬性</div><div class="v"><select id="itemKind" onchange="searchItems()"></select></div></div>
+        <div class="kv"><div class="k">特殊效果</div><div class="v"><select id="itemSpecial" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
       </div>
       <div class="itemFilterActions"><button type="button" onclick="clearItemSearchFilters()">清空篩選</button></div>
-      <div class="notice itemFilterNote">系列快選依合成模擬清單建立；類型依 ITEM.INI 原始欄位篩選。</div>
       <div class="results" id="itemResults"></div>
     </div>
     <aside class="latestSidePane">
@@ -403,24 +413,35 @@ function searchItems(){
  const kind=window.v110ItemKind;
  const box=byId('itemResults'); if(!box)return;
  if(!hasItemData()&&!hasItemSearchIndex()){box.innerHTML='<div class="muted">資料載入中，請稍等。</div>';return;}
- if(!(q||type||window.v86ItemMin||window.v86ItemMax||series||kind)){box.innerHTML='';return;}
+ if(!(q||type||window.v86ItemMin||window.v86ItemMax||series||kind||window.SZO_ITEM_TAXONOMY?.active())){box.innerHTML='';return;}
  if(!hasItemData()){
-  box.innerHTML=itemIndexResultsHTML(filterItemIndexList(q,type,window.v86ItemMin,window.v86ItemMax,series,kind));
+  renderItemSearchResults(filterItemIndexList(q,type,window.v86ItemMin,window.v86ItemMax,series,kind),true);
   return;
  }
  const arr=items.filter(it=>
+  (!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it))&&
   (!q||itemSearchText(it).includes(q))&&
   (!type||it.Type===type)&&
   (min===null||intOf(it.Level)>=min)&&
   (max===null||intOf(it.Level)<=max)&&
   itemMatchesKind(it,kind)&&
   itemMatchesSeries(it,series)
- ).slice(0,180);
- box.innerHTML=arr.map(it=>{
+ );
+ renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(arr):arr,false);
+}
+let itemResultPage=1,itemResultRows=[],itemResultIsIndex=false;
+function renderItemSearchResults(rows,indexOnly,more=false){
+ if(!more){itemResultPage=1;itemResultRows=rows;itemResultIsIndex=indexOnly;}
+ const visible=rows.slice(0,itemResultPage*180),box=byId('itemResults');
+ const html=visible.map(raw=>{
+  const it=indexOnly?{ID:raw.id,Name:raw.name,Level:raw.level,Type:raw.type}:raw;
   const parts=[`Lv.${esc(it.Level||'')}`,esc(itemTypeName(it.Type)||it.Type||''),itemKind(it)?`專剋 ${esc(itemKind(it))}`:'',`ID ${esc(it.ID)}`].filter(Boolean);
+  const effect=window.SZO_ITEM_TAXONOMY?.summary(it);if(effect)parts.unshift(esc(effect));
   return `<button class="resultItem withAsset" data-item="${esc(it.ID)}">${itemThumbHTML(it)}<span class="resultText"><div class="rName">${esc(nameOf(it))}</div><div class="rSub">${parts.join(' / ')}</div></span></button>`;
  }).join('')||'<div class="muted">沒有符合的道具。</div>';
+ box.innerHTML=`<div class="muted">共 ${rows.length} 筆，已顯示 ${visible.length} 筆</div>`+html+(rows.length>visible.length?'<button type="button" onclick="showMoreItemResults()">顯示更多</button>':'');
 }
+function showMoreItemResults(){itemResultPage++;renderItemSearchResults(itemResultRows,itemResultIsIndex,true);}
 
 function clearItemSearchFilters(){
  window.v86ItemQ='';
@@ -429,6 +450,7 @@ function clearItemSearchFilters(){
  window.v86ItemMax='';
  window.v110ItemEqSeries='';
  window.v110ItemKind='';
+ window.SZO_ITEM_TAXONOMY?.clear();
  ['itemQ','itemType','itemMin','itemMax','itemEqSeries','itemKind'].forEach(id=>{
   const el=byId(id);
   if(el)el.value='';

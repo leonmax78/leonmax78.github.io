@@ -4072,6 +4072,12 @@ body{
 .itemSection-special .kv .v{font-size:16px;font-weight:700}
 .itemSection-special .kv{border:0;padding:0}
 .itemSection-special .itemRepeatedLabel{display:none}
+.itemAdvancedSearchPage .kvGrid>.kv{min-width:0}
+.itemAdvancedSearchPage .kvGrid select,.itemAdvancedSearchPage .kvGrid input{min-width:0;max-width:100%;width:100%}
+@media(max-width:700px){
+ .itemAdvancedSearchPage .latestMainPane>.kvGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .itemAdvancedSearchPage .kvGrid>.kv:has(#itemQ),.itemAdvancedSearchPage .kvGrid>.kv:has(#itemCollection){grid-column:1/-1}
+}
 @media(max-width:700px){
  .itemSectionGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
  .itemIdentity h1{font-size:20px}

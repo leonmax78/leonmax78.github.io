@@ -47,6 +47,9 @@ window.SZO_SCRIPT_GROUPS = {
     "js/calc/jiangshen-calc.js"
   ],
   "pages": [
+    "data/equipment-taxonomy.js",
+    "data/item-buffs.js",
+    "js/pages/item-equipment-filters.js",
     "js/pages/monster-page.js",
     "js/pages/item-page.js",
     "js/pages/reverse-page.js",
@@ -61,6 +64,9 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/monster-page.js"
   ],
   "page_item": [
+    "data/equipment-taxonomy.js",
+    "data/item-buffs.js",
+    "js/pages/item-equipment-filters.js",
     "js/pages/item-page.js",
     "js/pages/reverse-page.js"
   ],
