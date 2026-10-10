@@ -31,6 +31,9 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   assert(!reviewedRows.some(r=>['價值','道具旗標','關聯技能'].includes(r[0])));
   await page.evaluate(()=>showItem('23640'));const enchantRows=await rows(page);assert(enchantRows.some(r=>r[0]==='類型'&&r[1]==='特殊功能道具'));
   await page.evaluate(()=>showShopItem('23640'));assert.deepEqual(await rows(page),enchantRows);
+  assert.deepEqual(await page.evaluate(()=>[0,1,40,99,100,150,4000,4400,'',null,'unknown'].map(v=>SZO_DISPLAY.value('Weight',v))),['小於1','小於1','小於1','小於1','1','1.5','40','44','','','unknown']);
+  await page.evaluate(()=>showItem('29595'));assert((await rows(page)).some(r=>r[0]==='重量'&&r[1]==='40'));
+  await page.evaluate(()=>showShopItem('29595'));assert((await rows(page)).some(r=>r[0]==='重量'&&r[1]==='40'));
   await page.evaluate(()=>showItem('29917'));
   const staffRows=await rows(page);assert(staffRows.some(r=>r[0]==='血量'&&r[1]==='55%'));assert(staffRows.some(r=>r[0]==='精力'&&r[1]==='57%'));
   const fixed=await page.evaluate(()=>itemDetailRows({HP:'30',HPFlag:'AFFECT_NUMBER',MP:'40',MPFlag:'AFFECT_MAX_NUMBER'}));assert.deepEqual(fixed,[['血量','30'],['精力','40']]);
@@ -49,6 +52,8 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   const compound=await page.evaluate(()=>({labels:['m_attack','m_def','dark_def','lightning_def','hp'].map(k=>eqStatLabel(k)),speed:[1,2,3,4,5].map(n=>eqDisplayStatText('attack',{value:n})),rank:eqCLevelText(3)}));
   assert.deepEqual(compound.labels,['術法攻擊','術法防禦','冥防','雷防','血量']);assert.deepEqual(compound.speed,translated.speed);assert.equal(compound.rank,'三轉');
   assert.equal(await page.evaluate(()=>eqDisplayStatText('attack_range',{value:7})),'7格距離');
+  assert.equal(await page.evaluate(()=>eqDisplayStatText('weight',{value:4000})),'40');
+  assert.equal(await page.evaluate(()=>eqDisplayStatText('weight',{value:40})),'小於1');
   await page.evaluate(async()=>{await ensureJiangshenToolLoaded();calcStars();});
   const heads=await page.locator('#reader th').allTextContents();assert(heads.includes('術法攻擊'));assert(heads.includes('物理防禦'));assert(!heads.includes('術攻'));
   assert.deepEqual(errors,[]);

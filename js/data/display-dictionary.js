@@ -41,6 +41,10 @@
     return fields[aliases[raw]||raw] || fields[aliases[String(fallback??'')]||String(fallback??'')] || fallback || raw;
   }
   function value(key,raw){
+    if((aliases[key]||key)==='Weight'&&String(raw??'').trim()!==''&&Number.isFinite(Number(raw))){
+      const weight=Number(raw)/100;
+      return weight<1?'小於1':String(weight);
+    }
     if(key==='Class')return String(raw??'').split(',').map(code=>code.trim()).filter(Boolean).map(code=>values.Class[code]||code).join('、');
     return values[aliases[key]||key]?.[String(raw)] ?? String(raw??'');
   }

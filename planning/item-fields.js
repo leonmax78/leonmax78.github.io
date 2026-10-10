@@ -39,6 +39,7 @@
     stats();
   }
   function currentValue(key,raw){
+    if(key==='Weight')return D.value(key,raw);
     if(key==='Class')return D.value(key,raw);
     if(key==='Type')return ITEM_TYPE_MAP[raw]||'';
     if(key==='Kind')return RACE_MAP[raw.toLowerCase()]||'';
@@ -110,7 +111,8 @@
       const data=await response.json(),stored=JSON.parse(localStorage.getItem('sihai-status-review-v1')||'{}');
       statusReviews=data.entries.map(e=>({id:e.id,name:e.name,source:e.raw,description:typeof stored[e.id]?.description==='string'?stored[e.id].description:e.description,approved:stored[e.id]?.approved===true}));
     }catch(e){$('error').textContent='無法匯出特殊能力草稿，請稍後重試。';return;}
-    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V577',createdAt:new Date().toISOString(),status:'draft-not-applied',
+    const result={schemaVersion:1,kind:'sihai-display-review',baseVersion:'V578',createdAt:new Date().toISOString(),status:'draft-not-applied',
+      displayRules:{Weight:{divisor:100,lessThan:1,lessThanText:'小於1'}},
       statusReviews,combinedFields:{Damage:['DamageMin','DamageMax']},
       fields:fields.map(f=>({key:f.key,label:fieldLabel(f.key),visible:isVisible(f)})),
       sharedLabels:Object.fromEntries(Object.keys(D.fields).map(k=>[k,fieldLabel(k)])),
