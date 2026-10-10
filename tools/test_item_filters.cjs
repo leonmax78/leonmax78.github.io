@@ -14,6 +14,17 @@ assert(!buffs.byId['20069'].some(e=>e.key==='HP'));
 assert(buffs.byId['20069'].some(e=>e.key==='RestoreHP'&&e.value===30));
 assert(!buffs.byId['20075']);
 assert(buffs.specialById['20075'].some(e=>e.label==='解除萬蠱毒'));
+const allItems=require('../data/items.json');
+for(const [collection,ids] of Object.entries({'東離':['31521','31522','31523','31607'],'真侍魂':['30159','30160','30582','30597'],'霹靂':['29617','29626','29737','29775','29777','29778']})){
+ for(const id of ids){assert(taxonomy.byId[id].tags.some(t=>t.family==='聯動／NFT'&&t.collection===collection));assert(!taxonomy.byId[id].tags.some(t=>t.family==='其他／未分類'));}
+}
+assert(!taxonomy.byId['22254'].tags.some(t=>t.family==='聯動／NFT'));
+for(const item of allItems){
+ const r=taxonomy.byId[item.ID];
+ assert(!r.tags.some(t=>t.family==='暗器'));
+ assert.equal(r.tags.some(t=>t.family==='無限暗器'),['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(item.Type)&&Number(item.Durabulity||0)===0);
+ assert.equal(r.tags.some(t=>t.family==='六滅系列'),r.category!=='其他道具'&&item.Name.includes('六滅'));
+}
 async function run(engine,mobile){
  const browser=await engine.launch(engine===chromium?{channel:'msedge'}:{});
  try{
@@ -32,6 +43,11 @@ async function run(engine,mobile){
   assert(await page.locator('#itemSpecial').isVisible());
   await page.screenshot({path:path.join(root,`outputs/filter-initial-${mobile?'mobile':'desktop'}.png`),fullPage:true});
   await select('itemCategory','武器');assert(await page.locator('#itemFamily').isVisible());
+  await select('itemFamily','無限暗器');
+  assert(await page.evaluate(()=>itemResultRows.length>0&&itemResultRows.every(i=>['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(i.Type)&&Number(i.Durabulity||0)===0)));
+  await select('itemFamily','六滅系列');assert(await page.locator('#itemResults [data-item="29943"]').count()>0);
+  await select('itemFamily','聯動／NFT');await select('itemCollection','東離');assert(await page.locator('#itemResults [data-item="31607"]').count()>0);
+  await select('itemFamily','');
   assert(await page.locator('#itemKind').isVisible());
   await page.locator('#itemKind').selectOption({index:1});
   await select('itemCategory','道具');assert(!await page.locator('#itemKind').isVisible());assert.equal(await page.locator('#itemKind').inputValue(),'');

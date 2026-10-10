@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / 'tmp/equipment-source-pages'
 BASE = 'https://sites.google.com/view/szounofficial/'
 TRADE = ['300級龍涉大川繼鱗武匣','299級古文明東西霸武匣','288級三分鼎鋒真王武匣','277級南辰時祿機神兵匣','266-級東明開天釋達神匣','255級萬帝天尊極武神匣','233級冥府皇統法老征匣','222級阿薩群鋒巨武神匣','200級創宇諸恆極兵神匣','199級永恆山海唯武神匣','188級鎮天聖守星武神匣','177級天尊帝宿超武神匣','168級仙儀丹曦帝武玉匣','155級奧林帕斯神兵聖櫃','145級盡宇絕兵聖箱','133級仙魔極兵聖箱','123級元極兵聖匣','111級尊佛極兵聖匣']
-WEAPONS = {'SWORD','BLADE','WHISK','STAFF','HIDDEN_WEAPON','SPEAR','ROD','AXE','HAMMER','SHIELD'}
+WEAPONS = {'SWORD','BLADE','WHISK','STAFF','HIDDEN_WEAPON','HIDDEN_WEAPON2','SPEAR','ROD','AXE','HAMMER','SHIELD'}
 ARMOR = {'HELMET','ARMOR','BRACER','BOOT'}
 
 class Text(HTMLParser):
@@ -35,6 +35,10 @@ def category(item):
         if flags & {'ITEM_HAND_R','ITEM_HAND_L'}: return '武器'
         if flags & {'ITEM_BODY','ITEM_HEAD','ITEM_FOOT','ITEM_ARM'}: return '防具'
     return '武器' if t in WEAPONS else '防具' if t in ARMOR else '仙器' if t=='UNDER_BOOT' else '特殊飾品' if t=='ORNAMENT' else '其他道具'
+
+def collaboration_name(name):
+    name=norm(name).strip('【】')
+    return re.sub(r'[（(][^（）()]*[）)]$', '', name)
 
 def main():
     CACHE.mkdir(parents=True,exist_ok=True)
@@ -106,6 +110,35 @@ def main():
         except Exception as e:
             audit.append({'url':url,'error':str(e)})
             print(f'FAILED {relative}: {e}',flush=True)
+    # Propagate only unambiguous collaboration names, including bracketed variants.
+    collabs={};evidence={}
+    for item in items:
+        key=collaboration_name(item.get('Name',''))
+        for entry in records[item['ID']]['tags']:
+            if entry['family']=='聯動／NFT':
+                collabs.setdefault(key,set()).add(entry['collection'])
+                evidence.setdefault(key,[]).append(item)
+    confirmed={'拙劍':'東離','煙月':'東離','正義之劍':'真侍魂','自作.無銘':'真侍魂','如是我斬':'霹靂','般若':'霹靂'}
+    for name,collection in confirmed.items():
+        collabs.setdefault(name,set()).add(collection)
+    additions=[]
+    for item in items:
+        id=item['ID'];r=records[id];name=item.get('Name','')
+        r['tags']=[entry for entry in r['tags'] if entry['family']!='暗器']
+        if r['category']=='其他道具': continue
+        key=collaboration_name(name)
+        collections=collabs.get(key,set())
+        supported=key in confirmed or '聯動' in item.get('Help','') or any(item.get('GIcon') and item.get('GIcon')==ref.get('GIcon') or item.get('Help') and item.get('Help')==ref.get('Help') for ref in evidence.get(key,[]))
+        if len(collections)==1 and supported:
+            collection=next(iter(collections))
+            before=len(r['tags'])
+            tag(id,'聯動／NFT',collection,'confirmed collaboration / normalized equipment name')
+            if len(r['tags'])>before:additions.append({'id':id,'name':name,'family':'聯動／NFT','collection':collection})
+        if '六滅' in name:
+            tag(id,'六滅系列','','ITEM.Name contains 六滅')
+        if item.get('Type') in {'HIDDEN_WEAPON','HIDDEN_WEAPON2'} and float(item.get('Durabulity') or 0)==0:
+            tag(id,'無限暗器','','ITEM.Type / absent or zero Durabulity')
+    (ROOT/'reports/equipment-classification-additions.json').write_text(json.dumps(additions,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     # Exact local status groups identify functional accessory families.
     statuses={s['ID']:s for s in json.loads((ROOT/'data/status.json').read_text(encoding='utf-8'))}
     for item in items:
@@ -116,10 +149,8 @@ def main():
             group=statuses.get(item.get('ExtraStatus'),{}).get('Group')
             family={'25':'經驗加倍','21':'轉運加倍'}.get(group)
             if family: tag(id,family,'','STATUS.Group='+group)
-        if r['category']=='武器' and item.get('Type')=='HIDDEN_WEAPON':
-            tag(id,'暗器','職業限定' if item.get('Class') else '不限職業','ITEM.Class')
         if not r['tags']:tag(id,'其他／未分類','','ITEM.Type')
-    result={'version':'V586','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
+    result={'version':'V593','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
     (ROOT/'data/equipment-taxonomy.js').write_text('window.SZO_EQUIPMENT_TAXONOMY='+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
     (ROOT/'reports/equipment-taxonomy-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 

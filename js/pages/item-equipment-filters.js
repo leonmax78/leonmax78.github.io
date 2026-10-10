@@ -52,8 +52,9 @@
   const unique=v=>[...new Set(v.filter(Boolean))];
   if(isEquipment){
    const families=unique(rows.flatMap(([,r])=>r.tags.map(t=>t.family))).filter(f=>f!=='寵物裝備');
-   const order=['世貿系列','玄宙','旭品','帝星流','煌星流','仙星流','聯動／NFT','暗器','聖甲','潮服','特殊系列','九日系列','王狼系列','南遼系列','虛化系列','太極系列','星陣系列','兇星系列','狼牙系列','五蛇系列','五鎖系列','經驗加倍','轉運加倍','五佐天座','聖獸之心','六滅化神','其他／未分類'];
+   const order=['世貿系列','玄宙','旭品','帝星流','煌星流','仙星流','聯動／NFT','無限暗器','六滅系列','聖甲','潮服','特殊系列','九日系列','王狼系列','南遼系列','虛化系列','太極系列','星陣系列','兇星系列','狼牙系列','五蛇系列','五鎖系列','經驗加倍','轉運加倍','五佐天座','聖獸之心','六滅化神','其他／未分類'];
    state.family=fill('itemFamily',families.sort((a,b)=>order.indexOf(a)-order.indexOf(b)),state.family,'全部系列');
+   if(!state.family)state.collection='';
    rows=rows.filter(([,r])=>!state.family||tagsMatch(r,state.family,''));
    state.collection=fill('itemCollection',unique(rows.flatMap(([,r])=>r.tags.filter(t=>!state.family||t.family===state.family).map(t=>t.collection))).sort((a,b)=>a.localeCompare(b,'zh-Hant',{numeric:true})*-1),state.collection,'全部細分類');
    rows=rows.filter(([,r])=>!state.collection||tagsMatch(r,state.family,state.collection));
