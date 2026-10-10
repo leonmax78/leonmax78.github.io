@@ -346,12 +346,12 @@ async function renderItemPage(tab='item'){
   <div class="latestQueryLayout">
     <div class="latestMainPane">
       <div class="kvGrid">
+        <div class="kv"><div class="k">道具名稱 / ID / 類型</div><div class="v"><input id="itemQ" placeholder="例如：經驗丹、藥草、277、火傷" value="${esc(window.v86ItemQ||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">大類</div><div class="v"><select id="itemCategory" onchange="SZO_ITEM_TAXONOMY.categoryChanged()"></select></div></div>
         <div class="kv" hidden><div class="k">用途</div><div class="v"><select id="itemMode" onchange="SZO_ITEM_TAXONOMY.modeChanged()"></select></div></div>
         <div class="kv" hidden><div class="k">增益效果</div><div class="v"><select id="itemBuffEffect" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv" hidden><div class="k">效果單位</div><div class="v"><select id="itemBuffUnit" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv" hidden><div class="k">使用對象</div><div class="v"><select id="itemBuffTarget" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
-        <div class="kv"><div class="k">道具名稱 / ID / 類型</div><div class="v"><input id="itemQ" placeholder="例如：經驗丹、藥草、277、火傷" value="${esc(window.v86ItemQ||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">系列</div><div class="v"><select id="itemFamily" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">細分類 / 武匣</div><div class="v"><select id="itemCollection" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">職業／特仕系列</div><div class="v"><select id="itemProfession" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>

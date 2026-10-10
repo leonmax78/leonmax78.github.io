@@ -24,6 +24,9 @@ async function run(engine,mobile){
   await page.goto(base);await page.waitForFunction(()=>window.SZO_READY);await page.waitForTimeout(1800);
   await page.evaluate(async()=>{await ensureItemPageLoaded();await ensureItemDataLoaded();await renderItemPage('item');closeDrawer();});
   const select=(id,value)=>page.selectOption('#'+id,value);
+  assert(await page.evaluate(()=>document.querySelector('#itemQ').closest('.kv').parentElement.firstElementChild.contains(document.querySelector('#itemQ'))));
+  const queryBox=await page.locator('#itemQ').boundingBox(),categoryBox=await page.locator('#itemCategory').boundingBox();
+  assert(mobile?queryBox.y<categoryBox.y:queryBox.x<categoryBox.x);
   assert(!await page.locator('#itemFamily').isVisible());assert(!await page.locator('#itemMode').isVisible());
   assert(!await page.locator('#itemKind').isVisible());
   assert(await page.locator('#itemSpecial').isVisible());
