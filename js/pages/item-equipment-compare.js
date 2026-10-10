@@ -15,7 +15,9 @@
  function render(){
   const saved=read(),entries=slots.map(s=>item(saved[s])),maps=entries.map(it=>new Map(it?itemDetailRows(it).filter(([label,value])=>label!==SZO_DISPLAY.label('Name')&&String(value??'').trim()!==''&&String(value)!=='0'):[]));
   const labels=[...new Set(maps.flatMap(m=>[...m.keys()]))];
-  const order=[...new Set(ITEM_DETAIL_ORDER.map(k=>SZO_DISPLAY.label(k==='DamageMin'?'Damage':k,ITEM_DETAIL_RENAME[k]||k)))];
+  const elements=['Ice','Fire','Lightning','Dark'].flatMap(type=>[type+'Attack',type+'Prob']);
+  const keys=ITEM_DETAIL_ORDER.flatMap(k=>elements.includes(k)?(k===elements.find(e=>ITEM_DETAIL_ORDER.includes(e))?elements:[]):[k]);
+  const order=[...new Set(keys.map(k=>SZO_DISPLAY.label(k==='DamageMin'?'Damage':k,ITEM_DETAIL_RENAME[k]||k)))];
   const rank=label=>label===SZO_DISPLAY.label('Help')?Infinity:order.includes(label)?order.indexOf(label):order.length;
   labels.sort((a,b)=>rank(a)-rank(b));
   const body=labels.map(label=>{

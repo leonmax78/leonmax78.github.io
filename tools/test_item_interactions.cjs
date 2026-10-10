@@ -53,7 +53,7 @@ async function run(engine,mobile){
   assert((await dialog.innerText()).includes('皇．勇者聖甲'));
   await click(dialog.locator('[data-equipment-close]'));
   await page.keyboard.press('Escape');
-  for(const [slot,id] of [['A','31835'],['B','31552'],['C','31845']]){
+  for(const [slot,id] of [['A','31835'],['B','31552'],['C','31607']]){
    await page.evaluate(id=>showItem(id),id);
    await click(page.locator(`#reader [data-equipment-save="${slot}"]`));
   }
@@ -62,6 +62,7 @@ async function run(engine,mobile){
    await dialog.locator('[data-equipment-differences]').setChecked(differences);
    const labels=await dialog.locator('tbody th').allTextContents();
    for(const label of ['火傷','火傷機率','冥傷','冥傷機率'])assert(labels.indexOf(label)>=0&&labels.indexOf(label)<labels.indexOf('說明'));
+   for(const label of ['火傷','雷傷','冥傷'])assert.equal(labels.indexOf(label+'機率'),labels.indexOf(label)+1);
   }
   assert.deepEqual(errors,[]);console.log(`${mobile?'WebKit mobile':'Chromium desktop'}: searchable choices, keyboard/touch, cascade reset and persistent A/B/C comparisons passed.`);
  }finally{await browser.close();}
