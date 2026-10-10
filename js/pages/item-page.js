@@ -489,6 +489,15 @@ function itemApprovedStatusHTML(it){
   return `<div class="itemStatusDescription" data-status-description="${esc(id)}">${ids.length>1?`<strong>${esc(entry.name)}</strong>`:''}${entry.lines.map(line=>`<div>${esc(line)}</div>`).join('')}</div>`;
  }).join('');
 }
+function itemContentsHTML(it){
+ if(it.Type!=='BONUS')return '';
+ const contents=window.SZO_ITEM_CONTENTS?.[String(it.ID)];
+ if(!contents)return '<div class="muted itemContentsUnavailable">目前資料未提供可確認的內容物清單。</div>';
+ return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><div class="itemContentsGrid">${contents.ids.map(id=>{
+  const entry=itemIndex[id];
+  return entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）</div>`;
+ }).join('')}</div></details>`;
+}
 function itemDetailBodyHTML(it){
  const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
  const labels=keys=>new Set(keys.map(k=>window.SZO_DISPLAY.label(k)));
@@ -504,7 +513,7 @@ function itemDetailBodyHTML(it){
  groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
  const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>${key==='special'?itemApprovedStatusHTML(it):''}</section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}</div>`;
+ return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}${itemContentsHTML(it)}</div>`;
 }
 
 function showItem(id,skipPush){

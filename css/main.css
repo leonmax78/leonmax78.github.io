@@ -4125,6 +4125,12 @@ body{
 .compoundTaxonomyPage .resultItem{display:flex;align-items:center;gap:10px}
 @media(max-width:760px){.compoundTaxonomyPage .kvGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.compoundTaxonomyPage .kv:has(#eqQ){grid-column:1/-1}}
 @media(max-width:440px){.compoundTaxonomyPage .kvGrid{grid-template-columns:minmax(0,1fr)}}
+.itemContents{margin:16px 0;border-top:1px solid var(--line,#526472);padding-top:12px}
+.itemContents summary{cursor:pointer;padding:10px 0;font-weight:600}
+.itemContentsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.itemContentsGrid .resultItem{display:flex;align-items:center;gap:10px;min-width:0;margin:0}
+.itemContentsGrid .rName,.itemContentsGrid .rSub{display:block;overflow-wrap:anywhere}
+@media(max-width:600px){.itemContentsGrid{grid-template-columns:minmax(0,1fr)}}
 .itemAdvancedSearchPage .kvGrid>.kv{min-width:0}
 .itemAdvancedSearchPage .kvGrid select,.itemAdvancedSearchPage .kvGrid input{min-width:0;max-width:100%;width:100%}
 @media(max-width:700px){

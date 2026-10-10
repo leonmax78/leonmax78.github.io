@@ -51,6 +51,7 @@ window.SZO_SCRIPT_GROUPS = {
   "pages": [
     "data/equipment-taxonomy.js",
     "data/item-buffs.js",
+    "data/item-contents.js",
     "js/pages/item-equipment-filters.js",
     "js/pages/item-filter-search.js",
     "js/pages/item-equipment-compare.js",
@@ -70,6 +71,7 @@ window.SZO_SCRIPT_GROUPS = {
   "page_item": [
     "data/equipment-taxonomy.js",
     "data/item-buffs.js",
+    "data/item-contents.js",
     "js/pages/item-equipment-filters.js",
     "js/pages/item-filter-search.js",
     "js/pages/item-equipment-compare.js",
