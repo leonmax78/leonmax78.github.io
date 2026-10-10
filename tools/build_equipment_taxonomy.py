@@ -40,7 +40,7 @@ def main():
     CACHE.mkdir(parents=True,exist_ok=True)
     items=json.loads((ROOT/'data/items.json').read_text(encoding='utf-8'))
     cfg=json.loads((ROOT/'data/compound_config.json').read_text(encoding='utf-8'))
-    records={i['ID']:{'category':category(i),'class':i.get('Class',''),'type':i.get('Type',''),'tags':[]} for i in items}
+    records={i['ID']:{'category':category(i),'class':i.get('Class',''),'type':i.get('Type',''),'order':order,'tags':[]} for order,i in enumerate(items)}
     def tag(id,family,collection,source,variant=''):
         r=records.get(str(id))
         if r is not None and not any(x['family']==family and x['collection']==collection and x.get('variant','')==variant for x in r['tags']):
@@ -119,7 +119,7 @@ def main():
         if r['category']=='武器' and item.get('Type')=='HIDDEN_WEAPON':
             tag(id,'暗器','職業限定' if item.get('Class') else '不限職業','ITEM.Class')
         if not r['tags']:tag(id,'其他／未分類','','ITEM.Type')
-    result={'version':'V584','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
+    result={'version':'V586','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
     (ROOT/'data/equipment-taxonomy.js').write_text('window.SZO_EQUIPMENT_TAXONOMY='+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
     (ROOT/'reports/equipment-taxonomy-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 

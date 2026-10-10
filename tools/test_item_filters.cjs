@@ -38,9 +38,29 @@ async function run(engine,mobile){
   assert(pets.length>0&&pets.every(i=>i.class?.split(',').includes('CLASS_PET')));
   assert(pets.some(i=>i.id==='21181'));assert(!pets.some(i=>i.id==='20792'));
   await select('itemProfession','');
+  await page.locator('#itemMin').fill('999');await select('itemProfession','CLASS_SWORDMAN');
+  await select('itemCategory','寵物裝備');
+  for(const field of ['itemFamily','itemProfession','itemType','itemMin','itemMax','itemKind','itemSpecial']){
+   assert(!await page.locator('#'+field).isVisible());assert.equal(await page.locator('#'+field).inputValue(),'');
+  }
+  const petOrder=await page.evaluate(()=>itemResultRows.map(i=>SZO_EQUIPMENT_TAXONOMY.byId[i.ID].order));
+  assert(petOrder.length>0&&petOrder.every((v,i)=>i===0||v<=petOrder[i-1]));
+  assert.deepEqual(await page.locator('#itemCollection option').allTextContents(),['全部部位','武器','防具','飾品']);
+  for(const [part,example] of [['武器','21181'],['防具','21182'],['特殊飾品','21183']]){
+   await select('itemCollection',part);
+   const results=await page.evaluate(()=>itemResultRows.map(i=>({id:i.ID,...SZO_EQUIPMENT_TAXONOMY.byId[i.ID]})));
+   assert(results.some(i=>i.id===example));
+   assert(results.every(i=>i.category===part&&i.class.includes('CLASS_PET')));
+  }
+  await select('itemCollection','');
+  await page.screenshot({path:path.join(root,`outputs/filter-pet-${mobile?'mobile':'desktop'}.png`)});
+  await select('itemCategory','武器');
+  assert(!(await page.locator('#itemFamily option').allTextContents()).includes('寵物裝備'));
   await select('itemFamily','世貿系列');
+  assert(await page.locator('#itemMin').isVisible());assert(await page.locator('#itemProfession').isVisible());
   await select('itemCollection','300級龍涉大川繼鱗武匣');
   assert.equal(await page.locator('#itemResults [data-item]').count(),20);
+  assert(await page.evaluate(()=>itemResultRows.every((it,i)=>i===0||SZO_EQUIPMENT_TAXONOMY.byId[it.ID].order<=SZO_EQUIPMENT_TAXONOMY.byId[itemResultRows[i-1].ID].order)));
   await select('itemCategory','防具');await select('itemFamily','聖甲');await select('itemCollection','昊系列');
   assert((await page.locator('#itemResults').innerText()).includes('勇者聖甲'));
   await select('itemFamily','玄宙');await select('itemCollection','職業防具');
