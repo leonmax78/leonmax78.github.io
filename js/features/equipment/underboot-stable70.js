@@ -64,7 +64,7 @@
       const mats=eqMaterials(recipe,count);
       return '<h3>'+esc(recipeGroupLabel88ab(recipe.group))+'｜'+esc(recipe.name)+' × '+fmt(count)+'</h3><div class="tableWrap"><table class="eqMatTable"><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>'+mats.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+fmt(m.qty)+'</td></tr>').join('')+'</tbody></table></div>';
     }).join('');
-    byId('reader').innerHTML='<section class="card"><button class="backBtn" id="eqBackToSim">← 返回裝備合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>'+esc(eq.name)+'</b><br>材料依配方分開顯示，並依安定值順序排列。</div>'+sections+'</section>';
+    byId('reader').innerHTML='<section class="card"><button class="backBtn" id="eqBackToSim">← 返回常用配方合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>'+esc(eq.name)+'</b><br>材料依配方分開顯示，並依安定值順序排列。</div>'+sections+'</section>';
     window.scrollTo({top:0,behavior:'smooth'});
   };
   function simGroup88ab(){

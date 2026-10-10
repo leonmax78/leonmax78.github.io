@@ -8,7 +8,7 @@
  document.addEventListener('focusin',e=>{if(active&&!active.wrap.contains(e.target)&&!active.list.contains(e.target))close();});
  window.addEventListener('popstate',close);
  function enhance(){
-  document.querySelectorAll('.itemAdvancedSearchPage .kvGrid select').forEach(select=>{
+  document.querySelectorAll('.itemAdvancedSearchPage .kvGrid select, .compoundTaxonomyPage .kvGrid select').forEach(select=>{
    if(select.dataset.searchReady)return;
    select.dataset.searchReady='1';
    const wrap=document.createElement('div');wrap.className='itemFilterCombo';

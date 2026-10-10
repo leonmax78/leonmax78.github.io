@@ -278,7 +278,7 @@ function itemSubLoadingLabel(kind){
  const labels={
   item:'道具查詢',
   reverse:'掉落反查',
-  compound:'常用裝備配方合成模擬'
+  compound:'常用配方合成模擬'
  };
  return labels[kind]||'道具功能';
 }
@@ -328,7 +328,7 @@ function itemSubLoadingLabel(kind){
  const labels={
   item:'道具查詢',
   reverse:'掉落反查',
-  compound:'常用裝備配方合成模擬'
+  compound:'常用配方合成模擬'
  };
  return labels[kind]||'道具功能';
 }

@@ -4119,6 +4119,12 @@ body{
 .detailPreviewDrops .searchedDrop{color:#ff8793;background:#6b1f2a44;border-color:#ff8793;box-shadow:inset 3px 0 #ff6578;font-weight:700}
 @media(max-width:600px){.detailPreviewBody{padding:12px}.detailPreviewDrops{grid-template-columns:1fr}.detailPreview .itemSectionGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .detailPreview .itemSection-help .itemSectionGrid,.detailPreview .itemSection-special .itemSectionGrid{grid-template-columns:1fr}
+.compoundTaxonomyPage .kvGrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.compoundTaxonomyPage .kvGrid>.kv{min-width:0}
+.compoundTaxonomyPage .kvGrid input{width:100%;min-width:0}
+.compoundTaxonomyPage .resultItem{display:flex;align-items:center;gap:10px}
+@media(max-width:760px){.compoundTaxonomyPage .kvGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.compoundTaxonomyPage .kv:has(#eqQ){grid-column:1/-1}}
+@media(max-width:440px){.compoundTaxonomyPage .kvGrid{grid-template-columns:minmax(0,1fr)}}
 .itemAdvancedSearchPage .kvGrid>.kv{min-width:0}
 .itemAdvancedSearchPage .kvGrid select,.itemAdvancedSearchPage .kvGrid input{min-width:0;max-width:100%;width:100%}
 @media(max-width:700px){

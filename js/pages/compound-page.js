@@ -205,6 +205,7 @@ function eqBuildBaseStatsFromItemIni(raw,fallback){
  eqAddStatFromIni(base,'poison_res','抗毒',raw.PosionRes??raw.PoisonRes);
  eqAddStatFromIni(base,'blind_res','抗盲目',raw.BlindRes);
  eqAddStatFromIni(base,'silent_res','抗禁咒',raw.SilentRes);
+ eqAddStatFromIni(base,'attack','攻速',raw.Attack);
  eqAddStatFromIni(base,'durability','耐久',raw.Durabulity??raw.Durability);
  eqAddStatFromIni(base,'weight','重量',raw.Weight);
  for(const k of ['level','clevel'])if(base[k]===undefined&&fallback[k]!==undefined)base[k]=fallback[k];
@@ -422,13 +423,13 @@ function renderEquipmentCompoundPage(){
    !(typeof itemIndex!=='undefined'&&itemIndex&&Object.keys(itemIndex).length)
   )
  ){
-  if(typeof showPageLoading==='function')showPageLoading('常用裝備配方合成模擬');
-  else byId('reader').innerHTML='<section class="card"><h1>常用裝備配方合成模擬讀取中</h1><div class="muted">正在載入道具、怪物與合成資料，請稍等。</div></section>';
+  if(typeof showPageLoading==='function')showPageLoading('常用配方合成模擬');
+  else byId('reader').innerHTML='<section class="card"><h1>常用配方合成模擬讀取中</h1><div class="muted">正在載入道具、怪物與合成資料，請稍等。</div></section>';
   ensureCompoundDataLoaded().then(ok=>{if(ok)renderEquipmentCompoundPage();});
   return;
  }
  window.v86LastView='item';
- byId('reader').innerHTML=`<section class="card"><h1>常用裝備配方合成模擬</h1><div class="muted">先篩選裝備，點選裝備後會進入合成模擬頁。</div>
+ byId('reader').innerHTML=`<section class="card"><h1>常用配方合成模擬</h1><div class="muted">先篩選裝備，點選裝備後會進入合成模擬頁。</div>
  <div class="eqFilterGrid"><div><label>種類（武器 / 防具 / 仙器）</label><select id="eqMain"></select></div><div><label>系列</label><select id="eqSeries"></select></div><div><label>階級 / 等級</label><select id="eqTier"></select></div><div><label>類型 / 部位</label><select id="eqType"></select></div><div style="grid-column:1/-1"><label>搜尋裝備名稱 / ID</label><input id="eqQ" value="${esc(eqState.q||'')}" placeholder="例如：椒圖、宮殤、劍、300"></div></div>
  <h3>選擇裝備</h3><div class="results" id="eqList"></div></section>`;
  eqRefreshFilters(); eqRefreshList();
@@ -448,7 +449,7 @@ function eqRenderPreview(keepScroll=false){
  const y=window.scrollY||document.documentElement.scrollTop||0;
  const eq=eqSelected();
  if(!eq){renderEquipmentCompoundPage();return;}
- byId('reader').innerHTML=`<section class="card"><button class="backBtn" id="eqBackToList">← 返回裝備篩選</button><h1>常用裝備配方合成模擬</h1><h2>${esc(eq.name)}</h2>${eqMetaLine(eq)}${eqRenderStats(eq,true)}${eqRenderRecipeArea()}</section>`;
+ byId('reader').innerHTML=`<section class="card"><button class="backBtn" id="eqBackToList">← 返回裝備篩選</button><h1>常用配方合成模擬</h1><h2>${esc(eq.name)}</h2>${eqMetaLine(eq)}${eqRenderStats(eq,true)}${eqRenderRecipeArea()}</section>`;
  closeDrawer();
  if(keepScroll)setTimeout(()=>window.scrollTo(0,y),0); else window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -460,7 +461,7 @@ function eqAllMaterials(){const map={}; for(const {recipe,count} of eqSelectedRe
 function showEquipmentMaterials(){
  const eq=eqSelected(), picks=eqSelectedRecipes(); if(!eq||!picks.length){empty('請先選擇裝備與至少一個配方');return}
  const sections=picks.map(({recipe,count})=>{const mats=eqMaterials(recipe,count); return `<h3>${esc(recipe.name)} × ${fmt(count)}</h3><div class="tableWrap"><table class="eqMatTable"><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>${mats.map(m=>`<tr><td>${esc(m.name)}</td><td>${fmt(m.qty)}</td></tr>`).join('')}</tbody></table></div>`;}).join('');
- byId('reader').innerHTML=`<section class="card"><button class="backBtn" id="eqBackToSim">← 返回常用裝備配方合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>${esc(eq.name)}</b><br>材料依配方分開顯示，方便核對。</div>${sections}</section>`;
+ byId('reader').innerHTML=`<section class="card"><button class="backBtn" id="eqBackToSim">← 返回常用配方合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>${esc(eq.name)}</b><br>材料依配方分開顯示，方便核對。</div>${sections}</section>`;
  window.scrollTo({top:0,behavior:'smooth'});
 }
 

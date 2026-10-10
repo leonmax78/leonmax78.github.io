@@ -77,6 +77,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/reverse-page.js"
   ],
   "page_compound": [
+    "data/equipment-taxonomy.js",
+    "js/pages/item-filter-search.js",
     "js/pages/compound-page.js"
   ],
   "page_collect": [
@@ -100,7 +102,7 @@ window.SZO_SCRIPT_GROUPS = {
     "js/features/equipment/stable-group-routing.js",
     "js/features/equipment/underboot-stable70.js",
     "js/features/equipment/stat-renderer.js",
-    "js/features/equipment/accessory-filter.js",
+    "js/features/equipment/taxonomy-filter.js",
     "js/features/equipment/accessory-menu-guard.js",
     "js/features/equipment/equipment-sort-fix.js"
   ],
