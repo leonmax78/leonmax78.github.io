@@ -64,7 +64,13 @@ async function run(engine,mobile){
   assert(await page.locator('#itemMin').isVisible());assert(await page.locator('#itemProfession').isVisible());
   await select('itemCollection','300級龍涉大川繼鱗武匣');
   assert.equal(await page.locator('#itemResults [data-item]').count(),20);
-  assert(await page.evaluate(()=>itemResultRows.every((it,i)=>i===0||SZO_EQUIPMENT_TAXONOMY.byId[it.ID].order<=SZO_EQUIPMENT_TAXONOMY.byId[itemResultRows[i-1].ID].order)));
+  assert(await page.evaluate(()=>{
+   const types=Object.keys(ITEM_TYPE_MAP),records=itemResultRows.map(it=>SZO_EQUIPMENT_TAXONOMY.byId[it.ID]);
+   return records[0].type==='SWORD'&&records.every((r,i)=>i===0||(r.type===records[i-1].type?r.order<=records[i-1].order:types.indexOf(r.type)>types.indexOf(records[i-1].type)));
+  }));
+  await select('itemType','SWORD');
+  assert(await page.evaluate(()=>itemResultRows.length>0&&itemResultRows.every((it,i)=>it.Type==='SWORD'&&(i===0||SZO_EQUIPMENT_TAXONOMY.byId[it.ID].order<=SZO_EQUIPMENT_TAXONOMY.byId[itemResultRows[i-1].ID].order))));
+  await select('itemType','');
   await select('itemFamily','玄宙');
   const allTypes=await page.locator('#itemType option').count();
   await select('itemProfession','CLASS_SWORDMAN');

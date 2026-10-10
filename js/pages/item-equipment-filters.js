@@ -91,7 +91,11 @@
  function modeChanged(){state.mode=document.getElementById('itemMode').value;state.effect='All';state.unit='';state.target=state.mode==='buff'?'person':'';state.special='';window.v86ItemType='';refresh();window.searchItems();}
  function best(it){return effects(it).slice().sort((a,b)=>a.key.localeCompare(b.key)||a.unit.localeCompare(b.unit)||b.value-a.value)[0];}
  function sort(rows){
-  if(!['buff','hp','mp'].includes(state.mode))return rows.every(it=>equipment(record(it)))?rows.slice().sort((a,b)=>(record(b).order??-1)-(record(a).order??-1)):rows;
+  if(!['buff','hp','mp'].includes(state.mode)){
+   const types=Object.keys(ITEM_TYPE_MAP);
+   const rank=it=>{const type=record(it).type;const index=types.indexOf(type==='HIDDEN_WEAPON2'?'HIDDEN_WEAPON':type);return index<0?types.length:index;};
+   return rows.every(it=>equipment(record(it)))?rows.slice().sort((a,b)=>rank(a)-rank(b)||(record(b).order??-1)-(record(a).order??-1)):rows;
+  }
   return rows.slice().sort((a,b)=>{const x=best(a),y=best(b);return x.key.localeCompare(y.key)||x.unit.localeCompare(y.unit)||y.value-x.value||y.seconds-x.seconds||Number(b.ID||b.id)-Number(a.ID||a.id);});
  }
  function summary(it){if(!state.mode)return '';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+SZO_DISPLAY.duration(e.seconds)+'）':''}`).join('；');}
