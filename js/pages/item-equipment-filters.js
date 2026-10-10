@@ -9,17 +9,17 @@
  const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='道具'?!equipment(r):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
  const tagsMatch=(r,family,collection)=>r.tags.some(t=>(!family||t.family===family)&&(!collection||t.collection===collection));
  const special=it=>buffs().specialById[id(it)]||[];
- function effects(it){return (buffs().byId[id(it)]||[]).filter(e=>{
+ function effects(it,ignoreUnit=false){return (buffs().byId[id(it)]||[]).filter(e=>{
   const key=state.mode==='hp'?'RestoreHP':state.mode==='mp'?'RestoreMP':state.effect;
-  return (state.mode!=='buff'||!e.key.startsWith('Restore'))&&(!key||e.key===key)&&(!state.unit||e.unit===state.unit);
+  return (state.mode!=='buff'||!e.key.startsWith('Restore'))&&(!key||e.key===key)&&(ignoreUnit||!state.unit||e.unit===state.unit);
  });}
- function matches(it){
+ function matches(it,ignoreUnit=false){
   const r=record(it);
   if(!categoryMatch(r)||state.special&&!special(it).some(s=>s.label===state.special))return false;
   if(state.category==='寵物裝備')return !state.collection||r.category===state.collection;
   if(state.mode){
-   if(state.target==='person'&&r.class.includes('CLASS_PET')||state.target==='pet'&&!r.class.includes('CLASS_PET'))return false;
-   return state.mode==='remove'?special(it).some(s=>s.key.startsWith('remove:')):effects(it).length>0;
+   if(state.mode==='buff'&&(state.target==='person'&&r.class.includes('CLASS_PET')||state.target==='pet'&&!r.class.includes('CLASS_PET')))return false;
+   return state.mode==='remove'?special(it).some(s=>s.key.startsWith('remove:')):effects(it,ignoreUnit).length>0;
   }
   const classes=r.class.split(',').map(s=>s.trim());
   const professionMatch=!state.profession||(state.profession.startsWith('series:')?r.tags.some(t=>t.variant===state.profession.slice(7)&&(!state.family||t.family===state.family)&&(!state.collection||t.collection===state.collection)):state.profession==='CLASS_PET'?classes.includes('CLASS_PET'):state.profession==='unrestricted'?!r.class:!r.class||classes.includes(state.profession));
@@ -34,16 +34,16 @@
   show('itemKind',state.category==='武器');
   if(state.category!=='武器'){window.v110ItemKind='';const kind=document.getElementById('itemKind');if(kind)kind.value='';}
   if(!isEquipment&&!petEquipment){state.family='';state.collection='';state.profession='';fill('itemFamily',[],'','全部系列');fill('itemCollection',[],'','全部細分類');}
-  fill('itemCategory',['武器','防具','仙器','特殊飾品','寵物裝備','配方','藥品','符咒','道具'],state.category,'全部大類');
+  fill('itemCategory',['武器','防具','仙器','特殊飾品',{value:'寵物裝備',label:'封獸裝備'},'配方','藥品','符咒','道具'],state.category,'全部大類');
   const collectionLabel=document.getElementById('itemCollection')?.closest('.kv').querySelector('.k');
   if(collectionLabel)collectionLabel.textContent=petEquipment?'部位':'細分類 / 武匣';
   for(const field of ['itemFamily','itemCollection','itemProfession'])show(field,isEquipment);
   show('itemType',!!state.category&&state.category!=='配方'&&state.category!=='藥品'&&state.category!=='符咒');
-  show('itemMode',consumable);show('itemBuffEffect',state.mode==='buff');show('itemBuffUnit',['buff','hp','mp'].includes(state.mode));show('itemBuffTarget',!!state.mode);
+  show('itemMode',consumable);show('itemBuffEffect',state.mode==='buff');show('itemBuffUnit',['buff','hp','mp'].includes(state.mode));show('itemBuffTarget',state.mode==='buff');
+  if(state.mode!=='buff')state.target='';
   fill('itemMode',[{value:'hp',label:'補血'},{value:'mp',label:'補精'},{value:'buff',label:'增益'},{value:'remove',label:'解除異常'}],state.mode,'全部用途');
   state.effect=fill('itemBuffEffect',Object.entries(buffs().fields).map(([value,label])=>({value,label})),state.effect,'全部增益');
-  state.unit=fill('itemBuffUnit',[{value:'number',label:'固定加值'},{value:'percent',label:'百分比'},{value:'multiplier',label:'倍率'}],state.unit,'分組高至低');
-  fill('itemBuffTarget',[{value:'person',label:'人物'},{value:'pet',label:'寵物／封獸'}],state.target,'全部使用對象');
+  fill('itemBuffTarget',[{value:'person',label:'人物'},{value:'pet',label:'封獸'}],state.target,'全部使用對象');
   let rows=Object.entries(data().byId).filter(([,r])=>categoryMatch(r));
   const unique=v=>[...new Set(v.filter(Boolean))];
   if(isEquipment){
@@ -60,7 +60,7 @@
   const variants=unique(rows.flatMap(([,r])=>r.tags.filter(t=>(!state.family||t.family===state.family)&&(!state.collection||t.collection===state.collection)).map(t=>t.variant))).map(label=>({value:'series:'+label,label}));
   const professions=state.collection==='特仕'?[]:[...(state.collection==='職業防具'?[]:[{value:'unrestricted',label:'不限職業'}]),...Object.entries(SZO_DISPLAY.values.Class).filter(([code])=>code!=='CLASS_PET').map(([value,label])=>({value,label}))];
   state.profession=fill('itemProfession',[...professions,...variants],state.profession,state.collection==='特仕'?'全部特仕系列':'全部職業／特仕系列');
-  const types=new Set(rows.filter(([key])=>matches({ID:key})).map(([,r])=>r.type));
+  const types=new Set(rows.filter(([key])=>matches({ID:key},true)).map(([,r])=>r.type));
   window.v86ItemType=fill('itemType',Object.entries(ITEM_TYPE_MAP).filter(([code])=>types.has(code)).map(([value,label])=>({value,label})),window.v86ItemType||'','全部種類');
   for(const field of ['itemMin','itemMax','itemSpecial'])show(field,!petEquipment);
   if(petEquipment){
@@ -73,15 +73,24 @@
    }
   }
  }
+ function refreshUnits(rows){
+  const el=document.getElementById('itemBuffUnit');if(!el)return;
+  if(!['buff','hp','mp'].includes(state.mode)){state.unit='';el.replaceChildren();return;}
+  const available=new Set(rows.flatMap(it=>effects(it,true).map(e=>e.unit)));
+  const options=[['number','固定加值'],['percent','百分比'],['multiplier','倍率']].filter(([value])=>available.has(value));
+  state.unit=available.has(state.unit)?state.unit:options[0]?.[0]||'';
+  el.replaceChildren(...options.map(([value,label])=>new Option(label,value)));
+  el.value=state.unit;
+ }
  function changed(){for(const [key,field] of Object.entries({family:'itemFamily',collection:'itemCollection',profession:'itemProfession',effect:'itemBuffEffect',unit:'itemBuffUnit',special:'itemSpecial',target:'itemBuffTarget'}))state[key]=document.getElementById(field)?.value||'';refresh();window.searchItems();}
  function categoryChanged(){state.category=document.getElementById('itemCategory').value;for(const key of ['family','collection','profession','mode','unit','special','target'])state[key]='';state.effect='All';window.v86ItemType='';refresh();window.searchItems();}
- function modeChanged(){state.mode=document.getElementById('itemMode').value;state.effect='All';state.unit='';state.target='person';state.special='';window.v86ItemType='';refresh();window.searchItems();}
+ function modeChanged(){state.mode=document.getElementById('itemMode').value;state.effect='All';state.unit='';state.target=state.mode==='buff'?'person':'';state.special='';window.v86ItemType='';refresh();window.searchItems();}
  function best(it){return effects(it).slice().sort((a,b)=>a.key.localeCompare(b.key)||a.unit.localeCompare(b.unit)||b.value-a.value)[0];}
  function sort(rows){
   if(!['buff','hp','mp'].includes(state.mode))return rows.every(it=>equipment(record(it)))?rows.slice().sort((a,b)=>(record(b).order??-1)-(record(a).order??-1)):rows;
   return rows.slice().sort((a,b)=>{const x=best(a),y=best(b);return x.key.localeCompare(y.key)||x.unit.localeCompare(y.unit)||y.value-x.value||y.seconds-x.seconds||Number(b.ID||b.id)-Number(a.ID||a.id);});
  }
- function summary(it){if(!state.mode)return '';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'寵物／封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+SZO_DISPLAY.duration(e.seconds)+'）':''}`).join('；');}
+ function summary(it){if(!state.mode)return '';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+SZO_DISPLAY.duration(e.seconds)+'）':''}`).join('；');}
  function clear(){Object.keys(state).forEach(k=>state[k]='');state.effect='All';refresh();}
- window.SZO_ITEM_TAXONOMY={matches,refresh,changed,categoryChanged,modeChanged,sort,summary,clear,active:()=>[state.category,state.special,state.mode].some(Boolean)};
+ window.SZO_ITEM_TAXONOMY={matches,refresh,refreshUnits,changed,categoryChanged,modeChanged,sort,summary,clear,active:()=>[state.category,state.special,state.mode].some(Boolean)};
 })();

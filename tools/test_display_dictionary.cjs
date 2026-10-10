@@ -10,6 +10,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await route(page);await ready(page);
   const approved=JSON.parse(fs.readFileSync(path.join(root,'planning/approved-display-review.json'),'utf8'));
   approved.confirmedValueChanges.Type.BONUS='錦囊';
+  approved.confirmedValueChanges.Class.CLASS_PET='封獸';
   approved.sharedLabels.Time='作用時間';
   const actual=await page.evaluate(()=>({labels:SZO_DISPLAY.fields,visible:SZO_DISPLAY.itemVisible,values:SZO_DISPLAY.values}));
   const typeOptions=await page.evaluate(()=>Object.entries(ITEM_TYPE_MAP));
@@ -27,7 +28,7 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   await page.evaluate(async()=>{await showShopItem('20469');});const status=await rows(page);
   await page.evaluate(()=>showItem('20469'));assert.deepEqual(await rows(page),status);
   const reviewedRows=await page.evaluate(()=>itemDetailRows({ID:'test',Type:'ITEM_ENCHANT',Class:'CLASS_SWORDMAN,CLASS_PET',Attack:'5',AttackRange:'7',ExpireDate:'0-7 11:50',Time:'60',DamageMin:'3',DamageMax:'9',FireAttack:'20',FireProb:'30',Value:'999',Flag:'ITEM_TEST',Magic:'123'}));
-  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、寵物'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間','1 分鐘'],['傷害','3-9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
+  for(const entry of [['類型','特殊功能道具'],['職業限制','劍俠、封獸'],['攻速','最快'],['攻擊距離','7格距離'],['回收時間','星期日、11點50分'],['作用時間','1 分鐘'],['傷害','3-9'],['火傷','20'],['火傷機率','30']])assert(reviewedRows.some(r=>r[0]===entry[0]&&r[1]===entry[1]),JSON.stringify(entry));
   assert.deepEqual(await page.evaluate(()=>[0,30,59,60,90,1800,3600,60.5,'',null,-1,'unknown'].map(SZO_DISPLAY.duration)),['0 秒','30 秒','59 秒','1 分鐘','1 分 30 秒','30 分鐘','60 分鐘','1 分 0.5 秒','','','-1','unknown']);
   assert(!reviewedRows.some(r=>['傷害下限','傷害上限'].includes(r[0])));
   assert(!reviewedRows.some(r=>['價值','道具旗標','關聯技能'].includes(r[0])));
@@ -76,16 +77,16 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   assert.equal(await check.locator('#valueMode').inputValue(),'tokens');assert.equal(await check.locator('[data-value-index]').count(),6);
   const sword=check.locator('#valueRows tr').filter({has:check.locator('.rawValue',{hasText:/^CLASS_SWORDMAN$/})});
   await sword.locator('input').fill('custom sword');
-  assert.equal(await check.locator('#valueRows tr').filter({has:check.locator('.rawValue',{hasText:/^CLASS_PET$/})}).locator('input').inputValue(),'寵物');
+  assert.equal(await check.locator('#valueRows tr').filter({has:check.locator('.rawValue',{hasText:/^CLASS_PET$/})}).locator('input').inputValue(),'封獸');
   await check.locator('#valueMode').selectOption('values');assert.equal(await check.locator('[data-value-index]').count(),0);assert.equal(await check.locator('[data-class-preview]').count(),18);
   const previews=await check.locator('#valueRows tr').evaluateAll(rows=>rows.map(r=>[r.querySelector('.rawValue').textContent,r.querySelector('[data-class-preview]').textContent]));
   for(const [raw,label] of previews)if(raw.split(',').includes('CLASS_SWORDMAN'))assert(label.includes('custom sword'));
   assert(!previews.some(([,label])=>label==='legacy combination'));
   await check.screenshot({path:path.join(root,'outputs/class-combination-preview.png'),fullPage:true});await check.locator('#closeValues').click();
   const download=check.waitForEvent('download');await check.locator('#export').click();const d=await download;const json=JSON.parse(fs.readFileSync(await d.path(),'utf8'));assert.equal(json.fields.length,65);assert.equal(json.confirmedValueChanges.Attack['1'],'最慢（確認）');assert.equal(json.status,'draft-not-applied');
-  assert.equal(json.legacyClassCombinations['CLASS_SWORDMAN,CLASS_ASSASSIN'],'legacy combination');assert.equal(json.confirmedValueChanges.Class.CLASS_SWORDMAN,'custom sword');assert(!Object.keys(json.confirmedValueChanges.Class).some(k=>k.includes(',')));assert.equal(Object.keys(json.resolvedClassMappings).length,6);assert.equal(json.resolvedClassMappings.CLASS_PET,'寵物');
+  assert.equal(json.legacyClassCombinations['CLASS_SWORDMAN,CLASS_ASSASSIN'],'legacy combination');assert.equal(json.confirmedValueChanges.Class.CLASS_SWORDMAN,'custom sword');assert(!Object.keys(json.confirmedValueChanges.Class).some(k=>k.includes(',')));assert.equal(Object.keys(json.resolvedClassMappings).length,6);assert.equal(json.resolvedClassMappings.CLASS_PET,'封獸');
   await check.reload();await check.locator('[data-values="Class"]').click();await check.waitForSelector('[data-value-index]');assert.equal(await sword.locator('input').inputValue(),'custom sword');await check.locator('#closeValues').click();
-  assert.equal(await check.evaluate(()=>SZO_DISPLAY.value('Class','CLASS_UNKNOWN, CLASS_PET')),'CLASS_UNKNOWN、寵物');
+  assert.equal(await check.evaluate(()=>SZO_DISPLAY.value('Class','CLASS_UNKNOWN, CLASS_PET')),'CLASS_UNKNOWN、封獸');
   await check.screenshot({path:path.join(root,'outputs/field-checklist-desktop.png'),fullPage:true});
   await check.setViewportSize({width:390,height:844});await check.screenshot({path:path.join(root,'outputs/field-checklist-mobile.png'),fullPage:true});assert(await check.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await check.locator('[data-values="Attack"]').click();await check.waitForSelector('[data-value-index]');assert(await check.evaluate(()=>document.querySelector('dialog').getBoundingClientRect().right<=innerWidth));

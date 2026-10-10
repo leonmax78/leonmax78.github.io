@@ -31,6 +31,7 @@
     '術攻':'MagicAttack','術防':'MagicDef','物防':'ExtraDef','防禦':'ExtraDef','生命':'HP','電防':'LightningDef','暗防':'DarkDef','職等(CL)':'CLevel'
   };
   const values = {Attack:{'1':'最慢','2':'次慢','3':'普通','4':'次快','5':'最快'},CLevel:{'0':'無','1':'一轉','2':'二轉','3':'三轉','4':'四轉','5':'五轉'},Class:{CLASS_SWORDMAN:'劍俠',CLASS_WARRIOR:'勇士',CLASS_ASSASSIN:'術者',CLASS_TAOIST:'道人',CLASS_PRIEST:'僧侶',CLASS_PET:'寵物'}};
+  values.Class.CLASS_PET='封獸';
   values.AttackRange={'1':'1格距離','2':'2格距離','6':'6格距離','7':'7格距離','8':'8格距離','9':'9格距離','10':'10格距離'};
   values.ExpireDate={'0-1 12:00':'星期一、12點','0-2 12:00':'星期二、12點','0-3 12:00':'星期三、12點','0-4 12:00':'星期四、12點','0-5 12:00':'星期五、12點','0-6 12:00':'星期六、12點','0-7 11:50':'星期日、11點50分','0-7 12:00':'星期日、12點'};
   values.Type={SWORD:'劍',BLADE:'刀',WHISK:'拂塵',STAFF:'禪杖',HIDDEN_WEAPON:'暗器',HIDDEN_WEAPON2:'暗器',SPEAR:'槍',ROD:'棍',AXE:'斧頭',HAMMER:'錘',SHIELD:'盾',HELMET:'頭盔',ARMOR:'鎧甲',BRACER:'護腕',BOOT:'靴',ORNAMENT:'飾品',UNDER_BOOT:'仙器',TALISMAN:'法器',SUMMON_TOOL:'封甕',PRESCRIPTION:'配方',POTION:'藥品',MATERIAL:'道具',MAGIC_FIGURE:'符咒',BODY_CHANGE:'武魂',ITEM_ENCHANT:'特殊功能道具',BONUS:'錦囊類'};

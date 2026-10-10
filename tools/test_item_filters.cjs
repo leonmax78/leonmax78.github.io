@@ -41,6 +41,7 @@ async function run(engine,mobile){
   await select('itemProfession','');
   await page.locator('#itemMin').fill('999');await select('itemProfession','CLASS_SWORDMAN');
   await select('itemCategory','寵物裝備');
+  assert.equal(await page.locator('#itemCategory option:checked').innerText(),'封獸裝備');
   for(const field of ['itemFamily','itemProfession','itemType','itemMin','itemMax','itemKind','itemSpecial']){
    assert(!await page.locator('#'+field).isVisible());assert.equal(await page.locator('#'+field).inputValue(),'');
   }
@@ -92,14 +93,27 @@ async function run(engine,mobile){
   await page.screenshot({path:path.join(root,`outputs/filter-special-${mobile?'mobile':'desktop'}.png`)});
   await select('itemCategory','藥品');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
   await select('itemMode','hp');assert(!await page.locator('#itemBuffEffect').isVisible());
+  assert.equal(await page.locator('#itemBuffUnit').inputValue(),'number');
+  assert(!(await page.locator('#itemBuffUnit option').allTextContents()).some(t=>t.includes('分組')||t==='倍率'));
   assert((await page.locator('#itemResults').innerText()).includes('補血 +'));
   await select('itemMode','buff');assert(await page.locator('#itemBuffEffect').isVisible());
+  assert(await page.locator('#itemBuffTarget').isVisible());
+  assert.deepEqual(await page.locator('#itemBuffTarget option').allTextContents(),['全部使用對象','人物','封獸']);
+  await select('itemBuffTarget','pet');
+  for(const mode of ['hp','mp','remove','']){
+   await select('itemMode',mode);
+   assert(!await page.locator('#itemBuffTarget').isVisible());
+   assert.equal(await page.evaluate(()=>SZO_ITEM_FILTERS.target),'');
+  }
+  await select('itemMode','buff');
   assert((await page.locator('#itemResults [data-item]').first().innerText()).includes('行家強身藥酒'));
   await select('itemCategory','道具');await select('itemMode','buff');
   const result=await page.evaluate(()=>({names:itemResultRows.map(i=>i.Name),types:[...new Set(itemResultRows.map(i=>i.Type))]}));
   assert(result.types.includes('POTION')&&result.types.includes('MAGIC_FIGURE')&&result.types.includes('MATERIAL'));
   assert(!result.names.includes('激獸源符'));assert(result.names.includes('仙帝十倍練功符'));
   await select('itemBuffEffect','Drop');assert((await page.locator('#itemResults').innerText()).includes('30 分鐘'));assert(!(await page.locator('#itemResults').innerText()).includes('1800 秒'));
+  assert.deepEqual(await page.locator('#itemBuffUnit option').allTextContents(),['倍率']);
+  assert.equal(await page.locator('#itemBuffUnit').inputValue(),'multiplier');
   await select('itemBuffEffect','All');
   await select('itemBuffTarget','pet');assert((await page.locator('#itemResults [data-item]').first().innerText()).includes('激獸源符'));
   await select('itemBuffTarget','person');await select('itemBuffEffect','Str');await select('itemBuffUnit','number');

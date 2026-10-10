@@ -247,12 +247,12 @@ function itemSearchIndexRows(){
 function hasItemSearchIndex(){return itemSearchIndexRows().length>0}
 function itemIndexTypeName(row){return itemTypeName(row.type)||row.type||''}
 function itemIndexSearchText(row){return `${row.name||''} ${row.id||''} ${row.level||''} ${row.type||''} ${itemIndexTypeName(row)}`.toLowerCase()}
-function filterItemIndexList(q,type,min,max,series,kind){
+function filterItemIndexList(q,type,min,max,series,kind,ignoreUnit=false){
  const qText=(q||'').trim().toLowerCase();
  const minLv=min?intOf(min):null;
  const maxLv=max?intOf(max):null;
  const rows=itemSearchIndexRows().filter(it=>
-  (!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it))&&
+  (!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it,ignoreUnit))&&
   (!qText||itemIndexSearchText(it).includes(qText))&&
   (!type||it.type===type)&&
   (minLv===null||intOf(it.level)>=minLv)&&
@@ -260,7 +260,7 @@ function filterItemIndexList(q,type,min,max,series,kind){
   (!series||itemMatchesSeries({ID:it.id},series))&&
   itemMatchesKind({ID:it.id},kind)
  );
- return window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(rows):rows;
+ return window.SZO_ITEM_TAXONOMY&&!ignoreUnit?window.SZO_ITEM_TAXONOMY.sort(rows):rows;
 }
 function itemIndexResultsHTML(arr){
  return arr.map(it=>`<button class="resultItem" data-item="${esc(it.id)}"><div class="rName">${esc(it.name)}</div><div class="rSub">Lv.${esc(it.level||'')} / ${esc(itemIndexTypeName(it))} / ID ${esc(it.id||'')}</div></button>`).join('')||'<div class="muted">找不到符合條件的道具。</div>';
@@ -349,7 +349,7 @@ async function renderItemPage(tab='item'){
         <div class="kv"><div class="k">大類</div><div class="v"><select id="itemCategory" onchange="SZO_ITEM_TAXONOMY.categoryChanged()"></select></div></div>
         <div class="kv" hidden><div class="k">用途</div><div class="v"><select id="itemMode" onchange="SZO_ITEM_TAXONOMY.modeChanged()"></select></div></div>
         <div class="kv" hidden><div class="k">增益效果</div><div class="v"><select id="itemBuffEffect" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
-        <div class="kv" hidden><div class="k">效果單位 / 排序</div><div class="v"><select id="itemBuffUnit" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
+        <div class="kv" hidden><div class="k">效果單位</div><div class="v"><select id="itemBuffUnit" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv" hidden><div class="k">使用對象</div><div class="v"><select id="itemBuffTarget" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">道具名稱 / ID / 類型</div><div class="v"><input id="itemQ" placeholder="例如：經驗丹、藥草、277、火傷" value="${esc(window.v86ItemQ||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">系列</div><div class="v"><select id="itemFamily" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
@@ -425,21 +425,26 @@ function searchItems(){
  if(!hasItemData()&&!hasItemSearchIndex()){box.innerHTML='<div class="muted">資料載入中，請稍等。</div>';return;}
  if(!(q||type||window.v86ItemMin||window.v86ItemMax||series||kind||window.SZO_ITEM_TAXONOMY?.active())){refreshAvailableItemKinds(null);box.innerHTML='';return;}
  if(!hasItemData()){
-  const candidates=filterItemIndexList(q,type,window.v86ItemMin,window.v86ItemMax,series,'');
+  const unitCandidates=filterItemIndexList(q,type,window.v86ItemMin,window.v86ItemMax,series,'',true);
+  window.SZO_ITEM_TAXONOMY?.refreshUnits(unitCandidates);
+  const candidates=unitCandidates.filter(it=>!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it));
   const availableKind=refreshAvailableItemKinds(candidates);
-  renderItemSearchResults(candidates.filter(it=>itemMatchesKind(it,availableKind)),true);
+  const filtered=candidates.filter(it=>itemMatchesKind(it,availableKind));
+  renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(filtered):filtered,true);
   return;
  }
  const arr=items.filter(it=>
-  (!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it))&&
+  (!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it,true))&&
   (!q||itemSearchText(it).includes(q))&&
   (!type||it.Type===type)&&
   (min===null||intOf(it.Level)>=min)&&
   (max===null||intOf(it.Level)<=max)&&
   itemMatchesSeries(it,series)
  );
- const availableKind=refreshAvailableItemKinds(arr);
- const filtered=arr.filter(it=>itemMatchesKind(it,availableKind));
+ window.SZO_ITEM_TAXONOMY?.refreshUnits(arr);
+ const unitRows=arr.filter(it=>!window.SZO_ITEM_TAXONOMY||window.SZO_ITEM_TAXONOMY.matches(it));
+ const availableKind=refreshAvailableItemKinds(unitRows);
+ const filtered=unitRows.filter(it=>itemMatchesKind(it,availableKind));
  renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(filtered):filtered,false);
 }
 let itemResultPage=1,itemResultRows=[],itemResultIsIndex=false;
