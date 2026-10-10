@@ -19,12 +19,15 @@ function itemKind(it){
  return '';
 }
 
+function itemRemovesStatus(it){return String(it?.StatusParam||'').split(/[,\s;]+/).includes('EFFECT_REMOVE');}
+
 function itemStatus(it){
  const raw=String(it?.ExtraStatus||'').trim();
  if(!raw||raw==='0')return '';
  const parts=raw.split(/[,\s;]+/).filter(Boolean);
  const names=parts.map(x=>statusName(x)||magicName(x)||(/^\d+$/.test(String(x))||/^0x/i.test(String(x))?`StatusID:${x}`:'')).filter(Boolean);
- return [...new Set(names)].join('、');
+ const text=[...new Set(names)].join('、');
+ return text&&itemRemovesStatus(it)?'解除'+text:text;
 }
 
 function itemDetailRows(it){
@@ -51,7 +54,7 @@ function itemDetailRows(it){
   }
   if(k==='ExtraStatus'){
    const st=itemStatus(it);
-   if(st)rows.push([window.SZO_DISPLAY.label('ExtraStatus'),st]);
+   if(st)rows.push([window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'),st]);
    continue;
   }
   if(k in it&&String(it[k]??'').trim()!==''){
@@ -438,7 +441,7 @@ function itemDetailBodyHTML(it){
  const labels=keys=>new Set(keys.map(k=>window.SZO_DISPLAY.label(k)));
  const ability=labels(['HP','MP','Con','Str','Int','Dex','Damage','DamageMin','DamageMax','MagicAttack','ExtraDef','MagicDef']);
  const element=labels(['IceAttack','IceProb','FireAttack','FireProb','LightningAttack','LightningProb','DarkAttack','DarkProb','IceDef','FireDef','LightningDef','DarkDef','ParalysisRes','PosionRes','BlindRes','SilentRes']);
- const special=labels(['ExtraStatus','StatusProb']);
+ const special=labels(['ExtraStatus','RemoveStatus','StatusProb']);
  const helpLabel=window.SZO_DISPLAY.label('Help'),groups={basic:[],ability:[],element:[],help:[],special:[]};
  for(const row of rows){
   const label=row[0];
@@ -448,7 +451,7 @@ function itemDetailBodyHTML(it){
  groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
  const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div></section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special','特殊能力')}${section('help','道具說明')}</div>`;
+ return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}</div>`;
 }
 
 function showItem(id,skipPush){

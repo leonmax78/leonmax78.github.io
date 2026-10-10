@@ -2,7 +2,7 @@
 (function(){
   const fields = {
     ID:'ID',Name:'名稱',Type:'類型',SubType:'子分類',Level:'等級',CLevel:'職等',Kind:'專剋',
-    ExtraStatus:'特殊能力',Help:'說明',HP:'血量',MP:'精力',Con:'體魄',Str:'力量',Int:'智慧',Dex:'靈敏',
+    ExtraStatus:'特殊能力',RemoveStatus:'解除效果',Help:'說明',HP:'血量',MP:'精力',Con:'體魄',Str:'力量',Int:'智慧',Dex:'靈敏',
     Damage:'傷害',DamageMin:'傷害下限',DamageMax:'傷害上限',MagicAttack:'術法攻擊',ExtraDef:'物理防禦',MagicDef:'術法防禦',
     IceAttack:'冰傷',FireAttack:'火傷',LightningAttack:'雷傷',DarkAttack:'冥傷',
     IceProb:'冰傷機率',FireProb:'火傷機率',LightningProb:'雷傷機率',DarkProb:'冥傷機率',

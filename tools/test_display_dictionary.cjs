@@ -34,6 +34,10 @@ const rows=page=>page.locator('#reader .kv').evaluateAll(nodes=>nodes.map(n=>[n.
   assert.deepEqual(await page.evaluate(()=>[0,1,40,99,100,150,4000,4400,'',null,'unknown'].map(v=>SZO_DISPLAY.value('Weight',v))),['小於1','小於1','小於1','小於1','1','1.5','40','44','','','unknown']);
   await page.evaluate(()=>showItem('29595'));assert((await rows(page)).some(r=>r[0]==='重量'&&r[1]==='40'));
   await page.evaluate(()=>showShopItem('29595'));assert((await rows(page)).some(r=>r[0]==='重量'&&r[1]==='40'));
+  await page.evaluate(()=>showItem('20075'));const cureRows=await rows(page);assert(cureRows.some(r=>r[0]==='解除效果'&&r[1]==='解除萬蠱毒'));assert.equal(await page.locator('[data-item-section="special"] h2').textContent(),'解除效果');
+  await page.evaluate(()=>showShopItem('20075'));assert.deepEqual(await rows(page),cureRows);
+  await page.evaluate(()=>showItem('20076'));assert((await rows(page)).some(r=>r[0]==='解除效果'&&r[1]==='解除定身'));
+  assert.equal(await page.evaluate(()=>itemStatus({ExtraStatus:'37',StatusParam:'EFFECT_SELF'})),'萬蠱毒');
   await page.evaluate(()=>showItem('29917'));
   const staffRows=await rows(page);assert(staffRows.some(r=>r[0]==='血量'&&r[1]==='55%'));assert(staffRows.some(r=>r[0]==='精力'&&r[1]==='57%'));
   const fixed=await page.evaluate(()=>itemDetailRows({HP:'30',HPFlag:'AFFECT_NUMBER',MP:'40',MPFlag:'AFFECT_MAX_NUMBER'}));assert.deepEqual(fixed,[['血量','30'],['精力','40']]);
