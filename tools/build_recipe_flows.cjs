@@ -8,7 +8,7 @@ for(const recipe of rows.filter(r=>r.Item)){
  const signature=JSON.stringify(Object.fromEntries(Object.entries(recipe).filter(([key])=>key!=='ID').sort(([a],[b])=>a.localeCompare(b))));
  if(seen.has(signature))continue;
  seen.add(signature);
- const flow={id:recipe.ID,name:recipe.Name,input:recipe.Input||null,output:recipe.Output||null,count:recipe.Count?Number(recipe.Count):null,steps:[]};
+ const flow={id:recipe.ID,name:recipe.Name,input:recipe.Input||null,output:recipe.Output||null,count:recipe.Count?Number(recipe.Count):null,failRate:recipe.Fail!==undefined&&recipe.Fail!==''?Number(recipe.Fail):null,stable:recipe.Stable!==undefined&&recipe.Stable!==''?Number(recipe.Stable):null,steps:[]};
  for(const key of Object.keys(recipe).filter(k=>/^Step\d+$/.test(k)).sort((a,b)=>Number(a.slice(4))-Number(b.slice(4)))){
   const source=steps.get(recipe[key]);assert(source,'Missing step '+recipe[key]);
   const materials=Object.keys(source).filter(k=>/^InputItem\d+$/.test(k)).sort((a,b)=>Number(a.slice(9))-Number(b.slice(9))).map(k=>{

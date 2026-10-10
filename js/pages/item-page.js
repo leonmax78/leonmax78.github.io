@@ -493,9 +493,10 @@ function itemContentsHTML(it){
  if(it.Type!=='BONUS')return '';
  const contents=window.SZO_ITEM_CONTENTS?.[String(it.ID)];
  if(!contents)return '<div class="muted itemContentsUnavailable">目前資料未提供可確認的內容物清單。</div>';
- return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><div class="itemContentsGrid">${contents.ids.map(id=>{
+ return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><p class="muted">機率依原始內容物權重換算。</p><div class="itemContentsGrid">${contents.ids.map(id=>{
   const entry=itemIndex[id];
-  return entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）</div>`;
+  const rate=Number.isFinite(contents.rates?.[id])?contents.rates[id].toFixed(6).replace(/\.?0+$/,'')+'%':'資料未提供';
+  return entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span><span class="itemContentRate">機率 ${rate}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）<div class="itemContentRate">機率 ${rate}</div></div>`;
  }).join('')}</div></details>`;
 }
 function itemRecipeFlowHTML(it){
@@ -503,7 +504,8 @@ function itemRecipeFlowHTML(it){
  const recipes=window.SZO_RECIPE_FLOWS?.[String(it.ID)];
  if(!recipes)return '<div class="muted">目前資料未提供可確認的合成流程。</div>';
  const link=id=>itemIndex[id]?`<button type="button" class="itemRecipeLink" data-item="${esc(id)}">${esc(nameOf(itemIndex[id]))}</button>`:`道具 ID ${esc(id)}`;
- return `<section class="itemRecipeFlows"><h2>合成流程</h2>${recipes.map(recipe=>`<details class="itemRecipeFlow" ${recipes.length===1?'open':''}><summary>${esc(recipe.name)}${recipes.length>1?' / '+(recipe.output?esc(nameOf(itemIndex[recipe.output]||{Name:recipe.output})):'配方 '+esc(recipe.id)):''}</summary>${recipe.input?`<p>合成對象：${link(recipe.input)}</p>`:''}<ol>${recipe.steps.map(step=>`<li><h3>步驟 ${step.slot}</h3><div class="tableWrap"><table><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>${step.materials.map(m=>`<tr><td>${link(m.id)}</td><td>${m.qty}</td></tr>`).join('')}</tbody></table></div></li>`).join('')}</ol>${recipe.output?`<p class="itemRecipeOutput">合成產物：${link(recipe.output)}${recipe.count!==null?' × '+recipe.count:''}</p>`:'<p class="muted">此配方未指定新道具產物，效果請參閱配方說明。</p>'}</details>`).join('')}</section>`;
+ const conditions=recipe=>[Number.isFinite(recipe.stable)?`<span class="itemRecipeStable">安定值：${recipe.stable}</span>`:'',Number.isFinite(recipe.failRate)?`<span class="itemRecipeFailure">失敗率：${recipe.failRate}%</span>`:''].filter(Boolean).join('');
+ return `<section class="itemRecipeFlows"><h2>合成流程</h2>${recipes.map(recipe=>`<details class="itemRecipeFlow" ${recipes.length===1?'open':''}><summary>${esc(recipe.name)}${recipes.length>1?' / '+(recipe.output?esc(nameOf(itemIndex[recipe.output]||{Name:recipe.output})):'配方 '+esc(recipe.id)):''}</summary>${conditions(recipe)?`<div class="itemRecipeConditions">${conditions(recipe)}</div>`:''}${recipe.input?`<p>合成對象：${link(recipe.input)}</p>`:''}<ol>${recipe.steps.map(step=>`<li><h3>步驟 ${step.slot}</h3><div class="tableWrap"><table><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>${step.materials.map(m=>`<tr><td>${link(m.id)}</td><td>${m.qty}</td></tr>`).join('')}</tbody></table></div></li>`).join('')}</ol>${recipe.output?`<p class="itemRecipeOutput">合成產物：${link(recipe.output)}${recipe.count!==null?' × '+recipe.count:''}</p>`:'<p class="muted">此配方未指定新道具產物，效果請參閱配方說明。</p>'}</details>`).join('')}</section>`;
 }
 function itemDetailBodyHTML(it){
  const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');

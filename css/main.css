@@ -4129,12 +4129,17 @@ body{
 .itemRecipeFlows h2{font-size:16px}.itemRecipeFlows h3{font-size:14px;margin:12px 0 6px}
 .itemRecipeFlow{padding:10px 0;border-bottom:1px solid var(--line,#526472)}
 .itemRecipeFlow summary{cursor:pointer;font-weight:600;padding:8px 0}
-.itemRecipeFlow ol{list-style:none;padding:0;margin:0}
+.itemRecipeFlow ol{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;align-items:start}
+.itemRecipeFlow li{min-width:0}
+.itemRecipeFailure{font-weight:600}
+.itemRecipeConditions{display:flex;gap:12px 24px;flex-wrap:wrap;margin:8px 0;font-weight:600}
+.itemContentRate{display:block;font-size:13px;margin-top:3px}
 .itemRecipeFlow .tableWrap{border-radius:8px}
 .itemRecipeFlow .tableWrap table{min-width:0;table-layout:fixed;width:100%}
 .itemRecipeFlow td,.itemRecipeFlow th{overflow-wrap:anywhere}
 .itemRecipeFlow td:last-child,.itemRecipeFlow th:last-child{width:80px;text-align:right}
 .itemRecipeLink{border:0;background:none;color:var(--accent,#71d5ef);padding:4px 0;cursor:pointer;text-align:left;text-decoration:underline;overflow-wrap:anywhere;font:inherit}
+.itemRecipeFlow .tableWrap .itemRecipeLink{border:0;border-radius:0;background:none;padding:2px 0;min-height:0;box-shadow:none}
 .itemRecipeOutput{margin:14px 0 0}
 .itemContents{margin:16px 0;border-top:1px solid var(--line,#526472);padding-top:12px}
 .itemContents summary{cursor:pointer;padding:10px 0;font-weight:600}
