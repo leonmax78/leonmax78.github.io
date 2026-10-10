@@ -22,7 +22,7 @@ assert(!taxonomy.byId['22254'].tags.some(t=>t.family==='聯動／NFT'));
 for(const item of allItems){
  const r=taxonomy.byId[item.ID];
  assert(!r.tags.some(t=>t.family==='暗器'));
- assert.equal(r.tags.some(t=>t.family==='無限暗器'),['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(item.Type)&&Number(item.Durabulity||0)===0);
+ assert.equal(r.tags.some(t=>t.family==='無限暗器'),['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(item.Type)&&Number(item.Durabulity||0)===0&&!String(item.Flag||'').split(',').map(s=>s.trim()).includes('ITEM_COMBINED'));
  assert.equal(r.tags.some(t=>t.family==='六滅系列'),r.category!=='其他道具'&&item.Name.includes('六滅'));
 }
 async function run(engine,mobile){
@@ -44,9 +44,9 @@ async function run(engine,mobile){
   await page.screenshot({path:path.join(root,`outputs/filter-initial-${mobile?'mobile':'desktop'}.png`),fullPage:true});
   await select('itemCategory','武器');assert(await page.locator('#itemFamily').isVisible());
   await select('itemFamily','無限暗器');
-  assert(await page.evaluate(()=>itemResultRows.length>0&&itemResultRows.every(i=>['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(i.Type)&&Number(i.Durabulity||0)===0)));
+  assert(await page.evaluate(()=>itemResultRows.length>0&&itemResultRows.every(i=>['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(i.Type)&&Number(i.Durabulity||0)===0&&!String(i.Flag||'').split(',').includes('ITEM_COMBINED'))));
   await select('itemFamily','六滅系列');assert(await page.locator('#itemResults [data-item="29943"]').count()>0);
-  await select('itemFamily','聯動／NFT');await select('itemCollection','東離');assert(await page.locator('#itemResults [data-item="31607"]').count()>0);
+  await select('itemFamily','聯動／NFT');assert((await page.locator('#itemCollection option').allTextContents()).includes('NFT'));assert(!(await page.locator('#itemCollection option').allTextContents()).includes('nft'));await select('itemCollection','東離');assert(await page.locator('#itemResults [data-item="31607"]').count()>0);
   await select('itemFamily','');
   assert(await page.locator('#itemKind').isVisible());
   await page.locator('#itemKind').selectOption({index:1});
@@ -127,6 +127,16 @@ async function run(engine,mobile){
   assert(await page.evaluate(()=>itemResultRows.every(i=>SZO_EQUIPMENT_TAXONOMY.byId[i.ID].tags.some(t=>t.family==='玄宙'&&t.collection==='特仕'&&t.variant==='靜月'))));
   await page.screenshot({path:path.join(root,`outputs/filter-special-${mobile?'mobile':'desktop'}.png`)});
   await select('itemCategory','道具');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
+  await select('itemMode','experience');
+  assert.equal(await page.locator('#itemResults [data-item]').count(),35);
+  assert((await page.locator('#itemResults [data-item]').first().innerText()).includes('極‧名星真驗丹'));
+  assert(await page.evaluate(()=>itemResultRows.every((it,i)=>i===0||(SZO_ITEM_BUFFS.experienceById[it.ID].value??-1)<=(SZO_ITEM_BUFFS.experienceById[itemResultRows[i-1].ID].value??-1))));
+  assert.equal(await page.evaluate(()=>SZO_ITEM_BUFFS.experienceById['26322'].value),250000000);
+  assert.equal(await page.evaluate(()=>SZO_ITEM_BUFFS.experienceById['30003'].value),15000);
+  assert((await page.locator('#itemResults [data-item="31885"]').innerText()).includes('經驗值待確認'));
+  for(const field of ['itemBuffEffect','itemBuffUnit','itemBuffTarget'])assert(!await page.locator('#'+field).isVisible());
+  await page.evaluate(()=>ensureItemSearchIndexLoaded());
+  assert(await page.evaluate(()=>JSON.stringify(filterItemIndexList('','','','','','').map(i=>i.id))===JSON.stringify(itemResultRows.map(i=>i.ID))));
   await select('itemMode','hp');assert(!await page.locator('#itemBuffEffect').isVisible());
   assert.equal(await page.locator('#itemBuffUnit').inputValue(),'number');
   assert(!(await page.locator('#itemBuffUnit option').allTextContents()).some(t=>t.includes('分組')||t==='倍率'));

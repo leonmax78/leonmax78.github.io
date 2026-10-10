@@ -76,7 +76,7 @@ def main():
         if not link.startswith(prefix): continue
         relative=link[len(prefix):];parts=relative.split('/')
         if relative.startswith('裝備/武器/聯動-nft/'):
-            sources.append(('武器','聯動／NFT',parts[-1],relative,None))
+            sources.append(('武器','聯動／NFT','NFT' if parts[-1]=='nft' else parts[-1],relative,None))
         elif relative.startswith('裝備/防具/') and len(parts)>=4:
             cat='特殊飾品' if '飾品' in parts else '防具'
             collection={'職業防具':'職業防具','特仕防具':'特仕'}.get(parts[3],' / '.join(parts[3:]))
@@ -136,8 +136,8 @@ def main():
             if len(r['tags'])>before:additions.append({'id':id,'name':name,'family':'聯動／NFT','collection':collection})
         if '六滅' in name:
             tag(id,'六滅系列','','ITEM.Name contains 六滅')
-        if item.get('Type') in {'HIDDEN_WEAPON','HIDDEN_WEAPON2'} and float(item.get('Durabulity') or 0)==0:
-            tag(id,'無限暗器','','ITEM.Type / absent or zero Durabulity')
+        if item.get('Type') in {'HIDDEN_WEAPON','HIDDEN_WEAPON2'} and float(item.get('Durabulity') or 0)==0 and 'ITEM_COMBINED' not in {flag.strip() for flag in item.get('Flag','').split(',')}:
+            tag(id,'無限暗器','','ITEM.Type / absent or zero Durabulity / not ITEM_COMBINED')
     (ROOT/'reports/equipment-classification-additions.json').write_text(json.dumps(additions,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     # Exact local status groups identify functional accessory families.
     statuses={s['ID']:s for s in json.loads((ROOT/'data/status.json').read_text(encoding='utf-8'))}

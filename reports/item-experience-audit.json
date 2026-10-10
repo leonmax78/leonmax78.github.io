@@ -1,0 +1,247 @@
+[
+  {
+    "id": "26311",
+    "name": "武骨經驗丹",
+    "value": 10000,
+    "label": "1萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26312",
+    "name": "中級武骨經驗丹",
+    "value": 100000,
+    "label": "10萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26313",
+    "name": "高級武骨經驗丹",
+    "value": 250000,
+    "label": "25萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26314",
+    "name": "頂級武骨經驗丹",
+    "value": 500000,
+    "label": "50萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26315",
+    "name": "特級武骨經驗丹",
+    "value": 1000000,
+    "label": "100萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26316",
+    "name": "上品武骨經驗丹",
+    "value": 2000000,
+    "label": "200萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26317",
+    "name": "精品武骨經驗丹",
+    "value": 5000000,
+    "label": "500萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26318",
+    "name": "絕品武骨經驗丹",
+    "value": 10000000,
+    "label": "1000萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26319",
+    "name": "完美武骨經驗丹",
+    "value": 20000000,
+    "label": "2000萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26320",
+    "name": "極致武骨經驗丹",
+    "value": 50000000,
+    "label": "5000萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26321",
+    "name": "超級武骨經驗丹",
+    "value": 100000000,
+    "label": "1億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "26322",
+    "name": "神絕武骨經驗丹",
+    "value": 250000000,
+    "label": "2億5000萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "27350",
+    "name": "仙絕武骨經驗丹",
+    "value": 500000000,
+    "label": "5億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "27351",
+    "name": "帝寶武骨經驗丹",
+    "value": 1000000000,
+    "label": "10億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "27352",
+    "name": "太宇武骨經驗丹",
+    "value": 2000000000,
+    "label": "20億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28180",
+    "name": "逸蒼武骨經驗丹",
+    "value": 4000000000,
+    "label": "40億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28181",
+    "name": "湛虛武骨經驗丹",
+    "value": 6500000000,
+    "label": "65億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28182",
+    "name": "京兆武骨經驗丹",
+    "value": 10000000000,
+    "label": "100億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28488",
+    "name": "頂天新進經驗丹",
+    "value": 50000000,
+    "label": "5000萬",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28768",
+    "name": "名星真驗丹",
+    "value": 25000000000,
+    "label": "250億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28769",
+    "name": "真‧名星真驗丹",
+    "value": 75000000000,
+    "label": "750億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28770",
+    "name": "超‧名星真驗丹",
+    "value": 150000000000,
+    "label": "1500億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28771",
+    "name": "極‧名星真驗丹",
+    "value": 250000000000,
+    "label": "2500億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "28772",
+    "name": "絕‧名星真驗丹",
+    "value": null,
+    "label": "",
+    "source": "unconfirmed"
+  },
+  {
+    "id": "28773",
+    "name": "小‧名星真驗丹",
+    "value": 10000000000,
+    "label": "100億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "29037",
+    "name": "伏赦武骨經驗丹",
+    "value": 15000000000,
+    "label": "150億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "29038",
+    "name": "穆嵅武骨經驗丹",
+    "value": 25000000000,
+    "label": "250億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "29972",
+    "name": "玉籙武骨經驗丹",
+    "value": 40000000000,
+    "label": "400億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "29973",
+    "name": "和輔武骨經驗丹",
+    "value": 55000000000,
+    "label": "550億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "29974",
+    "name": "碧落武骨經驗丹",
+    "value": 75000000000,
+    "label": "750億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "30003",
+    "name": "經驗丹",
+    "value": 15000,
+    "label": "15000",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "30120",
+    "name": "行家武骨經驗丹",
+    "value": 50000000000,
+    "label": "500億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "31884",
+    "name": "瓊筵武骨經驗丹",
+    "value": 90000000000,
+    "label": "900億",
+    "source": "ITEM.Help"
+  },
+  {
+    "id": "31885",
+    "name": "織蘿武骨經驗丹",
+    "value": null,
+    "label": "",
+    "source": "unconfirmed"
+  },
+  {
+    "id": "31886",
+    "name": "盛華武骨經驗丹",
+    "value": null,
+    "label": "",
+    "source": "unconfirmed"
+  }
+]

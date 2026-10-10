@@ -3,7 +3,15 @@ const root=path.resolve(__dirname,'..');
 const read=name=>JSON.parse(fs.readFileSync(path.join(root,'data',name+'.json'),'utf8'));
 const items=read('items'),magic=new Map(read('magic').map(x=>[x.ID,x])),status=new Map(read('status').map(x=>[x.ID,x]));
 const fields={All:'全屬性',Str:'力量',Dex:'靈敏',Con:'體魄',Int:'智慧',HP:'最大生命',MP:'最大精力',ExtraDef:'物理防禦',MagicDef:'術法防禦',MagicAttack:'術法攻擊',Experience:'經驗值',Drop:'掉寶率'};
-const byId={},audit=[],specialById={};
+const byId={},audit=[],specialById={},experienceById={};
+for(const item of items){
+ if(!['POTION','MAGIC_FIGURE','TALISMAN','MATERIAL'].includes(item.Type)||!/(經驗丹|真驗丹)$/.test(item.Name||''))continue;
+ const match=(item.Help||'').match(/([\d,.億萬\s]+)\s*(?:點|的)經驗/);
+ const label=match?.[1].replace(/[\s,]/g,'')||'';
+ const parts=Array.from(label.matchAll(/(\d+(?:\.\d+)?)(億|萬)?/g));
+ const value=label&&parts.map(p=>p[0]).join('')===label?parts.reduce((sum,p)=>sum+Number(p[1])*({億:1e8,萬:1e4}[p[2]]||1),0):null;
+ experienceById[item.ID]={value:value>0?value:null,label:value>0?label:'',source:value>0?'ITEM.Help':'unconfirmed'};
+}
 for(const item of items){
  const entries=[],spell=magic.get(item.Magic);
  for(const raw of [item,...(spell?.Target==='TARGET_SELF'?[spell]:[])]){
@@ -46,6 +54,7 @@ for(const item of items){
  }
  if(effects.length){byId[item.ID]=effects;audit.push({id:item.ID,name:item.Name,type:item.Type,effects});}
 }
-fs.writeFileSync(path.join(root,'data/item-buffs.js'),'window.SZO_ITEM_BUFFS='+JSON.stringify({fields,byId,specialById})+';\n');
+fs.writeFileSync(path.join(root,'data/item-buffs.js'),'window.SZO_ITEM_BUFFS='+JSON.stringify({fields,byId,specialById,experienceById})+';\n');
+fs.writeFileSync(path.join(root,'reports/item-experience-audit.json'),JSON.stringify(items.filter(i=>experienceById[i.ID]).map(i=>({id:i.ID,name:i.Name,...experienceById[i.ID]})),null,2)+'\n');
 fs.writeFileSync(path.join(root,'reports/item-buffs-audit.json'),JSON.stringify(audit,null,2)+'\n');
 console.log(`Indexed ${audit.length} usable buff items.`);

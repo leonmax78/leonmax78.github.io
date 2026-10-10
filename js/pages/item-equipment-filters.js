@@ -9,6 +9,7 @@
  const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='道具'?!equipment(r):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
  const tagsMatch=(r,family,collection)=>r.tags.some(t=>(!family||t.family===family)&&(!collection||t.collection===collection));
  const special=it=>buffs().specialById[id(it)]||[];
+ const experience=it=>buffs().experienceById?.[id(it)];
  function effects(it,ignoreUnit=false){
   const all=buffs().byId[id(it)]||[];
   if(state.mode==='buff'&&['Str','Dex','Con','Int'].includes(state.effect)&&all.some(e=>e.key==='All'))return [];
@@ -21,6 +22,7 @@
   if(!categoryMatch(r)||state.special&&!special(it).some(s=>s.label===state.special))return false;
   if(state.category==='寵物裝備')return !state.collection||r.category===state.collection;
   if(state.mode){
+   if(state.mode==='experience')return !!experience(it);
    if(state.mode==='buff'&&(state.target==='person'&&r.class.includes('CLASS_PET')||state.target==='pet'&&!r.class.includes('CLASS_PET')))return false;
    return state.mode==='remove'?special(it).some(s=>s.key.startsWith('remove:')):effects(it,ignoreUnit).length>0;
   }
@@ -45,7 +47,7 @@
   show('itemType',!!state.category&&state.category!=='配方'&&state.category!=='藥品'&&state.category!=='符咒');
   show('itemMode',consumable);show('itemBuffEffect',state.mode==='buff');show('itemBuffUnit',['buff','hp','mp'].includes(state.mode));show('itemBuffTarget',state.mode==='buff');
   if(state.mode!=='buff')state.target='';
-  fill('itemMode',[{value:'hp',label:'補血'},{value:'mp',label:'補精'},{value:'buff',label:'增益'},{value:'remove',label:'解除異常'}],state.mode,'全部用途');
+  fill('itemMode',[{value:'hp',label:'補血'},{value:'mp',label:'補精'},{value:'buff',label:'增益'},{value:'experience',label:'經驗丹'},{value:'remove',label:'解除異常'}],state.mode,'全部用途');
   state.effect=fill('itemBuffEffect',Object.entries(buffs().fields).map(([value,label])=>({value,label})),state.effect,'全部增益');
   fill('itemBuffTarget',[{value:'person',label:'人物'},{value:'pet',label:'封獸'}],state.target,'全部使用對象');
   let rows=Object.entries(data().byId).filter(([,r])=>categoryMatch(r));
@@ -94,6 +96,7 @@
  function modeChanged(){state.mode=document.getElementById('itemMode').value;state.effect='All';state.unit='';state.target=state.mode==='buff'?'person':'';state.special='';window.v86ItemType='';refresh();window.searchItems();}
  function best(it){return effects(it).slice().sort((a,b)=>a.key.localeCompare(b.key)||a.unit.localeCompare(b.unit)||b.value-a.value)[0];}
  function sort(rows){
+  if(state.mode==='experience')return rows.slice().sort((a,b)=>(experience(b)?.value??-1)-(experience(a)?.value??-1)||(record(b).order??-1)-(record(a).order??-1));
   if(!['buff','hp','mp'].includes(state.mode)){
    const types=Object.keys(ITEM_TYPE_MAP);
    const rank=it=>{const type=record(it).type;const index=types.indexOf(type==='HIDDEN_WEAPON2'?'HIDDEN_WEAPON':type);return index<0?types.length:index;};
@@ -101,7 +104,7 @@
   }
   return rows.slice().sort((a,b)=>{const x=best(a),y=best(b);return x.key.localeCompare(y.key)||x.unit.localeCompare(y.unit)||y.value-x.value||y.seconds-x.seconds||Number(b.ID||b.id)-Number(a.ID||a.id);});
  }
- function summary(it){if(!state.mode)return '';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+SZO_DISPLAY.duration(e.seconds)+'）':''}`).join('；');}
+ function summary(it){if(!state.mode)return '';if(state.mode==='experience')return experience(it)?.value?'獲得經驗 '+experience(it).label+' 點':'經驗值待確認';if(state.mode==='remove')return special(it).filter(s=>s.key.startsWith('remove:')).map(s=>s.label).join('、');return (record(it).class.includes('CLASS_PET')?'封獸專用；':'')+effects(it).map(e=>`${({...buffs().fields,RestoreHP:'補血',RestoreMP:'補精'})[e.key]} ${e.unit==='multiplier'?'':'+'}${e.value}${e.max&&e.max!==e.value?'-'+e.max:''}${e.unit==='percent'?'%':e.unit==='multiplier'?' 倍':''}${e.seconds?'（'+SZO_DISPLAY.duration(e.seconds)+'）':''}`).join('；');}
  function clear(){Object.keys(state).forEach(k=>state[k]='');state.effect='All';refresh();}
  window.SZO_ITEM_TAXONOMY={matches,refresh,refreshUnits,changed,categoryChanged,modeChanged,sort,summary,clear,active:()=>[state.category,state.special,state.mode].some(Boolean)};
 })();
