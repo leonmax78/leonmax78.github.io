@@ -15,6 +15,15 @@ async function run(engine,mobile){
    return {count:entries.length,all:entries.every(([id,e])=>{const dom=document.createElement('div');dom.innerHTML=itemDetailBodyHTML({ID:'test',Name:'test',ExtraStatus:id});return e.lines.every(line=>dom.querySelector('[data-status-description]')?.textContent.includes(line));}),unknown:itemApprovedStatusHTML({ExtraStatus:'12'}),remove:itemApprovedStatusHTML({ExtraStatus:'146',StatusParam:'EFFECT_REMOVE'})};
   });
   assert.equal(check.count,11);assert(check.all);assert.equal(check.unknown,'');assert.equal(check.remove,'');
+  for(const [id,label] of [['23347','真勇猛'],['23348','匯神']]){
+   await page.evaluate(id=>showItem(id),id);
+   assert((await page.locator('#reader [data-item-section="special"]').innerText()).includes(label));
+   if(id==='23348')assert((await page.locator('#reader [data-status-description="76"]').innerText()).includes('+50%'));
+   if(id==='23347')assert.equal(await page.locator('#reader [data-status-description]').count(),0);
+   await page.evaluate(id=>SZO_PREVIEW.open('item',id),id);
+   assert((await page.locator('#detailPreview [data-item-section="special"]').innerText()).includes(label));
+   await page.keyboard.press('Escape');
+  }
   await page.evaluate(()=>showItem('28949'));
   const lines=page.locator('#reader [data-status-description="146"]');
   assert((await lines.innerText()).includes('物理傷害輸出 +75%'));

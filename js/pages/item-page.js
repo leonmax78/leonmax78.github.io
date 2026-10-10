@@ -21,15 +21,18 @@ function itemKind(it){
 
 function itemRemovesStatus(it){return String(it?.StatusParam||'').split(/[,\s;]+/).includes('EFFECT_REMOVE');}
 
-function itemStatus(it){
- const raw=String(it?.ExtraStatus||'').trim();
- if(!raw||raw==='0')return '';
- const parts=raw.split(/[,\s;]+/).filter(Boolean);
- const names=parts.map(x=>statusName(x)||magicName(x)||(/^\d+$/.test(String(x))||/^0x/i.test(String(x))?`StatusID:${x}`:'')).filter(Boolean);
- const text=[...new Set(names)].join('、');
- return text&&itemRemovesStatus(it)?'解除'+text:text;
+function itemStatusEntries(it){
+ const entries=String(it?.ExtraStatus||'').split(/[,\s;]+/).filter(x=>x&&x!=='0').map(id=>({id,remove:itemRemovesStatus(it)}));
+ for(const entry of window.SZO_ITEM_BUFFS?.specialById?.[String(it?.ID||it?.id)]||[]){
+  const [action,id]=entry.key.split(':');
+  const remove=action==='remove';
+  if(!entries.some(e=>e.id===id&&e.remove===remove))entries.push({id,remove,label:entry.label});
+ }
+ return entries;
 }
-
+function itemStatus(it){
+ return [...new Set(itemStatusEntries(it).map(e=>e.label||((e.remove?'解除':'')+(statusName(e.id)||magicName(e.id)||`StatusID:${e.id}`))))].join('、');
+}
 function itemDetailRows(it){
  const rows=[];
  for(const k of ITEM_DETAIL_ORDER){
@@ -479,7 +482,7 @@ function clearItemSearchFilters(){
 
 function itemApprovedStatusHTML(it){
  if(itemRemovesStatus(it))return '';
- const ids=[...new Set(String(it.ExtraStatus||'').split(/[,\s;]+/).filter(Boolean))];
+ const ids=[...new Set(itemStatusEntries(it).filter(e=>!e.remove).map(e=>e.id))];
  return ids.map(id=>{
   const entry=window.SZO_APPROVED_STATUS_DESCRIPTIONS?.[id];
   if(!entry)return '';
