@@ -325,11 +325,11 @@ function showBeastDetail(index){
  const hero=m?monsterThumbHTML(m).replace('assetThumb monsterThumb','assetHero monsterHero'):row.portrait&&window.SZO_ASSET_MEDIA?window.SZO_ASSET_MEDIA.img(row.portrait,row.name,'assetHero monsterHero'):'';
  const basic=[['怪物名稱',row.name],['星級',`${row.stars}星甕`],['種族',m?raceName(m.Type):'待補'],['子分類',m?subtypeName(m.Type,m.SubType):'待補']];
  const ability=m?[
-  ['生命',m.HP],['攻擊',row.attack==null?'待補':Math.round(Number(row.attack))],
+  ['生命',m.HP],['攻擊',row.attack==null?'待補':`${Math.round(Number(row.attack))}${row.attackPending?'（待確認）':''}`],
   ['防禦',Math.round((Number(m.ExtraDef)||0)+(Number(m.Con)||0)*0.2+(Number(m.Dex)||0)*0.1)],
   ['術攻',Math.round((Number(m.MagicAttack)||0)+(Number(m.Int)||0)*2.4)],
   ['術防',Math.round((Number(m.MagicDef)||0)+(Number(m.Int)||0)*0.8)]
- ]:[['生命','待補'],['攻擊',row.attack==null?'待補':row.attack],['防禦','待補'],['術攻','待補'],['術防','待補']];
+ ]:[['生命','待補'],['攻擊',row.attack==null?'待補':`${row.attack}${row.attackPending?'（待確認）':''}`],['防禦','待補'],['術攻','待補'],['術防','待補']];
  const stats=m?[['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex]]:[];
  const skills=m?[["技能1",monsterSkillText(m.Skill1)],["技能2",monsterSkillText(m.Skill2)],["技能3",monsterSkillText(m.Skill3)],["技能4",monsterSkillText(m.Skill4)]]:(row.skills||[]).map((skill,i)=>[`技能${i+1}`,skill]);
  const capture=(row.captureLocations||[]).map((place,i)=>`<button type="button" class="collectTag collectMapTag" onclick="showBeastCaptureLocation(${Number(index)},${i})">${esc(place.stageName)}</button>`).join('');
