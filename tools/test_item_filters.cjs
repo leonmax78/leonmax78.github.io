@@ -104,6 +104,13 @@ async function run(engine,mobile){
   await page.locator('#itemQ').fill('');await page.evaluate(()=>searchItems());
   await select('itemCategory','防具');await select('itemFamily','聖甲');await select('itemCollection','昊系列');
   assert.deepEqual(await page.locator('#itemCollection option').allTextContents(),['全部細分類','終極系列','皇系列','昊系列','星系列','神系列','終系列','帝系列','絕系列','極系列','超系列','真系列','初代系列']);
+  await select('itemCollection','初代系列');assert.equal(await page.locator('#itemResults [data-item]').count(),3);
+  await select('itemFamily','');
+  assert.equal(await page.locator('#itemCollection').inputValue(),'');
+  assert.equal(await page.evaluate(()=>SZO_ITEM_FILTERS.collection),'');
+  assert(!await page.locator('#itemCollection').isVisible());
+  assert(await page.evaluate(()=>itemResultRows.length>3&&itemResultRows.some(i=>!i.Name.includes('聖甲'))));
+  await select('itemFamily','聖甲');await select('itemCollection','昊系列');
   assert((await page.locator('#itemResults').innerText()).includes('勇者聖甲'));
   await select('itemFamily','玄宙');await select('itemCollection','職業防具');
   assert(!(await page.locator('#itemCollection').innerText()).includes('職業防具 /'));
