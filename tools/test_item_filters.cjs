@@ -33,10 +33,11 @@ async function run(engine,mobile){
   await page.locator('#itemKind').selectOption({index:1});
   await select('itemCategory','藥品');assert(!await page.locator('#itemKind').isVisible());assert.equal(await page.locator('#itemKind').inputValue(),'');
   await select('itemCategory','武器');
-  await select('itemProfession','CLASS_PET');
-  const pets=await page.evaluate(()=>itemResultRows.map(i=>({id:i.ID,class:i.Class})));
-  assert(pets.length>0&&pets.every(i=>i.class?.split(',').includes('CLASS_PET')));
-  assert(pets.some(i=>i.id==='21181'));assert(!pets.some(i=>i.id==='20792'));
+  for(const category of ['武器','防具','仙器','特殊飾品']){
+   await select('itemCategory',category);
+   assert.equal(await page.locator('#itemProfession option[value="CLASS_PET"]').count(),0);
+  }
+  await select('itemCategory','武器');
   await select('itemProfession','');
   await page.locator('#itemMin').fill('999');await select('itemProfession','CLASS_SWORDMAN');
   await select('itemCategory','寵物裝備');
