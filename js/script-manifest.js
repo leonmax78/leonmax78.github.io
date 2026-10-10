@@ -3,6 +3,7 @@
 window.SZO_SCRIPT_GROUPS = {
   "data": [
     "js/data/display-dictionary.js",
+    "data/approved-status-descriptions.js",
     "js/data/type-maps.js",
     "data/build_meta.bundle.js",
     "data/asset_manifest.bundle.js",

@@ -476,6 +476,15 @@ function clearItemSearchFilters(){
  searchItems();
 }
 
+function itemApprovedStatusHTML(it){
+ if(itemRemovesStatus(it))return '';
+ const ids=[...new Set(String(it.ExtraStatus||'').split(/[,\s;]+/).filter(Boolean))];
+ return ids.map(id=>{
+  const entry=window.SZO_APPROVED_STATUS_DESCRIPTIONS?.[id];
+  if(!entry)return '';
+  return `<div class="itemStatusDescription" data-status-description="${esc(id)}">${ids.length>1?`<strong>${esc(entry.name)}</strong>`:''}${entry.lines.map(line=>`<div>${esc(line)}</div>`).join('')}</div>`;
+ }).join('');
+}
 function itemDetailBodyHTML(it){
  const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
  const labels=keys=>new Set(keys.map(k=>window.SZO_DISPLAY.label(k)));
@@ -489,7 +498,7 @@ function itemDetailBodyHTML(it){
  }
  const elementOrder=[...element];
  groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
- const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div></section>`:'';
+ const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>${key==='special'?itemApprovedStatusHTML(it):''}</section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
  return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}</div>`;
 }
