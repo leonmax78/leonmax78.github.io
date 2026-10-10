@@ -43,6 +43,13 @@ async function run(engine,mobile){
   assert.equal(await page.locator('#itemResults [data-item]').count(),20);
   await select('itemCategory','防具');await select('itemFamily','聖甲');await select('itemCollection','昊系列');
   assert((await page.locator('#itemResults').innerText()).includes('勇者聖甲'));
+  await select('itemFamily','玄宙');await select('itemCollection','職業防具');
+  assert(!(await page.locator('#itemCollection').innerText()).includes('職業防具 /'));
+  const allArmor=await page.locator('#itemResults [data-item]').count();
+  await select('itemProfession','CLASS_SWORDMAN');
+  const swordArmor=await page.evaluate(()=>itemResultRows.map(i=>i.Class));
+  assert(swordArmor.length>0&&swordArmor.length<allArmor&&swordArmor.every(c=>c?.includes('CLASS_SWORDMAN')));
+  await select('itemProfession','CLASS_WARRIOR');assert(await page.locator('#itemResults [data-item]').count()>0);
   await select('itemCategory','藥品');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
   await select('itemMode','hp');assert(!await page.locator('#itemBuffEffect').isVisible());
   assert((await page.locator('#itemResults').innerText()).includes('補血 +'));

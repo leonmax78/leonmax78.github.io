@@ -73,7 +73,8 @@ def main():
             sources.append(('武器','聯動／NFT',parts[-1],relative,None))
         elif relative.startswith('裝備/防具/') and len(parts)>=4:
             cat='特殊飾品' if '飾品' in parts else '防具'
-            sources.append((cat,parts[2],' / '.join(parts[3:]),relative,None))
+            collection='職業防具' if parts[3]=='職業防具' else ' / '.join(parts[3:])
+            sources.append((cat,parts[2],collection,relative,None))
         elif relative.startswith('裝備/特殊飾品/') and len(parts)>=4 and parts[2] in ['五佐天座','聖獸之心','六滅化神'] and '比較' not in parts[-1]:
             sources.append(('特殊飾品',parts[2],parts[-1],relative,None))
     audit=[]
@@ -115,7 +116,7 @@ def main():
         if r['category']=='武器' and item.get('Type')=='HIDDEN_WEAPON':
             tag(id,'暗器','職業限定' if item.get('Class') else '不限職業','ITEM.Class')
         if not r['tags']:tag(id,'其他／未分類','','ITEM.Type')
-    result={'version':'V580','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
+    result={'version':'V583','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
     (ROOT/'data/equipment-taxonomy.js').write_text('window.SZO_EQUIPMENT_TAXONOMY='+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
     (ROOT/'reports/equipment-taxonomy-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
