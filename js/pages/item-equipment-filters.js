@@ -55,13 +55,13 @@
    rows=rows.filter(([,r])=>!state.collection||tagsMatch(r,state.family,state.collection));
    show('itemCollection',!!state.family&&rows.some(([,r])=>r.tags.some(t=>t.family===state.family&&t.collection)));
   }
-  const types=new Set(rows.map(([,r])=>r.type));
-  window.v86ItemType=fill('itemType',Object.entries(ITEM_TYPE_MAP).filter(([code])=>types.has(code)).map(([value,label])=>({value,label})),window.v86ItemType||'','全部種類');
   const specials=new Map(rows.flatMap(([key])=>special({ID:key})).map(s=>[s.label,s.label]));
   state.special=fill('itemSpecial',Array.from(specials,([value,label])=>({value,label})).sort((a,b)=>a.label.localeCompare(b.label,'zh-Hant')),state.special,'全部特殊效果');
   const variants=unique(rows.flatMap(([,r])=>r.tags.filter(t=>(!state.family||t.family===state.family)&&(!state.collection||t.collection===state.collection)).map(t=>t.variant))).map(label=>({value:'series:'+label,label}));
   const professions=state.collection==='特仕'?[]:[...(state.collection==='職業防具'?[]:[{value:'unrestricted',label:'不限職業'}]),...Object.entries(SZO_DISPLAY.values.Class).filter(([code])=>code!=='CLASS_PET').map(([value,label])=>({value,label}))];
   state.profession=fill('itemProfession',[...professions,...variants],state.profession,state.collection==='特仕'?'全部特仕系列':'全部職業／特仕系列');
+  const types=new Set(rows.filter(([key])=>matches({ID:key})).map(([,r])=>r.type));
+  window.v86ItemType=fill('itemType',Object.entries(ITEM_TYPE_MAP).filter(([code])=>types.has(code)).map(([value,label])=>({value,label})),window.v86ItemType||'','全部種類');
   for(const field of ['itemMin','itemMax','itemSpecial'])show(field,!petEquipment);
   if(petEquipment){
    state.family='';state.profession='';state.special='';

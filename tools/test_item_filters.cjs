@@ -62,6 +62,18 @@ async function run(engine,mobile){
   await select('itemCollection','300級龍涉大川繼鱗武匣');
   assert.equal(await page.locator('#itemResults [data-item]').count(),20);
   assert(await page.evaluate(()=>itemResultRows.every((it,i)=>i===0||SZO_EQUIPMENT_TAXONOMY.byId[it.ID].order<=SZO_EQUIPMENT_TAXONOMY.byId[itemResultRows[i-1].ID].order)));
+  await select('itemFamily','玄宙');
+  const allTypes=await page.locator('#itemType option').count();
+  await select('itemProfession','CLASS_SWORDMAN');
+  assert(await page.locator('#itemType option').count()<allTypes);
+  assert(await page.evaluate(()=>Array.from(document.querySelector('#itemType').options).every(o=>!o.value||itemResultRows.some(i=>i.Type===o.value))));
+  assert(await page.evaluate(()=>Array.from(document.querySelector('#itemKind').options).every(o=>!o.value||itemResultRows.some(i=>itemMatchesKind(i,o.value)))));
+  const incompatible=await page.evaluate(()=>{const current=new Set(Array.from(document.querySelector('#itemType').options,o=>o.value));SZO_ITEM_FILTERS.profession='';SZO_ITEM_TAXONOMY.refresh();return Array.from(document.querySelector('#itemType').options,o=>o.value).find(v=>v&&!current.has(v));});
+  assert(incompatible);await select('itemType',incompatible);
+  await select('itemProfession','CLASS_SWORDMAN');assert.equal(await page.locator('#itemType').inputValue(),'');
+  await page.locator('#itemQ').fill('不存在的裝備測試');await page.evaluate(()=>searchItems());
+  assert.deepEqual(await page.locator('#itemKind option').allTextContents(),['全部專剋']);
+  await page.locator('#itemQ').fill('');await page.evaluate(()=>searchItems());
   await select('itemCategory','防具');await select('itemFamily','聖甲');await select('itemCollection','昊系列');
   assert((await page.locator('#itemResults').innerText()).includes('勇者聖甲'));
   await select('itemFamily','玄宙');await select('itemCollection','職業防具');

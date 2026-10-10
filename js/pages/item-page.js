@@ -162,6 +162,16 @@ function itemMatchesKind(it,kind){
  return itemKind(it)===kind;
 }
 
+function refreshAvailableItemKinds(rows){
+ const select=byId('itemKind');
+ if(!select)return window.v110ItemKind||'';
+ const selected=window.v110ItemKind||'';
+ const kinds=itemKindOptions().filter(kind=>!rows||rows.some(it=>itemMatchesKind(it,kind)));
+ select.innerHTML=optionHtml(kinds,kinds.includes(selected)?selected:'','全部專剋');
+ window.v110ItemKind=select.value;
+ return select.value;
+}
+
 function itemSeriesOptions(){
  if(itemSeriesOptionsCache)return itemSeriesOptionsCache;
  const bundle=window.SZO_DATA_BUNDLES&&window.SZO_DATA_BUNDLES.item_series;
@@ -413,9 +423,11 @@ function searchItems(){
  const kind=window.v110ItemKind;
  const box=byId('itemResults'); if(!box)return;
  if(!hasItemData()&&!hasItemSearchIndex()){box.innerHTML='<div class="muted">資料載入中，請稍等。</div>';return;}
- if(!(q||type||window.v86ItemMin||window.v86ItemMax||series||kind||window.SZO_ITEM_TAXONOMY?.active())){box.innerHTML='';return;}
+ if(!(q||type||window.v86ItemMin||window.v86ItemMax||series||kind||window.SZO_ITEM_TAXONOMY?.active())){refreshAvailableItemKinds(null);box.innerHTML='';return;}
  if(!hasItemData()){
-  renderItemSearchResults(filterItemIndexList(q,type,window.v86ItemMin,window.v86ItemMax,series,kind),true);
+  const candidates=filterItemIndexList(q,type,window.v86ItemMin,window.v86ItemMax,series,'');
+  const availableKind=refreshAvailableItemKinds(candidates);
+  renderItemSearchResults(candidates.filter(it=>itemMatchesKind(it,availableKind)),true);
   return;
  }
  const arr=items.filter(it=>
@@ -424,10 +436,11 @@ function searchItems(){
   (!type||it.Type===type)&&
   (min===null||intOf(it.Level)>=min)&&
   (max===null||intOf(it.Level)<=max)&&
-  itemMatchesKind(it,kind)&&
   itemMatchesSeries(it,series)
  );
- renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(arr):arr,false);
+ const availableKind=refreshAvailableItemKinds(arr);
+ const filtered=arr.filter(it=>itemMatchesKind(it,availableKind));
+ renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(filtered):filtered,false);
 }
 let itemResultPage=1,itemResultRows=[],itemResultIsIndex=false;
 function renderItemSearchResults(rows,indexOnly,more=false){
