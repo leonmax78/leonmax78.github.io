@@ -37,6 +37,9 @@ async function run(engine,mobile){
    await click(page.locator(`[data-equipment-save="${slot}"]`));
    assert((await page.locator('.equipmentSaveFeedback').innerText()).includes('已存入 '+slot));
   }
+  for(const name of ['昊．勇者聖甲','皇．勇者聖甲','終極勇者聖甲'])assert((await page.locator('.equipmentSavedSlots').innerText()).includes(name));
+  await page.screenshot({path:path.join(root,`outputs/equipment-saved-slots-${mobile?'mobile':'desktop'}.png`)});
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await click(page.locator('[data-equipment-compare]'));
   const dialog=page.locator('.equipmentCompareDialog');await dialog.waitFor();
   for(const name of ['昊．勇者聖甲','皇．勇者聖甲','終極勇者聖甲'])assert((await dialog.innerText()).includes(name));
@@ -48,6 +51,9 @@ async function run(engine,mobile){
   await ready();await click(page.locator('[data-equipment-compare]'));assert((await dialog.innerText()).includes('終極勇者聖甲'));
   await click(dialog.locator('[data-equipment-clear="B"]'));assert(!(await dialog.innerText()).includes('皇．勇者聖甲'));
   await click(dialog.locator('[data-equipment-close]'));
+  await page.evaluate(()=>showItem('29681'));
+  assert((await page.locator('.equipmentSavedSlots').innerText()).includes('尚未存檔'));
+  assert(!(await page.locator('.equipmentSavedSlots').innerText()).includes('皇．勇者聖甲'));
   await page.evaluate(()=>SZO_PREVIEW.open('item','29681'));await page.locator('dialog [data-equipment-save="A"]').waitFor();
   await click(page.locator('#detailPreview [data-equipment-save="A"]'));await click(page.locator('#detailPreview [data-equipment-compare]'));
   assert((await dialog.innerText()).includes('皇．勇者聖甲'));

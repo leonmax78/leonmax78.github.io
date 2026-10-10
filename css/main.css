@@ -4086,6 +4086,11 @@ body{
 .equipmentCompareTools button{padding:6px 10px}
 .equipmentSaveFeedback{flex-basis:100%;font-size:13px;color:#8ce3c3;overflow-wrap:anywhere}
 .equipmentSaveFeedback:empty{display:none}
+.equipmentSavedSlots{flex-basis:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px 16px;margin:0;font-size:13px}
+.equipmentSavedSlots>div{display:flex;gap:8px;min-width:0}
+.equipmentSavedSlots dt{font-weight:700;color:#8edcff}
+.equipmentSavedSlots dd{margin:0;overflow-wrap:anywhere;min-width:0}
+@media(max-width:600px){.equipmentSavedSlots{grid-template-columns:minmax(0,1fr)}}
 .equipmentCompareDialog{width:min(1040px,calc(100vw - 24px));max-height:calc(100dvh - 32px);box-sizing:border-box;margin:auto;padding:16px;border:1px solid #71889e;border-radius:8px;background:#101923;color:#e6edf5;overflow:auto}
 .equipmentCompareDialog::backdrop{background:#0009}
 .equipmentCompareDialog>header{display:flex;justify-content:space-between;align-items:center;gap:12px}

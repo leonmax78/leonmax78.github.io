@@ -9,9 +9,14 @@
  function persist(data){try{localStorage.setItem(key,JSON.stringify(data));memory=null;return true;}catch{memory=data;return false;}}
  function toolbar(it){
   if(!eligible(it))return '';
-  return `<section class="equipmentCompareTools" aria-label="裝備比較存檔"><strong>裝備比較</strong><div>${slots.map(s=>`<button type="button" data-equipment-save="${s}" data-equipment-id="${esc(it.ID)}">存入 ${s}</button>`).join('')}<button type="button" data-equipment-compare>開啟比較</button></div><span class="equipmentSaveFeedback" role="status"></span></section>`;
+  return `<section class="equipmentCompareTools" aria-label="裝備比較存檔"><strong>裝備比較</strong><div>${slots.map(s=>`<button type="button" data-equipment-save="${s}" data-equipment-id="${esc(it.ID)}">存入 ${s}</button>`).join('')}<button type="button" data-equipment-compare>開啟比較</button></div><dl class="equipmentSavedSlots" aria-label="已存裝備">${savedSlotsHTML()}</dl><span class="equipmentSaveFeedback" role="status"></span></section>`;
  }
  function item(id){return (window.items||[]).find(it=>String(it.ID)===id);}
+ function savedSlotsHTML(){
+  const saved=read();
+  return slots.map(s=>{const it=item(saved[s]);return `<div><dt>${s}</dt><dd>${esc(it?nameOf(it):saved[s]?'道具已不存在':'尚未存檔')}</dd></div>`;}).join('');
+ }
+ function refreshSavedSlots(){document.querySelectorAll('.equipmentSavedSlots').forEach(el=>{el.innerHTML=savedSlotsHTML();});}
  function render(){
   const saved=read(),entries=slots.map(s=>item(saved[s])),maps=entries.map(it=>new Map(it?itemDetailRows(it).filter(([label,value])=>label!==SZO_DISPLAY.label('Name')&&String(value??'').trim()!==''&&String(value)!=='0'):[]));
   const labels=[...new Set(maps.flatMap(m=>[...m.keys()]))];
@@ -39,12 +44,12 @@
  }
  document.addEventListener('click',e=>{
   const save=e.target.closest('[data-equipment-save]');
-  if(save){const slot=save.dataset.equipmentSave,it=item(save.dataset.equipmentId);if(!slots.includes(slot)||!eligible(it))return;const saved=read();saved[slot]=String(it.ID);const stored=persist(saved);save.closest('.equipmentCompareTools').querySelector('.equipmentSaveFeedback').textContent=`已存入 ${slot}：${nameOf(it)}${stored?'':'（瀏覽器無法儲存，僅本次有效）'}`;return;}
+  if(save){const slot=save.dataset.equipmentSave,it=item(save.dataset.equipmentId);if(!slots.includes(slot)||!eligible(it))return;const saved=read();saved[slot]=String(it.ID);const stored=persist(saved);refreshSavedSlots();save.closest('.equipmentCompareTools').querySelector('.equipmentSaveFeedback').textContent=`已存入 ${slot}：${nameOf(it)}${stored?'':'（瀏覽器無法儲存，僅本次有效）'}`;return;}
   if(e.target.closest('[data-equipment-compare]')){open().catch(()=>alert('裝備資料載入失敗，請稍後再試。'));return;}
   if(e.target.closest('[data-equipment-close]')){dialog?.close();return;}
-  const clear=e.target.closest('[data-equipment-clear]');if(clear&&slots.includes(clear.dataset.equipmentClear)){const saved=read();delete saved[clear.dataset.equipmentClear];persist(saved);render();}
+  const clear=e.target.closest('[data-equipment-clear]');if(clear&&slots.includes(clear.dataset.equipmentClear)){const saved=read();delete saved[clear.dataset.equipmentClear];persist(saved);refreshSavedSlots();render();}
  });
  document.addEventListener('change',e=>{if(e.target.matches('[data-equipment-differences]')){onlyDifferences=e.target.checked;render();dialog.querySelector('[data-equipment-differences]').focus();}});
- window.addEventListener('storage',e=>{if(e.key===key){memory=null;if(dialog?.open)render();}});
+ window.addEventListener('storage',e=>{if(e.key===key||e.key===null){memory=null;refreshSavedSlots();if(dialog?.open)render();}});
  window.SZO_EQUIPMENT_COMPARE={toolbar,open};
 })();
