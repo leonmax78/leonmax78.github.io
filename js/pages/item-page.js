@@ -344,7 +344,7 @@ async function renderItemPage(tab='item'){
         <div class="kv"><div class="k">道具名稱 / ID / 類型</div><div class="v"><input id="itemQ" placeholder="例如：經驗丹、藥草、277、火傷" value="${esc(window.v86ItemQ||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">系列</div><div class="v"><select id="itemFamily" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">細分類 / 武匣</div><div class="v"><select id="itemCollection" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
-        <div class="kv"><div class="k">可使用職業</div><div class="v"><select id="itemProfession" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
+        <div class="kv"><div class="k">職業／特仕系列</div><div class="v"><select id="itemProfession" onchange="SZO_ITEM_TAXONOMY.changed()"></select></div></div>
         <div class="kv"><div class="k">類型</div><div class="v"><select id="itemType" onchange="searchItems()"></select></div></div>
         <div class="kv"><div class="k">最低 Lv</div><div class="v"><input id="itemMin" type="number" value="${esc(window.v86ItemMin||'')}" oninput="searchItems()"></div></div>
         <div class="kv"><div class="k">最高 Lv</div><div class="v"><input id="itemMax" type="number" value="${esc(window.v86ItemMax||'')}" oninput="searchItems()"></div></div>

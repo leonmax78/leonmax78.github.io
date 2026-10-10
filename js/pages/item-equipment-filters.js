@@ -20,7 +20,7 @@
    return state.mode==='remove'?special(it).some(s=>s.key.startsWith('remove:')):effects(it).length>0;
   }
   const classes=r.class.split(',').map(s=>s.trim());
-  const professionMatch=!state.profession||(state.profession==='CLASS_PET'?classes.includes('CLASS_PET'):state.profession==='unrestricted'?!r.class:!r.class||classes.includes(state.profession));
+  const professionMatch=!state.profession||(state.profession.startsWith('series:')?r.tags.some(t=>t.variant===state.profession.slice(7)&&(!state.family||t.family===state.family)&&(!state.collection||t.collection===state.collection)):state.profession==='CLASS_PET'?classes.includes('CLASS_PET'):state.profession==='unrestricted'?!r.class:!r.class||classes.includes(state.profession));
   return (!state.family&&!state.collection||tagsMatch(r,state.family,state.collection))&&(!state.profession||equipment(r)&&professionMatch);
  }
  function fill(id,values,selected,all){const el=document.getElementById(id);if(!el)return selected;el.replaceChildren(new Option(all,''),...values.map(v=>new Option(v.label||v,v.value||v)));el.value=selected;return el.value;}
@@ -54,7 +54,9 @@
   window.v86ItemType=fill('itemType',Object.entries(ITEM_TYPE_MAP).filter(([code])=>types.has(code)).map(([value,label])=>({value,label})),window.v86ItemType||'','全部種類');
   const specials=new Map(rows.flatMap(([key])=>special({ID:key})).map(s=>[s.label,s.label]));
   state.special=fill('itemSpecial',Array.from(specials,([value,label])=>({value,label})).sort((a,b)=>a.label.localeCompare(b.label,'zh-Hant')),state.special,'全部特殊效果');
-  state.profession=fill('itemProfession',[{value:'unrestricted',label:'不限職業'},...Object.entries(SZO_DISPLAY.values.Class).map(([value,label])=>({value,label}))],state.profession,'全部職業');
+  const variants=unique(rows.flatMap(([,r])=>r.tags.filter(t=>(!state.family||t.family===state.family)&&(!state.collection||t.collection===state.collection)).map(t=>t.variant))).map(label=>({value:'series:'+label,label}));
+  const professions=state.collection==='特仕'?[]:[...(state.collection==='職業防具'?[]:[{value:'unrestricted',label:'不限職業'}]),...Object.entries(SZO_DISPLAY.values.Class).filter(([code])=>state.collection!=='職業防具'||code!=='CLASS_PET').map(([value,label])=>({value,label}))];
+  state.profession=fill('itemProfession',[...professions,...variants],state.profession,state.collection==='特仕'?'全部特仕系列':'全部職業／特仕系列');
  }
  function changed(){for(const [key,field] of Object.entries({family:'itemFamily',collection:'itemCollection',profession:'itemProfession',effect:'itemBuffEffect',unit:'itemBuffUnit',special:'itemSpecial',target:'itemBuffTarget'}))state[key]=document.getElementById(field)?.value||'';refresh();window.searchItems();}
  function categoryChanged(){state.category=document.getElementById('itemCategory').value;for(const key of ['family','collection','profession','mode','unit','special','target'])state[key]='';state.effect='All';window.v86ItemType='';refresh();window.searchItems();}

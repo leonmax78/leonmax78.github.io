@@ -50,6 +50,13 @@ async function run(engine,mobile){
   const swordArmor=await page.evaluate(()=>itemResultRows.map(i=>i.Class));
   assert(swordArmor.length>0&&swordArmor.length<allArmor&&swordArmor.every(c=>c?.includes('CLASS_SWORDMAN')));
   await select('itemProfession','CLASS_WARRIOR');assert(await page.locator('#itemResults [data-item]').count()>0);
+  assert.deepEqual((await page.locator('#itemCollection option').allTextContents()).sort(),['全部細分類','特仕','職業防具'].sort());
+  await select('itemCollection','特仕');
+  assert.deepEqual((await page.locator('#itemProfession option').allTextContents()).sort(),['全部特仕系列','靜月','宿星','狂陽'].sort());
+  await select('itemProfession','series:靜月');
+  assert(await page.locator('#itemResults [data-item]').count()>0);
+  assert(await page.evaluate(()=>itemResultRows.every(i=>SZO_EQUIPMENT_TAXONOMY.byId[i.ID].tags.some(t=>t.family==='玄宙'&&t.collection==='特仕'&&t.variant==='靜月'))));
+  await page.screenshot({path:path.join(root,`outputs/filter-special-${mobile?'mobile':'desktop'}.png`)});
   await select('itemCategory','藥品');assert(!await page.locator('#itemFamily').isVisible());assert(await page.locator('#itemMode').isVisible());
   await select('itemMode','hp');assert(!await page.locator('#itemBuffEffect').isVisible());
   assert((await page.locator('#itemResults').innerText()).includes('補血 +'));

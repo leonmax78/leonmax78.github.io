@@ -41,10 +41,12 @@ def main():
     items=json.loads((ROOT/'data/items.json').read_text(encoding='utf-8'))
     cfg=json.loads((ROOT/'data/compound_config.json').read_text(encoding='utf-8'))
     records={i['ID']:{'category':category(i),'class':i.get('Class',''),'type':i.get('Type',''),'tags':[]} for i in items}
-    def tag(id,family,collection,source):
+    def tag(id,family,collection,source,variant=''):
         r=records.get(str(id))
-        if r is not None and not any(x['family']==family and x['collection']==collection for x in r['tags']):
-            r['tags'].append({'family':family,'collection':collection,'source':source})
+        if r is not None and not any(x['family']==family and x['collection']==collection and x.get('variant','')==variant for x in r['tags']):
+            entry={'family':family,'collection':collection,'source':source}
+            if variant: entry['variant']=variant
+            r['tags'].append(entry)
     for eq in cfg['equipment']:
         family=eq.get('series_grade') or eq.get('series_group') or ''
         if family and family not in ('仙器','世貿裝'):
@@ -73,12 +75,13 @@ def main():
             sources.append(('武器','聯動／NFT',parts[-1],relative,None))
         elif relative.startswith('裝備/防具/') and len(parts)>=4:
             cat='特殊飾品' if '飾品' in parts else '防具'
-            collection='職業防具' if parts[3]=='職業防具' else ' / '.join(parts[3:])
+            collection={'職業防具':'職業防具','特仕防具':'特仕'}.get(parts[3],' / '.join(parts[3:]))
             sources.append((cat,parts[2],collection,relative,None))
         elif relative.startswith('裝備/特殊飾品/') and len(parts)>=4 and parts[2] in ['五佐天座','聖獸之心','六滅化神'] and '比較' not in parts[-1]:
             sources.append(('特殊飾品',parts[2],parts[-1],relative,None))
     audit=[]
     for cat,family,collection,relative,level in sources:
+        variant=relative.split('/')[-1] if collection=='特仕' else ''
         url=BASE+urllib.parse.quote(relative,safe='/')
         file=CACHE/(relative.replace('/','_')+'.html')
         try:
@@ -97,7 +100,7 @@ def main():
                 if category(item)!=cat or (level is not None and str(item.get('Level'))!=str(level)): continue
                 name=norm(item.get('Name',''))
                 if len(name)>=3 and any(c.startswith(name) and (len(c)==len(name) or c[len(name)] not in 'ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ★☆') for c in candidates):
-                    tag(item['ID'],family,collection,url);matched.append(item['ID'])
+                    tag(item['ID'],family,collection,url,variant);matched.append(item['ID'])
             audit.append({'url':url,'family':family,'collection':collection,'nameEntries':len(candidates),'matchedIds':matched})
             print(f'{relative}: {len(matched)}',flush=True)
         except Exception as e:
@@ -116,7 +119,7 @@ def main():
         if r['category']=='武器' and item.get('Type')=='HIDDEN_WEAPON':
             tag(id,'暗器','職業限定' if item.get('Class') else '不限職業','ITEM.Class')
         if not r['tags']:tag(id,'其他／未分類','','ITEM.Type')
-    result={'version':'V583','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
+    result={'version':'V584','categories':['武器','防具','仙器','特殊飾品','其他道具'],'byId':records,'sources':audit}
     (ROOT/'data/equipment-taxonomy.js').write_text('window.SZO_EQUIPMENT_TAXONOMY='+json.dumps(result,ensure_ascii=False,separators=(',',':'))+';\n',encoding='utf-8')
     (ROOT/'reports/equipment-taxonomy-audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
