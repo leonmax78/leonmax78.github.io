@@ -56,7 +56,9 @@
    state.family=fill('itemFamily',families.sort((a,b)=>order.indexOf(a)-order.indexOf(b)),state.family,'全部系列');
    if(!state.family)state.collection='';
    rows=rows.filter(([,r])=>!state.family||tagsMatch(r,state.family,''));
-   state.collection=fill('itemCollection',unique(rows.flatMap(([,r])=>r.tags.filter(t=>!state.family||t.family===state.family).map(t=>t.collection))).sort((a,b)=>a.localeCompare(b,'zh-Hant',{numeric:true})*-1),state.collection,'全部細分類');
+   const collectionOrder=new Map();
+   for(const [,r] of rows)for(const t of r.tags)if(t.family===state.family&&t.collection)collectionOrder.set(t.collection,Math.max(collectionOrder.get(t.collection)??-1,r.order??-1));
+   state.collection=fill('itemCollection',unique(rows.flatMap(([,r])=>r.tags.filter(t=>!state.family||t.family===state.family).map(t=>t.collection))).sort((a,b)=>state.family==='聖甲'?(collectionOrder.get(b)??-1)-(collectionOrder.get(a)??-1):a.localeCompare(b,'zh-Hant',{numeric:true})*-1),state.collection,'全部細分類');
    rows=rows.filter(([,r])=>!state.collection||tagsMatch(r,state.family,state.collection));
    show('itemCollection',!!state.family&&rows.some(([,r])=>r.tags.some(t=>t.family===state.family&&t.collection)));
   }
