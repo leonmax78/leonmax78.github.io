@@ -498,6 +498,13 @@ function itemContentsHTML(it){
   return entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）</div>`;
  }).join('')}</div></details>`;
 }
+function itemRecipeFlowHTML(it){
+ if(it.Type!=='PRESCRIPTION')return '';
+ const recipes=window.SZO_RECIPE_FLOWS?.[String(it.ID)];
+ if(!recipes)return '<div class="muted">目前資料未提供可確認的合成流程。</div>';
+ const link=id=>itemIndex[id]?`<button type="button" class="itemRecipeLink" data-item="${esc(id)}">${esc(nameOf(itemIndex[id]))}</button>`:`道具 ID ${esc(id)}`;
+ return `<section class="itemRecipeFlows"><h2>合成流程</h2>${recipes.map(recipe=>`<details class="itemRecipeFlow" ${recipes.length===1?'open':''}><summary>${esc(recipe.name)}${recipes.length>1?' / '+(recipe.output?esc(nameOf(itemIndex[recipe.output]||{Name:recipe.output})):'配方 '+esc(recipe.id)):''}</summary>${recipe.input?`<p>合成對象：${link(recipe.input)}</p>`:''}<ol>${recipe.steps.map(step=>`<li><h3>步驟 ${step.slot}</h3><div class="tableWrap"><table><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>${step.materials.map(m=>`<tr><td>${link(m.id)}</td><td>${m.qty}</td></tr>`).join('')}</tbody></table></div></li>`).join('')}</ol>${recipe.output?`<p class="itemRecipeOutput">合成產物：${link(recipe.output)}${recipe.count!==null?' × '+recipe.count:''}</p>`:'<p class="muted">此配方未指定新道具產物，效果請參閱配方說明。</p>'}</details>`).join('')}</section>`;
+}
 function itemDetailBodyHTML(it){
  const rows=itemDetailRows(it).filter(x=>x[1]!==''&&x[1]!==undefined&&x[1]!==null&&String(x[1]).trim()!=='0');
  const labels=keys=>new Set(keys.map(k=>window.SZO_DISPLAY.label(k)));
@@ -513,7 +520,7 @@ function itemDetailBodyHTML(it){
  groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
  const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>${key==='special'?itemApprovedStatusHTML(it):''}</section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}${itemContentsHTML(it)}</div>`;
+ return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}${itemContentsHTML(it)}${itemRecipeFlowHTML(it)}</div>`;
 }
 
 function showItem(id,skipPush){

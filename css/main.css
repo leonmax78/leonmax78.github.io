@@ -4125,6 +4125,17 @@ body{
 .compoundTaxonomyPage .resultItem{display:flex;align-items:center;gap:10px}
 @media(max-width:760px){.compoundTaxonomyPage .kvGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.compoundTaxonomyPage .kv:has(#eqQ){grid-column:1/-1}}
 @media(max-width:440px){.compoundTaxonomyPage .kvGrid{grid-template-columns:minmax(0,1fr)}}
+.itemRecipeFlows{margin-top:16px;border-top:1px solid var(--line,#526472);padding-top:12px}
+.itemRecipeFlows h2{font-size:16px}.itemRecipeFlows h3{font-size:14px;margin:12px 0 6px}
+.itemRecipeFlow{padding:10px 0;border-bottom:1px solid var(--line,#526472)}
+.itemRecipeFlow summary{cursor:pointer;font-weight:600;padding:8px 0}
+.itemRecipeFlow ol{list-style:none;padding:0;margin:0}
+.itemRecipeFlow .tableWrap{border-radius:8px}
+.itemRecipeFlow .tableWrap table{min-width:0;table-layout:fixed;width:100%}
+.itemRecipeFlow td,.itemRecipeFlow th{overflow-wrap:anywhere}
+.itemRecipeFlow td:last-child,.itemRecipeFlow th:last-child{width:80px;text-align:right}
+.itemRecipeLink{border:0;background:none;color:var(--accent,#71d5ef);padding:4px 0;cursor:pointer;text-align:left;text-decoration:underline;overflow-wrap:anywhere;font:inherit}
+.itemRecipeOutput{margin:14px 0 0}
 .itemContents{margin:16px 0;border-top:1px solid var(--line,#526472);padding-top:12px}
 .itemContents summary{cursor:pointer;padding:10px 0;font-weight:600}
 .itemContentsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}

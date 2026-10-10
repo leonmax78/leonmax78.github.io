@@ -6,7 +6,7 @@
  const record=it=>data().byId[id(it)]||{category:'其他道具',class:'',type:it.Type||it.type,tags:[]};
  const equipment=r=>r.category!=='其他道具';
  const isPet=r=>equipment(r)&&r.type!=='TALISMAN'&&r.class.split(',').map(s=>s.trim()).includes('CLASS_PET');
- const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='道具'?(!equipment(r)||state.mode==='experience'&&r.type==='TALISMAN'):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
+ const categoryMatch=r=>!state.category||(state.category==='寵物裝備'?isPet(r):state.category==='錦囊'?r.type==='BONUS':state.category==='道具'?(!equipment(r)&&r.type!=='BONUS'||state.mode==='experience'&&r.type==='TALISMAN'):state.category==='藥品'?r.type==='POTION':state.category==='符咒'?r.type==='MAGIC_FIGURE':state.category==='配方'?r.type==='PRESCRIPTION':r.category===state.category);
  const tagsMatch=(r,family,collection)=>r.tags.some(t=>(!family||t.family===family)&&(!collection||t.collection===collection));
  const special=it=>buffs().specialById[id(it)]||[];
  const experience=it=>buffs().experienceById?.[id(it)];
@@ -43,11 +43,11 @@
   show('itemKind',state.category==='武器');
   if(state.category!=='武器'){window.v110ItemKind='';const kind=document.getElementById('itemKind');if(kind)kind.value='';}
   if(!isEquipment&&!petEquipment){state.family='';state.collection='';state.profession='';fill('itemFamily',[],'','全部系列');fill('itemCollection',[],'','全部細分類');}
-  fill('itemCategory',['武器','防具','仙器',{value:'特殊飾品',label:'飾品'},'法器',{value:'寵物裝備',label:'封獸裝備'},'配方',{value:'道具',label:'藥品／道具／符咒'}],state.category,'全部大類');
+  fill('itemCategory',['武器','防具','仙器',{value:'特殊飾品',label:'飾品'},'法器',{value:'寵物裝備',label:'封獸裝備'},'配方','錦囊',{value:'道具',label:'藥品／道具／符咒'}],state.category,'全部大類');
   const collectionLabel=document.getElementById('itemCollection')?.closest('.kv').querySelector('.k');
   if(collectionLabel)collectionLabel.textContent=petEquipment?'部位':'細分類 / 武匣';
   for(const field of ['itemFamily','itemCollection','itemProfession'])show(field,isEquipment);
-  show('itemType',!!state.category&&state.category!=='配方'&&state.category!=='藥品'&&state.category!=='符咒');
+  show('itemType',!!state.category&&!['配方','錦囊','藥品','符咒'].includes(state.category));
   show('itemMode',consumable);show('itemBuffEffect',state.mode==='buff');show('itemBuffUnit',['buff','hp','mp'].includes(state.mode));show('itemBuffTarget',state.mode==='buff');
   if(state.mode!=='buff')state.target='';
   fill('itemMode',[{value:'hp',label:'補血'},{value:'mp',label:'補精'},{value:'buff',label:'增益'},{value:'experience',label:'經驗丹'},{value:'remove',label:'解除異常'}],state.mode,'全部用途');

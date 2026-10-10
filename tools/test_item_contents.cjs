@@ -18,12 +18,35 @@ async function run(engine,mobile){
   await page.locator('#reader .itemContents [data-item]').first().click();
   await page.waitForFunction(()=>document.querySelector('#detailPreview[open]')?.textContent.includes('26416')||location.hash==='#item-26416');
   await page.keyboard.press('Escape');
+  await page.waitForFunction(()=>!history.state?.szoPreview&&!document.querySelector('#detailPreview[open]'));
   await page.evaluate(()=>SZO_PREVIEW.open('item','30943'));
   await page.locator('#detailPreview .itemContents summary').click();
   assert.equal(await page.locator('#detailPreview .itemContents [data-item]').count(),16);
   await page.keyboard.press('Escape');
+  await page.waitForFunction(()=>!history.state?.szoPreview&&!document.querySelector('#detailPreview[open]'));
   await page.evaluate(()=>showItem('22339'));assert.equal(await page.locator('#reader .itemContentsUnavailable').count(),1);
   await page.evaluate(()=>showItem('31835'));assert.equal(await page.locator('#reader .itemContents').count(),0);
+  await page.evaluate(()=>renderItemPage('item'));
+  await page.locator('#itemCategory').selectOption('錦囊');
+  assert(await page.evaluate(()=>itemResultRows.length===items.filter(i=>i.Type==='BONUS').length&&itemResultRows.every(i=>i.Type==='BONUS')));
+  await page.locator('#itemCategory').selectOption('道具');assert(await page.evaluate(()=>itemResultRows.every(i=>i.Type!=='BONUS')));
+  await page.evaluate(()=>showItem('25137'));
+  assert.equal(await page.locator('#reader .itemRecipeFlow li').count(),3);
+  assert.equal(await page.locator('#reader .itemRecipeOutput [data-item]').getAttribute('data-item'),'20511');
+  const raw=require('../data/compound.json'),recipe=raw.find(r=>r.Item==='25137');
+  for(let n=1;n<=3;n++){
+   const step=raw.find(r=>!r.Item&&r.ID===recipe['Step'+n]);
+   const expected=Object.keys(step).filter(k=>/^InputItem\d+$/.test(k)).map(k=>({id:step[k],qty:step['InputNum'+k.slice(9)]}));
+   assert.deepEqual(await page.locator('#reader .itemRecipeFlow li').nth(n-1).locator('tbody tr').evaluateAll(rows=>rows.map(r=>({id:r.querySelector('[data-item]').dataset.item,qty:r.lastElementChild.textContent}))),expected);
+  }
+  await page.screenshot({path:path.join(root,`outputs/recipe-flow-${mobile?'mobile':'desktop'}.png`),fullPage:true});
+  assert(await page.locator('#reader .itemRecipeFlow .tableWrap').evaluateAll(tables=>tables.every(t=>t.scrollWidth<=t.clientWidth+1)));
+  await page.evaluate(()=>showItem('25221'));assert.equal(await page.locator('#reader .itemRecipeFlow').count(),1);
+  await page.evaluate(()=>showItem('25000'));assert.equal(await page.locator('#reader .itemRecipeOutput').count(),0);assert.equal(await page.locator('#reader .itemRecipeFlow [data-item="32000"]').count(),0);
+  await page.evaluate(()=>SZO_PREVIEW.open('item','25031'));
+  assert((await page.locator('#detailPreview .itemRecipeOutput').innerText()).includes('99'));
+  await page.locator('#detailPreview .itemRecipeOutput [data-item]').click();
+  await page.waitForFunction(()=>document.querySelector('#detailPreview[open]')?.textContent.includes('20397')||location.hash==='#item-20397');
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);
   console.log(`${mobile?'Mobile':'Desktop'}: container contents, linked item, preview and unavailable data passed.`);
  }finally{await browser.close();}
