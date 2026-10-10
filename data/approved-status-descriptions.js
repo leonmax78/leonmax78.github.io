@@ -45,6 +45,21 @@ window.SZO_APPROVED_STATUS_DESCRIPTIONS={
     },
     "reviewedAt": "2026-10-10T02:02:56.781Z"
   },
+  "80": {
+    "name": "真勇猛",
+    "lines": [
+      "物理傷害輸出 +50%"
+    ],
+    "source": {
+      "ID": "80",
+      "Group": "6",
+      "Order": "1",
+      "Name": "真勇猛",
+      "Param1": "50"
+    },
+    "reviewedAt": "2026-10-10",
+    "reviewNote": "依已確認的 Group 6 參數對照補充，使用者要求刊登。"
+  },
   "82": {
     "name": "六年禮勇猛",
     "lines": [
