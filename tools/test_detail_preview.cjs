@@ -38,6 +38,21 @@ async function run(engine,mobile){
   assert(await page.evaluate(()=>document.getElementById('detailPreview').scrollWidth<=document.getElementById('detailPreview').clientWidth));
   await page.screenshot({path:path.join(root,`outputs/preview-monster-${mobile?'mobile':'desktop'}.png`)});
   await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  await page.evaluate(()=>showReverse('23347'));
+  await page.locator('#reader [data-monster="17432"]').click();await page.locator('#detailPreview .searchedDrop').waitFor();
+  const highlight=page.locator('#detailPreview .searchedDrop');
+  assert.equal(await highlight.count(),1);assert.equal(await highlight.getAttribute('data-item'),'23347');
+  assert((await highlight.innerText()).includes('勝佛仙丹'));
+  assert.equal(await highlight.evaluate(el=>getComputedStyle(el).color),'rgb(255, 135, 147)');
+  await highlight.scrollIntoViewIfNeeded();await page.screenshot({path:path.join(root,`outputs/drop-highlight-${mobile?'mobile':'desktop'}.png`)});
+  await highlight.click();await page.locator('[data-preview-full="item"]').waitFor();
+  await page.locator('[data-preview-back]').click();await page.locator('#detailPreview .searchedDrop').waitFor();
+  await page.locator('[data-preview-close]').click();await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  await page.goForward();await page.locator('#detailPreview .searchedDrop').waitFor();
+  await page.goBack();await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  await page.evaluate(()=>SZO_PREVIEW.open('monster','17432'));await page.locator('[data-preview-full="monster"]').waitFor();
+  assert.equal(await page.locator('#detailPreview .searchedDrop').count(),0);
+  await page.locator('[data-preview-close]').click();await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
   assert.deepEqual(errors,[]);console.log(`${mobile?'WebKit mobile':'Chromium desktop'} preview, nested drops, back preservation and source links passed.`);
  }finally{await browser.close();}
 }

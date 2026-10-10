@@ -4086,6 +4086,7 @@ body{
 .detailPreviewActions button{flex:1;min-width:130px}
 .detailPreviewDrops{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .detailPreviewDrops button{text-align:left;min-width:0;overflow-wrap:anywhere}.detailPreviewDrops small{display:block}
+.detailPreviewDrops .searchedDrop{color:#ff8793;background:#6b1f2a44;border-color:#ff8793;box-shadow:inset 3px 0 #ff6578;font-weight:700}
 @media(max-width:600px){.detailPreviewBody{padding:12px}.detailPreviewDrops{grid-template-columns:1fr}.detailPreview .itemSectionGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .detailPreview .itemSection-help .itemSectionGrid,.detailPreview .itemSection-special .itemSectionGrid{grid-template-columns:1fr}
 .itemAdvancedSearchPage .kvGrid>.kv{min-width:0}

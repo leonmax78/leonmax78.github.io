@@ -405,7 +405,7 @@
       : '<div class="reverseDropLoc">'+escHtml(loc)+'</div>';
     return '<div class="reverseDropCard reverseDropCardMonster">'
       + '<div class="reverseDropMain">'
-      + '<button type="button" class="reverseDropName reverseDropMonsterName" data-monster="'+escHtml(mid)+'">'+escHtml(name)+'</button>'
+      + '<button type="button" class="reverseDropName reverseDropMonsterName" data-monster="'+escHtml(mid)+'" data-drop-item="'+escHtml(currentItemId||'')+'">'+escHtml(name)+'</button>'
       + locHtml
       + '</div>'
       + '<div class="reverseDropRate">'+escHtml(rate)+'</div>'
