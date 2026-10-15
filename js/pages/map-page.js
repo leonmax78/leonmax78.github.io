@@ -741,6 +741,7 @@
       </div>
       ${renderMapSuggestions()}
       <div class="mapLayout">
+        ${stage.flags?.includes('STAGE_FLAG_ForbidGive')?'<p class="notice" style="grid-column:1/-1">此地圖禁止交易／給予道具。</p>':''}
         <aside class="mapLeftPane">
         <details class="mapSide mapMonsterSide" data-map-panel="monster" ${state.panels.monster ? 'open' : ''}>
           <summary class="mapSideHead">
