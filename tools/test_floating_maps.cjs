@@ -40,6 +40,8 @@ async function run(engine,mobile){
   await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
   assert(await page.evaluate(()=>testReaderNodes.every((n,i)=>document.getElementById('reader').childNodes[i]===n)));
   await page.evaluate(async()=>{await ensureCollectPageLoaded();await renderCollectBookPage('weapon');closeDrawer();});
+  assert.equal(await page.locator('[data-collect-map-query="當鋪掌櫃"]').count(),2);
+  assert.equal(await page.locator('[data-collect-shop-location="京城"],[data-collect-shop-location="祁州"],[data-collect-shop-location="玄州當舖商人"]').count(),0);
   const shop=page.locator('[data-collect-shop-location]').filter({hasText:'黑心狐'}).first();
   await shop.scrollIntoViewIfNeeded();
   await page.evaluate(()=>{

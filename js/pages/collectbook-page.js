@@ -200,8 +200,14 @@
     return `<span class="collectTag collectNoteTag">${escHtml(text)}</span>`;
   }
   function shopLocationTags(values, emptyText){
-    const list = uniqueList(values || []);
+    let list = uniqueList(values || []);
+    if(list.includes('京城')&&list.includes('祁州')&&list.includes('玄州當舖商人')){
+      list=['當舖商人',...list.filter(name=>!['京城','祁州','玄州當舖商人'].includes(name))];
+    }
     return list.length ? list.map(name => {
+      if(name==='當舖商人'){
+        return '<button class="collectTag collectMapTag" type="button" data-collect-map-location="祁州城" data-collect-map-query="當鋪掌櫃">當舖商人</button>';
+      }
       if(name === '賞金獵人（5個大王石牌換取）'){
         return '<button class="collectTag collectMapTag" type="button" data-collect-map-location="祁州城" data-collect-map-query="賞金獵人" data-collect-npc-id="8383">賞金獵人</button> <span class="muted">（5個大王石牌換取）</span>';
       }
