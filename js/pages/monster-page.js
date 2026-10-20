@@ -342,6 +342,7 @@ async function showBeastCaptureLocation(index,locationIndex){
  const place=beastRows()[index]?.captureLocations?.[locationIndex];if(!place)return;
  if(typeof ensureMapPageLoaded==='function')await ensureMapPageLoaded();
  await window.openBeastCaptureMap(place);
+ if(window.SZO_MAP_FLOAT?.isOpen())return;
  document.querySelectorAll('.navBtn[data-view]').forEach(button=>button.classList.toggle('active',button.dataset.view==='map'));
  if(typeof closeDrawer==='function')closeDrawer();
  window.scrollTo({top:0,behavior:'smooth'});
@@ -489,9 +490,9 @@ function showMonsterDropPage(id){
 }
 
 async function showMonsterMapLocations(id, name){
- if(typeof showPageLoading==='function')showPageLoading('地圖查詢','正在載入這隻怪物的地圖位置，請稍候。');
  if(typeof ensureMapPageLoaded==='function')await ensureMapPageLoaded();
  if(typeof openMonsterMapLocations==='function')await openMonsterMapLocations(id, name);
+ if(window.SZO_MAP_FLOAT?.isOpen())return;
  document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='map'));
  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
  if(typeof closeDrawer==='function')closeDrawer();

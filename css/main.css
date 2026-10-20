@@ -4109,12 +4109,17 @@ body{
 .equipmentCompareDialog .itemStatusDescription{margin:0}
 .detailPreview{width:min(900px,calc(100vw - 24px));max-width:none;max-height:calc(100dvh - 24px);padding:0;border:1px solid var(--line,#526477);border-radius:8px;background:var(--panel,#101827);color:var(--text,#e9f0fa)}
 .detailPreview[open]{display:flex;flex-direction:column}
-.detailPreview button{background:var(--panel2,#172538);color:var(--text,#e9f0fa);border:1px solid #526477;border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit}
+.detailPreview.floatingExpanded{width:calc(100vw - 16px);height:calc(100dvh - 16px);max-height:calc(100dvh - 16px)}
+.detailPreviewBar{touch-action:none;cursor:move}
+.floatingMap{width:min(1400px,calc(100vw - 24px));height:calc(100dvh - 24px)}
+.floatingMapBody{flex:1}
+.floatingMapBody .mapPage{margin:0}
+.detailPreview:not(.floatingMap) button,.floatingMap>.detailPreviewBar button{background:var(--panel2,#172538);color:var(--text,#e9f0fa);border:1px solid #526477;border-radius:8px;padding:10px 12px;cursor:pointer;font:inherit}
 .detailPreview button:focus-visible{outline:2px solid #56cee0;outline-offset:2px}
 .detailPreview::backdrop{background:#0009}
 .detailPreviewOpen{overflow:hidden}
 .detailPreviewBar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid #52647766;flex-shrink:0}
-.detailPreviewBar strong{flex:1}.detailPreviewBar button{width:40px;height:40px;padding:0;font-size:24px}
+.detailPreviewBar strong{flex:1}.detailPreview .detailPreviewBar button{width:40px;height:40px;padding:0;font-size:24px}
 .detailPreviewBody{overflow:auto;overscroll-behavior:contain;padding:16px;min-height:0}
 .detailPreviewBody h2{font-size:16px}.detailPreviewBody .itemIdentity h1{font-size:22px}
 .detailPreviewActions{display:flex;gap:8px;flex-wrap:wrap;padding:12px;border-top:1px solid #52647766;flex-shrink:0}

@@ -412,7 +412,6 @@
   async function jumpToMap(key){
     const loc = locationByKey(key);
     if(!loc) return;
-    if(typeof showPageLoading === 'function') showPageLoading('地圖查詢', '地圖載入中，請稍候...');
     if(typeof window.ensureMapPageLoaded === 'function') await window.ensureMapPageLoaded();
     if(typeof window.openShopMapLocation === 'function') await window.openShopMapLocation({
       stageId: loc.stageId,

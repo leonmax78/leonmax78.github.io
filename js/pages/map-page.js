@@ -1,5 +1,51 @@
 // Stage map lookup page for the test site.
 (function(){
+  let floatingMap = null, mapReturn = null, floatingRequest = 0;
+  function byId(id){
+    if(floatingMap?.open){
+      if(id === 'reader') return floatingMap.querySelector('.floatingMapBody');
+      const found = floatingMap.querySelector(`[id="${id}"]`);
+      if(found) return found;
+    }
+    return document.getElementById(id);
+  }
+  function closeFloatingMap(){
+    if(!floatingMap?.open) return;
+    floatingRequest++;
+    closeMapShopPanel();
+    closeMapMonsterPanel();
+    floatingMap.close();
+    floatingMap.querySelector('.floatingMapBody').replaceChildren();
+    if(mapReturn){
+      Object.assign(state, mapReturn.state);
+      if(mapReturn.nodes) document.getElementById('reader').replaceChildren(...mapReturn.nodes);
+      for(const [el,top,left] of mapReturn.scroll){el.scrollTop=top;el.scrollLeft=left;}
+      mapReturn.focus?.focus({preventScroll:true});
+      mapReturn = null;
+    }
+  }
+  function enterFloatingMap(){
+    if(floatingMap?.open){floatingMap.close();floatingMap.showModal();return;}
+    const reader = document.getElementById('reader');
+    mapReturn = {state:{...state,monsters:new Set(state.monsters),npcs:new Set(state.npcs),panels:{...state.panels}},
+      focus:document.activeElement,scroll:[reader,...reader.querySelectorAll('*')].filter(el=>el.scrollTop||el.scrollLeft).map(el=>[el,el.scrollTop,el.scrollLeft])};
+    if(reader.querySelector('.mapPage')){
+      mapReturn.nodes=[...reader.childNodes];
+      reader.replaceChildren();
+    }
+    if(!floatingMap){
+      floatingMap=document.createElement('dialog');
+      floatingMap.id='floatingMap';floatingMap.className='detailPreview floatingMap';
+      floatingMap.setAttribute('aria-label','地圖位置');
+      floatingMap.innerHTML='<header class="detailPreviewBar"><strong>地圖位置</strong><button type="button" data-map-window-close title="關閉地圖" aria-label="關閉地圖">×</button></header><div class="detailPreviewBody floatingMapBody"></div>';
+      document.body.append(floatingMap);
+      floatingMap.addEventListener('cancel',e=>{e.preventDefault();closeFloatingMap();});
+      floatingMap.querySelector('[data-map-window-close]').addEventListener('click',closeFloatingMap);
+      window.SZO_FLOATING?.enhance(floatingMap);
+    }
+    floatingMap.showModal();
+  }
+  window.SZO_MAP_FLOAT={close:closeFloatingMap,isOpen:()=>!!floatingMap?.open};
   let mapDataPromise = null;
   let mapData = null;
   let shopDataPromise = null;
@@ -309,7 +355,7 @@
     const shop = shopById(marker.shop);
     if(!shop) return;
     closeMapShopPanel();
-    document.body.insertAdjacentHTML('beforeend', mapShopPanelHtml(marker, shop, mode || 'sell'));
+    (floatingMap?.open ? floatingMap : document.body).insertAdjacentHTML('beforeend', mapShopPanelHtml(marker, shop, mode || 'sell'));
     window.__szoMapShopMarker = marker;
     window.__szoMapShopMode = mode || 'sell';
   }
@@ -806,9 +852,12 @@
   }
 
   async function renderStageMapPage(){
-    if(typeof showPageLoading === 'function') showPageLoading('地圖查詢', '地圖載入中，請稍候。');
+    const wasFloating=!!floatingMap?.open, ticket=floatingRequest;
+    if(floatingMap?.open) byId('reader').innerHTML = '<p role="status">地圖載入中…</p>';
+    else if(typeof showPageLoading === 'function') showPageLoading('地圖查詢', '地圖載入中，請稍候。');
     else if(byId('reader')) byId('reader').innerHTML = '<section class="card pageLoadingCard"><h1>地圖載入中</h1><div class="muted">正在載入地圖資料，請稍候。</div></section>';
     await ensureMapDataLoaded();
+    if(wasFloating&&(!floatingMap?.open||ticket!==floatingRequest))return;
     if(state.stageId === null){
       const first = (mapData.stages || [])[0];
       if(first) state.stageId = Number(first.stageId);
@@ -922,6 +971,7 @@
       const id = monsterDot.dataset.mapMonster || '';
       if(id){
         ev.preventDefault();
+        if(window.SZO_PREVIEW){window.SZO_PREVIEW.open('monster',id);return;}
         showMapMonsterPanel({
           kind: 'monster',
           id,
@@ -1030,12 +1080,15 @@
   });
 
   window.openMonsterMapLocations = async function(monsterId, monsterName){
+    enterFloatingMap();
+    const ticket=++floatingRequest;
     state.monsters.clear();
     state.npcs.clear();
     await ensureMapDataLoaded();
+    if(!floatingMap?.open||ticket!==floatingRequest)return;
     const target = String(monsterId || '');
     let foundName = monsterName || '';
-    const stage = (mapData.stages || []).find(s => (s.monsters || []).some(m => {
+    const stage = (mapData.stages || []).find(s => [...(s.monsters || []),...(s.chests || [])].some(m => {
       const ok = String(m.id) === target;
       if(ok && !foundName) foundName = m.name || '';
       return ok;
@@ -1043,7 +1096,7 @@
     state.query = foundName || target;
     if(stage){
       state.stageId = Number(stage.stageId);
-      monsterGroups(stage).forEach(group => {
+      [...monsterGroups(stage),...monsterGroups(stage,'chests')].forEach(group => {
         if(String(group.id || '') === target) state.monsters.add(monsterGroupKey(group));
       });
     }
@@ -1051,7 +1104,10 @@
   };
 
   window.openBeastCaptureMap = async function(place){
+    enterFloatingMap();
+    const ticket=++floatingRequest;
     await ensureMapDataLoaded();
+    if(!floatingMap?.open||ticket!==floatingRequest)return;
     const stage=mapData.stages.find(item=>Number(item.stageId)===Number(place.stageId));
     if(!stage)return;
     const ids=new Set(place.monsterIds.map(String));
@@ -1064,7 +1120,10 @@
   };
 
   window.openMapSearchLocation = async function(mapName, queryName){
+    enterFloatingMap();
+    const ticket=++floatingRequest;
     await ensureMapDataLoaded();
+    if(!floatingMap?.open||ticket!==floatingRequest)return;
     const targetMap = String(mapName || '').trim();
     const targetQuery = String(queryName || '').trim();
     state.monsters.clear();
@@ -1087,8 +1146,11 @@
   };
 
   window.openShopMapByLabel = async function(label){
+    enterFloatingMap();
+    const ticket=++floatingRequest;
     await ensureMapDataLoaded();
     await ensureMapShopDataLoaded().catch(() => null);
+    if(!floatingMap?.open||ticket!==floatingRequest)return;
     const raw = String(label || '').trim();
     const norm = value => String(value || '').replace(/\s+/g, '').replace(/舖/g, '鋪').trim();
     const text = norm(raw);
@@ -1148,7 +1210,10 @@
   };
 
   window.openShopMapLocation = async function(info){
+    enterFloatingMap();
+    const ticket=++floatingRequest;
     await ensureMapDataLoaded();
+    if(!floatingMap?.open||ticket!==floatingRequest)return;
     const targetStageId = Number(info?.stageId);
     const targetNpcId = String(info?.npcId || '');
     const targetShopId = String(info?.shopId || '');

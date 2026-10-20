@@ -412,6 +412,15 @@
       + '</div>';
   }
 
+  window.renderReversePreviewHTML=async function(id){
+    const itemId=String(id||'').trim();
+    await ensureReverseItemDataLoaded(itemId);
+    const it=itemLiteById(itemId);
+    if(!it)throw Error('找不到這個道具');
+    const rows=(getDropReverse()[itemId]||[]).slice().sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0));
+    return '<h2>'+escHtml(nameOfSafe(it))+'</h2><p>取得來源｜共 '+rows.length+' 筆</p>'
+      +'<div class="reverseDropList">'+(rows.map(row=>renderReverseCard(row,itemId,'reverse')).join('')||'<p>沒有掉落資料。</p>')+'</div>';
+  };
   window.showReverse=async function(id,returnView,parentItemId,skipPush){
     const returnKey=!skipPush?window.SZO_DETAIL_NAV?.capture():null;
     const itemId=String(id||'').trim();
@@ -458,7 +467,6 @@
     const id=btn.getAttribute('data-reverse-map-monster')||'';
     const name=btn.getAttribute('data-reverse-map-name')||'';
     (async function(){
-      if(typeof showPageLoading==='function')showPageLoading('????','????????...');
       if(typeof window.ensureMapPageLoaded==='function')await window.ensureMapPageLoaded();
       else if(typeof window.loadScriptGroupOnce==='function')await window.loadScriptGroupOnce('page_map');
       if(typeof window.openMonsterMapLocations==='function')await window.openMonsterMapLocations(id,name);
