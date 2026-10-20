@@ -201,7 +201,12 @@
   }
   function shopLocationTags(values, emptyText){
     const list = uniqueList(values || []);
-    return list.length ? list.map(name => `<button class="collectTag collectMapTag" type="button" data-collect-shop-location="${escHtml(name)}">${escHtml(name)}</button>`).join('') : `<span class="muted">${escHtml(emptyText || '-')}</span>`;
+    return list.length ? list.map(name => {
+      if(name === '賞金獵人（5個大王石牌換取）'){
+        return '<button class="collectTag collectMapTag" type="button" data-collect-map-location="祁州城" data-collect-map-query="賞金獵人">賞金獵人</button> <span class="muted">（5個大王石牌換取）</span>';
+      }
+      return `<button class="collectTag collectMapTag" type="button" data-collect-shop-location="${escHtml(name)}">${escHtml(name)}</button>`;
+    }).join('') : `<span class="muted">${escHtml(emptyText || '-')}</span>`;
   }
   function splitLocationText(value){
     return String(value || '').split(/[、,，/／]+/).map(x => x.trim()).filter(Boolean);

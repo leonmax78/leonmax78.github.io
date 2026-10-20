@@ -54,6 +54,18 @@ async function run(engine,mobile){
   assert(await page.evaluate(()=>Math.abs(scrollY-collectBefore.y)<2));
   assert(await page.evaluate(()=>JSON.stringify(collectBefore.forms)===JSON.stringify([...document.querySelectorAll('.formBox')].map(e=>e.className))));
   assert(await page.evaluate(()=>JSON.stringify(collectBefore.nav)===JSON.stringify([...document.querySelectorAll('.navBtn[data-view]')].map(e=>e.className))));
+  await page.evaluate(()=>renderCollectBookPage('artifact'));
+  const bounty=page.locator('[data-collect-map-query="賞金獵人"]');
+  assert.equal(await bounty.count(),3);
+  for(let i=0;i<3;i++){
+   assert.equal(await bounty.nth(i).textContent(),'賞金獵人');
+   await bounty.nth(i).click();
+   await page.locator('#floatingMap .mapPage').waitFor();
+   assert.equal(await page.locator('#floatingMap #mapSearchInput').inputValue(),'賞金獵人');
+   assert(await page.locator('#floatingMap .mapDot.npc').count()>0);
+   await page.locator('[data-map-window-close]').click();
+   assert.equal(await bounty.count(),3);
+  }
   assert.deepEqual(errors,[]);
   console.log(mobile?'Mobile floating workflow passed':'Desktop floating workflow passed');
  }finally{await browser.close();}
