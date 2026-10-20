@@ -39,6 +39,21 @@ async function run(engine,mobile){
   await page.locator('[data-preview-close]').click();
   await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
   assert(await page.evaluate(()=>testReaderNodes.every((n,i)=>document.getElementById('reader').childNodes[i]===n)));
+  await page.evaluate(async()=>{await ensureCollectPageLoaded();await renderCollectBookPage('weapon');closeDrawer();});
+  const shop=page.locator('[data-collect-shop-location]').filter({hasText:'黑心狐'}).first();
+  await shop.scrollIntoViewIfNeeded();
+  await page.evaluate(()=>{
+   window.collectBefore={nodes:[...document.getElementById('reader').childNodes],y:scrollY,
+    forms:[...document.querySelectorAll('.formBox')].map(e=>e.className),
+    nav:[...document.querySelectorAll('.navBtn[data-view]')].map(e=>e.className)};
+  });
+  await shop.click();
+  await page.locator('#floatingMap .mapPage').waitFor();
+  await page.locator('[data-map-window-close]').click();
+  assert(await page.evaluate(()=>collectBefore.nodes.every((n,i)=>document.getElementById('reader').childNodes[i]===n)));
+  assert(await page.evaluate(()=>Math.abs(scrollY-collectBefore.y)<2));
+  assert(await page.evaluate(()=>JSON.stringify(collectBefore.forms)===JSON.stringify([...document.querySelectorAll('.formBox')].map(e=>e.className))));
+  assert(await page.evaluate(()=>JSON.stringify(collectBefore.nav)===JSON.stringify([...document.querySelectorAll('.navBtn[data-view]')].map(e=>e.className))));
   assert.deepEqual(errors,[]);
   console.log(mobile?'Mobile floating workflow passed':'Desktop floating workflow passed');
  }finally{await browser.close();}

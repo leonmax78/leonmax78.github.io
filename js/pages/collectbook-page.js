@@ -1026,18 +1026,12 @@
     if(mapBtn){
       ev.preventDefault();
       ev.stopPropagation();
-      hideCollectTopButton();
       const mapName = mapBtn.dataset.collectMapLocation || '';
       const query = mapBtn.dataset.collectMapQuery || '';
       saveCollectScroll(state.active);
       (async () => {
-        if(typeof showPageLoading === 'function') showPageLoading('地圖查詢', '正在載入地圖位置，請稍候。');
         if(typeof window.ensureMapPageLoaded === 'function') await window.ensureMapPageLoaded();
         if(typeof window.openMapSearchLocation === 'function') await window.openMapSearchLocation(mapName, query);
-        try{ document.querySelectorAll('.navBtn[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'map')); }catch(e){}
-        try{ document.querySelectorAll('.formBox').forEach(form => form.classList.remove('active')); }catch(e){}
-        try{ if(typeof closeDrawer === 'function') closeDrawer(); }catch(e){}
-        try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){}
       })();
       return;
     }
@@ -1045,17 +1039,11 @@
     if(shopMapBtn){
       ev.preventDefault();
       ev.stopPropagation();
-      hideCollectTopButton();
       const shopName = shopMapBtn.dataset.collectShopLocation || '';
       saveCollectScroll(state.active);
       (async () => {
-        if(typeof showPageLoading === 'function') showPageLoading('地圖查詢', '正在載入商店位置，請稍候。');
         if(typeof window.ensureMapPageLoaded === 'function') await window.ensureMapPageLoaded();
         if(typeof window.openShopMapByLabel === 'function') await window.openShopMapByLabel(shopName);
-        try{ document.querySelectorAll('.navBtn[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'map')); }catch(e){}
-        try{ document.querySelectorAll('.formBox').forEach(form => form.classList.remove('active')); }catch(e){}
-        try{ if(typeof closeDrawer === 'function') closeDrawer(); }catch(e){}
-        try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(e){}
       })();
       return;
     }
