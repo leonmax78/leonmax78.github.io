@@ -22,6 +22,7 @@
       <button class="navBtn major active" data-view="home">首頁 <span>›</span></button>
       <button class="navBtn major" data-view="jiang">降神、經驗、修練試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
+        <div class="subMenuNote">降神、經驗、修練相關功能</div>
         <button class="navBtn sub" data-jiang="support">副降神模擬 <span>›</span></button>
         <button class="navBtn sub" data-jiang="recommend">副降神組合推薦方案 <span>›</span></button>
         <button class="navBtn sub" data-jiang="compare">主降神比較 <span>›</span></button>
