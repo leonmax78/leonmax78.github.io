@@ -77,8 +77,10 @@ async function run(engine,mobile){
   await page.locator('#detailPreview [data-preview-close]').click();
   await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
   assert(await page.evaluate(()=>Math.abs(scrollY-dropBefore.y)<2));
+  await page.reload();await page.waitForFunction(()=>window.SZO_READY);await page.waitForTimeout(1800);
   await page.evaluate(async()=>{await ensureQaPageLoaded();await renderQaPage();closeDrawer();});
-  for(const [query,selector] of [['誅仙','[data-qa-item]'],['誅仙','[data-qa-reverse]'],['大狂猴','[data-qa-monster]']]){
+  assert(await page.evaluate(()=>typeof window.renderReversePreviewHTML==='undefined'));
+  for(const [query,selector] of [['誅仙','[data-qa-reverse]'],['誅仙','[data-qa-shop-item]'],['誅仙','[data-qa-item]'],['大狂猴','[data-qa-monster]']]){
    await page.locator('#qaInput').fill(query);
    await page.locator('#qaInput').press('Enter');
    const result=page.locator('#reader '+selector).first();
@@ -87,6 +89,9 @@ async function run(engine,mobile){
    await result.click();
    await page.locator('#detailPreview').waitFor();
    await page.waitForFunction(()=>document.querySelector('#detailPreview .detailPreviewBody').textContent!=='資料載入中…');
+   const content=await page.locator('#detailPreview .detailPreviewBody').textContent();
+   assert(!/not a function|載入失敗|找不到這個/.test(content),content);
+   assert(content.length>30,content);
    assert(await page.evaluate(()=>qaBefore.every((n,i)=>document.getElementById('reader').childNodes[i]===n)));
    await page.locator('#detailPreview [data-preview-close]').click();
    await page.waitForFunction(()=>!document.getElementById('detailPreview').open);

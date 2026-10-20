@@ -228,11 +228,11 @@
     }
     return rows.sort((a,b) => a.stageId - b.stageId || a.npcName.localeCompare(b.npcName, 'zh-Hant') || Number(a.shopId) - Number(b.shopId));
   }
-  async function answerShop(query, forcedMode){
+  async function answerShop(query, forcedMode, exactItem=state.exactItem){
     const raw = String(query || '');
     const term = searchTerm(raw);
     const locs = await shopLocations();
-    const q = norm(state.exactItem || term || raw);
+    const q = norm(exactItem || term || raw);
 
     function collectRows(mode){
       const rows = [];
@@ -241,8 +241,8 @@
         for(const item of loc.shop?.items || []){
           const priceValue = mode === 'buy' ? item.buyPrice : item.sellPrice;
           if(priceValue === undefined || priceValue === null || priceValue === '') continue;
-          if(state.exactItem){
-            if(String(item.name || '').trim() !== state.exactItem) continue;
+          if(exactItem){
+            if(String(item.name || '').trim() !== exactItem) continue;
           }else{
             const hay = norm([item.name, loc.stageName, loc.npcName].join(' '));
             if(!hay.includes(q)) continue;
@@ -436,5 +436,6 @@
     }
   });
 
+  window.renderQaShopPreviewHTML = query => answerShop(query, undefined, String(query||''));
   window.renderQaPage = renderQaPage;
 })();
