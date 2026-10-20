@@ -66,6 +66,9 @@
    if(kind==='item'){
     await ensureItemPageLoaded();if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');await ensureItemOptionalData('');
     const item=itemIndex[String(id)];if(!item)throw Error('找不到這個道具');html=itemDetailBodyHTML(item);
+   }else if(kind==='collect'){
+    await ensureCollectPageLoaded();
+    html=await window.renderCollectDropPreviewHTML(id);
    }else if(kind==='reverse'){
     if(!window.renderReversePreviewHTML)await window.loadScriptGroupOnce('page_reverse');
     html=await window.renderReversePreviewHTML(id);
@@ -82,6 +85,7 @@
     if(drop.dataset.item===String(highlightItemId)){drop.classList.add('searchedDrop');drop.title='本次查詢道具';}
    }
    actions.innerHTML=`<button type="button" data-preview-full="${kind}" data-id="${esc(id)}">前往完整${kind==='item'?'道具':kind==='reverse'?'來源':'怪物'}頁</button>${kind==='item'?`<button type="button" data-rev="${esc(id)}">查詢取得來源</button>`:kind==='monster'?`<button type="button" data-preview-map="${esc(id)}" data-map-name="${esc(monsterName)}">查看地圖位置</button>`:''}`;
+   if(kind==='collect')actions.replaceChildren();
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
  function pop(event){
@@ -96,10 +100,12 @@
  window.SZO_PREVIEW={open,close};
  // Capture before legacy document delegates so one click opens exactly one preview.
  window.addEventListener('click',event=>{
-  const button=event.target.closest?.('[data-item],[data-monster],[data-qa-item],[data-qa-monster],[data-shop-item],[data-map-shop-item],[data-rev],[data-reverse-item],[data-preview-map]');if(!button||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+  const button=event.target.closest?.('[data-item],[data-monster],[data-qa-item],[data-qa-monster],[data-qa-reverse],[data-shop-item],[data-map-shop-item],[data-rev],[data-reverse-item],[data-preview-map],[data-collect-reverse],[data-collect-nested-reverse]');if(!button||event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
   event.preventDefault();event.stopImmediatePropagation();
+  if(button.dataset.collectReverse){open('collect',button.dataset.collectReverse);return;}
+  if(button.dataset.collectNestedReverse){open('reverse',button.dataset.collectNestedReverse);return;}
   if(button.dataset.previewMap){ensureMapPageLoaded().then(()=>window.openMonsterMapLocations(button.dataset.previewMap,button.dataset.mapName)).catch(console.error);return;}
-  const reverseId=button.dataset.rev||button.dataset.reverseItem;
+  const reverseId=button.dataset.rev||button.dataset.reverseItem||button.dataset.qaReverse;
   if(reverseId){open('reverse',reverseId);return;}
   const itemId=button.dataset.item||button.dataset.qaItem||button.dataset.shopItem||button.dataset.mapShopItem;
   open(itemId?'item':'monster',itemId||button.dataset.monster||button.dataset.qaMonster,true,button.dataset.dropItem||'');

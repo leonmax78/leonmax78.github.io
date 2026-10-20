@@ -68,6 +68,30 @@ async function run(engine,mobile){
    await page.locator('[data-map-window-close]').click();
    assert.equal(await bounty.count(),3);
   }
+  const dropButton=page.locator('[data-collect-reverse]').first();
+  await dropButton.scrollIntoViewIfNeeded();
+  await page.evaluate(()=>window.dropBefore={nodes:[...document.getElementById('reader').childNodes],y:scrollY});
+  await dropButton.click();
+  await page.locator('#detailPreview .collectDropDetailList').waitFor();
+  assert(await page.evaluate(()=>dropBefore.nodes.every((n,i)=>document.getElementById('reader').childNodes[i]===n)));
+  await page.locator('#detailPreview [data-preview-close]').click();
+  await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+  assert(await page.evaluate(()=>Math.abs(scrollY-dropBefore.y)<2));
+  await page.evaluate(async()=>{await ensureQaPageLoaded();await renderQaPage();closeDrawer();});
+  for(const [query,selector] of [['誅仙','[data-qa-item]'],['誅仙','[data-qa-reverse]'],['大狂猴','[data-qa-monster]']]){
+   await page.locator('#qaInput').fill(query);
+   await page.locator('#qaInput').press('Enter');
+   const result=page.locator('#reader '+selector).first();
+   await result.waitFor();
+   await page.evaluate(()=>window.qaBefore=[...document.getElementById('reader').childNodes]);
+   await result.click();
+   await page.locator('#detailPreview').waitFor();
+   await page.waitForFunction(()=>document.querySelector('#detailPreview .detailPreviewBody').textContent!=='資料載入中…');
+   assert(await page.evaluate(()=>qaBefore.every((n,i)=>document.getElementById('reader').childNodes[i]===n)));
+   await page.locator('#detailPreview [data-preview-close]').click();
+   await page.waitForFunction(()=>!document.getElementById('detailPreview').open);
+   assert.equal(await page.locator('#qaInput').inputValue(),query);
+  }
   assert.deepEqual(errors,[]);
   console.log(mobile?'Mobile floating workflow passed':'Desktop floating workflow passed');
  }finally{await browser.close();}

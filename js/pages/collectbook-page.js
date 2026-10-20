@@ -671,6 +671,14 @@
       ? `<div class="tableWrap monsterDropTable collectDropDetailTable"><table><thead><tr><th>怪物</th><th>位置</th><th>機率</th></tr></thead><tbody>${drops.map(name => `<tr><td>${escHtml(name)}</td><td>-</td><td>-</td></tr>`).join('')}</tbody></table></div>`
       : '<div class="empty">沒有掉落資料</div>';
   }
+  window.renderCollectDropPreviewHTML=async function(itemId){
+    const row=findCollectRow(itemId);
+    if(!row)throw Error('找不到掉落資料');
+    await enrichCollectSourceDrops(row);
+    const shops=new Set(row.shops||[]);
+    const count=row.reverseDrops?.length||(row.excelSources||[]).filter(x=>!shops.has(x)).length;
+    return `<div class="collectPage collectDropDetailPage"><h2>${escHtml(row.name||'-')}</h2><p class="muted">掉落反查｜共 ${count} 筆</p><div class="collectDropDetailList">${collectDropDetailRows(row)}</div></div>`;
+  };
   async function renderCollectDropDetail(itemId){
     const row = findCollectRow(itemId);
     const reader = by('reader');
