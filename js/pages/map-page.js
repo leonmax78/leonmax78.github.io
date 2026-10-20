@@ -14,7 +14,7 @@
     stageId: null,
     monsters: new Set(),
     npcs: new Set(),
-    panels: { monster: true, npc: true },
+    panels: { monster: true, npc: true, chest: true },
     composing: false,
     zoom: 1
   };
@@ -335,7 +335,7 @@
     if(!q) return true;
     const head = `${stage.stageId || ''} ${stage.stageName || ''}`.toLowerCase();
     if(head.includes(q)) return true;
-    return (stage.monsters || []).some(m => markerText(m).includes(q)) || (stage.npcs || []).some(n => markerText(n).includes(q));
+    return [...(stage.monsters || []), ...(stage.chests || [])].some(m => markerText(m).includes(q)) || (stage.npcs || []).some(n => markerText(n).includes(q));
   }
 
   function markerMatches(marker, q){
@@ -374,7 +374,7 @@
           note: '地圖'
         });
       }
-      monsterGroups(stage).forEach(group => {
+      [...monsterGroups(stage), ...monsterGroups(stage, 'chests')].forEach(group => {
         if(markerMatches(group, q)){
           push({
             kind: 'monster',
@@ -475,7 +475,7 @@
     state.npcs.clear();
     const q = state.query.trim().toLowerCase();
     if(!q) return;
-    monsterGroups(stage).forEach(group => { if(markerMatches(group, q)) state.monsters.add(markerKey(group)); });
+    [...monsterGroups(stage), ...monsterGroups(stage, 'chests')].forEach(group => { if(markerMatches(group, q)) state.monsters.add(markerKey(group)); });
     (stage.npcs || []).forEach(n => { if(markerMatches(Object.assign({ kind: 'npc' }, n), q)) state.npcs.add(npcKey(n)); });
   }
 
@@ -497,9 +497,9 @@
     return `(${x}, ${y})`;
   }
 
-  function monsterGroups(stage){
+  function monsterGroups(stage, collection = 'monsters'){
     const groups = new Map();
-    (stage.monsters || []).forEach(marker => {
+    (stage[collection] || []).forEach(marker => {
       const key = monsterGroupKey(marker);
       if(!groups.has(key)){
         groups.set(key, Object.assign({ kind: 'monster', points: [] }, marker));
@@ -536,8 +536,8 @@
   }
 
   function markerList(stage, kind){
-    const rows = kind === 'monster' ? monsterGroups(stage) : (stage.npcs || []).map(n => Object.assign({ kind: 'npc' }, n));
-    const checked = kind === 'monster' ? state.monsters : state.npcs;
+    const rows = kind === 'npc' ? (stage.npcs || []).map(n => Object.assign({ kind: 'npc' }, n)) : monsterGroups(stage, kind === 'chest' ? 'chests' : 'monsters');
+    const checked = kind === 'npc' ? state.npcs : state.monsters;
     if(!rows.length) return '<div class="muted mapEmptyLine">沒有資料</div>';
     let previousRegion = null;
     return rows.map(marker => {
@@ -551,7 +551,7 @@
         }
       }
       const key = markerKey(marker);
-      const label = kind === 'monster' ? monsterGroupLabel(marker) : `${marker.name || '未命名'}${roleLabel(marker.role) ? ' / ' + roleLabel(marker.role) : ''}`;
+      const label = kind !== 'npc' ? monsterGroupLabel(marker) : `${marker.name || '未命名'}${roleLabel(marker.role) ? ' / ' + roleLabel(marker.role) : ''}`;
       return `${heading}<label class="mapMarkerChoice">
         <input type="checkbox" data-map-${kind}="${htmlEscape(key)}" ${checked.has(key) ? 'checked' : ''}>
         <span>${htmlEscape(label)}</span>
@@ -560,7 +560,7 @@
   }
 
   function visibleMarkers(stage){
-    const monsterRows = (stage.monsters || []).filter(m => state.monsters.has(monsterGroupKey(m))).map(m => Object.assign({ kind: 'monster' }, m));
+    const monsterRows = [...(stage.monsters || []), ...(stage.chests || [])].filter(m => state.monsters.has(monsterGroupKey(m))).map(m => Object.assign({ kind: 'monster' }, m));
     const npcRows = (stage.npcs || []).filter(n => state.npcs.has(npcKey(n))).map(n => Object.assign({ kind: 'npc' }, n));
     return monsterRows.concat(npcRows);
   }
@@ -750,6 +750,13 @@
           </summary>
           <div class="mapChoiceList">${markerList(stage, 'monster')}</div>
         </details>
+        ${(stage.chests || []).length ? `<details class="mapSide mapChestSide" data-map-panel="chest" ${state.panels.chest ? 'open' : ''}>
+          <summary class="mapSideHead">
+            <h2>寶箱</h2>
+            <div><button type="button" class="ghost mapMiniBtn" data-map-all="chest">全選</button><button type="button" class="ghost mapMiniBtn" data-map-none="chest">全不選</button></div>
+          </summary>
+          <div class="mapChoiceList">${markerList(stage, 'chest')}</div>
+        </details>` : ''}
         <details class="mapSide mapNpcSide" data-map-panel="npc" ${state.panels.npc ? 'open' : ''}>
           <summary class="mapSideHead">
             <h2>NPC</h2>
@@ -888,7 +895,7 @@
       state.zoom = Number(ev.target.value) || 1;
       applyZoomToDom();
     }
-    const monster = ev.target?.dataset?.mapMonster;
+    const monster = ev.target?.dataset?.mapMonster || ev.target?.dataset?.mapChest;
     if(monster){
       ev.target.checked ? state.monsters.add(monster) : state.monsters.delete(monster);
       updateMapSelectionDom();
@@ -955,11 +962,12 @@
     const none = ev.target?.closest?.('[data-map-none]')?.dataset.mapNone;
     const stage = currentStage();
     if(!stage || (!all && !none)) return;
-    const set = (all || none) === 'monster' ? state.monsters : state.npcs;
-    const rows = (all || none) === 'monster' ? monsterGroups(stage) : (stage.npcs || []).map(n => Object.assign({ kind: 'npc' }, n));
-    set.clear();
+    const kind = all || none;
+    const set = kind === 'npc' ? state.npcs : state.monsters;
+    const rows = kind === 'npc' ? (stage.npcs || []).map(n => Object.assign({ kind: 'npc' }, n)) : monsterGroups(stage, kind === 'chest' ? 'chests' : 'monsters');
+    rows.forEach(row => set.delete(markerKey(row)));
     if(all) rows.forEach(row => set.add(markerKey(row)));
-    const attr = (all || none) === 'monster' ? 'data-map-monster' : 'data-map-npc';
+    const attr = `data-map-${kind}`;
     document.querySelectorAll(`input[${attr}]`).forEach(input => { input.checked = !!all; });
     updateMapSelectionDom(stage);
   });
