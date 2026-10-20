@@ -57,6 +57,7 @@
   const SHOW_MAP_COORDS = false;
   const state = {
     query: '',
+    npcTarget: null,
     stageId: null,
     monsters: new Set(),
     npcs: new Set(),
@@ -378,6 +379,9 @@
   }
 
   function stageMatches(stage, q){
+    if(state.npcTarget && q===state.npcTarget.name.toLowerCase()){
+      return (stage.npcs||[]).some(n=>String(n.id)===state.npcTarget.id);
+    }
     if(!q) return true;
     const head = `${stage.stageId || ''} ${stage.stageName || ''}`.toLowerCase();
     if(head.includes(q)) return true;
@@ -385,6 +389,9 @@
   }
 
   function markerMatches(marker, q){
+    if(state.npcTarget && q===state.npcTarget.name.toLowerCase()){
+      return marker.kind==='npc' && String(marker.id)===state.npcTarget.id;
+    }
     return !q || markerText(marker).includes(q);
   }
 
@@ -1119,13 +1126,14 @@
     await renderStageMapPage();
   };
 
-  window.openMapSearchLocation = async function(mapName, queryName){
+  window.openMapSearchLocation = async function(mapName, queryName, npcId){
     enterFloatingMap();
     const ticket=++floatingRequest;
     await ensureMapDataLoaded();
     if(!floatingMap?.open||ticket!==floatingRequest)return;
     const targetMap = String(mapName || '').trim();
     const targetQuery = String(queryName || '').trim();
+    state.npcTarget=npcId?{id:String(npcId),name:targetQuery}:null;
     state.monsters.clear();
     state.npcs.clear();
     const norm = value => String(value || '').replace(/\s+/g, '').trim();

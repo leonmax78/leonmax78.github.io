@@ -62,6 +62,8 @@ async function run(engine,mobile){
    await bounty.nth(i).click();
    await page.locator('#floatingMap .mapPage').waitFor();
    assert.equal(await page.locator('#floatingMap #mapSearchInput').inputValue(),'賞金獵人');
+   assert.equal(await page.locator('#floatingMap #mapStageSelect option').count(),5);
+   assert(!(await page.locator('#floatingMap').textContent()).includes('塔干沙漠'));
    assert(await page.locator('#floatingMap .mapDot.npc').count()>0);
    await page.locator('[data-map-window-close]').click();
    assert.equal(await bounty.count(),3);

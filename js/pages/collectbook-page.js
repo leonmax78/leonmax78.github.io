@@ -203,7 +203,7 @@
     const list = uniqueList(values || []);
     return list.length ? list.map(name => {
       if(name === '賞金獵人（5個大王石牌換取）'){
-        return '<button class="collectTag collectMapTag" type="button" data-collect-map-location="祁州城" data-collect-map-query="賞金獵人">賞金獵人</button> <span class="muted">（5個大王石牌換取）</span>';
+        return '<button class="collectTag collectMapTag" type="button" data-collect-map-location="祁州城" data-collect-map-query="賞金獵人" data-collect-npc-id="8383">賞金獵人</button> <span class="muted">（5個大王石牌換取）</span>';
       }
       return `<button class="collectTag collectMapTag" type="button" data-collect-shop-location="${escHtml(name)}">${escHtml(name)}</button>`;
     }).join('') : `<span class="muted">${escHtml(emptyText || '-')}</span>`;
@@ -1036,7 +1036,7 @@
       saveCollectScroll(state.active);
       (async () => {
         if(typeof window.ensureMapPageLoaded === 'function') await window.ensureMapPageLoaded();
-        if(typeof window.openMapSearchLocation === 'function') await window.openMapSearchLocation(mapName, query);
+        if(typeof window.openMapSearchLocation === 'function') await window.openMapSearchLocation(mapName, query, mapBtn.dataset.collectNpcId);
       })();
       return;
     }
