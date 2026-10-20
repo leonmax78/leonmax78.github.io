@@ -3203,6 +3203,30 @@ body{
   font-size:15px!important;
   min-height:44px!important;
 }
+.drawer .navBtn.sub{
+  background:#263a40!important;
+  border-color:#456068!important;
+  color:#edf5f5;
+  margin-bottom:6px;
+  border-radius:8px!important;
+  opacity:1;
+  box-shadow:none;
+  transition:background-color .15s ease,border-color .15s ease;
+}
+.drawer .navBtn.sub:hover{
+  background:#324b52!important;
+  border-color:#6c9199!important;
+  transform:none;
+}
+.drawer .navBtn.sub.active,.drawer .navBtn.sub:active{
+  background:#34565b!important;
+  border-color:#86babf!important;
+  box-shadow:inset 3px 0 #9cd6d6;
+}
+.drawer .navBtn.sub:focus-visible{
+  outline:2px solid #b4e4e5;
+  outline-offset:2px;
+}
 .navGroup{
   background:color-mix(in srgb,var(--panel) 66%,var(--bg) 34%)!important;
 }
