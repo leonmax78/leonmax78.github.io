@@ -4123,6 +4123,12 @@ body{
 .equipmentDifferenceToggle{display:flex;gap:8px;align-items:center;margin:12px 0}
 .equipmentDifferenceToggle input{width:18px;height:18px}
 .equipmentCompareScroll{overflow:auto;max-height:70dvh}
+.equipmentCompareZoom{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:8px 0 12px}
+.equipmentCompareZoom button{min-height:44px;min-width:44px;padding:6px 10px;background:#213840;color:#edf5f5;border:1px solid #55717a;border-radius:6px;cursor:pointer}
+.equipmentCompareZoom button:disabled{opacity:.4;cursor:default}
+.equipmentCompareZoom input{width:110px;min-width:60px;flex:1;max-width:200px;accent-color:#65d3cc}
+.equipmentCompareZoom [data-equipment-zoom-reset]{width:64px;font-variant-numeric:tabular-nums}
+.equipmentCompareZoom :focus-visible{outline:2px solid #9cd6d6;outline-offset:2px}
 .equipmentCompareDialog table{width:100%;min-width:680px;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:14px}
 .equipmentCompareDialog th,.equipmentCompareDialog td{padding:10px;border-bottom:1px solid #45596b;text-align:left;vertical-align:top;overflow-wrap:anywhere;white-space:pre-wrap}
 .equipmentCompareDialog th:first-child{width:110px}

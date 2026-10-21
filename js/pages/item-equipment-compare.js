@@ -1,6 +1,14 @@
 (function(){
  const key='sihai-equipment-compare-v1',slots=['A','B','C'];
- let dialog,onlyDifferences=false,memory;
+ let dialog,onlyDifferences=false,memory,zoom=100;
+ function setZoom(value){
+  zoom=Math.max(35,Math.min(150,Math.round(value)));
+  const table=dialog.querySelector('table');table.style.zoom=zoom/100;
+  dialog.querySelector('[data-equipment-zoom]').value=zoom;
+  dialog.querySelector('[data-equipment-zoom-reset]').textContent=zoom+'%';
+  dialog.querySelector('[data-equipment-zoom-out]').disabled=zoom<=35;
+  dialog.querySelector('[data-equipment-zoom-in]').disabled=zoom>=150;
+ }
  const eligible=it=>{const r=window.SZO_EQUIPMENT_TAXONOMY?.byId[it?.ID];return r&&r.category!=='其他道具';};
  function read(){
   if(memory)return memory;
@@ -35,21 +43,33 @@
   const descriptions=notes.some(Boolean)&&(!onlyDifferences||notesDiffer)?`<tr><th scope="row">特殊能力說明</th>${notes.map(n=>`<td>${n||'-'}</td>`).join('')}</tr>`:'';
   dialog.innerHTML=`<header><h2>裝備比較</h2><button type="button" data-equipment-close aria-label="關閉裝備比較" title="關閉">×</button></header><label class="equipmentDifferenceToggle"><input type="checkbox" data-equipment-differences ${onlyDifferences?'checked':''}>只看差異</label><div class="equipmentCompareScroll"><table><thead><tr><th scope="col">欄位</th>${slots.map((s,i)=>`<th scope="col"><div class="equipmentSlotTitle">${s}<button type="button" data-equipment-clear="${s}" aria-label="清除 ${s}" title="清除 ${s}" ${saved[s]?'':'disabled'}>×</button></div>${entries[i]?`${itemThumbHTML(entries[i])}<div>${esc(nameOf(entries[i]))}</div>`:`<div>${saved[s]?'道具已不存在':'尚未存檔'}</div>`}</th>`).join('')}</tr></thead><tbody>${body}${descriptions}${!body&&!descriptions?'<tr><td colspan="4">'+(entries.some(Boolean)?'沒有差異':'尚未存入裝備')+'</td></tr>':''}</tbody></table></div>`;
  }
+ function zoomControls(){
+  dialog.querySelector('.equipmentDifferenceToggle').insertAdjacentHTML('afterend',`<div class="equipmentCompareZoom" role="group" aria-label="比較表格縮放"><button type="button" data-equipment-zoom-out title="縮小" aria-label="縮小比較表格">−</button><input type="range" min="35" max="150" step="1" value="${zoom}" data-equipment-zoom aria-label="比較表格縮放比例"><button type="button" data-equipment-zoom-in title="放大" aria-label="放大比較表格">＋</button><button type="button" data-equipment-zoom-reset title="還原為 100%" aria-label="還原為百分之百">${zoom}%</button><button type="button" data-equipment-zoom-fit title="符合視窗寬度">符合寬度</button></div>`);
+  setZoom(zoom);
+ }
  async function open(){
   window.SZO_ITEM_FILTER_SEARCH?.close();
   if(typeof ensureItemDataLoaded==='function')await ensureItemDataLoaded();
   if(typeof ensureItemOptionalData==='function')await ensureItemOptionalData('');
   if(!dialog){dialog=document.createElement('dialog');dialog.className='equipmentCompareDialog';dialog.setAttribute('aria-label','裝備比較');document.body.append(dialog);dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});}
-  render();if(!dialog.open)dialog.showModal();
+  render();zoomControls();if(!dialog.open)dialog.showModal();
  }
  document.addEventListener('click',e=>{
+  if(e.target.closest('[data-equipment-zoom-out]')){setZoom(zoom-10);return;}
+  if(e.target.closest('[data-equipment-zoom-in]')){setZoom(zoom+10);return;}
+  if(e.target.closest('[data-equipment-zoom-reset]')){setZoom(100);return;}
+  if(e.target.closest('[data-equipment-zoom-fit]')){
+   const table=dialog.querySelector('table');table.style.zoom=1;
+   setZoom(Math.floor(dialog.querySelector('.equipmentCompareScroll').clientWidth/table.getBoundingClientRect().width*100));return;
+  }
   const save=e.target.closest('[data-equipment-save]');
   if(save){const slot=save.dataset.equipmentSave,it=item(save.dataset.equipmentId);if(!slots.includes(slot)||!eligible(it))return;const saved=read();saved[slot]=String(it.ID);const stored=persist(saved);refreshSavedSlots();save.closest('.equipmentCompareTools').querySelector('.equipmentSaveFeedback').textContent=`已存入 ${slot}：${nameOf(it)}${stored?'':'（瀏覽器無法儲存，僅本次有效）'}`;return;}
   if(e.target.closest('[data-equipment-compare]')){open().catch(()=>alert('裝備資料載入失敗，請稍後再試。'));return;}
   if(e.target.closest('[data-equipment-close]')){dialog?.close();return;}
-  const clear=e.target.closest('[data-equipment-clear]');if(clear&&slots.includes(clear.dataset.equipmentClear)){const saved=read();delete saved[clear.dataset.equipmentClear];persist(saved);refreshSavedSlots();render();}
+  const clear=e.target.closest('[data-equipment-clear]');if(clear&&slots.includes(clear.dataset.equipmentClear)){const saved=read();delete saved[clear.dataset.equipmentClear];persist(saved);refreshSavedSlots();render();zoomControls();}
  });
- document.addEventListener('change',e=>{if(e.target.matches('[data-equipment-differences]')){onlyDifferences=e.target.checked;render();dialog.querySelector('[data-equipment-differences]').focus();}});
- window.addEventListener('storage',e=>{if(e.key===key||e.key===null){memory=null;refreshSavedSlots();if(dialog?.open)render();}});
+ document.addEventListener('input',e=>{if(e.target.matches('[data-equipment-zoom]'))setZoom(Number(e.target.value));});
+ document.addEventListener('change',e=>{if(e.target.matches('[data-equipment-differences]')){onlyDifferences=e.target.checked;render();zoomControls();dialog.querySelector('[data-equipment-differences]').focus();}});
+ window.addEventListener('storage',e=>{if(e.key===key||e.key===null){memory=null;refreshSavedSlots();if(dialog?.open){render();zoomControls();}}});
  window.SZO_EQUIPMENT_COMPARE={toolbar,open};
 })();
