@@ -3,12 +3,14 @@
   const MANIFEST_URLS = [
     'downloads/version.json',
     'downloads/szo-launcher-version.json',
-    'downloads/collectbook-version.json'
+    'downloads/collectbook-version.json',
+    'downloads/appearance-changer/latest.json'
   ];
   const DESCRIPTIONS = [
     '記錄武冠與封獸收藏，統計總分與收藏率，並匯出未收清單及取得出處。',
     '自動開啟遊戲並輸入帳號密碼，免去手動登入操作，同時支援遊戲更新與帳號管理。',
-    '彙整武冠道具與出處資料，離線也能查找掉落位置與取得方式。'
+    '彙整武冠道具與出處資料，離線也能查找掉落位置與取得方式。',
+    '變更武防裝備、武魂與技能外觀，支援搜尋、紅心收藏、常用組合及單獨或全部還原。Windows 測試版；遊戲更新前請先全部還原。'
   ];
 
   function esc(value){
