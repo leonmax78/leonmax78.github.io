@@ -10,7 +10,7 @@
     '記錄武冠與封獸收藏，統計總分與收藏率，並匯出未收清單及取得出處。',
     '自動開啟遊戲並輸入帳號密碼，免去手動登入操作，同時支援遊戲更新與帳號管理。',
     '彙整武冠道具與出處資料，離線也能查找掉落位置與取得方式。',
-    '變更武防裝備、武魂與技能外觀，支援搜尋、紅心收藏、常用組合及單獨或全部還原。Windows 測試版；遊戲更新前請先全部還原。'
+    '變更武防裝備、武魂與技能外觀，使用前請先關閉遊戲。\n(每週四遊戲更新後重置)'
   ];
 
   function esc(value){
@@ -52,7 +52,7 @@
         <td data-label="載點"><span class="downloadCellValue"><a class="downloadBtn" href="${esc(downloadUrl)}" download>載點</a></span></td>
         <td data-label="版本號"><span class="downloadCellValue">${esc(version)}</span></td>
         <td data-label="上傳時間"><span class="downloadCellValue">${esc(published)}</span></td>
-        <td data-label="說明"><span class="downloadCellValue">${esc(data.description)}</span></td>
+        <td data-label="說明"><span class="downloadCellValue">${esc(data.description).replace(/\n/g, '<br>')}</span></td>
       </tr>`;
     }).join('');
     return `<section class="card downloadsPage">
