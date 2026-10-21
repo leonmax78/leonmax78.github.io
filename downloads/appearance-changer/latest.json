@@ -1,10 +1,10 @@
 {
   "display_name": "神州Online角色外觀變更程式 By尼扣扣",
-  "version": "0.1.5",
-  "published_at": "2026-10-21 15:59",
-  "file_name": "SZOAppearance-v0.1.5.zip",
-  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.5.zip",
-  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.5.zip",
-  "sha256": "f75c5f5a4fdd70e2968f75906c2f097baaad409878def1e13530aaf799305f6d",
-  "notes": "常用組合支援 Ctrl / Shift 多選批次套用；裝備來源鎖定同種類。重新載入時偵測封包內容變更，驗證並備份新基準，保留舊備份與收藏，不要求更新前還原。使用前請先關閉遊戲。"
+  "version": "0.1.6",
+  "published_at": "2026-10-21 16:10",
+  "file_name": "SZOAppearance-v0.1.6.zip",
+  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.6.zip",
+  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.6.zip",
+  "sha256": "12ead030f33ee10c08608a5c2c583a25807ef12d73cc274c8c7e7c6c63b001f6",
+  "notes": "新增網站自動更新：下載校驗後替換程式並重新啟動；右下角改為文字階段與下載百分比。保留批次套用、裝備同種類限制、新封包載入時自動備份。0.1.5 以前版本首次須手動下載本版，之後可於程式內更新。"
 }
