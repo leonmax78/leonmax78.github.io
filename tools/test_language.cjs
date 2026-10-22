@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..');
 (async()=>{
  const browser=await chromium.launch({channel:'msedge'});
  try{
-  for(const width of [1440,390]){
+  for(const width of [1440,980,390,320]){
    const page=await browser.newPage({viewport:{width,height:900}});
    const errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.route('https://preview.test/**',r=>{
@@ -33,6 +33,9 @@ const root=path.resolve(__dirname,'..');
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    const boxes=await page.locator('.languageTools button').evaluateAll(nodes=>nodes.map(n=>{const r=n.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom};}));
    assert(boxes.every(b=>b.x>=0&&b.right<=width));
+   const search=await page.locator('.topSearch').boundingBox();
+   const toolbar=await page.locator('.languageTools').boundingBox();
+   assert(search.x+search.width<=toolbar.x+1||search.y+search.height<=toolbar.y+1,'Search overlaps toolbar');
    for(let i=1;i<boxes.length;i++)assert(boxes[i].x>=boxes[i-1].right-1,JSON.stringify(boxes));
    await page.screenshot({path:path.join(root,'outputs',`language-${width}.png`)});
    assert.deepEqual(errors,[]);

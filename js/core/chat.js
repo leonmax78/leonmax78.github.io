@@ -1,8 +1,9 @@
 (function(){
-  const launcher=document.createElement('button');
+  const launcher=document.getElementById('szoChatLauncher')||document.createElement('button');
+  launcher.disabled=false;
   launcher.type='button';launcher.className='szoChatLauncher';launcher.id='szoChatLauncher';
   launcher.setAttribute('aria-controls','szoChatPanel');launcher.setAttribute('aria-expanded','false');
-  launcher.innerHTML='<span>即時聊天室</span><small>未連線</small>';
+  launcher.innerHTML='<span>即時聊天</span><small>未連線</small>';
   const panel=document.createElement('section');
   panel.id='szoChatPanel';panel.className='szoChatPanel';panel.hidden=true;
   panel.setAttribute('role','dialog');panel.setAttribute('aria-label','即時聊天室');
@@ -14,7 +15,8 @@
     <form class="szoChatComposer"><label>暱稱<input name="nickname" aria-label="暱稱" maxlength="20" autocomplete="nickname" required></label>
     <textarea name="message" aria-label="訊息" placeholder="寫下訊息…" maxlength="300" required disabled></textarea>
     <div class="szoChatSendRow"><small data-chat-length>0 / 300</small><button type="button" data-chat-send disabled>送出</button></div></form>`;
-  document.body.append(launcher,panel);
+  if(!launcher.isConnected)document.body.append(launcher);
+  document.body.append(panel);
   const $=selector=>panel.querySelector(selector);
   const status=$('.szoChatStatus'),log=$('.szoChatMessages'),join=$('[data-chat-connect]');
   const form=$('form'),nickname=form.elements.nickname,message=form.elements.message,send=$('[data-chat-send]');

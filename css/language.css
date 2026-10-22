@@ -5,3 +5,30 @@
 .languageControl button[aria-pressed="true"]{background:#22646b;color:#fff}
 .languageControl button:focus-visible{outline:2px solid #fff;outline-offset:-3px}
 @media(max-width:600px){.topline>.languageTools{gap:5px}.languageTools>#openUiSettingsBtn{padding:6px!important;max-width:62px}.languageControl button{width:30px}}
+
+/* Keep the same toolbar geometry before and after the feature scripts load. */
+.languageTools>#openUiSettingsBtn{height:36px!important;max-width:none!important;padding:0 12px!important;line-height:normal!important;white-space:nowrap;border:1px solid var(--line,#526477);border-radius:6px;background:var(--panel2,#172538);color:var(--text,#e9f0fa);font:inherit;font-size:14px}
+.languageTools>.szoChatLauncher{position:static;inset:auto;z-index:auto;height:36px;padding:0 10px;box-shadow:none;white-space:nowrap;flex-shrink:0;font-size:13px;gap:6px}
+.languageTools>.szoChatLauncher[hidden]{display:flex!important;visibility:hidden}
+@media(min-width:980px){
+ .topline{display:flex!important;gap:16px!important;max-width:none!important;width:100%!important}
+ .topline>.brand{flex:1 1 280px!important;min-width:180px!important}
+ .topline>.topSearch{position:static!important;order:0!important;flex:0 1 360px!important;min-width:180px!important;width:auto!important;grid-column:auto!important}
+ .topSearch input{width:100%;min-width:0;flex:1}
+ .topSearch button{flex-shrink:0}
+ .topline>.languageTools{flex:0 0 auto!important}
+}
+@media(max-width:979px){
+ body{padding-top:calc(158px + env(safe-area-inset-top))!important}
+ .topbar{height:calc(158px + env(safe-area-inset-top))!important;min-height:158px!important;padding:calc(8px + env(safe-area-inset-top)) 10px 8px!important}
+ .topline{display:grid!important;grid-template-columns:40px minmax(0,1fr)!important;grid-template-areas:"menu brand" "search search" "settings settings"!important;grid-template-rows:40px 40px 36px!important;gap:10px!important;height:136px!important;min-height:136px!important}
+ .topline .menuBtn{width:40px!important;min-width:40px!important;height:40px!important}
+ .topline .brandTitle{width:100%!important;height:40px!important;max-height:40px!important;background-position:left center!important}
+ .topline>.languageTools{grid-area:settings!important;width:100%!important;height:36px!important;line-height:normal!important;justify-content:space-between;gap:6px}
+ .topline>.topSearch{position:static!important;grid-area:search!important;width:100%!important;height:40px!important}
+ .topSearch input,.topSearch button{height:40px!important;min-height:40px!important}
+ .languageTools>#openUiSettingsBtn{padding:0 8px!important}
+ .languageControl button{width:30px;min-height:34px}
+ .drawer{top:calc(158px + env(safe-area-inset-top))!important;height:calc(100dvh - 158px - env(safe-area-inset-top))!important}
+ .homeBlank{height:calc(100dvh - 158px - env(safe-area-inset-top))!important;min-height:calc(100dvh - 158px - env(safe-area-inset-top))!important}
+}

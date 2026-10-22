@@ -5,18 +5,8 @@
   const skip='script,style,textarea,code,pre,svg,[contenteditable], [translate="no"],.notranslate';
   let mode='tw';
   try{if(localStorage.getItem('szo.language')==='cn')mode='cn';}catch(_error){}
-  const settings=document.getElementById('openUiSettingsBtn');
-  const control=document.createElement('div');
-  control.className='languageControl';
-  control.setAttribute('translate','no');
-  control.setAttribute('role','group');
-  control.setAttribute('aria-label','繁簡切換');
-  control.innerHTML='<button type="button" data-language="tw" lang="zh-Hant">繁</button><button type="button" data-language="cn" lang="zh-Hans">简</button>';
-  // Share the existing settings grid cell to preserve the responsive header.
-  const wrap=document.createElement('div');
-  wrap.className='shellSettingsBtn languageTools';
-  settings.replaceWith(wrap);
-  wrap.append(settings,control);
+  const control=document.querySelector('.languageControl');
+  control.querySelectorAll('button').forEach(button=>{button.disabled=false;});
   function convert(node,key,current,write){
     let record=saved.get(node);
     if(!record){record={};saved.set(node,record);}

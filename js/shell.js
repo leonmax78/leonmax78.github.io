@@ -10,7 +10,11 @@
     <input id="globalSearchInput" placeholder="全站搜尋" autocomplete="off">
     <button type="submit">搜尋</button>
   </form>
-  <button class="shellSettingsBtn" id="openUiSettingsBtn" type="button">網頁外觀</button>
+  <div class="shellSettingsBtn languageTools">
+    <button id="openUiSettingsBtn" type="button">網頁外觀</button>
+    <div class="languageControl" translate="no" role="group" aria-label="繁簡切換"><button type="button" data-language="tw" lang="zh-Hant" disabled>繁</button><button type="button" data-language="cn" lang="zh-Hans" disabled>简</button></div>
+    <button type="button" class="szoChatLauncher" id="szoChatLauncher" disabled><span>即時聊天</span><small>未連線</small></button>
+  </div>
   <div class="status" id="topStatus">準備中</div>
 </div></header>
 <div class="backdrop" id="backdrop"></div>
