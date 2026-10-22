@@ -40,6 +40,7 @@ window.SZO_SCRIPT_GROUPS = {
   "core": [
     "js/vendor/opencc/opencc-1.4.2.js",
     "js/core/language.js",
+    "js/core/chat.js",
     "js/core/app-settings.js",
     "js/utils/common-utils.js",
     "js/core/data-loader-utils.js",

@@ -1,0 +1,34 @@
+.szoChatLauncher{position:fixed;right:calc(18px + env(safe-area-inset-right));bottom:calc(76px + env(safe-area-inset-bottom));z-index:1100;background:#185c57;color:#fff;border:1px solid #58aaa0;border-radius:8px;padding:10px 14px;font:inherit;font-size:14px;cursor:pointer;box-shadow:0 4px 16px #0004;display:flex;gap:10px;align-items:center}
+.szoChatLauncher small{font-size:12px;color:#d0e7e3}
+.szoChatLauncher[hidden]{display:none!important}
+.szoChatPanel{position:fixed;z-index:1250;right:calc(18px + env(safe-area-inset-right));bottom:calc(18px + env(safe-area-inset-bottom));width:380px;max-width:calc(100vw - 24px);height:580px;max-height:calc(100dvh - 24px);display:flex;flex-direction:column;background:var(--panel,#141720);color:var(--text,#e6edf5);border:1px solid #59857e;border-radius:8px;box-shadow:0 12px 48px #0008;overflow:hidden;box-sizing:border-box;font-size:14px;line-height:1.5}
+.szoChatPanel[hidden]{display:none!important}
+.szoChatPanel{max-height:var(--chat-viewport-height,calc(100dvh - 24px));bottom:var(--chat-viewport-bottom,calc(18px + env(safe-area-inset-bottom)))}
+.szoChatHeader{display:flex;align-items:center;gap:8px;padding:12px;border-bottom:1px solid #53635e;flex-shrink:0}
+.szoChatHeader h2{font-size:16px;margin:0;flex:1}
+.szoChatPanel button{font:inherit;color:inherit;background:var(--panel2,#252a33);border:1px solid #657b75;border-radius:6px;padding:7px 10px;cursor:pointer;letter-spacing:0}
+.szoChatPanel button:disabled{opacity:.5;cursor:not-allowed}
+.szoChatPanel button:focus-visible,.szoChatLauncher:focus-visible{outline:2px solid #72d7c5;outline-offset:2px}
+.szoChatStatus{padding:8px 12px;color:#b5d9d0;font-size:13px;flex-shrink:0}
+.szoChatPrivacy{margin:0;padding:0 12px 8px;color:#c2c7ca;font-size:12px;flex-shrink:0}
+.szoChatMessages{flex:1;min-height:70px;overflow:auto;overscroll-behavior:contain;padding:0 12px;list-style:none;margin:0;scrollbar-gutter:stable}
+.szoChatMessages:empty::before{content:attr(data-empty);display:block;padding:24px 4px;text-align:center;color:#aebcba;font-size:13px}
+.szoChatMessage{padding:10px 0;border-top:1px solid #45544f70;overflow-wrap:anywhere}
+.szoChatMessage header{display:flex;gap:8px;align-items:baseline;color:#92d4c7;font-size:12px}
+.szoChatMessage header strong{min-width:0;flex:1;white-space:pre-wrap;overflow-wrap:anywhere}
+.szoChatMessage time{color:#aab9b5;white-space:nowrap;flex-shrink:0}
+.szoChatMessage p{margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.6}
+.szoChatMessage[data-removed="true"] p{color:#aab9b5;font-style:italic}
+.szoChatJoin{padding:8px 12px;flex-shrink:0}
+.szoChatCaptcha{max-width:100%;overflow:hidden}
+.szoChatComposer{padding:10px 12px;border-top:1px solid #53635e;display:grid;gap:8px;flex-shrink:0}
+.szoChatComposer label{font-size:12px;display:flex;align-items:center;gap:10px;color:#cad6d2}
+.szoChatComposer input,.szoChatComposer textarea{font:inherit;font-size:16px;border:1px solid #526b63;border-radius:6px;background:var(--bg,#10131a);color:var(--text,#e6edf5);padding:8px;min-width:0;width:100%;box-sizing:border-box;letter-spacing:0}
+.szoChatComposer input{flex:1}.szoChatComposer textarea{height:72px;resize:none}
+.szoChatSendRow{display:flex;align-items:center;gap:12px;justify-content:space-between}
+.szoChatSendRow small{color:#acbdb7}.szoChatSendRow button{background:#23655b;color:white;min-width:72px}
+.szoChatPanel [hidden]{display:none!important}
+@media(max-width:480px){.szoChatPanel{right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:calc(100vw - 16px);max-width:none;max-height:calc(100dvh - 16px - env(safe-area-inset-bottom))}.szoChatLauncher{right:12px}.szoChatHeader{padding:10px 12px}}
+@media(max-width:480px){.szoChatPanel{max-height:var(--chat-viewport-height,calc(100dvh - 16px - env(safe-area-inset-bottom)));bottom:var(--chat-viewport-bottom,calc(8px + env(safe-area-inset-bottom)))}}
+@media(max-height:520px){.szoChatHeader{padding:6px 12px}.szoChatStatus{padding:4px 12px}.szoChatPrivacy{font-size:11px;padding-bottom:4px}.szoChatComposer{padding:6px 12px;gap:5px}.szoChatComposer textarea{height:48px}.szoChatMessages{min-height:24px}.szoChatJoin{padding:4px 12px}}
+.chatCompact .szoChatHeader{padding:6px 12px}.chatCompact .szoChatStatus{padding:4px 12px}.chatCompact .szoChatPrivacy{font-size:11px;padding-bottom:4px}.chatCompact .szoChatComposer{padding:6px 12px;gap:5px}.chatCompact .szoChatComposer textarea{height:48px}.chatCompact .szoChatMessages{min-height:24px}.chatCompact .szoChatJoin{padding:4px 12px}
