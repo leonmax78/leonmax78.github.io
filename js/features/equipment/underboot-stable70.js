@@ -12,6 +12,7 @@
     return g==='stable_1' || g==='stable_12' || g==='stable_50';
   }
   function recipeGroupLabel88ab(group){
+    if(group==='stable_99') return '安定值 99（限時）';
     if(group==='stable_1') return '安定值 1';
     if(group==='stable_12') return '安定值 12';
     if(group==='stable_50') return '安定值 50';
@@ -37,9 +38,10 @@
     if(!eq)return '<div class="empty">請先選擇裝備。</div>';
     const recipes=eqSortRecipeObjects(eqAllowedRecipes());
     const isUnder=isEqUnderBoot88ab(eq);
-    const groups=isUnder ? [['stable_70','安定值 70']] : [['stable_1','安定值 1'],['stable_12','安定值 12'],['stable_50','安定值 50']];
-    const groupRecipes=g=>recipes.filter(r=>r.group===g);
-    const groupSelected=g=>eqSelectedRecipes().filter(x=>x.recipe.group===g);
+    const displayGroup=r=>window.SZO_REFINING?.group(r)||r.group;
+    const groups=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>recipes.some(r=>displayGroup(r)===g)).map(g=>[g,recipeGroupLabel88ab(g)]);
+    const groupRecipes=g=>recipes.filter(r=>displayGroup(r)===g);
+    const groupSelected=g=>eqSelectedRecipes().filter(x=>displayGroup(x.recipe)===g);
     const renderSelected=g=>{
       const rows=groupSelected(g);
       if(!rows.length)return '<div class="muted" style="margin-top:8px">尚未加入這個安定值的配方。</div>';
@@ -47,9 +49,7 @@
         rows.map(({recipe,count})=>'<tr><td><b>'+esc(recipe.name)+'</b><div class="rSub">'+esc(recipe.effect_summary||'')+'</div></td><td style="width:120px"><input class="eqRecipeCount" data-eq-recipe-count="'+esc(recipe.id)+'" type="number" min="1" value="'+esc(count)+'"></td><td style="width:90px"><button class="ghost" data-eq-recipe="'+esc(recipe.id)+'">移除</button></td></tr>').join('')+
         '</tbody></table></div>';
     };
-    const notice=isUnder
-      ? '仙器只使用安定值 70 配方；不顯示安定值 1、安定值 12。'
-      : '配方改為下拉式加入，可跨安定值累加；材料清單會依安定值 1 → 12 → 50 的順序列出。';
+    const notice=window.SZO_REFINING?.enabled?SZO_REFINING.notice:'配方依安定值排列。';
     return '<h3 id="eqRecipeAnchor">選擇配方</h3><div class="notice">'+notice+'</div>'+groups.map(([g,label])=>{
       const arr=groupRecipes(g);
       return '<div class="card" style="box-shadow:none"><h3>'+esc(label)+'</h3><label>加入配方</label><select data-eq-recipe-select="'+esc(g)+'"><option value="">請選擇要加入的配方</option>'+arr.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+(r.effect_summary?'｜'+esc(r.effect_summary):'')+'</option>').join('')+'</select>'+renderSelected(g)+'</div>';
@@ -62,7 +62,7 @@
     picks=picks.filter(x=>recipeGroupAllowed88ab(x.recipe,eq)).sort((a,b)=>eqRecipeGroupRank(a.recipe)-eqRecipeGroupRank(b.recipe));
     const sections=picks.map(({recipe,count})=>{
       const mats=eqMaterials(recipe,count);
-      return '<h3>'+esc(recipeGroupLabel88ab(recipe.group))+'｜'+esc(recipe.name)+' × '+fmt(count)+'</h3><div class="tableWrap"><table class="eqMatTable"><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>'+mats.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+fmt(m.qty)+'</td></tr>').join('')+'</tbody></table></div>';
+      return '<h3>'+esc(recipeGroupLabel88ab(window.SZO_REFINING?.group(recipe)||recipe.group))+'｜'+esc(recipe.name)+' × '+fmt(count)+'</h3><div class="tableWrap"><table class="eqMatTable"><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>'+mats.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+fmt(m.qty)+'</td></tr>').join('')+'</tbody></table></div>';
     }).join('');
     byId('reader').innerHTML='<section class="card"><button class="backBtn" id="eqBackToSim">← 返回常用配方合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>'+esc(eq.name)+'</b><br>材料依配方分開顯示，並依安定值順序排列。</div>'+sections+'</section>';
     window.scrollTo({top:0,behavior:'smooth'});
@@ -78,13 +78,13 @@
   window.eqRenderRandomRecipePicker=function(){
     const eq=(typeof eqSelected==='function') ? eqSelected() : null;
     const g=simGroup88ab();
-    const label=recipeGroupLabel88ab(g);
+    const label=recipeGroupLabel88ab(g==='stable_70'&&window.SZO_REFINING?.enabled?'stable_99':g);
     const recipes=simRecipes88ab();
     const active=eqState.simActiveRecipeId||'';
     const activeRecipe=eqRecipeById(active);
     const used=activeRecipe ? Number((eqState.simRecipeCounts||{})[String(activeRecipe.id)])||0 : 0;
     const note=isEqUnderBoot88ab(eq)
-      ? '仙器亂數模擬只保留安定值 70 配方。選一個配方後按「模擬一次」，會自動累計使用次數與材料。'
+      ? (window.SZO_REFINING?.enabled?SZO_REFINING.notice:'仙器配方安定值 70。')
       : '亂數模擬只保留安定值 1 配方。選一個配方後按「模擬一次」，每按一次就像骰子一樣產生本次增加值，並自動累計使用次數與材料。';
     return '<h3>選擇要模擬的配方</h3><div class="notice">'+note+'</div><div class="card" style="box-shadow:none"><label>模擬配方（'+esc(label)+'）</label><select data-eq-sim-recipe-select="single"><option value="">請選擇要模擬的'+esc(label)+'配方</option>'+recipes.map(r=>'<option value="'+esc(r.id)+'" '+(String(active)===String(r.id)?'selected':'')+'>'+esc(r.name)+(r.effect_summary?'｜'+esc(r.effect_summary):'')+'</option>').join('')+'</select>'+(activeRecipe?'<div class="notice" style="margin-top:10px"><b>'+esc(activeRecipe.name)+'</b><br>'+esc(activeRecipe.effect_summary||'')+(activeRecipe.desc?'<br>'+esc(activeRecipe.desc):'')+'<br>目前已模擬使用：'+fmt(used)+' 次</div>':'')+'</div>';
   };

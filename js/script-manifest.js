@@ -2,6 +2,7 @@
 // index.html remains a pure entry.  Add/disable modules here, not in index.html.
 window.SZO_SCRIPT_GROUPS = {
   "data": [
+    "data/refining-policy.js",
     "js/data/display-dictionary.js",
     "data/approved-status-descriptions.js",
     "js/data/type-maps.js",
@@ -37,6 +38,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/data/training-data.js"
   ],
   "core": [
+    "js/vendor/opencc/opencc-1.4.2.js",
+    "js/core/language.js",
     "js/core/app-settings.js",
     "js/utils/common-utils.js",
     "js/core/data-loader-utils.js",

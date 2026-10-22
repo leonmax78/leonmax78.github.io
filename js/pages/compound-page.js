@@ -113,6 +113,7 @@ function eqData(){
  if(compoundIniRecipes&&compoundIniRecipes.length){
   base.recipes=mergeCompoundIniRecipesWithConfig(compoundIniRecipes,(cfg.recipes||fallback.recipes||[]));
  }
+ if(window.SZO_REFINING)base.recipes=(base.recipes||[]).map(r=>SZO_REFINING.apply(r));
  return base;
 }
 

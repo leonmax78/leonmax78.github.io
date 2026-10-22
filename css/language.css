@@ -1,0 +1,7 @@
+.topline>.languageTools{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0!important;border:0!important;background:none!important;max-width:none!important;width:auto!important;overflow:visible!important;box-shadow:none!important}
+.languageTools>#openUiSettingsBtn{position:static!important;order:0!important;margin:0!important;width:auto!important;min-width:0!important;flex-shrink:0;transform:none!important}
+.languageControl{display:flex;flex-shrink:0;border:1px solid var(--line,#526477);border-radius:6px;overflow:hidden}
+.languageControl button{width:34px;min-height:36px;padding:4px;border:0;border-radius:0;background:var(--panel2,#172538);color:var(--text,#e9f0fa);font-size:14px;cursor:pointer;letter-spacing:0}
+.languageControl button[aria-pressed="true"]{background:#22646b;color:#fff}
+.languageControl button:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+@media(max-width:600px){.topline>.languageTools{gap:5px}.languageTools>#openUiSettingsBtn{padding:6px!important;max-width:62px}.languageControl button{width:30px}}

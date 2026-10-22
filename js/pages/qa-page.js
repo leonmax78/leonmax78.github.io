@@ -28,6 +28,7 @@
     return cache[name];
   }
   function norm(value){
+    if(window.SZO_LANGUAGE)value=SZO_LANGUAGE.toSimple(String(value??''));
     return String(value ?? '').toLowerCase().replace(/[\s\u3000"'「」『』【】\[\]（）()、，,。:：;；\-_/\\|]+/g, '');
   }
   function itemId(item){ return String(item?.ID ?? item?.id ?? item?.itemId ?? '').trim(); }
