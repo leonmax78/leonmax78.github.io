@@ -46,6 +46,8 @@ def main():
     new_npcs = [renderer.marker(row, capital['scale']) for row in overlay.parse_stage_npcs(7, npc_data)]
     old_by_key = {(n['id'], n['rawX'], n['rawY']): n for n in capital['npcs']}
     capital['npcs'] = [dict(old_by_key.get((n['id'],n['rawX'],n['rawY']), {}), **n) for n in new_npcs]
+    from fix_suying_portrait import apply as fix_suying
+    fix_suying(payload)
     save('stage_maps.json', payload)
     index = load('stage_map_index.json')
     index['version'] = payload['version']
