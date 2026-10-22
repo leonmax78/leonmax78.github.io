@@ -20,7 +20,7 @@
   const form=$('form'),nickname=form.elements.nickname,message=form.elements.message,send=$('[data-chat-send]');
   const rows=new Map();
   let config=null,client=null,channel=null,generation=0,connecting=false,connected=false,sending=false;
-  let widget=null,captchaToken='',userId='',pending=null,cleanupTimer=null;
+  let widget=null,captchaToken='',userId='',pending=null,cleanupTimer=null,captchaWaiting=false;
   const scripts=new Map();
   try{nickname.value=localStorage.getItem('szo.chat.nickname')||'';}catch(_error){}
   function say(text){status.textContent=text;}
@@ -33,7 +33,7 @@
   }
   window.visualViewport?.addEventListener('resize',fitViewport);
   window.visualViewport?.addEventListener('scroll',fitViewport);
-  function controls(){message.disabled=!connected;send.disabled=!connected||sending;join.disabled=connecting||!config?.enabled;join.hidden=connected;}
+  function controls(){message.disabled=!connected;send.disabled=!connected||sending;join.disabled=connecting||captchaWaiting||!config?.enabled;join.hidden=connected;}
   function offline(text){connected=false;launcher.querySelector('small').textContent='未連線';say(text);controls();}
   async function boundedFetch(url,options={}){
     const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),15000);
@@ -91,7 +91,7 @@
     (result.data||[]).forEach(merge);render();return true;
   }
   async function closeConnection(){
-    generation++;connecting=false;connected=false;sending=false;
+    generation++;connecting=false;connected=false;sending=false;captchaWaiting=false;
     const old=channel;channel=null;
     clearInterval(cleanupTimer);cleanupTimer=null;
     if(widget!==null&&window.turnstile){window.turnstile.remove(widget);widget=null;captchaToken='';}
@@ -134,7 +134,9 @@
       if(!session&&config.turnstileSiteKey&&!captchaToken){
         await script('https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit');
         if(token!==generation)return;
-        if(widget===null)widget=window.turnstile.render($('.szoChatCaptcha'),{sitekey:config.turnstileSiteKey,theme:'auto',size:'flexible',callback:value=>{captchaToken=value;},'expired-callback':()=>{captchaToken='';},'error-callback':()=>{captchaToken='';say('驗證暫時無法完成，請稍後重試。');}});
+        captchaWaiting=true;
+        if(widget===null)widget=window.turnstile.render($('.szoChatCaptcha'),{sitekey:config.turnstileSiteKey,theme:'auto',size:'flexible',callback:value=>{captchaToken=value;captchaWaiting=false;controls();say('驗證成功，請按「進入聊天室」。');},'expired-callback':()=>{captchaToken='';captchaWaiting=false;controls();say('驗證已過期，請重新驗證。');},'error-callback':code=>{captchaToken='';captchaWaiting=false;controls();say('人機驗證失敗（'+String(code).replace(/[^0-9]/g,'').slice(0,8)+'），請關閉聊天室後重試。');},'timeout-callback':()=>{captchaToken='';captchaWaiting=false;controls();say('人機驗證逾時，請關閉聊天室後重試。');}});
+        else window.turnstile.reset(widget);
         say('請完成人機驗證，再按「進入聊天室」。');return;
       }
       if(!session){
@@ -172,8 +174,14 @@
       });
     }catch(error){
       if(token===generation){
-        if(widget!==null&&window.turnstile){window.turnstile.reset(widget);captchaToken='';}
-        offline(error.code==='over_request_rate_limit'?'連線太頻繁，請稍後再試。':'無法連線，請稍後再試。');
+        if(widget!==null&&window.turnstile){window.turnstile.remove(widget);widget=null;captchaToken='';}
+        captchaWaiting=false;
+        const code=String(error.code||error.name||'unknown').replace(/[^a-zA-Z0-9_-]/g,'').slice(0,64);
+        const detail=String(error.message||'');
+        const failures={over_request_rate_limit:'連線太頻繁，請稍後再試。',over_request_rate_limit_anonymous:'匿名登入次數過多，請稍後再試。',anonymous_provider_disabled:'網站尚未開啟匿名登入。',captcha_failed:'人機驗證未通過，請重新驗證；若持續失敗，請站長確認 Turnstile 金鑰設定。'};
+        let explanation=failures[code]||'無法連線，請重試並將此錯誤代碼提供給站長。';
+        if(/sitekey-secret-mismatch|invalid-input-secret/.test(detail))explanation='網站的人機驗證金鑰不相符，請站長確認 Supabase 的 Secret Key 與網站 Site Key 屬於同一組。';
+        offline(explanation+'（'+code+'）');
       }
     }finally{if(token===generation){connecting=false;controls();}}
   }
