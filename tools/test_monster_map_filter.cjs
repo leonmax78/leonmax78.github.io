@@ -32,7 +32,7 @@ const root=path.resolve(__dirname,'..');
    await page.waitForFunction(()=>document.querySelector('#monsterResultsMain .resultItem'));
    await page.locator('#monsterResultsMain .resultItem').first().click();
    await page.getByText('攻擊距離（原始值）',{exact:true}).waitFor();
-   await page.getByText('攻擊速度（原始值）',{exact:true}).waitFor();
+   await page.getByText('攻擊速度',{exact:true}).waitFor();
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    await page.screenshot({path:path.join(root,`outputs/beast-speed-${width}.png`)});
    await page.evaluate(()=>setMonsterQueryMode('monster'));
