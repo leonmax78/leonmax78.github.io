@@ -66,6 +66,13 @@
    if(kind==='item'){
     await ensureItemPageLoaded();if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');await ensureItemOptionalData('');
     const item=itemIndex[String(id)];if(!item)throw Error('找不到這個道具');html=itemDetailBodyHTML(item);
+   }else if(kind==='beast'){
+    await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('封獸資料載入失敗');await ensureMonsterOptionalData('');
+    html=beastDetailHTML(id);
+   }else if(kind==='monster-drops'){
+    await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('怪物資料載入失敗');if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');
+    const m=monsters.find(row=>String(row.ID)===String(id));if(!m)throw Error('找不到這個怪物');
+    html=`<div class="itemGroupedDetail"><h1>${esc(nameOf(m))}：掉落資料</h1><div class="detailPreviewDrops">${monsterDropRows(m).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}"><span>${esc(name)}</span><small>${esc(rate)}</small></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
    }else if(kind==='shops'){
     await ensureQaPageLoaded();
     html=await window.renderQaShopPreviewHTML(id);
@@ -88,7 +95,7 @@
     if(drop.dataset.item===String(highlightItemId)){drop.classList.add('searchedDrop');drop.title='本次查詢道具';}
    }
    actions.innerHTML=`<button type="button" data-preview-full="${kind}" data-id="${esc(id)}">前往完整${kind==='item'?'道具':kind==='reverse'?'來源':'怪物'}頁</button>${kind==='item'?`<button type="button" data-rev="${esc(id)}">查詢取得來源</button>`:kind==='monster'?`<button type="button" data-preview-map="${esc(id)}" data-map-name="${esc(monsterName)}">查看地圖位置</button>`:''}`;
-   if(kind==='collect'||kind==='shops')actions.replaceChildren();
+   if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
  function pop(event){

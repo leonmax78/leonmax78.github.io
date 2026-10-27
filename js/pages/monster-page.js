@@ -338,7 +338,11 @@ function searchMonstersMain(){
 }
 
 function showBeastDetail(index){
- const row=beastRows()[Number(index)];if(!row)return;
+ return window.SZO_PREVIEW.open('beast',String(index));
+}
+
+function beastDetailHTML(index){
+ const row=beastRows()[Number(index)];if(!row)throw Error('找不到這個封獸');
  const m=(monsters||[]).find(item=>String(item.ID||'')===String(row.monsterId||''));
  const hero=m?monsterThumbHTML(m).replace('assetThumb monsterThumb','assetHero monsterHero'):row.portrait&&window.SZO_ASSET_MEDIA?window.SZO_ASSET_MEDIA.img(row.portrait,row.name,'assetHero monsterHero'):'';
  const basic=[['怪物名稱',row.name],['星級',`${row.stars}星甕`],['種族',m?raceName(m.Type):'待補'],['子分類',m?subtypeName(m.Type,m.SubType):'待補']];
@@ -349,13 +353,11 @@ function showBeastDetail(index){
   ['術防',Math.round((Number(m.MagicDef)||0)+(Number(m.Int)||0)*0.8)]
  ]:[['生命','待補'],['攻擊',row.attack==null?'待補':`${row.attack}${row.attackPending?'（待確認）':''}`],['防禦','待補'],['術攻','待補'],['術防','待補']];
  const stats=m?[['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex]]:[];
- const attackSpeed={1:'最慢',2:'慢',3:'普通',4:'快',5:'最快'}[m?.Attack]||'待補';
- ability.push(['攻擊距離（原始值）',m?.AttackRange??'待補'],['攻擊速度',attackSpeed]);
+ const speedLabels={1:'最慢',2:'慢',3:'普通',4:'快',5:'最快'};
+ ability.push(['攻擊距離（原始值）',m?.AttackRange??'待補'],['攻擊速度',speedLabels[m?.Attack]||'待補'],['移動速度',speedLabels[m?.Move]||'待補']);
  const skills=m?[["技能1",monsterSkillText(m.Skill1)],["技能2",monsterSkillText(m.Skill2)],["技能3",monsterSkillText(m.Skill3)],["技能4",monsterSkillText(m.Skill4)]]:(row.skills||[]).map((skill,i)=>[`技能${i+1}`,skill]);
  const capture=(row.captureLocations||[]).map((place,i)=>`<button type="button" class="collectTag collectMapTag" onclick="showBeastCaptureLocation(${Number(index)},${i})">${esc(place.stageName)}</button>`).join('');
- byId('reader').innerHTML=`<section class="card monsterCompact"><button class="backBtn" type="button" onclick="renderMonsterPage()">← 返回封獸查詢</button><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div><div class="monsterPanel"><h3>能力資訊</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div></div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}</div></section>`;
- if(capture)byId('reader').querySelector('.monsterGrid').insertAdjacentHTML('beforeend',`<div class="monsterPanel beastCapturePanel"><h3>捕捉位置</h3><div class="beastCaptureLinks">${capture}</div></div>`);
- window.scrollTo({top:0,behavior:'smooth'});
+ return `<section class="monsterCompact"><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div><div class="monsterPanel"><h3>能力資訊</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div></div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}${capture?`<div class="monsterPanel beastCapturePanel"><h3>捕捉位置</h3><div class="beastCaptureLinks">${capture}</div></div>`:''}</div></section>`;
 }
 
 async function showBeastCaptureLocation(index,locationIndex){
@@ -498,6 +500,7 @@ function monsterDropsTableHTML(drops){
 }
 
 function showMonsterDropPage(id){
+ if(window.SZO_PREVIEW)return window.SZO_PREVIEW.open('monster-drops',String(id));
  window.v86LastView='monsterDrop';
  try{history.pushState({app:'detail',view:'monsterDrop'},'','#monster-drop-'+id);}catch(e){}
  const m=monsters.find(x=>String(x.ID).trim()===String(id).trim()); if(!m)return;

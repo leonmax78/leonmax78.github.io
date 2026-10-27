@@ -1065,6 +1065,7 @@
       ev.preventDefault();
       const marker = window.__szoMapMonsterMarker;
       closeMapMonsterPanel();
+      if(window.SZO_PREVIEW){window.SZO_PREVIEW.open('monster',String(marker.id));return;}
       (async () => {
         if(typeof window.showMonster !== 'function'){
           if(typeof window.ensureMonsterPageLoaded === 'function'){
