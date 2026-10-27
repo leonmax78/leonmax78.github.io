@@ -17,6 +17,7 @@ function writeMonsterSearchState(){
    max:window.v88MonsterMax||'',
    race:window.v88MonsterRace||'',
    subtype:window.v88MonsterSubtype||'',
+   map:window.v88MonsterMap||'',
    withPoints:!!window.v88MonsterWithPoints,
    hideInstances:!!window.v88MonsterHideInstances
   }));
@@ -25,6 +26,7 @@ function writeMonsterSearchState(){
 
 function restoreMonsterSearchState(){
  const state=readMonsterSearchState();
+ if(window.v88MonsterMap===undefined)window.v88MonsterMap=String(state.map||'');
  if(window.v88MonsterWithPoints===undefined)window.v88MonsterWithPoints=!!state.withPoints;
  if(window.v88MonsterHideInstances===undefined)window.v88MonsterHideInstances=!!state.hideInstances;
  if(window.v88MonsterQ===undefined || (!window.v88MonsterQ && state.q))window.v88MonsterQ=state.q||'';
@@ -71,6 +73,11 @@ function monsterSearchIndexRows(){
 }
 function hasMonsterSearchIndex(){return monsterSearchIndexRows().length>0}
 let monsterSpawnIds=null;
+let monsterMapChoices=[];
+let monsterMapIds=new Map();
+function monsterMapOptionsHTML(){
+ return '<option value="">全部地圖</option>'+monsterMapChoices.map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${esc(s.name)}（${esc(s.id)}）</option>`).join('');
+}
 let monsterInstanceOnlyIds=null;
 let monsterSpawnPromise=null;
 function ensureMonsterSpawnIds(){
@@ -83,11 +90,14 @@ function ensureMonsterSpawnIds(){
     const excluded=new Set(categories.stages.map(s=>Number(s.stageId)));
     const all=new Set(),inside=new Set(),outside=new Set();
     for(const stage of data.stages){
+     const mapIds=new Set();
      for(const m of stage.monsters||[]){
       if(m.id==null||!Number.isFinite(m.x)||!Number.isFinite(m.y))continue;
       const id=String(m.id);all.add(id);
+      mapIds.add(id);
       (excluded.has(Number(stage.stageId))?inside:outside).add(id);
      }
+     if(mapIds.size){monsterMapIds.set(String(stage.stageId),mapIds);monsterMapChoices.push({id:String(stage.stageId),name:stage.stageName});}
     }
     monsterInstanceOnlyIds=new Set([...inside].filter(id=>!outside.has(id)));
     monsterSpawnIds=all;
@@ -97,7 +107,8 @@ function ensureMonsterSpawnIds(){
  return monsterSpawnPromise;
 }
 function monsterPassesPointFilter(id){
- return (!window.v88MonsterWithPoints||!!monsterSpawnIds?.has(String(id)))&&
+ return (!window.v88MonsterMap||!!monsterMapIds.get(window.v88MonsterMap)?.has(String(id)))&&
+  (!window.v88MonsterWithPoints||!!monsterSpawnIds?.has(String(id)))&&
   (!window.v88MonsterHideInstances||!!monsterInstanceOnlyIds&&!monsterInstanceOnlyIds.has(String(id)));
 }
 let monsterSearchLocationPromise=null;
@@ -215,7 +226,7 @@ function monsterResultsHTML(arr){
 }
 
 function latestMonstersHTML(limit=260){
- if((window.v88MonsterWithPoints||window.v88MonsterHideInstances)&&!monsterSpawnIds)return '<div class="muted">地圖點位資料載入中。</div>';
+ if((window.v88MonsterMap||window.v88MonsterWithPoints||window.v88MonsterHideInstances)&&!monsterSpawnIds)return '<div class="muted">地圖點位資料載入中。</div>';
  if(!hasMonsterData())return '<div class="muted">資料載入中，請稍等。</div>';
  return (monsters||[]).filter(m=>monsterPassesPointFilter(m.ID)).reverse().slice(0,limit).map(m=>`<button type="button" class="resultItem withAsset" data-monster="${esc(m.ID)}">${monsterThumbHTML(m)}<span class="resultText"><div class="rName">${esc(nameOf(m))}</div><div class="rSub">Lv.${esc(m.Level||'')} / ${esc(raceName(m.Type))}${subtypeName(m.Type,m.SubType)?' / '+esc(subtypeName(m.Type,m.SubType)):''} / ID ${esc(m.ID||'')}</div></span></button>`).join('');
 }
@@ -258,6 +269,7 @@ function renderMonsterPage(){
       <div class="kvGrid">
         <div class="kv"><div class="k">${beastMode?'封獸名稱':'怪物名稱 / ID / 位置 / 種族 / 子分類'}</div><div class="v"><input id="monsterQMain" placeholder="${beastMode?'例如：影咒獸．垣鹿':'例如：黃帝、問頂仙龍、蜘蛛精'}" value="${esc(q)}" oninput="searchMonstersMain()"></div></div>
         ${beastMode?'':`
+        <div class="kv"><div class="k">地圖</div><div class="v"><select id="monsterMapMain" aria-label="地圖" onchange="searchMonstersMain()" ${monsterSpawnIds?'':'disabled'}>${monsterMapOptionsHTML()}</select></div></div>
         <div class="kv"><div class="k">種族</div><div class="v"><select id="monsterRaceMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterRaceOptionsHTML(race):monsterIndexRaceOptionsHTML(race)}</select></div></div>
         <div class="kv"><div class="k">子分類</div><div class="v"><select id="monsterSubtypeMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterSubtypeOptionsHTML(subtype,race):monsterIndexSubtypeOptionsHTML(subtype,race)}</select></div></div>
         <div class="kv"><div class="k">最低 Lv</div><div class="v"><input id="monsterMinMain" type="number" value="${esc(min)}" oninput="searchMonstersMain()"></div></div>
@@ -275,6 +287,11 @@ function renderMonsterPage(){
   </div>
  </section>`;
  startMonsterFullDataLoad();
+ if(!beastMode)ensureMonsterSpawnIds().then(()=>{
+  const select=byId('monsterMapMain');if(!select)return;
+  if(window.v88MonsterMap&&!monsterMapIds.has(window.v88MonsterMap))window.v88MonsterMap='';
+  select.innerHTML=monsterMapOptionsHTML();select.disabled=false;searchMonstersMain();
+ }).catch(()=>{const select=byId('monsterMapMain');if(select){select.innerHTML='<option value="">地圖載入失敗，請重新開啟查詢</option>';}});
  ensureMonsterSearchLocations().then(ok=>{
   if(ok&&byId('monsterResultsMain'))searchMonstersMain();
  });
@@ -285,6 +302,7 @@ function searchMonstersMain(){
  const q=byId('monsterQMain'); if(!q)return;
  window.v88MonsterQ=q.value;
  if(window.v88MonsterMode==='beast'){renderBeastResults();return;}
+ if(!byId('monsterMapMain')?.disabled)window.v88MonsterMap=byId('monsterMapMain')?.value||'';
  window.v88MonsterWithPoints=!!byId('monsterWithPoints')?.checked;
  window.v88MonsterHideInstances=!!byId('monsterHideInstances')?.checked;
  window.v88MonsterMin=byId('monsterMinMain')?.value||'';
@@ -301,10 +319,10 @@ function searchMonstersMain(){
  const box=byId('monsterResultsMain'); if(!box)return;
  const latest=byId('monsterLatestList');
  if(latest)latest.innerHTML=latestMonstersHTML();
- if((window.v88MonsterWithPoints||window.v88MonsterHideInstances)&&!monsterSpawnIds){
+ if((window.v88MonsterMap||window.v88MonsterWithPoints||window.v88MonsterHideInstances)&&!monsterSpawnIds){
   box.innerHTML='<div class="muted">地圖點位資料載入中。</div>';
   ensureMonsterSpawnIds().then(()=>{if(byId('monsterResultsMain'))searchMonstersMain();}).catch(()=>{
-   if((window.v88MonsterWithPoints||window.v88MonsterHideInstances)&&window.v88MonsterMode!=='beast'&&byId('monsterResultsMain')===box){
+   if((window.v88MonsterMap||window.v88MonsterWithPoints||window.v88MonsterHideInstances)&&window.v88MonsterMode!=='beast'&&byId('monsterResultsMain')===box){
     box.innerHTML='<div class="muted">地圖點位載入失敗。</div><button type="button" onclick="searchMonstersMain()">重試</button>';
     if(latest)latest.innerHTML='<div class="muted">地圖點位載入失敗。</div>';
    }
@@ -312,7 +330,7 @@ function searchMonstersMain(){
   return;
  }
  const hasFilter=!!(String(window.v88MonsterQ||'').trim()||String(window.v88MonsterMin||'').trim()||String(window.v88MonsterMax||'').trim()||String(window.v88MonsterRace||'').trim()||String(window.v88MonsterSubtype||'').trim());
- if(!hasFilter&&!window.v88MonsterWithPoints&&!window.v88MonsterHideInstances){box.innerHTML='';return;}
+ if(!hasFilter&&!window.v88MonsterMap&&!window.v88MonsterWithPoints&&!window.v88MonsterHideInstances){box.innerHTML='';return;}
  if(String(window.v88MonsterQ||'').trim()&&!(monsterLocations&&Object.keys(monsterLocations).length)){
   ensureMonsterSearchLocations().then(ok=>{if(ok&&byId('monsterResultsMain'))searchMonstersMain();});
  }
@@ -331,6 +349,7 @@ function showBeastDetail(index){
   ['術防',Math.round((Number(m.MagicDef)||0)+(Number(m.Int)||0)*0.8)]
  ]:[['生命','待補'],['攻擊',row.attack==null?'待補':`${row.attack}${row.attackPending?'（待確認）':''}`],['防禦','待補'],['術攻','待補'],['術防','待補']];
  const stats=m?[['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex]]:[];
+ ability.push(['攻擊距離（原始值）',m?.AttackRange??'待補'],['攻擊速度（原始值）',m?.Attack??'待補']);
  const skills=m?[["技能1",monsterSkillText(m.Skill1)],["技能2",monsterSkillText(m.Skill2)],["技能3",monsterSkillText(m.Skill3)],["技能4",monsterSkillText(m.Skill4)]]:(row.skills||[]).map((skill,i)=>[`技能${i+1}`,skill]);
  const capture=(row.captureLocations||[]).map((place,i)=>`<button type="button" class="collectTag collectMapTag" onclick="showBeastCaptureLocation(${Number(index)},${i})">${esc(place.stageName)}</button>`).join('');
  byId('reader').innerHTML=`<section class="card monsterCompact"><button class="backBtn" type="button" onclick="renderMonsterPage()">← 返回封獸查詢</button><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div><div class="monsterPanel"><h3>能力資訊</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div></div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}</div></section>`;
@@ -349,6 +368,8 @@ async function showBeastCaptureLocation(index,locationIndex){
 }
 
 function clearMonsterSearchFilters(){
+ window.v88MonsterMap='';
+ const map=byId('monsterMapMain');if(map)map.value='';
  window.v88MonsterHideInstances=false;
  const instances=byId('monsterHideInstances');if(instances)instances.checked=false;
  window.v88MonsterWithPoints=false;

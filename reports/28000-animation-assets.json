@@ -1,0 +1,437 @@
+{
+  "game": "C:\\UserJoy\\神州Online",
+  "files": 84402,
+  "skills": [
+    {
+      "id": "418",
+      "name": "血殺刀",
+      "effect": "334",
+      "definitions": 1,
+      "files": 128,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/334/fx_0000001.shp",
+        "shape/magic/334/fx_0000002.shp",
+        "shape/magic/334/fx_0000003.shp"
+      ]
+    },
+    {
+      "id": "419",
+      "name": "妙手",
+      "effect": "335",
+      "definitions": 2,
+      "files": 43,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/335/caster/output-caster_00000.shp",
+        "shape/magic/335/caster/output-caster_00001.shp",
+        "shape/magic/335/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "420",
+      "name": "點血截脈",
+      "effect": "336",
+      "definitions": 3,
+      "files": 95,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/336/caster/output-caster_00000.shp",
+        "shape/magic/336/caster/output-caster_00001.shp",
+        "shape/magic/336/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "421",
+      "name": "五絕神功",
+      "effect": "337",
+      "definitions": 1,
+      "files": 18,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/337/caster/output-caster_00000.shp",
+        "shape/magic/337/caster/output-caster_00001.shp",
+        "shape/magic/337/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "422",
+      "name": "移花接玉",
+      "effect": "338",
+      "definitions": 2,
+      "files": 168,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/338/caster/output-caster_00000.shp",
+        "shape/magic/338/caster/output-caster_00001.shp",
+        "shape/magic/338/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "423",
+      "name": "花神七式",
+      "effect": "339",
+      "definitions": 2,
+      "files": 36,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/339/caster/output-caster_00000.shp",
+        "shape/magic/339/caster/output-caster_00001.shp",
+        "shape/magic/339/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "424",
+      "name": "明玉功",
+      "effect": "340",
+      "definitions": 1,
+      "files": 20,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/340/caster/output-caster_00000.shp",
+        "shape/magic/340/caster/output-caster_00001.shp",
+        "shape/magic/340/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "425",
+      "name": "神劍訣．豪氣干雲",
+      "effect": "341",
+      "definitions": 2,
+      "files": 27,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/341/caster/output-caster_00000.shp",
+        "shape/magic/341/caster/output-caster_00001.shp",
+        "shape/magic/341/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "426",
+      "name": "佛門獅子吼",
+      "effect": "342",
+      "definitions": 1,
+      "files": 120,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/342/shot_0000001.shp",
+        "shape/magic/342/shot_0000002.shp",
+        "shape/magic/342/shot_0000003.shp"
+      ]
+    },
+    {
+      "id": "427",
+      "name": "嫁衣神功",
+      "effect": "343",
+      "definitions": 1,
+      "files": 32,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/343/caster/output-caster_00000.shp",
+        "shape/magic/343/caster/output-caster_00001.shp",
+        "shape/magic/343/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "428",
+      "name": "瘋狂百零捌打",
+      "effect": "344",
+      "definitions": 2,
+      "files": 34,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/344/caster/output-caster_00000.shp",
+        "shape/magic/344/caster/output-caster_00001.shp",
+        "shape/magic/344/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "429",
+      "name": "七煞王蠱",
+      "effect": "345",
+      "definitions": 2,
+      "files": 184,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/345/caster/output-caster_00000.shp",
+        "shape/magic/345/caster/output-caster_00001.shp",
+        "shape/magic/345/caster/output-caster_00002.shp"
+      ]
+    },
+    {
+      "id": "430",
+      "name": "媧皇十八變",
+      "effect": "346",
+      "definitions": 2,
+      "files": 88,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/346/shot/shot_0000001.shp",
+        "shape/magic/346/shot/shot_0000002.shp",
+        "shape/magic/346/shot/shot_0000003.shp"
+      ]
+    },
+    {
+      "id": "431",
+      "name": "雪山無影箭",
+      "effect": "347",
+      "definitions": 2,
+      "files": 144,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/347/shot/shot_0000001.shp",
+        "shape/magic/347/shot/shot_0000002.shp",
+        "shape/magic/347/shot/shot_0000003.shp"
+      ]
+    },
+    {
+      "id": "432",
+      "name": "子平推命",
+      "effect": "348",
+      "definitions": 1,
+      "files": 32,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/348/target/output-target_00000.shp",
+        "shape/magic/348/target/output-target_00001.shp",
+        "shape/magic/348/target/output-target_00002.shp"
+      ]
+    },
+    {
+      "id": "433",
+      "name": "閻王帖",
+      "effect": "349",
+      "definitions": 2,
+      "files": 27,
+      "archives": [
+        "data2.pak"
+      ],
+      "examples": [
+        "shape/magic/349/caster/output-caster_00000.shp",
+        "shape/magic/349/caster/output-caster_00001.shp",
+        "shape/magic/349/caster/output-caster_00002.shp"
+      ]
+    }
+  ],
+  "souls": [
+    {
+      "name": "邀月",
+      "forms": [
+        "變身68邀月單手(劍類)",
+        "變身68邀月單手(斧類)",
+        "變身68邀月雙手(槍類)",
+        "變身68邀月雙手(棍類)",
+        "變身76邀月參單手(劍類)",
+        "變身76邀月參單手(斧類)",
+        "變身76邀月參雙手(槍類)",
+        "變身76邀月參雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c68",
+        "charch/c76"
+      ],
+      "files": 52,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 52,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c68/21708_attack1.spr",
+        "shape/charch/c68/21708_attack4.spr",
+        "shape/charch/c68/21708_cast1.spr"
+      ]
+    },
+    {
+      "name": "憐星",
+      "forms": [
+        "變身60憐星單手(劍類)",
+        "變身60憐星單手(斧類)",
+        "變身60憐星雙手(槍類)",
+        "變身60憐星雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c60"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c60/21700_attack1.spr",
+        "shape/charch/c60/21700_attack4.spr",
+        "shape/charch/c60/21700_cast1.spr"
+      ]
+    },
+    {
+      "name": "RSKD",
+      "forms": [
+        "變身67RSKD單手(劍類)",
+        "變身67RSKD單手(斧類)",
+        "變身67RSKD雙手(槍類)",
+        "變身67RSKD雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c67"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c67/21707_attack1.spr",
+        "shape/charch/c67/21707_attack4.spr",
+        "shape/charch/c67/21707_cast1.spr"
+      ]
+    },
+    {
+      "name": "小蝦米",
+      "forms": [
+        "變身69小蝦米單手(劍類)",
+        "變身69小蝦米單手(斧類)",
+        "變身69小蝦米雙手(槍類)",
+        "變身69小蝦米雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c69"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c69/21709_attack1.spr",
+        "shape/charch/c69/21709_attack4.spr",
+        "shape/charch/c69/21709_cast1.spr"
+      ]
+    },
+    {
+      "name": "張君寶",
+      "forms": [
+        "變身70張君寶單手(劍類)",
+        "變身70張君寶單手(斧類)",
+        "變身70張君寶雙手(槍類)",
+        "變身70張君寶雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c70"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c70/21800_attack1.spr",
+        "shape/charch/c70/21800_attack4.spr",
+        "shape/charch/c70/21800_cast1.spr"
+      ]
+    },
+    {
+      "name": "顏玉書",
+      "forms": [
+        "變身71顏玉書單手(劍類)",
+        "變身71顏玉書單手(斧類)",
+        "變身71顏玉書雙手(槍類)",
+        "變身71顏玉書雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c71"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c71/21801_attack1.spr",
+        "shape/charch/c71/21801_attack4.spr",
+        "shape/charch/c71/21801_cast1.spr"
+      ]
+    },
+    {
+      "name": "程雁華",
+      "forms": [
+        "變身72程雁華單手(劍類)",
+        "變身72程雁華單手(斧類)",
+        "變身72程雁華雙手(槍類)",
+        "變身72程雁華雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c72"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c72/21802_attack1.spr",
+        "shape/charch/c72/21802_attack4.spr",
+        "shape/charch/c72/21802_cast1.spr"
+      ]
+    },
+    {
+      "name": "燕南天零",
+      "forms": [
+        "變身74燕南天零單手(劍類)",
+        "變身74燕南天零單手(斧類)",
+        "變身74燕南天零雙手(槍類)",
+        "變身74燕南天零雙手(棍類)"
+      ],
+      "directories": [
+        "charch/c74"
+      ],
+      "files": 26,
+      "archives": [
+        "data5.pak"
+      ],
+      "spriteReferences": 26,
+      "missingSpriteReferences": [],
+      "examples": [
+        "shape/charch/c74/21804_attack1.spr",
+        "shape/charch/c74/21804_attack4.spr",
+        "shape/charch/c74/21804_cast1.spr"
+      ]
+    }
+  ]
+}
