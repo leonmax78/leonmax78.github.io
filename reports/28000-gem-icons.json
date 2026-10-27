@@ -1,0 +1,426 @@
+{
+  "archive": "data2.pak",
+  "affectedItems": 600,
+  "icons": [
+    {
+      "icon": 29700,
+      "source": "shape/item/i9700.shp",
+      "sourceSha256": "df7f1f71ec23d120827831ff9e552d5fd74f5df80f5ea556aeb508c08fccdb98",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29701,
+      "source": "shape/item/i9701.shp",
+      "sourceSha256": "7282012941a75f7c702c6ffe851187ca654766bae452b1ce2ee474bb8387aac1",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29702,
+      "source": "shape/item/i9702.shp",
+      "sourceSha256": "17a744c7fc6e453f5f94d3dc3e7f62a8eb3278c13021e174a65f5e14782a4873",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29703,
+      "source": "shape/item/i9703.shp",
+      "sourceSha256": "ea417bcc749f85b19f46d3118433800697127a60038cffe3cef665819602af0d",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29704,
+      "source": "shape/item/i9704.shp",
+      "sourceSha256": "fe912e9415999e7321d1b383bb796321dc1507a0f6f119308f804531de3af634",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29705,
+      "source": "shape/item/i9705.shp",
+      "sourceSha256": "8467ad0fd6f78fa2159b766ca9e8d7a7e604125f568938d4782b369436bd0452",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29706,
+      "source": "shape/item/i9706.shp",
+      "sourceSha256": "961276e32c83339bfb88ebf96884564de4c795340c9df6cd629c2b59ad2ce4f6",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29707,
+      "source": "shape/item/i9707.shp",
+      "sourceSha256": "4941e0a932508e59897e64b9d7f2676bfeab85604c174e09ba5df64eeb732ab4",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29708,
+      "source": "shape/item/i9708.shp",
+      "sourceSha256": "d33fa15c1f72536ad2d582b72238eb1f969fbd82fcd76334c53ee4711806f16b",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29709,
+      "source": "shape/item/i9709.shp",
+      "sourceSha256": "01e23162fced1508330b77264a3ff166ac3e4515b324fe67b6ff2655a0e41469",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29710,
+      "source": "shape/item/i9710.shp",
+      "sourceSha256": "95827f22483080da0628e19c8b82d3a50fdb4338ce8bc43dab6f5aca3bd924d5",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29711,
+      "source": "shape/item/i9711.shp",
+      "sourceSha256": "3931408073fdb614b34a1df7092b9c5076acb316aa537288e8c9ac76c585c1c8",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29712,
+      "source": "shape/item/i9712.shp",
+      "sourceSha256": "7a37f5fabb33ec783e6e21477f59bcf09f63bd8423bb0b9ab0a2079304f7d297",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29713,
+      "source": "shape/item/i9713.shp",
+      "sourceSha256": "2e3649aaa55090fcca06889854336ec8e221ecb1e6c4904923ddcaeb2634909d",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29714,
+      "source": "shape/item/i9714.shp",
+      "sourceSha256": "c8f0a3b403197b72783fc9d1f4aaf5893ad85c029aad9842af992e1d908e9420",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29715,
+      "source": "shape/item/i9715.shp",
+      "sourceSha256": "6030a230e11fe70fba5d9a43d5a5dac793272345e35614b3f4d1554a12ec570e",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29716,
+      "source": "shape/item/i9716.shp",
+      "sourceSha256": "19e8a014337b9f3afd5b3164f4f38e1f3bece27b59ba9468132d671ffbcb3271",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29717,
+      "source": "shape/item/i9717.shp",
+      "sourceSha256": "6017c6b4bacb58d1ad994b8288ddbb406e03df4e7df73b04b90af553b88316f7",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29718,
+      "source": "shape/item/i9718.shp",
+      "sourceSha256": "b9beaa5e5cd486e4312df7c64accf8c98f25093a3dd442018472990528c1853c",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29719,
+      "source": "shape/item/i9719.shp",
+      "sourceSha256": "ca1825a58423ed903fbe44ef3add209c29be57c77263ed6e8a82ce7015bd3bd4",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29720,
+      "source": "shape/item/i9720.shp",
+      "sourceSha256": "e952ffaf47f1a6bfff378aad9148d7708f8e0dacbb030336f8ae3ef10f1c9224",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29721,
+      "source": "shape/item/i9721.shp",
+      "sourceSha256": "34ea127b79da84d35869f217e40bf50ceb574e16a1448c3760b448ce5e9782ae",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29722,
+      "source": "shape/item/i9722.shp",
+      "sourceSha256": "9270fe5c3f6c9550f47c05cd70093a4820b17e5868f58993d65d1547d3101303",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29723,
+      "source": "shape/item/i9723.shp",
+      "sourceSha256": "6c915a0f082f0656eb49cfda7a1b1bbb5be1cdf09814f78763149a61a91b5a66",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29724,
+      "source": "shape/item/i9724.shp",
+      "sourceSha256": "dba135dbcaf79c53b5929e905dfc3fd3f11ba5b69d472cac2016f8e9204cf753",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29725,
+      "source": "shape/item/i9725.shp",
+      "sourceSha256": "f62d2c1e73ccd9e4823dbdee6355707a43ae72a8d2648174c6ce92c87fc037d4",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29726,
+      "source": "shape/item/i9726.shp",
+      "sourceSha256": "3b6f7b6839eecd717010d343e76addabae5d4b32ce61144a091b3c7a7e80c12b",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29727,
+      "source": "shape/item/i9727.shp",
+      "sourceSha256": "e06492c11a4cdc010a3f4b3253baae77f530ea7a493cc9b3587e00de3b183929",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29728,
+      "source": "shape/item/i9728.shp",
+      "sourceSha256": "af3a01f0faf5dada6726eb5a2d80f08aba41fda9a265aa39a222aeb76b0aafd5",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29729,
+      "source": "shape/item/i9729.shp",
+      "sourceSha256": "bdd66fddc4a4c20614f618e81ed2765438a232ea0a156e816383edee5a3120c3",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29730,
+      "source": "shape/item/i9730.shp",
+      "sourceSha256": "4e39b372d95f9456b8a7fd0507997e6e8499e0300533605cfad608c973a445b8",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29731,
+      "source": "shape/item/i9731.shp",
+      "sourceSha256": "53483f0aaac55ab97fa08ded9dc4898d49762b2d4886ad6a86f3c35e2be64836",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29732,
+      "source": "shape/item/i9732.shp",
+      "sourceSha256": "2487747c5e3e1bee517bf7e133555bb4712388ade9a8197502d2897e1226f6cb",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29733,
+      "source": "shape/item/i9733.shp",
+      "sourceSha256": "5ddfa8c191ca5ff8d11efb96ff06f863708ff02ce3f40bc76c5cc43fed731e8f",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29734,
+      "source": "shape/item/i9734.shp",
+      "sourceSha256": "eaee4d090cf651af786cca0a41337d9c10a4d95ed84d872fa3f548a829f76dda",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29735,
+      "source": "shape/item/i9735.shp",
+      "sourceSha256": "828e6339253c9381974b472130bfbd1f41b8a8030bc56af615bffa926f6a7195",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29736,
+      "source": "shape/item/i9736.shp",
+      "sourceSha256": "9ac6cc1695f25103b0ce291a149dd97a8ff176b0eadc23d025c85a6856e67f18",
+      "width": 31,
+      "height": 30
+    },
+    {
+      "icon": 29737,
+      "source": "shape/item/i9737.shp",
+      "sourceSha256": "8143ae4beb46d18bae23a90ea55e1b1bf2be9f418477bab2215b905b44169a29",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29738,
+      "source": "shape/item/i9738.shp",
+      "sourceSha256": "8dd8b18c95884d7aa6ab1e56012f14133ff227fa27087a8b053c4672757d4134",
+      "width": 31,
+      "height": 31
+    },
+    {
+      "icon": 29739,
+      "source": "shape/item/i9739.shp",
+      "sourceSha256": "c25b02afef7a3d27d24a894c6db1ee2772e961e1385c441a823170a5b64713f3",
+      "width": 31,
+      "height": 32
+    },
+    {
+      "icon": 29740,
+      "source": "shape/item/i9740.shp",
+      "sourceSha256": "e25180346c121934ea1541dc0423a7c46db1cdeb49d6a93cbc505146315b3f4e",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29741,
+      "source": "shape/item/i9741.shp",
+      "sourceSha256": "46cfbc588aba97fdb4b7a1729a0bc2a7c649191713f61e7499cdd540911b5e1e",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29742,
+      "source": "shape/item/i9742.shp",
+      "sourceSha256": "efbb7a80c7127164eb7742e3cf8397b2652ced42ef7ab76c1deff1ca9fe141ea",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29743,
+      "source": "shape/item/i9743.shp",
+      "sourceSha256": "d1dbb059476103a67e9bd0dddd73956dbe35d237c7640b266266a8929faebb0f",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29744,
+      "source": "shape/item/i9744.shp",
+      "sourceSha256": "c777d7f9e62b5aba472297d2d302ead7728e308ad16264159b704715848c2fce",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29745,
+      "source": "shape/item/i9745.shp",
+      "sourceSha256": "718fbaeac5e7e0cebe53e7767e846ea0fa54341b1c9a7014ff9befeed3c23c68",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29746,
+      "source": "shape/item/i9746.shp",
+      "sourceSha256": "e4866e82b35779f432e0661108152d2cd793e742791ff68bfb469030010ebff4",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29747,
+      "source": "shape/item/i9747.shp",
+      "sourceSha256": "4a45516bf5de04b2810353221b2156b4a8c8b579622e559fd946ee58bc80c091",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29748,
+      "source": "shape/item/i9748.shp",
+      "sourceSha256": "e30c98bc2f289c02e0d2f0b85a5fc15c427d62664676f67dc03baf990f9f21a2",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29749,
+      "source": "shape/item/i9749.shp",
+      "sourceSha256": "c77e0d1d407cd833c5ecd1a8c481209607a755b954ccabd21e5a6376e6d47750",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29750,
+      "source": "shape/item/i9750.shp",
+      "sourceSha256": "7d720a935faf3a91bdd6de56a0e92c00b749c96167cf3fe264839bb6e291f96c",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29751,
+      "source": "shape/item/i9751.shp",
+      "sourceSha256": "feb05b055a748abacef801633c6fc2a62b93fad7e39df1cc03b277c2bfc49445",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29752,
+      "source": "shape/item/i9752.shp",
+      "sourceSha256": "905adce34d9b0cc2cba72b5bdbe088507e250577472b9c59acb5c313bb0c27fa",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29753,
+      "source": "shape/item/i9753.shp",
+      "sourceSha256": "b16c1ee6b9b941aff7f2cc968afe46d2b089b2c69ea82d6b986be46b82d91078",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29754,
+      "source": "shape/item/i9754.shp",
+      "sourceSha256": "9d07a78cf1ed723f580b47557b2641a0159ef919af65085b7dabf02876734079",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29755,
+      "source": "shape/item/i9755.shp",
+      "sourceSha256": "769e3eefb8d6bbbb02a5e66eb625509d3b604afd175a20442b72e8acb49b8b11",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29756,
+      "source": "shape/item/i9756.shp",
+      "sourceSha256": "1a52f87369041aa9aa9ca805f0c89585bb4641e56294704596e8eb8916e45017",
+      "width": 32,
+      "height": 30
+    },
+    {
+      "icon": 29757,
+      "source": "shape/item/i9757.shp",
+      "sourceSha256": "e2ca454a72bd3e7aed382dd98bf76ea197332ff51d4dbe7ee705be1a71e72852",
+      "width": 32,
+      "height": 32
+    },
+    {
+      "icon": 29758,
+      "source": "shape/item/i9758.shp",
+      "sourceSha256": "d759950fd76b9b45fc9f4ed983b4b9322de7272b834630dec6160a3d1898f7b1",
+      "width": 32,
+      "height": 31
+    },
+    {
+      "icon": 29759,
+      "source": "shape/item/i9759.shp",
+      "sourceSha256": "ffe14bc5ebe8986dd9429bfa435d6fdb1a9b0496104ee7f6810596f56a805e47",
+      "width": 32,
+      "height": 32
+    }
+  ]
+}
