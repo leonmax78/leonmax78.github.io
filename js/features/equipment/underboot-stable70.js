@@ -39,32 +39,39 @@
     const recipes=eqSortRecipeObjects(eqAllowedRecipes());
     const isUnder=isEqUnderBoot88ab(eq);
     const displayGroup=r=>window.SZO_REFINING?.group(r)||r.group;
-    const groups=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>recipes.some(r=>displayGroup(r)===g)).map(g=>[g,recipeGroupLabel88ab(g)]);
-    const groupRecipes=g=>recipes.filter(r=>displayGroup(r)===g);
-    const groupSelected=g=>eqSelectedRecipes().filter(x=>displayGroup(x.recipe)===g);
+    const groupRecipes=g=>recipes.filter(r=>displayGroup(r)===g||(g==='stable_50'&&r.group==='stable_50'));
+    const groups=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>groupRecipes(g).length).map(g=>[g,recipeGroupLabel88ab(g)]);
+    const groupSelected=g=>eqSelectedRecipes().filter(x=>(x.selectionGroup||displayGroup(x.recipe))===g);
     const renderSelected=g=>{
       const rows=groupSelected(g);
       if(!rows.length)return '<div class="muted" style="margin-top:8px">尚未加入這個安定值的配方。</div>';
-      return '<div class="tableWrap" style="margin-top:10px"><table><thead><tr><th>已選配方</th><th>次數</th><th>操作</th></tr></thead><tbody>'+
-        rows.map(({recipe,count})=>'<tr><td><b>'+esc(recipe.name)+'</b><div class="rSub">'+esc(recipe.effect_summary||'')+'</div></td><td style="width:120px"><input class="eqRecipeCount" data-eq-recipe-count="'+esc(recipe.id)+'" type="number" min="1" value="'+esc(count)+'"></td><td style="width:90px"><button class="ghost" data-eq-recipe="'+esc(recipe.id)+'">移除</button></td></tr>').join('')+
+      return '<div class="tableWrap" style="margin-top:10px"><table><thead><tr><th>已選配方</th><th>次數</th><th>所需材料</th><th>操作</th></tr></thead><tbody>'+
+        rows.map(({recipe,count,key})=>'<tr><td><b>'+esc(recipe.name)+'</b><div class="rSub">'+esc(recipe.effect_summary||'')+'</div></td><td style="min-width:90px"><input class="eqRecipeCount" data-eq-recipe-count="'+esc(key)+'" type="number" min="1" value="'+esc(count)+'"></td><td class="eqInlineMaterials">'+eqMaterials(recipe,count).map(m=>'<div>'+esc(m.name)+' × '+fmt(m.qty)+'</div>').join('')+'</td><td style="min-width:70px"><button class="ghost" data-eq-recipe="'+esc(key)+'">移除</button></td></tr>').join('')+
         '</tbody></table></div>';
     };
     const notice=window.SZO_REFINING?.enabled?SZO_REFINING.notice:'配方依安定值排列。';
     return '<h3 id="eqRecipeAnchor">選擇配方</h3><div class="notice">'+notice+'</div>'+groups.map(([g,label])=>{
       const arr=groupRecipes(g);
-      return '<div class="card" style="box-shadow:none"><h3>'+esc(label)+'</h3><label>加入配方</label><select data-eq-recipe-select="'+esc(g)+'"><option value="">請選擇要加入的配方</option>'+arr.map(r=>'<option value="'+esc(r.id)+'">'+esc(r.name)+(r.effect_summary?'｜'+esc(r.effect_summary):'')+'</option>').join('')+'</select>'+renderSelected(g)+'</div>';
+      return '<div class="card" style="box-shadow:none"><h3>'+esc(label)+'</h3><label>加入配方</label><select data-eq-recipe-select="'+esc(g)+'"><option value="">請選擇要加入的配方</option>'+arr.map(r=>'<option value="'+esc(r.id+':'+g)+'">'+esc(r.name)+(r.effect_summary?'｜'+esc(r.effect_summary):'')+'</option>').join('')+'</select>'+renderSelected(g)+'</div>';
     }).join('')+'<div class="quick"><button class="primary" id="eqOpenRandom">進入亂數模擬頁<small>進入後再選配方，像骰子一樣累計次數與材料</small></button><button class="primary" id="eqShowMaterials">產出所需材料清單<small>另開材料頁，並可返回</small></button></div>';
   };
   window.showEquipmentMaterials=function(){
     const eq=(typeof eqSelected==='function') ? eqSelected() : null;
     let picks=(typeof eqSelectedRecipes==='function') ? eqSelectedRecipes() : [];
     if(!eq||!picks||!picks.length){empty('請先選擇裝備與至少一個配方');return;}
-    picks=picks.filter(x=>recipeGroupAllowed88ab(x.recipe,eq)).sort((a,b)=>eqRecipeGroupRank(a.recipe)-eqRecipeGroupRank(b.recipe));
-    const sections=picks.map(({recipe,count})=>{
+    picks=eqSortRecipePicks(picks.filter(x=>recipeGroupAllowed88ab(x.recipe,eq)));
+    const totals=new Map();
+    for(const {recipe,count} of picks)for(const material of eqMaterials(recipe,count)){
+      const key=material.item_id||material.name;
+      if(!totals.has(key))totals.set(key,{...material,qty:0});
+      totals.get(key).qty+=material.qty;
+    }
+    const totalHTML='<h3>材料總計</h3><div class="tableWrap"><table class="eqMatTable eqMatTotals"><thead><tr><th>材料</th><th>總數量</th></tr></thead><tbody>'+[...totals.values()].map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+fmt(m.qty)+'</td></tr>').join('')+'</tbody></table></div>';
+    const sections=picks.map(({recipe,count,selectionGroup})=>{
       const mats=eqMaterials(recipe,count);
-      return '<h3>'+esc(recipeGroupLabel88ab(window.SZO_REFINING?.group(recipe)||recipe.group))+'｜'+esc(recipe.name)+' × '+fmt(count)+'</h3><div class="tableWrap"><table class="eqMatTable"><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>'+mats.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+fmt(m.qty)+'</td></tr>').join('')+'</tbody></table></div>';
+      return '<h3>'+esc(recipeGroupLabel88ab(selectionGroup||window.SZO_REFINING?.group(recipe)||recipe.group))+'｜'+esc(recipe.name)+' × '+fmt(count)+'</h3><div class="tableWrap"><table class="eqMatTable"><thead><tr><th>材料</th><th>數量</th></tr></thead><tbody>'+mats.map(m=>'<tr><td>'+esc(m.name)+'</td><td>'+fmt(m.qty)+'</td></tr>').join('')+'</tbody></table></div>';
     }).join('');
-    byId('reader').innerHTML='<section class="card"><button class="backBtn" id="eqBackToSim">← 返回常用配方合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>'+esc(eq.name)+'</b><br>材料依配方分開顯示，並依安定值順序排列。</div>'+sections+'</section>';
+    byId('reader').innerHTML='<section class="card"><button class="backBtn" id="eqBackToSim">← 返回常用配方合成模擬</button><h1>所需材料清單</h1><div class="notice"><b>'+esc(eq.name)+'</b><br>材料依配方分開顯示，並依安定值順序排列。</div>'+totalHTML+sections+'</section>';
     window.scrollTo({top:0,behavior:'smooth'});
   };
   function simGroup88ab(){

@@ -258,14 +258,14 @@ function eqAllowedRecipes(){
  return eqRecipesForType(tp);
 }
 
-function eqRecipeById(id){return (eqData().recipes||[]).find(r=>String(r.id)===String(id))||null}
+function eqRecipeById(id){return (eqData().recipes||[]).find(r=>String(r.id)===String(id).split(':')[0])||null}
 
 function eqSelectedRecipes(){
  const allowed=new Set(eqAllowedRecipes().map(r=>String(r.id)));
- return eqSortRecipePicks(Object.entries(eqState.recipeCounts||{}).filter(([id,c])=>allowed.has(String(id)) && Number(c)>0).map(([id,c])=>({recipe:eqRecipeById(id),count:Math.max(1,intOf(c,1))})).filter(x=>x.recipe));
+ return eqSortRecipePicks(Object.entries(eqState.recipeCounts||{}).filter(([id,c])=>allowed.has(String(id).split(':')[0]) && Number(c)>0).map(([key,c])=>({recipe:eqRecipeById(key),key,selectionGroup:key.split(':')[1]||'',count:Math.max(1,intOf(c,1))})).filter(x=>x.recipe));
 }
 
-function eqRecipeDefaultCount(recipe){return Math.max(1,intOf(recipe?.default_use_count,1)||1)}
+function eqRecipeDefaultCount(recipe,group){return group==='stable_99'?49:Math.max(1,intOf(recipe?.default_use_count,1)||1)}
 
 function eqRecipeGroupRank(recipe){
  const g=recipe?.group||'';
@@ -287,13 +287,14 @@ function eqSortRecipeObjects(arr){
 }
 
 function eqSortRecipePicks(arr){
- return (arr||[]).slice().sort((a,b)=>eqRecipeGroupRank(a.recipe)-eqRecipeGroupRank(b.recipe)||eqRecipeOrderIndex(a.recipe)-eqRecipeOrderIndex(b.recipe)||String(a.recipe?.name||'').localeCompare(String(b.recipe?.name||''),'zh-Hant'));
+ const rank=pick=>pick.selectionGroup?Number(pick.selectionGroup.replace('stable_','')):Number((window.SZO_REFINING?.group(pick.recipe)||pick.recipe.group).replace('stable_',''));
+ return (arr||[]).slice().sort((a,b)=>rank(a)-rank(b)||eqRecipeOrderIndex(a.recipe)-eqRecipeOrderIndex(b.recipe)||String(a.recipe?.name||'').localeCompare(String(b.recipe?.name||''),'zh-Hant'));
 }
 
 function eqAddRecipe(id){
  const r=eqRecipeById(id); if(!r)return;
  eqState.recipeCounts=eqState.recipeCounts||{};
- if(!eqState.recipeCounts[String(id)]) eqState.recipeCounts[String(id)]=eqRecipeDefaultCount(r);
+ if(!eqState.recipeCounts[String(id)]) eqState.recipeCounts[String(id)]=eqRecipeDefaultCount(r,String(id).split(':')[1]||window.SZO_REFINING?.group(r));
  eqResetRandom(false);
  eqRenderPreview(true);
 }
@@ -309,7 +310,7 @@ function eqToggleRecipe(id){
  const r=eqRecipeById(id); if(!r)return;
  eqState.recipeCounts=eqState.recipeCounts||{};
  if(eqState.recipeCounts[String(id)]) delete eqState.recipeCounts[String(id)];
- else eqState.recipeCounts[String(id)]=eqRecipeDefaultCount(r);
+ else eqState.recipeCounts[String(id)]=eqRecipeDefaultCount(r,String(id).split(':')[1]||window.SZO_REFINING?.group(r));
  eqResetRandom();
  eqRenderPreview();
 }
