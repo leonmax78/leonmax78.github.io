@@ -1,10 +1,10 @@
 {
   "display_name": "神州Online角色外觀變更程式 By尼扣扣",
-  "version": "0.1.8",
-  "published_at": "2026-10-27 15:16",
-  "file_name": "SZOAppearance-v0.1.8.zip",
-  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.8.zip",
-  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.8.zip",
-  "sha256": "217c33a73b67cef83c8d527c8ce932db04bfde1c29412c1de6625b43fd3df653",
-  "notes": "本次 28000 主程式新增 data1.pak 支援；提示仍以 update.pak 為主，週四更新後請選 update.pak。各封包獨立備份、修改紀錄與還原，保留收藏及安全寫入檢查。0.1.6 起可透過程式內網站自動更新升級。"
+  "version": "0.1.9",
+  "published_at": "2026-10-27 15:38",
+  "file_name": "SZOAppearance-v0.1.9.zip",
+  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.9.zip",
+  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.9.zip",
+  "sha256": "8168fcc0f8153f59e2a3f7d525a724476f26bc52a9b9bedf26a9c142cf537aed",
+  "notes": "更新武魂名稱與未出標註；[技能名稱] 版本歸入同名技能的職業／聯動分類，保留各自 ID。沿用 data1.pak 支援、獨立備份還原與 update.pak 提示。"
 }
