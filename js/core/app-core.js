@@ -448,7 +448,7 @@ function openItemMenuOnly(){
  document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='item'));
  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
  byId('itemForm')?.classList.add('active');
- renderChoiceMenu('道具查詢',[
+ renderChoiceMenu('道具、掉落查詢、合成模擬',[
   {title:'道具查詢',desc:'搜尋道具名稱、ID、類型、等級與專剋',attr:'data-item-open="item"'},
   {title:'掉落反查',desc:'用道具名稱或 ID 查詢掉落怪物與位置',attr:'data-item-open="reverse"'},
   {title:'裝備合成',desc:'查詢裝備合成來源與材料',attr:'data-item-open="compound"'}
