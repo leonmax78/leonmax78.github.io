@@ -265,7 +265,7 @@ function eqSelectedRecipes(){
  return eqSortRecipePicks(Object.entries(eqState.recipeCounts||{}).filter(([id,c])=>allowed.has(String(id).split(':')[0]) && Number(c)>0).map(([key,c])=>({recipe:eqRecipeById(key),key,selectionGroup:key.split(':')[1]||'',count:Math.max(1,intOf(c,1))})).filter(x=>x.recipe));
 }
 
-function eqRecipeDefaultCount(recipe,group){return group==='stable_99'?49:Math.max(1,intOf(recipe?.default_use_count,1)||1)}
+function eqRecipeDefaultCount(recipe,group){return group==='stable_99'?99-Number(window.SZO_REFINING?.original(recipe)||50):group==='stable_70'?70:Math.max(1,intOf(recipe?.default_use_count,1)||1)}
 
 function eqRecipeGroupRank(recipe){
  const g=recipe?.group||'';

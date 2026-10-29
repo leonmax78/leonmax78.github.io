@@ -38,6 +38,18 @@ const root=path.resolve(__dirname,'..');
   await page.locator('#eqBackToSim').click();
   await page.locator('[data-eq-recipe="580:stable_99"]').click();
   assert.equal(await lowCount.inputValue(),originalLow);assert.equal(await highCount.count(),0);
-  assert.deepEqual(errors,[]);console.log('PASS '+width+': shared recipe in two stages, 49 uses, independent removal/counts and multiplied materials/effects');await page.close();
+  await page.evaluate(()=>{eqState.uid=eqEquipList().find(e=>e.display_type==='仙器'||e.item_type_raw==='UNDER_BOOT').uid;eqState.recipeCounts={};eqRenderPreview();});
+  await page.locator('[data-eq-recipe-select="stable_70"]').selectOption('573:stable_70');
+  await page.locator('[data-eq-recipe-select="stable_99"]').selectOption('573:stable_99');
+  assert.equal(await page.locator('[data-eq-recipe-count="573:stable_70"]').inputValue(),'70');
+  assert.equal(await page.locator('[data-eq-recipe-count="573:stable_99"]').inputValue(),'29');
+  const artifact=await page.evaluate(()=>({picks:eqSelectedRecipes().map(p=>p.count),acc:eqEffectAccumulator(),effects:eqRecipeById(573).effects,mats:eqMaterials(eqRecipeById(573),29).map(m=>`${m.name} × ${fmt(m.qty)}`)}));
+  assert.deepEqual(artifact.picks,[70,29]);
+  for(const e of artifact.effects.filter(e=>e.stackable!==false)){if(e.min!==undefined)assert.equal(artifact.acc[e.stat].min,e.min*99);if(e.value!==undefined)assert.equal(artifact.acc[e.stat].value,e.value*99);}
+  const artifactRow=await page.locator('[data-eq-recipe-count="573:stable_99"]').locator('xpath=ancestor::tr').innerText();
+  for(const text of artifact.mats)assert(artifactRow.includes(text));
+  await page.locator('[data-eq-recipe-count="573:stable_70"]').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(root,`outputs/artifact-stages-${width}.png`)});
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  assert.deepEqual(errors,[]);console.log('PASS '+width+': equipment 50+49 and artifact 70+29, materials and effects');await page.close();
  }}finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

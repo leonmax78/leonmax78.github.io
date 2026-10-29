@@ -12,7 +12,7 @@
     return g==='stable_1' || g==='stable_12' || g==='stable_50';
   }
   function recipeGroupLabel88ab(group){
-    if(group==='stable_99') return '安定值 99（限時）';
+    if(group==='stable_99') return isEqUnderBoot88ab(typeof eqSelected==='function'?eqSelected():null)?'安定值 99（限時追加 29 次）':'安定值 99（限時追加 49 次）';
     if(group==='stable_1') return '安定值 1';
     if(group==='stable_12') return '安定值 12';
     if(group==='stable_50') return '安定值 50';
@@ -39,7 +39,7 @@
     const recipes=eqSortRecipeObjects(eqAllowedRecipes());
     const isUnder=isEqUnderBoot88ab(eq);
     const displayGroup=r=>window.SZO_REFINING?.group(r)||r.group;
-    const groupRecipes=g=>recipes.filter(r=>displayGroup(r)===g||(g==='stable_50'&&r.group==='stable_50'));
+    const groupRecipes=g=>recipes.filter(r=>displayGroup(r)===g||(['stable_50','stable_70'].includes(g)&&r.group===g));
     const groups=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>groupRecipes(g).length).map(g=>[g,recipeGroupLabel88ab(g)]);
     const groupSelected=g=>eqSelectedRecipes().filter(x=>(x.selectionGroup||displayGroup(x.recipe))===g);
     const renderSelected=g=>{
