@@ -31,11 +31,10 @@ for(const [name,rates] of packs){
    page.on('pageerror',e=>errors.push(e.message));
    await page.route('https://preview.test/**',r=>{const file=path.join(root,new URL(r.request().url()).pathname.slice(1)||'index.html');return fs.existsSync(file)&&fs.statSync(file).isFile()?r.fulfill({path:file}):r.fulfill({status:404,body:''});});
    await page.goto('https://preview.test');await page.waitForFunction(()=>window.SZO_READY);await page.waitForTimeout(8000);await page.waitForFunction(()=>window.SZO_READY);
-   await page.evaluate(()=>setView('abyss'));
-   assert((await page.locator('#abyssGemTotal').innerText()).includes('14 格'));
-   assert((await page.locator('#abyssGemTotal').innerText()).includes('2,775'));
-   await page.locator('#abyssLevel').fill('20000');
-   assert((await page.locator('#abyssGemTotal').innerText()).includes('6,300'));
+   await page.evaluate(()=>setView('gems'));
+   assert((await page.locator('#gemOpened').innerText()).includes('14 / 30'));
+   await page.locator('#gemLevel').fill('20000');
+   assert((await page.locator('#gemOpened').innerText()).includes('30 / 30'));
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
    await page.screenshot({path:path.join(root,`outputs/abyss-guide-${width}.png`)});
    await page.evaluate(async()=>{await ensureItemPageLoaded();await ensureItemDataLoaded();await SZO_PREVIEW.open('item','32306');});

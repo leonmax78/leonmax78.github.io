@@ -233,7 +233,8 @@ function renderChoiceMenu(title, rows){
 
 function renderJiangHome(){
  document.body.classList.remove('isHomeView');
- renderChoiceMenu('降神、經驗、修練計算',[
+ renderChoiceMenu('降神、經驗、修練、寶石試算',[
+  {title:'寶石試算、加工配方',desc:'',attr:'data-view="gems"'},
   {title:'副降神模擬',desc:'試算副降神能力與需求',attr:'data-jiang="support"'},
   {title:'副降神組合推薦方案',desc:'依星等推薦物理、術法、防禦組合',attr:'data-jiang="recommend"'},
   {title:'主降神比較',desc:'比較主降神能力差異',attr:'data-jiang="compare"'},
@@ -379,7 +380,7 @@ async function setView(view){
  else if(view==='map'){showPageLoading(viewLoadingLabel(view),'地圖載入中，請稍候。'); await ensureMapPageLoaded(); if(typeof renderStageMapPage==='function')renderStageMapPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='abyss'){showPageLoading('深淵資料'); await loadScriptGroupOnce('page_abyss'); renderAbyssPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='gems'){showPageLoading('寶石試算'); await loadScriptGroupOnce('page_gems'); await ensureItemDataLoaded(); renderGemPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='soul'){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));

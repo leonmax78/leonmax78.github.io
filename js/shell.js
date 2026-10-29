@@ -24,8 +24,7 @@
   <div class="drawerBody">
     <div class="navGroup" id="navGroup">
       <button class="navBtn major active" data-view="home">首頁 <span>›</span></button>
-      <button class="navBtn major" data-view="abyss">深淵資料、神魂寶石 <span>›</span></button>
-      <button class="navBtn major" data-view="jiang">降神、經驗、修練試算 <span>›</span></button>
+      <button class="navBtn major" data-view="jiang">降神、經驗、修練、寶石試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
         <div class="subMenuNote">降神、經驗、修練相關功能</div>
         <button class="navBtn sub" data-jiang="support">副降神模擬 <span>›</span></button>
@@ -35,6 +34,7 @@
         <button class="navBtn sub" data-jiang="starAura">星等/靈氣試算 <span>›</span></button>
         <button class="navBtn sub" data-jiang="expPill">等級/經驗丹試算 <span>›</span></button>
         <button class="navBtn sub" data-jiang="training">修練機制試算 <span>›</span></button>
+        <button class="navBtn sub" data-view="gems">寶石試算、加工配方 <span>›</span></button>
         <div id="jiangFields"></div>
       </div>
       <button class="navBtn major" data-view="monster">怪物、封獸查詢 <span>›</span></button>

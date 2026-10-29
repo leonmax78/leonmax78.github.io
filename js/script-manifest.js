@@ -104,7 +104,7 @@ window.SZO_SCRIPT_GROUPS = {
   "page_map": [
     "js/pages/map-page.js"
   ],
-  "page_abyss": ["data/jewels.js", "data/abyss-exchanges.js", "js/pages/abyss-page.js"],
+  "page_gems": ["data/jewels.js", "data/abyss-exchanges.js", "js/pages/gem-page.js"],
   "page_qa": [
     "js/pages/qa-page.js"
   ],
