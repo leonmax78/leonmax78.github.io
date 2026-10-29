@@ -1,10 +1,10 @@
 {
   "display_name": "神州Online角色外觀變更程式 By尼扣扣",
-  "version": "0.1.9",
-  "published_at": "2026-10-27 15:38",
-  "file_name": "SZOAppearance-v0.1.9.zip",
-  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.9.zip",
-  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.9.zip",
-  "sha256": "8168fcc0f8153f59e2a3f7d525a724476f26bc52a9b9bedf26a9c142cf537aed",
-  "notes": "更新武魂名稱與未出標註；[技能名稱] 版本歸入同名技能的職業／聯動分類，保留各自 ID。沿用 data1.pak 支援、獨立備份還原與 update.pak 提示。"
+  "version": "0.1.10",
+  "published_at": "2026-10-29 15:42",
+  "file_name": "SZOAppearance-v0.1.10.zip",
+  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.10.zip",
+  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.10.zip",
+  "sha256": "6b4486da7cc3ee1d676faa3edd2ff2681ded17b9db77556a58eb3e67ca61f663",
+  "notes": "武魂 CHAR3 可獨立選 data1.pak，裝備 ITEM／技能 MAGIC 使用 update.pak。UPDATE 缺少 CHAR3 不再阻擋載入；兩份封包獨立備份還原，紀錄顯示修改封包，支援常用組合跨封包套用。"
 }
