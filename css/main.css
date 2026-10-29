@@ -3646,6 +3646,8 @@ body{
 .mapExitDirection{position:absolute;display:flex;align-items:center;gap:8px;color:#ffbf36;text-shadow:0 2px 3px #000}
 .mapExitDirection b{font-size:52px;line-height:1;font-family:"Segoe UI Symbol",sans-serif}
 .mapExitDirection span{background:#182028;border:1px solid #ffbf36;border-radius:4px;padding:6px 10px;font-size:18px;font-weight:700;white-space:nowrap}
+.mapTransferOverlay{position:absolute;inset:0;pointer-events:none;z-index:3}
+.mapTransferLabel{position:absolute;transform:translate(-50%,-50%);padding:5px 8px;border:1px solid #ffd166;border-radius:4px;background:rgba(20,25,30,.95);color:#ffdf8d;font-size:15px;font-weight:700;line-height:20px;white-space:nowrap;pointer-events:auto}
 .mapAreaLabel{position:absolute;transform:translate(-50%,-50%);display:inline-grid;place-items:center;min-width:34px;height:24px;padding:0 8px;border-radius:999px;border:1px solid rgba(34,211,238,.75);background:rgba(6,17,31,.82);box-shadow:0 0 0 3px rgba(0,0,0,.28),0 8px 20px rgba(0,0,0,.35);color:#e0f2fe;font-size:13px;font-weight:1000;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.65)}
 .mapDot{position:absolute;transform:translate(-50%,-85%);width:22px;height:22px;border-radius:999px;border:2px solid #fff;display:grid;place-items:center;font-size:10px;font-weight:1000;color:#06111f;box-shadow:0 0 0 2px rgba(0,0,0,.4);pointer-events:auto;overflow:hidden}
 .mapDot.monster{background:#facc15}

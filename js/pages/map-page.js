@@ -642,6 +642,21 @@
     }).join('');
   }
 
+  function transferLabels(stage){
+    const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
+    return (stage.transfers || []).map(point => {
+      const x = Math.max(105, Math.min(w - 105, point.x));
+      let y = point.y > h - 70 ? point.y - 30 : point.y + 32;
+      for(const area of stage.areas || []){
+        if(Math.abs(x - area.x) < 145 && Math.abs(y - area.y) < 36){
+          y = area.y + 40 < h - 18 ? area.y + 40 : area.y - 40;
+        }
+      }
+      const label = `往${point.label}${point.conditional ? '（有條件）' : ''}`;
+      return `<span class="mapTransferLabel" data-transfer-event="${point.event}" style="left:${x/w*100}%;top:${y/h*100}%;" title="${htmlEscape(`MPC 事件 ${point.event}；目的地 ${point.destination}，位置 TAG ${point.tag}`)}">→ ${htmlEscape(label)}</span>`;
+    }).join('');
+  }
+
   function markerDots(stage){
     const w = Number(stage.width) || 1;
     const h = Number(stage.height) || 1;
@@ -836,6 +851,7 @@
             <div class="mapImageStage" style="transform:scale(${zoomValue()});width:${Number(stage.width)||1}px;height:${Number(stage.height)||1}px;">
               <img id="mapImage" src="${htmlEscape(withAssetVersion(stage.image))}" alt="${htmlEscape(stage.stageName)}" decoding="async" fetchpriority="high">
               <div class="mapAreaOverlay">${areaLabels(stage)}</div>
+              <div class="mapTransferOverlay">${transferLabels(stage)}</div>
               <div class="mapOverlay">${markerDots(stage)}</div>
             </div>
           </div>
