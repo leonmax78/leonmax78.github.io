@@ -9,11 +9,15 @@ const root=path.resolve(__dirname,'..');
  await page.evaluate(()=>setView('jiang'));await page.locator('#reader [data-view=gems]').click();await page.waitForSelector('#gemLevel');
  assert((await page.locator('#gemOpened').innerText()).includes('14 / 30'));
  await page.locator('#gemLevel').fill('20000');
- for(let i=1;i<=5;i++){await page.locator('#gemBatch'+i).selectOption(String(32306+(i-1)*10));await page.locator(`[data-fill-shape="${i}"]`).click();}
+ for(let i=1;i<=5;i++){await page.locator('#gemBatch'+i+'Grade').selectOption('6');assert.equal(await page.locator('#gemBatch'+i+' option').count(),11);await page.locator('#gemBatch'+i).selectOption(String(32306+(i-1)*10));await page.locator(`[data-fill-shape="${i}"]`).click();}
  assert((await page.locator('#gemTotal').innerText()).includes('智慧 +6,300'));
  await page.locator('#gemLevel').fill('5000');assert((await page.locator('#gemTotal').innerText()).includes('智慧 +2,775'));
  assert.equal(await page.locator('[data-gem-slot]:disabled').count(),16);
  assert.equal(await page.locator('[data-gem-slot="1"] option[value="32316"]').count(),0);
+ assert.equal(await page.locator('#gemSlot1Grade').inputValue(),'6');
+ await page.locator('#gemSlot1Grade').selectOption('5');assert.equal(await page.locator('#gemSlot1').inputValue(),'');
+ assert.equal(await page.locator('#gemSlot1 option[value="32306"]').count(),0);
+ await page.locator('#gemSlot1Grade').selectOption('6');await page.locator('#gemSlot1').selectOption('32306');
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
  await page.evaluate(()=>window.scrollTo(0,0));await page.waitForTimeout(500);await page.screenshot({path:path.join(root,`outputs/gem-calc-${width}.png`)});
  await page.locator('[data-gem-tab=recipes]').click();await page.locator('[data-powder="32802"]').click();
