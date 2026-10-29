@@ -234,14 +234,14 @@ function renderChoiceMenu(title, rows){
 function renderJiangHome(){
  document.body.classList.remove('isHomeView');
  renderChoiceMenu('降神、經驗、修練、寶石試算',[
-  {title:'寶石試算、加工配方',desc:'',attr:'data-view="gems"'},
   {title:'副降神模擬',desc:'試算副降神能力與需求',attr:'data-jiang="support"'},
   {title:'副降神組合推薦方案',desc:'依星等推薦物理、術法、防禦組合',attr:'data-jiang="recommend"'},
   {title:'主降神比較',desc:'比較主降神能力差異',attr:'data-jiang="compare"'},
   {title:'降神20星能力總表',desc:'星等資料與累積需求',attr:'data-jiang="stars"'},
   {title:'星等/靈氣試算',desc:'星等與靈氣相關試算',attr:'data-jiang="starAura"'},
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
-  {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'}
+  {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
+  {title:'寶石試算、加工配方',desc:'',attr:'data-view="gems"'}
  ]);
 }
 
