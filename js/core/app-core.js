@@ -379,6 +379,7 @@ async function setView(view){
  else if(view==='map'){showPageLoading(viewLoadingLabel(view),'地圖載入中，請稍候。'); await ensureMapPageLoaded(); if(typeof renderStageMapPage==='function')renderStageMapPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='abyss'){showPageLoading('深淵資料'); await loadScriptGroupOnce('page_abyss'); renderAbyssPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='soul'){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));
@@ -589,7 +590,7 @@ function buildDataIndexesFromJson(prebuiltReverse){
   for(const [itemId,rows] of Object.entries(prebuiltReverse)){
    dropReverse[String(itemId)]=(rows||[]).map(row=>{
     const monster=monsterById[String(row.monsterId)]||{ID:row.monsterId,Name:row.monsterName};
-    return {monster,rate:Number(row.rate)||0,weight:Number(row.weight)||0};
+    return {monster,rate:row.rate==null?null:Number(row.rate),weight:Number(row.weight)||0,revision:row.revision};
    }).filter(x=>x.monster);
   }
  }else{

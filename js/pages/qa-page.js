@@ -47,6 +47,7 @@
     return `${n}兩`;
   }
   function rateText(rate){
+    if(rate==null)return '改版機率待確認';
     const n = Number(rate);
     return Number.isFinite(n) ? `${n.toFixed(6)}%` : '';
   }

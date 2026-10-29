@@ -2909,7 +2909,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.009711,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -6282,7 +6282,7 @@
           "monsterId": "5211",
           "monster": "道觀寶物",
           "level": "",
-          "rate": 0.008599,
+          "rate": null,
           "locations": []
         },
         {
@@ -7085,7 +7085,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.176196,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -7094,7 +7094,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.176196,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -7526,7 +7526,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -7702,7 +7702,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -7875,7 +7875,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 10.0,
+          "rate": null,
           "locations": []
         },
         {
@@ -8071,7 +8071,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -8220,7 +8220,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 10.0,
+          "rate": null,
           "locations": []
         },
         {
@@ -8452,7 +8452,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -10581,7 +10581,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 10.526316,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -10851,7 +10851,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 5.263158,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -10958,7 +10958,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -11063,7 +11063,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -20661,7 +20661,7 @@
           "monsterId": "5211",
           "monster": "道觀寶物",
           "level": "",
-          "rate": 0.008599,
+          "rate": null,
           "locations": []
         },
         {
@@ -21485,7 +21485,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.009711,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -22134,7 +22134,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.000887,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -22361,7 +22361,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.00111,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -22420,7 +22420,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.00111,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -22507,7 +22507,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -22672,7 +22672,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -23242,7 +23242,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 10.0,
+          "rate": null,
           "locations": []
         },
         {
@@ -23450,7 +23450,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 10.0,
+          "rate": null,
           "locations": []
         },
         {
@@ -23647,7 +23647,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -23795,7 +23795,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -25777,7 +25777,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 10.526316,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -26064,7 +26064,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 5.263158,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -26165,7 +26165,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -26255,7 +26255,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -34066,7 +34066,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 10.526316,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -34243,7 +34243,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 5.263158,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -34329,7 +34329,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -42708,7 +42708,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 11.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -42883,7 +42883,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -44741,7 +44741,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 10.526316,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -45019,7 +45019,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 5.263158,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -45095,7 +45095,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -45176,7 +45176,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -53209,7 +53209,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 11.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -53376,7 +53376,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -55303,7 +55303,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 10.526316,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -55506,7 +55506,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 5.263158,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -55622,7 +55622,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -55678,7 +55678,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -63102,7 +63102,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.00111,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -63424,7 +63424,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.00111,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -63546,7 +63546,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -63713,7 +63713,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -63886,7 +63886,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 10.0,
+          "rate": null,
           "locations": []
         },
         {
@@ -64059,7 +64059,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -64220,7 +64220,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 10.0,
+          "rate": null,
           "locations": []
         },
         {
@@ -64384,7 +64384,7 @@
           "monsterId": "5883",
           "monster": "幻雷妖煞",
           "level": "120",
-          "rate": 1.25,
+          "rate": null,
           "locations": []
         },
         {
@@ -65560,7 +65560,7 @@
           "monsterId": "9805",
           "monster": "傾天絕邪",
           "level": "200",
-          "rate": 2.105263,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -72556,7 +72556,7 @@
           "monsterId": "5211",
           "monster": "道觀寶物",
           "level": "",
-          "rate": 0.008599,
+          "rate": null,
           "locations": []
         },
         {
@@ -74450,7 +74450,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 15.02295,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ],
@@ -82063,7 +82063,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -90000,7 +90000,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.008029,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -106702,7 +106702,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.003547,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -112446,7 +112446,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 0.75,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -115940,7 +115940,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.012511,
+          "rate": null,
           "locations": []
         },
         {
@@ -116284,7 +116284,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.024511,
+          "rate": null,
           "locations": []
         },
         {
@@ -117101,7 +117101,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.03,
+          "rate": null,
           "locations": []
         }
       ],
@@ -117148,7 +117148,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.02,
+          "rate": null,
           "locations": []
         },
         {
@@ -117386,7 +117386,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.015,
+          "rate": null,
           "locations": []
         },
         {
@@ -118665,7 +118665,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.0125,
+          "rate": null,
           "locations": []
         },
         {
@@ -118925,7 +118925,7 @@
           "monsterId": "16311",
           "monster": "真‧艾濟神王寶箱",
           "level": "1",
-          "rate": 0.025,
+          "rate": null,
           "locations": []
         },
         {
@@ -124576,7 +124576,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.027746,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -125454,18 +125454,8 @@
         "釣日村武器店長",
         "神龍將"
       ],
-      "reverseDrops": [
-        {
-          "monsterId": "5375",
-          "monster": "神龍將",
-          "level": "99",
-          "rate": 0.027746,
-          "locations": [
-            "龍宮八層廣場"
-          ]
-        }
-      ],
-      "reverseDropCount": 1,
+      "reverseDrops": [],
+      "reverseDropCount": 0,
       "searchText": "貝鱗甲 21227 衣服 1  釣日村武器店長 釣日村武器店長 神龍將 神龍將 21227 貝鱗甲",
       "collectOrder": 2138
     },
@@ -127041,7 +127031,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.088098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -127050,7 +127040,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.088098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -127089,7 +127079,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 0.002498,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -127127,7 +127117,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.000443,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -127320,7 +127310,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.001773,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -127376,7 +127366,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.004994,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -127548,7 +127538,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.009711,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -127640,7 +127630,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.009711,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -132939,7 +132929,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 0.404449,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -133032,7 +133022,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 0.404449,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -133107,7 +133097,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 0.404449,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -133870,7 +133860,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 0.75,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -138121,7 +138111,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.012511,
+          "rate": null,
           "locations": []
         }
       ],
@@ -138256,7 +138246,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.018766,
+          "rate": null,
           "locations": []
         },
         {
@@ -138336,7 +138326,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.018766,
+          "rate": null,
           "locations": []
         },
         {
@@ -138615,7 +138605,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.024511,
+          "rate": null,
           "locations": []
         }
       ],
@@ -138750,7 +138740,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.064063,
+          "rate": null,
           "locations": []
         },
         {
@@ -138830,7 +138820,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.064063,
+          "rate": null,
           "locations": []
         },
         {
@@ -139950,7 +139940,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.035,
+          "rate": null,
           "locations": []
         },
         {
@@ -140325,7 +140315,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.015,
+          "rate": null,
           "locations": []
         }
       ],
@@ -140806,7 +140796,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.005,
+          "rate": null,
           "locations": []
         },
         {
@@ -140867,7 +140857,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.004,
+          "rate": null,
           "locations": []
         }
       ],
@@ -142706,7 +142696,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.0125,
+          "rate": null,
           "locations": []
         },
         {
@@ -143078,7 +143068,7 @@
           "monsterId": "16311",
           "monster": "真‧艾濟神王寶箱",
           "level": "1",
-          "rate": 0.025,
+          "rate": null,
           "locations": []
         },
         {
@@ -143167,7 +143157,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.0085,
+          "rate": null,
           "locations": []
         }
       ],
@@ -143488,7 +143478,7 @@
           "monsterId": "16311",
           "monster": "真‧艾濟神王寶箱",
           "level": "1",
-          "rate": 0.017,
+          "rate": null,
           "locations": []
         },
         {
@@ -143682,7 +143672,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.006,
+          "rate": null,
           "locations": []
         },
         {
@@ -151003,7 +150993,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.004994,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -156490,7 +156480,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 0.75,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -160013,7 +160003,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.012511,
+          "rate": null,
           "locations": []
         },
         {
@@ -160406,7 +160396,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.024511,
+          "rate": null,
           "locations": []
         }
       ],
@@ -161385,7 +161375,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.02,
+          "rate": null,
           "locations": []
         },
         {
@@ -161643,7 +161633,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.015,
+          "rate": null,
           "locations": []
         },
         {
@@ -161706,7 +161696,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.015,
+          "rate": null,
           "locations": []
         }
       ],
@@ -162987,7 +162977,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.0125,
+          "rate": null,
           "locations": []
         },
         {
@@ -169145,7 +169135,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.088098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -169154,7 +169144,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.088098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -169278,7 +169268,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.000443,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -169356,7 +169346,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.003547,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -169468,7 +169458,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 0.004994,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -175497,7 +175487,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 0.75,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -179200,7 +179190,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.012511,
+          "rate": null,
           "locations": []
         },
         {
@@ -179336,7 +179326,7 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.020017,
+          "rate": null,
           "locations": []
         },
         {
@@ -179626,7 +179616,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.024511,
+          "rate": null,
           "locations": []
         },
         {
@@ -179760,7 +179750,7 @@
           "monsterId": "15331",
           "monster": "真天意逆轉寶箱",
           "level": "1",
-          "rate": 0.066848,
+          "rate": null,
           "locations": []
         },
         {
@@ -180740,7 +180730,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.02,
+          "rate": null,
           "locations": []
         },
         {
@@ -180793,7 +180783,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.03,
+          "rate": null,
           "locations": []
         }
       ],
@@ -180848,7 +180838,7 @@
           "monsterId": "15610",
           "monster": "虛空主宰寶箱",
           "level": "1",
-          "rate": 0.035,
+          "rate": null,
           "locations": []
         },
         {
@@ -181151,7 +181141,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.015,
+          "rate": null,
           "locations": []
         }
       ],
@@ -181236,7 +181226,7 @@
           "monsterId": "15660",
           "monster": "真‧虛空主宰寶箱",
           "level": "1",
-          "rate": 0.015,
+          "rate": null,
           "locations": []
         },
         {
@@ -182642,7 +182632,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.0125,
+          "rate": null,
           "locations": []
         },
         {
@@ -182966,7 +182956,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.009,
+          "rate": null,
           "locations": []
         }
       ],
@@ -183258,7 +183248,7 @@
           "monsterId": "16311",
           "monster": "真‧艾濟神王寶箱",
           "level": "1",
-          "rate": 0.018,
+          "rate": null,
           "locations": []
         },
         {
@@ -191696,7 +191686,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 11.098471,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -192524,7 +192514,7 @@
           "monsterId": "5375",
           "monster": "神龍將",
           "level": "99",
-          "rate": 11.098471,
+          "rate": null,
           "locations": [
             "龍宮八層廣場"
           ]
@@ -199277,7 +199267,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.88098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -199286,7 +199276,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.88098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -199368,7 +199358,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.110839,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -199427,7 +199417,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.88098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -199436,7 +199426,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.88098,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -199518,7 +199508,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.110839,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -213590,14 +213580,14 @@
           "monsterId": "15252",
           "monster": "真天命逆轉寶箱",
           "level": "1",
-          "rate": 0.010009,
+          "rate": null,
           "locations": []
         },
         {
           "monsterId": "15025",
           "monster": "絕對無限天寶箱",
           "level": "1",
-          "rate": 0.002,
+          "rate": null,
           "locations": []
         },
         {
@@ -218168,7 +218158,7 @@
           "monsterId": "16078",
           "monster": "艾濟神王寶箱",
           "level": "1",
-          "rate": 0.001,
+          "rate": null,
           "locations": []
         }
       ],
@@ -225387,7 +225377,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.01762,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -225396,7 +225386,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.01762,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -225438,7 +225428,7 @@
           "monsterId": "16028",
           "monster": "拉‧荷魯斯",
           "level": "1110",
-          "rate": 0.25,
+          "rate": null,
           "locations": [
             "荷魯斯聖祠"
           ]
@@ -225456,7 +225446,7 @@
           "monsterId": "16311",
           "monster": "真‧艾濟神王寶箱",
           "level": "1",
-          "rate": 0.005,
+          "rate": null,
           "locations": []
         }
       ],
@@ -225574,7 +225564,7 @@
           "monsterId": "16172",
           "monster": "飛雲大將軍",
           "level": "990",
-          "rate": 0.015,
+          "rate": null,
           "locations": [
             "神州武冠台"
           ]
@@ -225625,7 +225615,7 @@
           "monsterId": "16172",
           "monster": "飛雲大將軍",
           "level": "990",
-          "rate": 0.005,
+          "rate": null,
           "locations": [
             "神州武冠台"
           ]
@@ -225681,7 +225671,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 0.15,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -225754,7 +225744,7 @@
           "monsterId": "16659",
           "monster": "真．黃龍御命寶箱",
           "level": "1",
-          "rate": 0.003,
+          "rate": null,
           "locations": []
         },
         {
@@ -225779,7 +225769,7 @@
           "monsterId": "16471",
           "monster": "黃龍御命寶箱",
           "level": "1",
-          "rate": 0.0025,
+          "rate": null,
           "locations": []
         },
         {
@@ -225836,7 +225826,7 @@
           "monsterId": "16659",
           "monster": "真．黃龍御命寶箱",
           "level": "1",
-          "rate": 0.003,
+          "rate": null,
           "locations": []
         },
         {
@@ -225861,7 +225851,7 @@
           "monsterId": "16471",
           "monster": "黃龍御命寶箱",
           "level": "1",
-          "rate": 0.0025,
+          "rate": null,
           "locations": []
         },
         {
@@ -225952,7 +225942,7 @@
           "monsterId": "16591",
           "monster": "虛還西楚霸王",
           "level": "1600",
-          "rate": 0.004,
+          "rate": null,
           "locations": [
             "漢京首府"
           ]
@@ -229258,24 +229248,6 @@
           "locations": []
         },
         {
-          "monsterId": "5193",
-          "monster": "修羅魔君鬼魂",
-          "level": "99",
-          "rate": 0.352392,
-          "locations": [
-            "魔君陵寢二層"
-          ]
-        },
-        {
-          "monsterId": "9066",
-          "monster": "修羅魔君鬼魂",
-          "level": "1",
-          "rate": 0.352392,
-          "locations": [
-            "魔君陵寢二層"
-          ]
-        },
-        {
           "monsterId": "5194",
           "monster": "阿修羅王",
           "level": "90",
@@ -229439,7 +229411,7 @@
           ]
         }
       ],
-      "reverseDropCount": 20,
+      "reverseDropCount": 18,
       "searchText": "真火令 20155 法器 3   火麟獸 修羅魔君鬼魂 阿修羅王 阿修羅戰士 鳳凰 屍靈首 邪火刀僧 鬼修羅 女王護法 蒼狼千夫長 谷村真一 蓋世象魔 怒威象神 三霸象皇 [鳳凰] 十勝象王 懷古法器錦囊 懷古法器錦囊 修羅魔君鬼魂 修羅魔君鬼魂 阿修羅王 邪火刀僧 十勝象王 蓋世象魔 三霸象皇 怒威象神 女王護法 屍靈首 蒼狼千夫長 鬼修羅 阿修羅戰士 阿修羅戰士 [鳳凰] 鳳凰 鳳凰 火麟獸 谷村真一 20155 真火令",
       "collectOrder": 4077
     },
@@ -230005,7 +229977,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.176196,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -230014,7 +229986,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.176196,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -233032,7 +233004,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 0.007616,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -233297,7 +233269,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 0.003808,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -234036,7 +234008,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 0.001269,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -236092,7 +236064,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 2.030921,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -236500,7 +236472,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 1.269325,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -237097,7 +237069,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 2.030921,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -237261,7 +237233,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 1.269325,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -244146,7 +244118,7 @@
           "monsterId": "5032",
           "monster": "白骨精",
           "level": "80",
-          "rate": 0.002539,
+          "rate": null,
           "locations": [
             "猛鬼窟第二層",
             "萬人塚第二層",
@@ -244786,15 +244758,6 @@
       ],
       "reverseDrops": [
         {
-          "monsterId": "5287",
-          "monster": "蛇魔女王",
-          "level": "85",
-          "rate": 0.221678,
-          "locations": [
-            "盤蛇洞"
-          ]
-        },
-        {
           "monsterId": "5418",
           "monster": "青龍",
           "level": "65",
@@ -244935,7 +244898,7 @@
           ]
         }
       ],
-      "reverseDropCount": 16,
+      "reverseDropCount": 15,
       "searchText": "萬蠱毒配方 25188 配方 2   五毒蜈蚣 食人巨蟒 食人巨鱷 毒巨蛟 蛇魔女 蛇魔女王 青龍 海龍 小黑龍 熾火蜈蚣 真火神龍 玄冰神龍 拉薩跳神 沙漠巨蟒 [蛇魔女] 蛇魔女王 青龍 毒巨蛟 海龍 小黑龍 玄冰神龍 真火神龍 拉薩跳神 五毒蜈蚣 食人巨鱷 熾火蜈蚣 [蛇魔女] 蛇魔女 沙漠巨蟒 食人巨蟒 食人巨蟒 25188 萬蠱毒配方",
       "collectOrder": 4272
     },
@@ -253489,7 +253452,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.704784,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -253498,7 +253461,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.704784,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -253609,7 +253572,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.704784,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -253618,7 +253581,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.704784,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -253778,7 +253741,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.003547,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -254759,7 +254722,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 2.5,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -254827,7 +254790,7 @@
           "monsterId": "9942",
           "monster": "傾天絕邪",
           "level": "240",
-          "rate": 2.5,
+          "rate": null,
           "locations": [
             "寒愴冰獄"
           ]
@@ -256429,7 +256392,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.352392,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -256438,7 +256401,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.352392,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -256655,7 +256618,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.352392,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -256664,7 +256627,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.352392,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -257053,7 +257016,7 @@
           "monsterId": "5287",
           "monster": "蛇魔女王",
           "level": "85",
-          "rate": 0.221678,
+          "rate": null,
           "locations": [
             "盤蛇洞"
           ]
@@ -257235,7 +257198,7 @@
           "monsterId": "5193",
           "monster": "修羅魔君鬼魂",
           "level": "99",
-          "rate": 0.352392,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -257244,7 +257207,7 @@
           "monsterId": "9066",
           "monster": "修羅魔君鬼魂",
           "level": "1",
-          "rate": 0.352392,
+          "rate": null,
           "locations": [
             "魔君陵寢二層"
           ]
@@ -258591,7 +258554,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 3.568504,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -259002,7 +258965,7 @@
           "monsterId": "5709",
           "monster": "蒼狼族大汗",
           "level": "120",
-          "rate": 3.568504,
+          "rate": null,
           "locations": [
             "大汗陵墓",
             "統萬大營"
@@ -260323,7 +260286,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 2.077856,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -260371,7 +260334,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 2.077856,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -260419,7 +260382,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 2.077856,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -260467,7 +260430,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 2.077856,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -260508,7 +260471,7 @@
           "monsterId": "9440",
           "monster": "八歧大蛇",
           "level": "190",
-          "rate": 2.077856,
+          "rate": null,
           "locations": [
             "天照不二峰"
           ]
@@ -264028,7 +263991,8 @@
       "searchText": "大山犬 5061 兩儀 2 1★ 古皇陵近郊 5061 大山犬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4734
+      "collectOrder": 4734,
+      "reverseDropCount": 0
     },
     {
       "name": "大狂猴",
@@ -264054,7 +264018,8 @@
       "searchText": "大狂猴 5062 兩儀 2 1★ 古皇陵近郊 猢猻嶺 5062 大狂猴",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4735
+      "collectOrder": 4735,
+      "reverseDropCount": 0
     },
     {
       "name": "大野豬",
@@ -264079,7 +264044,8 @@
       "searchText": "大野豬 5063 兩儀 2 1★ 古皇陵近郊 5063 大野豬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4736
+      "collectOrder": 4736,
+      "reverseDropCount": 0
     },
     {
       "name": "大蟾蜍",
@@ -264104,7 +264070,8 @@
       "searchText": "大蟾蜍 5064 兩儀 2 1★ 古皇陵近郊 平西關 5064 大蟾蜍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4737
+      "collectOrder": 4737,
+      "reverseDropCount": 0
     },
     {
       "name": "大蜘蛛",
@@ -264129,7 +264096,8 @@
       "searchText": "大蜘蛛 5065 兩儀 2 1★ 望星坡 碧波谷徑 5065 大蜘蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4738
+      "collectOrder": 4738,
+      "reverseDropCount": 0
     },
     {
       "name": "巨鼠",
@@ -264153,7 +264121,8 @@
       "searchText": "巨鼠 5080 兩儀 2 1★ 古皇陵第一層 古皇陵第二層 5080 巨鼠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4739
+      "collectOrder": 4739,
+      "reverseDropCount": 0
     },
     {
       "name": "蝙蝠",
@@ -264176,7 +264145,8 @@
       "searchText": "蝙蝠 5083 兩儀 2 1★ 古皇陵第一層 5083 蝙蝠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4740
+      "collectOrder": 4740,
+      "reverseDropCount": 0
     },
     {
       "name": "惡犬",
@@ -264200,7 +264170,8 @@
       "searchText": "惡犬 5001 兩儀 3 1.5★ 古皇陵近郊 5001 惡犬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4741
+      "collectOrder": 4741,
+      "reverseDropCount": 0
     },
     {
       "name": "黑狂猴",
@@ -264226,7 +264197,8 @@
       "searchText": "黑狂猴 5012 兩儀 3 1.5★ 古皇陵近郊 猢猻嶺 5012 黑狂猴",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4742
+      "collectOrder": 4742,
+      "reverseDropCount": 0
     },
     {
       "name": "山豬",
@@ -264251,7 +264223,8 @@
       "searchText": "山豬 5010 兩儀 3 1.5★ 古皇陵近郊 望星坡 5010 山豬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4743
+      "collectOrder": 4743,
+      "reverseDropCount": 0
     },
     {
       "name": "巨蟾蜍",
@@ -264277,7 +264250,8 @@
       "searchText": "巨蟾蜍 5017 兩儀 3 1.5★ 古皇陵近郊 平西關 5017 巨蟾蜍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4744
+      "collectOrder": 4744,
+      "reverseDropCount": 0
     },
     {
       "name": "巨蜘蛛",
@@ -264303,7 +264277,8 @@
       "searchText": "巨蜘蛛 5021 兩儀 3 1.5★ 望星坡 碧波谷徑 5021 巨蜘蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4745
+      "collectOrder": 4745,
+      "reverseDropCount": 0
     },
     {
       "name": "巨灰鼠",
@@ -264326,7 +264301,8 @@
       "searchText": "巨灰鼠 5081 兩儀 3 1.5★ 古皇陵第一層 古皇陵第二層 5081 巨灰鼠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4746
+      "collectOrder": 4746,
+      "reverseDropCount": 0
     },
     {
       "name": "灰蝙蝠",
@@ -264349,7 +264325,8 @@
       "searchText": "灰蝙蝠 5084 兩儀 3 1.5★ 古皇陵第一層 古皇陵第二層 5084 灰蝙蝠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4747
+      "collectOrder": 4747,
+      "reverseDropCount": 0
     },
     {
       "name": "小蠍子",
@@ -264372,7 +264349,8 @@
       "searchText": "小蠍子 5106 兩儀 3 1.5★ 巨猿洞窟第二層 亂藤林 5106 小蠍子",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4748
+      "collectOrder": 4748,
+      "reverseDropCount": 0
     },
     {
       "name": "藍尾蠍",
@@ -264395,7 +264373,8 @@
       "searchText": "藍尾蠍 5107 兩儀 3 1.5★ 摘星嶺 亂藤林東方 5107 藍尾蠍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4749
+      "collectOrder": 4749,
+      "reverseDropCount": 0
     },
     {
       "name": "狂犬",
@@ -264419,7 +264398,8 @@
       "searchText": "狂犬 5002 兩儀 4 2★ 古皇陵近郊 5002 狂犬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4750
+      "collectOrder": 4750,
+      "reverseDropCount": 0
     },
     {
       "name": "火蟾蜍",
@@ -264445,7 +264425,8 @@
       "searchText": "火蟾蜍 5018 兩儀 4 2★ 平西關 碧波谷徑 萬人塚第一層 5018 火蟾蜍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4751
+      "collectOrder": 4751,
+      "reverseDropCount": 0
     },
     {
       "name": "冰蟾蜍",
@@ -264469,7 +264450,8 @@
       "searchText": "冰蟾蜍 5019 兩儀 4 2★ 映月泊 百妖穴第一層 萬人塚第一層 5019 冰蟾蜍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4752
+      "collectOrder": 4752,
+      "reverseDropCount": 0
     },
     {
       "name": "食屍巨鼠",
@@ -264492,7 +264474,8 @@
       "searchText": "食屍巨鼠 5082 兩儀 4 2★ 古皇陵第一層 古皇陵第二層 5082 食屍巨鼠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4753
+      "collectOrder": 4753,
+      "reverseDropCount": 0
     },
     {
       "name": "巨蝙蝠",
@@ -264515,7 +264498,8 @@
       "searchText": "巨蝙蝠 5085 兩儀 4 2★ 古皇陵第一層 古皇陵第二層 5085 巨蝙蝠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4754
+      "collectOrder": 4754,
+      "reverseDropCount": 0
     },
     {
       "name": "變色蜥蜴",
@@ -264538,7 +264522,8 @@
       "searchText": "變色蜥蜴 5095 兩儀 4 2★ 靖南古道 亂藤林西方 5095 變色蜥蜴",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4755
+      "collectOrder": 4755,
+      "reverseDropCount": 0
     },
     {
       "name": "搗蛋小狸貓",
@@ -264558,7 +264543,8 @@
       "searchText": "搗蛋小狸貓 5336 兩儀 4 2★ 桃花林東方 5336 搗蛋小狸貓",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4756
+      "collectOrder": 4756,
+      "reverseDropCount": 0
     },
     {
       "name": "屍犬",
@@ -264582,7 +264568,8 @@
       "searchText": "屍犬 5003 三才 5 2.5★ 鬼城 猛鬼窟 萬人塚 5003 屍犬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4757
+      "collectOrder": 4757,
+      "reverseDropCount": 0
     },
     {
       "name": "毒蟾蜍",
@@ -264606,7 +264593,8 @@
       "searchText": "毒蟾蜍 5020 三才 5 3★ 碧波谷徑 亂藤林 萬人塚第一層 5020 毒蟾蜍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4758
+      "collectOrder": 4758,
+      "reverseDropCount": 0
     },
     {
       "name": "赤蠍子",
@@ -264629,7 +264617,8 @@
       "searchText": "赤蠍子 5108 三才 5 2.5★ 巨猿洞窟第二層 摘星嶺 5108 赤蠍子",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4759
+      "collectOrder": 4759,
+      "reverseDropCount": 0
     },
     {
       "name": "野狼",
@@ -264653,7 +264642,8 @@
       "searchText": "野狼 5005 三才 5 2.5★ 惡狼林 入雲道 5005 野狼",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4760
+      "collectOrder": 4760,
+      "reverseDropCount": 0
     },
     {
       "name": "殭屍",
@@ -264679,7 +264669,8 @@
       "searchText": "殭屍 5039 三才 5 2.5★ 鬼城 猛鬼窟 萬人塚 5039 殭屍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4761
+      "collectOrder": 4761,
+      "reverseDropCount": 0
     },
     {
       "name": "緞帶兔",
@@ -264910,7 +264901,8 @@
       "searchText": "狂猿 5098 三才 6 3★ 碧波幽谷 巨猿洞窟第二層 亂藤林東方 5098 狂猿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4771
+      "collectOrder": 4771,
+      "reverseDropCount": 0
     },
     {
       "name": "斑紋蜘蛛",
@@ -264936,7 +264928,8 @@
       "searchText": "斑紋蜘蛛 5022 三才 6 3★ 望星坡 碧波谷徑 5022 斑紋蜘蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4772
+      "collectOrder": 4772,
+      "reverseDropCount": 0
     },
     {
       "name": "綠蜥蜴",
@@ -264959,7 +264952,8 @@
       "searchText": "綠蜥蜴 5096 三才 6 3★ 亂藤林南方 亂藤林西方 5096 綠蜥蜴",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4773
+      "collectOrder": 4773,
+      "reverseDropCount": 0
     },
     {
       "name": "巨蜈蚣",
@@ -264983,7 +264977,8 @@
       "searchText": "巨蜈蚣 5182 三才 6 3★ 河西谷地 鎮南關密道 亂藤林 5182 巨蜈蚣",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4774
+      "collectOrder": 4774,
+      "reverseDropCount": 0
     },
     {
       "name": "翠蛇",
@@ -265007,7 +265002,8 @@
       "searchText": "翠蛇 5185 三才 6 3★ 河西谷地 鎮南關密道 亂藤林西方 5185 翠蛇",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4775
+      "collectOrder": 4775,
+      "reverseDropCount": 0
     },
     {
       "name": "遊魂",
@@ -265031,7 +265027,8 @@
       "searchText": "遊魂 5037 三才 6 3★ 鬼城 猛鬼窟一層 猛鬼窟二層 5037 遊魂",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4776
+      "collectOrder": 4776,
+      "reverseDropCount": 0
     },
     {
       "name": "桃花蜂",
@@ -265055,7 +265052,8 @@
       "searchText": "桃花蜂 5293 三才 6 3★ 桃花林 桃花林東方 桃花林西方 5293 桃花蜂",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4777
+      "collectOrder": 4777,
+      "reverseDropCount": 0
     },
     {
       "name": "飛毛兔",
@@ -265078,7 +265076,8 @@
       "searchText": "飛毛兔 5301 三才 6 3★ 掩月松林 桃花林 桃花林東方 桃花林西方 5301 飛毛兔",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4778
+      "collectOrder": 4778,
+      "reverseDropCount": 0
     },
     {
       "name": "千面狐",
@@ -265099,7 +265098,8 @@
       "searchText": "千面狐 5309 三才 6 3★ 不老峰 瀰煙山道 5309 千面狐",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4779
+      "collectOrder": 4779,
+      "reverseDropCount": 0
     },
     {
       "name": "沙漠響尾蛇",
@@ -265121,7 +265121,8 @@
       "searchText": "沙漠響尾蛇 9015 三才 6 3★ 塔干沙漠南方 9015 沙漠響尾蛇",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4780
+      "collectOrder": 4780,
+      "reverseDropCount": 0
     },
     {
       "name": "沙漠斑蛛",
@@ -265143,7 +265144,8 @@
       "searchText": "沙漠斑蛛 9017 三才 6 3★ 塔干沙漠西方 9017 沙漠斑蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4781
+      "collectOrder": 4781,
+      "reverseDropCount": 0
     },
     {
       "name": "狂猴王",
@@ -265166,7 +265168,8 @@
       "searchText": "狂猴王 5013 四象 7 3.5★ 猢猻嶺 5013 狂猴王",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4782
+      "collectOrder": 4782,
+      "reverseDropCount": 0
     },
     {
       "name": "雪狼",
@@ -265190,7 +265193,8 @@
       "searchText": "雪狼 5006 四象 7 3.5★ 惡狼林 入雲道 天山雪道 5006 雪狼",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4783
+      "collectOrder": 4783,
+      "reverseDropCount": 0
     },
     {
       "name": "鱷魚",
@@ -265213,7 +265217,8 @@
       "searchText": "鱷魚 5188 四象 7 3.5★ 葬日沼澤 葬日沼澤北方 5188 鱷魚",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4784
+      "collectOrder": 4784,
+      "reverseDropCount": 0
     },
     {
       "name": "血屍",
@@ -265235,7 +265240,8 @@
       "searchText": "血屍 5040 四象 7 3.5★ 猛鬼窟一層 5040 血屍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4785
+      "collectOrder": 4785,
+      "reverseDropCount": 0
     },
     {
       "name": "毒殭屍",
@@ -265258,7 +265264,8 @@
       "searchText": "毒殭屍 5041 四象 7 3.5★ 猛鬼窟一層 萬人塚第二層 5041 毒殭屍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4786
+      "collectOrder": 4786,
+      "reverseDropCount": 0
     },
     {
       "name": "小妖狸",
@@ -265278,7 +265285,8 @@
       "searchText": "小妖狸 5312 四象 7 3.5★ 桃花林 5312 小妖狸",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4787
+      "collectOrder": 4787,
+      "reverseDropCount": 0
     },
     {
       "name": "山羊",
@@ -265302,7 +265310,8 @@
       "searchText": "山羊 5680 四象 7 3.5★ 河西谷地 塞北草原 5680 山羊",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4788
+      "collectOrder": 4788,
+      "reverseDropCount": 0
     },
     {
       "name": "野馬",
@@ -265326,7 +265335,8 @@
       "searchText": "野馬 5681 四象 7 3.5★ 河西谷地 塞北草原 5681 野馬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4789
+      "collectOrder": 4789,
+      "reverseDropCount": 0
     },
     {
       "name": "幽冥犬",
@@ -265349,7 +265359,8 @@
       "searchText": "幽冥犬 5004 四象 8 4★ 猛鬼窟一層 5004 幽冥犬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4790
+      "collectOrder": 4790,
+      "reverseDropCount": 0
     },
     {
       "name": "白毛巨猿",
@@ -265372,7 +265383,8 @@
       "searchText": "白毛巨猿 5014 四象 8 4★ 入雲道 天山雪道 5014 白毛巨猿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4791
+      "collectOrder": 4791,
+      "reverseDropCount": 0
     },
     {
       "name": "紅毛巨猿",
@@ -265395,7 +265407,8 @@
       "searchText": "紅毛巨猿 5015 四象 8 4★ 猢猻嶺 巨猿洞窟 5015 紅毛巨猿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4792
+      "collectOrder": 4792,
+      "reverseDropCount": 0
     },
     {
       "name": "大山豬",
@@ -265421,7 +265434,8 @@
       "searchText": "大山豬 5011 四象 8 4★ 古皇陵近郊 猢猻嶺 5011 大山豬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4793
+      "collectOrder": 4793,
+      "reverseDropCount": 0
     },
     {
       "name": "蟾蜍精",
@@ -265443,7 +265457,8 @@
       "searchText": "蟾蜍精 5223 四象 8 4★ 百妖穴第一層 百妖穴第二層 5223 蟾蜍精",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4794
+      "collectOrder": 4794,
+      "reverseDropCount": 0
     },
     {
       "name": "鬼面蜘蛛",
@@ -265464,7 +265479,8 @@
       "searchText": "鬼面蜘蛛 5023 四象 8 4★ 碧波谷徑 百妖穴第一層 5023 鬼面蜘蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4795
+      "collectOrder": 4795,
+      "reverseDropCount": 0
     },
     {
       "name": "巨蠍子",
@@ -265488,7 +265504,8 @@
       "searchText": "巨蠍子 5109 四象 8 4★ 飛仙岩 塔干沙漠東方 摘星嶺 5109 巨蠍子",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4796
+      "collectOrder": 4796,
+      "reverseDropCount": 0
     },
     {
       "name": "劍齒狼",
@@ -265513,7 +265530,8 @@
       "searchText": "劍齒狼 5007 四象 8 4★ 惡狼林 入雲道 八達嶺 5007 劍齒狼",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4797
+      "collectOrder": 4797,
+      "reverseDropCount": 0
     },
     {
       "name": "赤蜥蜴",
@@ -265535,7 +265553,8 @@
       "searchText": "赤蜥蜴 5097 四象 8 4★ 鷹翅族部落 5097 赤蜥蜴",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4798
+      "collectOrder": 4798,
+      "reverseDropCount": 0
     },
     {
       "name": "石怪",
@@ -265556,7 +265575,8 @@
       "searchText": "石怪 5025 四象 8 4★ 入雲道 碧波谷徑 5025 石怪",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4799
+      "collectOrder": 4799,
+      "reverseDropCount": 0
     },
     {
       "name": "水鬼",
@@ -265577,7 +265597,8 @@
       "searchText": "水鬼 5027 四象 8 4★ 映月泊 萬人塚第二層 5027 水鬼",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4800
+      "collectOrder": 4800,
+      "reverseDropCount": 0
     },
     {
       "name": "火妖",
@@ -265599,7 +265620,8 @@
       "searchText": "火妖 5028 四象 8 4★ 望星坡 萬人塚二層 萬人塚三層 5028 火妖",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4801
+      "collectOrder": 4801,
+      "reverseDropCount": 0
     },
     {
       "name": "骷髏士兵",
@@ -265621,7 +265643,8 @@
       "searchText": "骷髏士兵 5030 四象 8 4★ 猛鬼窟二層 5030 骷髏士兵",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4802
+      "collectOrder": 4802,
+      "reverseDropCount": 0
     },
     {
       "name": "骷髏弓手",
@@ -265643,7 +265666,8 @@
       "searchText": "骷髏弓手 5031 四象 8 4★ 猛鬼窟二層 5031 骷髏弓手",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4803
+      "collectOrder": 4803,
+      "reverseDropCount": 0
     },
     {
       "name": "玄龜",
@@ -265665,7 +265689,8 @@
       "searchText": "玄龜 5290 四象 8 4★ 桃花林東方 5290 玄龜",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4804
+      "collectOrder": 4804,
+      "reverseDropCount": 0
     },
     {
       "name": "黃牛",
@@ -265689,7 +265714,8 @@
       "searchText": "黃牛 5682 四象 8 4★ 塞北草原 呼倫草原 5682 黃牛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4805
+      "collectOrder": 4805,
+      "reverseDropCount": 0
     },
     {
       "name": "洞穴蜥蜴",
@@ -265711,7 +265737,8 @@
       "searchText": "洞穴蜥蜴 5879 四象 8 4★ 地靈穴 5879 洞穴蜥蜴",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4806
+      "collectOrder": 4806,
+      "reverseDropCount": 0
     },
     {
       "name": "沙漠蠱毒蜘蛛",
@@ -265731,7 +265758,8 @@
       "searchText": "沙漠蠱毒蜘蛛 9018 四象 8 4★ 塔干沙漠西方 9018 沙漠蠱毒蜘蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4807
+      "collectOrder": 4807,
+      "reverseDropCount": 0
     },
     {
       "name": "巨狂猿",
@@ -265754,7 +265782,8 @@
       "searchText": "巨狂猿 5099 五行 9 4.5★ 碧波谷徑 摘星嶺 5099 巨狂猿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4808
+      "collectOrder": 4808,
+      "reverseDropCount": 0
     },
     {
       "name": "箭蜈蚣",
@@ -265778,7 +265807,8 @@
       "searchText": "箭蜈蚣 5183 五行 9 5★ 河西谷地 鎮南關密道 葬日沼澤南方 5183 箭蜈蚣",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4809
+      "collectOrder": 4809,
+      "reverseDropCount": 0
     },
     {
       "name": "灰巨蟒",
@@ -265802,7 +265832,8 @@
       "searchText": "灰巨蟒 5186 五行 9 5★ 靖南古道 萬人塚第三層 桃花林西方 5186 灰巨蟒",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4810
+      "collectOrder": 4810,
+      "reverseDropCount": 0
     },
     {
       "name": "巨螯蝦兵",
@@ -265823,7 +265854,8 @@
       "searchText": "巨螯蝦兵 5288 五行 9 4.5★ 桃花林東方 桃花林南方 5288 巨螯蝦兵",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4811
+      "collectOrder": 4811,
+      "reverseDropCount": 0
     },
     {
       "name": "桃花兵蜂",
@@ -265847,7 +265879,8 @@
       "searchText": "桃花兵蜂 5292 五行 9 4.5★ 桃花林 桃花林東方 桃花林西方 5292 桃花兵蜂",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4812
+      "collectOrder": 4812,
+      "reverseDropCount": 0
     },
     {
       "name": "大力熊",
@@ -265869,7 +265902,8 @@
       "searchText": "大力熊 5304 五行 9 5★ 不老峰 桃花林西方 桃花林南方 5304 大力熊",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4813
+      "collectOrder": 4813,
+      "reverseDropCount": 0
     },
     {
       "name": "百草狐郎中",
@@ -265891,7 +265925,8 @@
       "searchText": "百草狐郎中 5310 五行 9 4.5★ 不老峰 瀰煙山道 半天岩 5310 百草狐郎中",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4814
+      "collectOrder": 4814,
+      "reverseDropCount": 0
     },
     {
       "name": "禿鷹",
@@ -265912,7 +265947,8 @@
       "searchText": "禿鷹 5945 五行 9 4.5★ 塔干沙漠東方 塔干沙漠南方 5945 禿鷹",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4815
+      "collectOrder": 4815,
+      "reverseDropCount": 0
     },
     {
       "name": "{石怪}",
@@ -265932,7 +265968,8 @@
       "searchText": "{石怪} 5343 五行 8 4★ 不老峰 5343 {石怪}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4816
+      "collectOrder": 4816,
+      "reverseDropCount": 0
     },
     {
       "name": "{水鬼}",
@@ -265953,7 +265990,8 @@
       "searchText": "{水鬼} 5345 五行 8 4★ 桃花林東方 桃花林西方 5345 {水鬼}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4817
+      "collectOrder": 4817,
+      "reverseDropCount": 0
     },
     {
       "name": "{火妖}",
@@ -265973,7 +266011,8 @@
       "searchText": "{火妖} 5346 五行 8 4★ 不老峰 5346 {火妖}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4818
+      "collectOrder": 4818,
+      "reverseDropCount": 0
     },
     {
       "name": "{千面狐}",
@@ -265994,7 +266033,8 @@
       "searchText": "{千面狐} 5322 五行 9 4.5★ 不老峰 瀰煙山道 (晚上出沒) 5322 {千面狐}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4819
+      "collectOrder": 4819,
+      "reverseDropCount": 0
     },
     {
       "name": "{桃花兵蜂}",
@@ -266019,7 +266059,8 @@
       "searchText": "{桃花兵蜂} 5342 五行 9 4.5★ 桃花林 桃花林東方 桃花林西方16.83 桃花林南方182.52 5342 {桃花兵蜂}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4820
+      "collectOrder": 4820,
+      "reverseDropCount": 0
     },
     {
       "name": "老虎",
@@ -266044,7 +266085,8 @@
       "searchText": "老虎 5008 五行 10 5★ 碧波谷徑 封神臺 亂藤林西方 瀰煙山道 5008 老虎",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4821
+      "collectOrder": 4821,
+      "reverseDropCount": 0
     },
     {
       "name": "食人巨猿",
@@ -266067,7 +266109,8 @@
       "searchText": "食人巨猿 5016 五行 10 5★ 猢猻嶺 巨猿洞窟 5016 食人巨猿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4822
+      "collectOrder": 4822,
+      "reverseDropCount": 0
     },
     {
       "name": "蠍子王",
@@ -266092,7 +266135,8 @@
       "searchText": "蠍子王 5110 五行 10 5★ 飛仙岩 亂藤林東方 摘星嶺 河西谷地 5110 蠍子王",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4823
+      "collectOrder": 4823,
+      "reverseDropCount": 0
     },
     {
       "name": "劍齒鱷",
@@ -266116,7 +266160,8 @@
       "searchText": "劍齒鱷 5189 五行 10 5★ 葬日沼澤 葬日沼澤北方 5189 劍齒鱷",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4824
+      "collectOrder": 4824,
+      "reverseDropCount": 0
     },
     {
       "name": "冤魂",
@@ -266140,7 +266185,8 @@
       "searchText": "冤魂 5038 五行 10 5★ 猛鬼窟一層 猛鬼窟二層 5038 冤魂",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4825
+      "collectOrder": 4825,
+      "reverseDropCount": 0
     },
     {
       "name": "毒血屍",
@@ -266165,7 +266211,8 @@
       "searchText": "毒血屍 5029 五行 10 5★ 猛鬼窟一層 猛鬼窟二層 萬人塚第二層 5029 毒血屍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4826
+      "collectOrder": 4826,
+      "reverseDropCount": 0
     },
     {
       "name": "死靈弓手",
@@ -266187,7 +266234,8 @@
       "searchText": "死靈弓手 5269 五行 10 5★ 魔君陵墓 5269 死靈弓手",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4827
+      "collectOrder": 4827,
+      "reverseDropCount": 0
     },
     {
       "name": "搗藥兔",
@@ -266207,7 +266255,8 @@
       "searchText": "搗藥兔 5302 五行 10 5★ 掩月松林 5302 搗藥兔",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4828
+      "collectOrder": 4828,
+      "reverseDropCount": 0
     },
     {
       "name": "靈芝精",
@@ -266230,7 +266279,8 @@
       "searchText": "靈芝精 5315 五行 10 5★ 不老峰（33、53）（104、29） 5315 靈芝精",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4829
+      "collectOrder": 4829,
+      "reverseDropCount": 0
     },
     {
       "name": "人蔘精",
@@ -266253,7 +266303,8 @@
       "searchText": "人蔘精 5317 五行 10 5★ 不老峰（43、93）（184、71） 5317 人蔘精",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4830
+      "collectOrder": 4830,
+      "reverseDropCount": 0
     },
     {
       "name": "岩龜",
@@ -266276,7 +266327,8 @@
       "searchText": "岩龜 5951 五行 10 5★ 塔干沙漠東方 塔干沙漠南方 5951 岩龜",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4831
+      "collectOrder": 4831,
+      "reverseDropCount": 0
     },
     {
       "name": "跳鼠",
@@ -266298,7 +266350,8 @@
       "searchText": "跳鼠 5954 五行 10 5★ 塔干沙漠東方 5954 跳鼠",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4832
+      "collectOrder": 4832,
+      "reverseDropCount": 0
     },
     {
       "name": "士兵俑",
@@ -266320,7 +266373,8 @@
       "searchText": "士兵俑（劍）  五行 10 5★ 古皇陵第一層 古皇陵第二層 5043 士兵俑",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4833
+      "collectOrder": 4833,
+      "reverseDropCount": 0
     },
     {
       "name": "士兵俑",
@@ -266342,7 +266396,8 @@
       "searchText": "士兵俑（劍）  五行 10 5★ 古皇陵第一層 古皇陵第二層 5044 士兵俑",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4834
+      "collectOrder": 4834,
+      "reverseDropCount": 0
     },
     {
       "name": "士兵俑",
@@ -266364,7 +266419,8 @@
       "searchText": "士兵俑（劍）  五行 10 5★ 古皇陵第一層 古皇陵第二層 5045 士兵俑",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4835
+      "collectOrder": 4835,
+      "reverseDropCount": 0
     },
     {
       "name": "五毒蜈蚣",
@@ -266386,7 +266442,8 @@
       "searchText": "五毒蜈蚣 5184 六合 11 5.5★ 葬日沼澤南方(176.22 5184 五毒蜈蚣",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4836
+      "collectOrder": 4836,
+      "reverseDropCount": 0
     },
     {
       "name": "食人巨蟒",
@@ -266411,7 +266468,8 @@
       "searchText": "食人巨蟒 5187 六合 11 5.5★ 河西谷地 葬日沼澤(78.111) 葬日沼澤南方(52.82、182.75 5187 食人巨蟒",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4837
+      "collectOrder": 4837,
+      "reverseDropCount": 0
     },
     {
       "name": "鬼螯蝦兵",
@@ -266432,7 +266490,8 @@
       "searchText": "鬼螯蝦兵 5289 六合 11 5.5★ 桃花林東方 桃花林南方 5289 鬼螯蝦兵",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4838
+      "collectOrder": 4838,
+      "reverseDropCount": 0
     },
     {
       "name": "巨角龜",
@@ -266454,7 +266513,8 @@
       "searchText": "巨角龜 5291 六合 11 5.5★ 桃花林東方 5291 巨角龜",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4839
+      "collectOrder": 4839,
+      "reverseDropCount": 0
     },
     {
       "name": "虎鬥士",
@@ -266475,7 +266535,8 @@
       "searchText": "虎鬥士 5307 六合 11 5.5★ 掩月松林 瀰煙山道 5307 虎鬥士",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4840
+      "collectOrder": 4840,
+      "reverseDropCount": 0
     },
     {
       "name": "妖狸射手",
@@ -266497,7 +266558,8 @@
       "searchText": "妖狸射手 5313 六合 11 5.5★ 不老峰 桃花林 桃花林東方 5313 妖狸射手",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4841
+      "collectOrder": 4841,
+      "reverseDropCount": 0
     },
     {
       "name": "紫靈貂",
@@ -266519,7 +266581,8 @@
       "searchText": "紫靈貂 5684 六合 11 5.5★ 貝爾草原 呼倫草原 亂石林 5684 紫靈貂",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4842
+      "collectOrder": 4842,
+      "reverseDropCount": 0
     },
     {
       "name": "沙漠巨蟒",
@@ -266541,7 +266604,8 @@
       "searchText": "沙漠巨蟒 9016 六合 11 5.5★ 塔干沙漠南方 9016 沙漠巨蟒",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4843
+      "collectOrder": 4843,
+      "reverseDropCount": 0
     },
     {
       "name": "風精窮奇",
@@ -266658,7 +266722,8 @@
       "searchText": "食人虎 5009 六合 12 6★ 封神臺 八達嶺 亂藤林西方 偃月松林 5009 食人虎",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4848
+      "collectOrder": 4848,
+      "reverseDropCount": 0
     },
     {
       "name": "綠毛狂猿",
@@ -266682,7 +266747,8 @@
       "searchText": "綠毛狂猿 5100 六合 12 6★ 碧波幽谷 巨猿洞窟第二層 亂藤林東方 5100 綠毛狂猿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4849
+      "collectOrder": 4849,
+      "reverseDropCount": 0
     },
     {
       "name": "妖面蜘蛛",
@@ -266703,7 +266769,8 @@
       "searchText": "妖面蜘蛛 5024 六合 12 6★ 百妖穴第一層 百妖穴第二層 5024 妖面蜘蛛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4850
+      "collectOrder": 4850,
+      "reverseDropCount": 0
     },
     {
       "name": "食人巨鱷",
@@ -266725,7 +266792,8 @@
       "searchText": "食人巨鱷 5190 六合 12 5.5★ 葬日沼澤北方 5190 食人巨鱷",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4851
+      "collectOrder": 4851,
+      "reverseDropCount": 0
     },
     {
       "name": "金石怪",
@@ -266747,7 +266815,8 @@
       "searchText": "金石怪 5057 六合 12 6★ 碧波谷徑 入雲道 5057 金石怪",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4852
+      "collectOrder": 4852,
+      "reverseDropCount": 0
     },
     {
       "name": "老樹精",
@@ -266769,7 +266838,8 @@
       "searchText": "老樹精 5058 六合 12 6★ 碧波谷徑 亂藤林 5058 老樹精",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4853
+      "collectOrder": 4853,
+      "reverseDropCount": 0
     },
     {
       "name": "惡水鬼",
@@ -266792,7 +266862,8 @@
       "searchText": "惡水鬼 5059 六合 12 6★ 映月泊 萬人塚第三層 葬日沼澤北方 5059 惡水鬼",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4854
+      "collectOrder": 4854,
+      "reverseDropCount": 0
     },
     {
       "name": "邪火妖",
@@ -266814,7 +266885,8 @@
       "searchText": "邪火妖 5060 六合 12 6★ 萬人塚第三層 葬日沼澤北方 5060 邪火妖",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4855
+      "collectOrder": 4855,
+      "reverseDropCount": 0
     },
     {
       "name": "花精",
@@ -266836,7 +266908,8 @@
       "searchText": "花精 5227 六合 12 6★ 亂藤林 亂藤林南方 葬日沼澤 5227 花精",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4856
+      "collectOrder": 4856,
+      "reverseDropCount": 0
     },
     {
       "name": "覓蜜熊",
@@ -266857,7 +266930,8 @@
       "searchText": "覓蜜熊 5305 六合 12 6★ 桃花林 桃花林西方 5305 覓蜜熊",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4857
+      "collectOrder": 4857,
+      "reverseDropCount": 0
     },
     {
       "name": "海魅",
@@ -266879,7 +266953,8 @@
       "searchText": "海魅 5319 六合 12 6★ 東方海域 5319 海魅",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4858
+      "collectOrder": 4858,
+      "reverseDropCount": 0
     },
     {
       "name": "林魅",
@@ -266903,7 +266978,8 @@
       "searchText": "林魅 5320 六合 12 6★ 桃花林西方 掩月松林 5320 林魅",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4859
+      "collectOrder": 4859,
+      "reverseDropCount": 0
     },
     {
       "name": "山魅",
@@ -266927,7 +267003,8 @@
       "searchText": "山魅 5321 六合 12 6★ 瀰煙山道 半天岩（晚上） 5321 山魅",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4860
+      "collectOrder": 4860,
+      "reverseDropCount": 0
     },
     {
       "name": "蒼狼",
@@ -266951,7 +267028,8 @@
       "searchText": "蒼狼 5685 六合 12 6★ 貝爾草原 呼倫草原 5685 蒼狼",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4861
+      "collectOrder": 4861,
+      "reverseDropCount": 0
     },
     {
       "name": "白鹿",
@@ -266975,7 +267053,8 @@
       "searchText": "白鹿 5686 六合 12 6★ 貝爾草原 呼倫草原 5686 白鹿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4862
+      "collectOrder": 4862,
+      "reverseDropCount": 0
     },
     {
       "name": "小蕈傘人",
@@ -266995,7 +267074,8 @@
       "searchText": "小蕈傘人 5872 六合 12 6★ 蕈菇林東方 5872 小蕈傘人",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4863
+      "collectOrder": 4863,
+      "reverseDropCount": 0
     },
     {
       "name": "小火蕈傘人",
@@ -267015,7 +267095,8 @@
       "searchText": "小火蕈傘人 5870 六合 12 6★ 蕈菇林東方 5870 小火蕈傘人",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4864
+      "collectOrder": 4864,
+      "reverseDropCount": 0
     },
     {
       "name": "小冰蕈傘人",
@@ -267035,7 +267116,8 @@
       "searchText": "小冰蕈傘人 5871 六合 12 6★ 蕈菇林東方 5871 小冰蕈傘人",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4865
+      "collectOrder": 4865,
+      "reverseDropCount": 0
     },
     {
       "name": "力士俑",
@@ -267056,7 +267138,8 @@
       "searchText": "力士俑(斧)  六合 12 6★ 古皇陵第二層 古皇陵第三層 5046 力士俑",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4866
+      "collectOrder": 4866,
+      "reverseDropCount": 0
     },
     {
       "name": "力士俑",
@@ -267077,7 +267160,8 @@
       "searchText": "力士俑(斧)  六合 12 6★ 古皇陵第二層 古皇陵第三層 5047 力士俑",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4867
+      "collectOrder": 4867,
+      "reverseDropCount": 0
     },
     {
       "name": "{力士俑}",
@@ -267097,7 +267181,8 @@
       "searchText": "{力士俑} 5437 六合 12 6★ 皇陵密室 5437 {力士俑}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4868
+      "collectOrder": 4868,
+      "reverseDropCount": 0
     },
     {
       "name": "{百草狐郎中}",
@@ -267119,7 +267204,8 @@
       "searchText": "{百草狐郎中} 5323 六合 12 6★ 不老峰 瀰煙山道 半天岩（晚上） 5323 {百草狐郎中}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4869
+      "collectOrder": 4869,
+      "reverseDropCount": 0
     },
     {
       "name": "{老樹精}",
@@ -267140,7 +267226,8 @@
       "searchText": "{老樹精} 5329 六合 12 6★ 不老峰 瀰煙山道 5329 {老樹精}",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4870
+      "collectOrder": 4870,
+      "reverseDropCount": 0
     },
     {
       "name": "<老樹精>",
@@ -267161,7 +267248,8 @@
       "searchText": "<老樹精> 5330 六合 12 6★ 不老峰 瀰煙山道 5330 <老樹精>",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4871
+      "collectOrder": 4871,
+      "reverseDropCount": 0
     },
     {
       "name": "龍骨河童",
@@ -267230,7 +267318,8 @@
       "searchText": "[吸血殭屍] 9083 七星 14 7★ 猛鬼窟第二層 萬人塚第三層 9083 [吸血殭屍]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4874
+      "collectOrder": 4874,
+      "reverseDropCount": 0
     },
     {
       "name": "[千年蟾蜍精]",
@@ -267250,7 +267339,8 @@
       "searchText": "[千年蟾蜍精] 9084 七星 14 7★ 百妖穴第二層 9084 [千年蟾蜍精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4875
+      "collectOrder": 4875,
+      "reverseDropCount": 0
     },
     {
       "name": "[蜘蛛精]",
@@ -267271,7 +267361,8 @@
       "searchText": "[蜘蛛精] 9085 七星 14 7★ 百妖穴第一層 百妖穴第二層 9085 [蜘蛛精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4876
+      "collectOrder": 4876,
+      "reverseDropCount": 0
     },
     {
       "name": "[蛇魔女]",
@@ -267291,7 +267382,8 @@
       "searchText": "[蛇魔女] 9086 七星 14 7★ 盤蛇洞 9086 [蛇魔女]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4877
+      "collectOrder": 4877,
+      "reverseDropCount": 0
     },
     {
       "name": "[女王蜂]",
@@ -267313,7 +267405,8 @@
       "searchText": "[女王蜂] 9087 七星 14 7★ 桃花林 桃花林西方 桃花林南方 9087 [女王蜂]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4878
+      "collectOrder": 4878,
+      "reverseDropCount": 0
     },
     {
       "name": "[兔仙人]",
@@ -267336,7 +267429,8 @@
       "searchText": "[兔仙人] 9088 七星 14 7★ 桃花林 東方(50.125、186.123) 西方 掩月松林【擊殺飛毛兔、搗藥兔】機率現身 9088 [兔仙人]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4879
+      "collectOrder": 4879,
+      "reverseDropCount": 0
     },
     {
       "name": "[虎霸王]",
@@ -267356,7 +267450,8 @@
       "searchText": "[虎霸王] 9089 七星 14 7★ 掩月松林（戌時-卯時） 9089 [虎霸王]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4880
+      "collectOrder": 4880,
+      "reverseDropCount": 0
     },
     {
       "name": "[九尾狐]",
@@ -267377,7 +267472,8 @@
       "searchText": "[九尾狐] 9090 七星 14 7★ 半天岩 瀰煙山道【戌時-卯時擊殺百草狐郎中】機率現身 9090 [九尾狐]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4881
+      "collectOrder": 4881,
+      "reverseDropCount": 0
     },
     {
       "name": "[隱者狸仙]",
@@ -267398,7 +267494,8 @@
       "searchText": "[隱者狸仙] 9091 七星 14 7★ 桃花林 桃花林東方【擊殺小妖狸、妖狸射手】機率現身 9091 [隱者狸仙]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4882
+      "collectOrder": 4882,
+      "reverseDropCount": 0
     },
     {
       "name": "[千年靈芝精]",
@@ -267419,7 +267516,8 @@
       "searchText": "[千年靈芝精] 9092 七星 14 7★ 不老峰 掩月松林【擊殺千年樹精】機率現身 9092 [千年靈芝精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4883
+      "collectOrder": 4883,
+      "reverseDropCount": 0
     },
     {
       "name": "[千年蔘精]",
@@ -267440,7 +267538,8 @@
       "searchText": "[千年蔘精] 9093 七星 14 7★ 不老峰 掩月松林【擊殺千年樹精】機率現身 9093 [千年蔘精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4884
+      "collectOrder": 4884,
+      "reverseDropCount": 0
     },
     {
       "name": "[獵鷹]",
@@ -267462,7 +267561,8 @@
       "searchText": "[獵鷹] 9094 七星 14 7★ 塞北草原 呼倫草原 貝爾草原 9094 [獵鷹]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4885
+      "collectOrder": 4885,
+      "reverseDropCount": 0
     },
     {
       "name": "[黑豹]",
@@ -267485,7 +267585,8 @@
       "searchText": "[黑豹] 9095 七星 14 7★ 亂石林 黑城遺跡 9095 [黑豹]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4886
+      "collectOrder": 4886,
+      "reverseDropCount": 0
     },
     {
       "name": "[巨禿鷹]",
@@ -267506,7 +267607,8 @@
       "searchText": "[巨禿鷹] 9096 七星 14 7★ 塔干沙漠東方 塔干沙漠西方 9096 [巨禿鷹]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4887
+      "collectOrder": 4887,
+      "reverseDropCount": 0
     },
     {
       "name": "[飛毛跳鼠]",
@@ -267529,7 +267631,8 @@
       "searchText": "[飛毛跳鼠] 9097 七星 14 7★ 塔干沙漠東方 塔干沙漠西方 9097 [飛毛跳鼠]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4888
+      "collectOrder": 4888,
+      "reverseDropCount": 0
     },
     {
       "name": "[熊武者]",
@@ -267550,7 +267653,8 @@
       "searchText": "[熊武者] 9553 七星 14 7★ 不老峰 桃花林西方（戌時-卯時） 9553 [熊武者]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4889
+      "collectOrder": 4889,
+      "reverseDropCount": 0
     },
     {
       "name": "[鳳凰]",
@@ -267570,7 +267674,8 @@
       "searchText": "[鳳凰] 9554 七星 14 7★ 棲鳳崖 9554 [鳳凰]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4890
+      "collectOrder": 4890,
+      "reverseDropCount": 0
     },
     {
       "name": "[嘯地幼犀]",
@@ -267593,7 +267698,8 @@
       "searchText": "[嘯地幼犀] 9555 七星 14 7★ 蕈菇林東方 晶湖水道 9555 [嘯地幼犀]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4891
+      "collectOrder": 4891,
+      "reverseDropCount": 0
     },
     {
       "name": "[傘鬼]",
@@ -267614,7 +267720,8 @@
       "searchText": "[傘鬼] 9556 七星 14 7★ 長野沙濱 八荒古墓 9556 [傘鬼]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4892
+      "collectOrder": 4892,
+      "reverseDropCount": 0
     },
     {
       "name": "烏羽天狗",
@@ -267660,7 +267767,8 @@
       "searchText": "[白骨精] 9569 八卦 16 8★ 猛鬼窟第二層 萬人塚第二層 9569 [白骨精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4894
+      "collectOrder": 4894,
+      "reverseDropCount": 0
     },
     {
       "name": "[將軍俑]",
@@ -267680,7 +267788,8 @@
       "searchText": "[將軍俑] 9570 八卦 16 8★ 古皇陵第三層 9570 [將軍俑]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4895
+      "collectOrder": 4895,
+      "reverseDropCount": 0
     },
     {
       "name": "[千年樹精]",
@@ -267702,7 +267811,8 @@
       "searchText": "[千年樹精] 9571 八卦 16 8★ 葬日沼澤 葬日沼澤北方 千佛遺跡東側 9571 [千年樹精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4896
+      "collectOrder": 4896,
+      "reverseDropCount": 0
     },
     {
       "name": "[千年花精]",
@@ -267723,7 +267833,8 @@
       "searchText": "[千年花精] 9572 八卦 16 8★ 亂藤林南方 葬日沼澤北方 9572 [千年花精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4897
+      "collectOrder": 4897,
+      "reverseDropCount": 0
     },
     {
       "name": "[天山食人虎]",
@@ -267745,7 +267856,8 @@
       "searchText": "[天山食人虎] 9573 八卦 16 8★ 天山冰池 9573 [天山食人虎]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4898
+      "collectOrder": 4898,
+      "reverseDropCount": 0
     },
     {
       "name": "[天山巨猿]",
@@ -267767,7 +267879,8 @@
       "searchText": "[天山巨猿] 9574 八卦 16 8★ 天山冰池 9574 [天山巨猿]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4899
+      "collectOrder": 4899,
+      "reverseDropCount": 0
     },
     {
       "name": "[草原戰士]",
@@ -267791,7 +267904,8 @@
       "searchText": "[草原戰士] 9575 八卦 16 8★ 呼倫草原 貝爾草原 大汗陵墓 9575 [草原戰士]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4900
+      "collectOrder": 4900,
+      "reverseDropCount": 0
     },
     {
       "name": "[疾風戰士]",
@@ -267813,7 +267927,8 @@
       "searchText": "[疾風戰士] 9576 八卦 16 8★ 呼倫草原 貝爾草原 大汗陵墓 9576 [疾風戰士]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4901
+      "collectOrder": 4901,
+      "reverseDropCount": 0
     },
     {
       "name": "[銅石龜]",
@@ -267835,7 +267950,8 @@
       "searchText": "[銅石龜] 9577 八卦 16 8★ 樓蘭遺址（213、15--144、15) 9577 [銅石龜]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4902
+      "collectOrder": 4902,
+      "reverseDropCount": 0
     },
     {
       "name": "[神行跳鼠]",
@@ -267858,7 +267974,8 @@
       "searchText": "[神行跳鼠] 9578 八卦 16 8★ 塔干沙漠西方 萬佛窟 9578 [神行跳鼠]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4903
+      "collectOrder": 4903,
+      "reverseDropCount": 0
     },
     {
       "name": "[嘯地巨犀]",
@@ -267881,7 +267998,8 @@
       "searchText": "[嘯地巨犀] 9579 八卦 16 8★ 地下水道 晶湖水道 9579 [嘯地巨犀]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4904
+      "collectOrder": 4904,
+      "reverseDropCount": 0
     },
     {
       "name": "[火蕈傘人]",
@@ -267902,7 +268020,8 @@
       "searchText": "[火蕈傘人] 9580 八卦 16 8★ 蕈菇林東方 晶湖水道 9580 [火蕈傘人]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4905
+      "collectOrder": 4905,
+      "reverseDropCount": 0
     },
     {
       "name": "[冰蕈傘人]",
@@ -267923,7 +268042,8 @@
       "searchText": "[冰蕈傘人] 9581 八卦 16 8★ 蕈菇林東方 晶湖水道 9581 [冰蕈傘人]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4906
+      "collectOrder": 4906,
+      "reverseDropCount": 0
     },
     {
       "name": "[毒蕈傘人]",
@@ -267944,7 +268064,8 @@
       "searchText": "[毒蕈傘人] 9582 八卦 16 8★ 蕈菇林東方 晶湖水道 9582 [毒蕈傘人]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4907
+      "collectOrder": 4907,
+      "reverseDropCount": 0
     },
     {
       "name": "[激雷鐮鼬]",
@@ -267968,7 +268089,8 @@
       "searchText": "[激雷鐮鼬] 9583 八卦 16 8★ 長野沙濱 葉隱蒼林 天照不二峰 9583 [激雷鐮鼬]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4908
+      "collectOrder": 4908,
+      "reverseDropCount": 0
     },
     {
       "name": "[鬼河童]",
@@ -267988,7 +268110,8 @@
       "searchText": "[鬼河童] 9584 八卦 16 8★ 葉隱蒼林 9584 [鬼河童]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4909
+      "collectOrder": 4909,
+      "reverseDropCount": 0
     },
     {
       "name": "真火鳳凰",
@@ -268010,7 +268133,8 @@
       "searchText": "真火鳳凰 9568 八卦 50 8★ 500個【火玉】 找 維摩洞天【拜金仙女】換取 2500張【奇蹟彩票】 找 京城【侯利蒙】換取 9568 真火鳳凰",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4910
+      "collectOrder": 4910,
+      "reverseDropCount": 0
     },
     {
       "name": "冰塵白鋼獅",
@@ -268031,7 +268155,8 @@
       "searchText": "冰塵白鋼獅 9662 八卦 50 8★ 2000個【大無界閻羅印】 找 九曲邪徑【朝廷賞官】換取 終末之塔弟 106 層守關者【阿樊怛Ⅱ】機率掉落 9662 冰塵白鋼獅",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4911
+      "collectOrder": 4911,
+      "reverseDropCount": 0
     },
     {
       "name": "蒼穹神翔牛",
@@ -268053,7 +268178,8 @@
       "searchText": "蒼穹神翔牛 9885 八卦 50 8★ 3000個【香格里拉聖刻】 找 吐蕃集鎮【秘宗表揚使】換取 終末之塔第7層守關者【末法如座】 第 113 層守關者【猛毒共生體】機率掉落 9885 蒼穹神翔牛",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4912
+      "collectOrder": 4912,
+      "reverseDropCount": 0
     },
     {
       "name": "九皇天尊龍",
@@ -268074,7 +268200,8 @@
       "searchText": "九皇天尊龍 9934 八卦 50 9★ 終末之塔第 9 層守關者【虛典壞相】 終末之塔第 123 層守關者【負荊紫甲龍】 9934 九皇天尊龍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4913
+      "collectOrder": 4913,
+      "reverseDropCount": 0
     },
     {
       "name": "天山黑霸",
@@ -268141,7 +268268,8 @@
       "searchText": "[晶石怪] 14034 九如 18 9★ 侏人部落 晶湖水道 14034 [晶石怪]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4916
+      "collectOrder": 4916,
+      "reverseDropCount": 0
     },
     {
       "name": "[魅亂傘鬼]",
@@ -268161,7 +268289,8 @@
       "searchText": "[魅亂傘鬼] 14035 九如 18 9★ 內崎埠原 14035 [魅亂傘鬼]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4917
+      "collectOrder": 4917,
+      "reverseDropCount": 0
     },
     {
       "name": "[黑天妖魔]",
@@ -268183,7 +268312,8 @@
       "searchText": "[黑天妖魔] 14036 九如 18 9★ 萬佛窟 14036 [黑天妖魔]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4918
+      "collectOrder": 4918,
+      "reverseDropCount": 0
     },
     {
       "name": "[冰執鐮鼬]",
@@ -268207,7 +268337,8 @@
       "searchText": "[冰執鐮鼬] 14037 九如 18 9★ 十津原樹海 內崎埠原 外崎埠原 14037 [冰執鐮鼬]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4919
+      "collectOrder": 4919,
+      "reverseDropCount": 0
     },
     {
       "name": "[天狗]",
@@ -268227,7 +268358,8 @@
       "searchText": "[天狗] 14038 九如 18 9★ 天照不二峰 14038 [天狗]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4920
+      "collectOrder": 4920,
+      "reverseDropCount": 0
     },
     {
       "name": "[密林妖禽]",
@@ -268248,7 +268380,8 @@
       "searchText": "[密林妖禽] 14039 九如 18 9★ 千佛遺跡東側 千佛遺跡西側 14039 [密林妖禽]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4921
+      "collectOrder": 4921,
+      "reverseDropCount": 0
     },
     {
       "name": "[巨錘猴精]",
@@ -268269,7 +268402,8 @@
       "searchText": "[巨錘猴精] 14040 九如 18 9★ 千佛遺跡東側 千佛遺跡西側 14040 [巨錘猴精]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4922
+      "collectOrder": 4922,
+      "reverseDropCount": 0
     },
     {
       "name": "[沼地巨蛇]",
@@ -268289,7 +268423,8 @@
       "searchText": "[沼地巨蛇] 14041 九如 18 9★ 千佛遺跡西側 14041 [沼地巨蛇]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4923
+      "collectOrder": 4923,
+      "reverseDropCount": 0
     },
     {
       "name": "[血瘤眼]",
@@ -268310,7 +268445,8 @@
       "searchText": "[血瘤眼] 14042 九如 18 9★ 恨生不歸途 三途之都 14042 [血瘤眼]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4924
+      "collectOrder": 4924,
+      "reverseDropCount": 0
     },
     {
       "name": "[白靈石獅]",
@@ -268332,7 +268468,8 @@
       "searchText": "[白靈石獅] 14043 九如 18 9★ 恨生不歸途 三途之都 枉死之城 14043 [白靈石獅]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4925
+      "collectOrder": 4925,
+      "reverseDropCount": 0
     },
     {
       "name": "[惡鬼]",
@@ -268355,7 +268492,8 @@
       "searchText": "[惡鬼] 14044 九如 18 9★ 八荒古墓 內崎埠原 14044 [惡鬼]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4926
+      "collectOrder": 4926,
+      "reverseDropCount": 0
     },
     {
       "name": "[叢林野象]",
@@ -268377,7 +268515,8 @@
       "searchText": "[叢林野象] 14045 九如 18 9★ 千佛遺跡西側 14045 [叢林野象]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4927
+      "collectOrder": 4927,
+      "reverseDropCount": 0
     },
     {
       "name": "[劍刺傘鬼]",
@@ -268397,7 +268536,8 @@
       "searchText": "[劍刺傘鬼] 14046 九如 18 9★ 八荒古墓 14046 [劍刺傘鬼]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4928
+      "collectOrder": 4928,
+      "reverseDropCount": 0
     },
     {
       "name": "[鴉天狗]",
@@ -268418,7 +268558,8 @@
       "searchText": "[鴉天狗] 14047 九如 18 9★ 八荒古墓 天照不二峰 14047 [鴉天狗]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4929
+      "collectOrder": 4929,
+      "reverseDropCount": 0
     },
     {
       "name": "[拔山象妖]",
@@ -268438,7 +268579,8 @@
       "searchText": "[拔山象妖] 14048 九如 18 9★ 摩羅國境 14048 [拔山象妖]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4930
+      "collectOrder": 4930,
+      "reverseDropCount": 0
     },
     {
       "name": "[火雲麒麟]",
@@ -268458,7 +268600,8 @@
       "searchText": "[火雲麒麟] 14049 九如 18 9★ 烈火修煉場 14049 [火雲麒麟]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4931
+      "collectOrder": 4931,
+      "reverseDropCount": 0
     },
     {
       "name": "[蠱毒麒麟]",
@@ -268478,7 +268621,8 @@
       "searchText": "[蠱毒麒麟] 14050 九如 18 9★ 瘴癘修煉場 14050 [蠱毒麒麟]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4932
+      "collectOrder": 4932,
+      "reverseDropCount": 0
     },
     {
       "name": "[怒雪麒麟]",
@@ -268498,7 +268642,8 @@
       "searchText": "[怒雪麒麟] 14051 九如 18 9★ 怒雪修煉場 14051 [怒雪麒麟]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4933
+      "collectOrder": 4933,
+      "reverseDropCount": 0
     },
     {
       "name": "幻武天龍神",
@@ -268522,7 +268667,8 @@
       "searchText": "幻武天龍神 14052 九如 50 9★ 【水晶鑽，紅水晶鑽，青水晶鑽，灰水晶鑽】各125顆 找 水晶礦坑【侏人神兵鐵匠】換取 6000張【奇蹟彩票】 找 京城【侯利蒙】換取 終末之塔第 4 層守關者【泳虛虢漁】 終末之塔第 14 層守關者【冷血者】 14052 幻武天龍神",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4934
+      "collectOrder": 4934,
+      "reverseDropCount": 0
     },
     {
       "name": "紫燄影凰",
@@ -268546,7 +268692,8 @@
       "searchText": "紫燄影凰 14068 九如 50 9★ 200顆【四聖諦】 找 高昌郡【外域鐵匠漢哥】換取 3500張【聖恩彩票】 找 京城【侯利蒙】換取 終末之塔第 5 6 層小怪【森羅冷指】 14068 紫燄影凰",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4935
+      "collectOrder": 4935,
+      "reverseDropCount": 0
     },
     {
       "name": "神威虎將",
@@ -268567,7 +268714,8 @@
       "searchText": "神威虎將 14169 九如 50 9★ 5000個【波斯聖徽】 找 波斯西市【波斯祕寶商】換取 終末之塔第 13 層守關者【蠍心邪后】 14169 神威虎將",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4936
+      "collectOrder": 4936,
+      "reverseDropCount": 0
     },
     {
       "name": "焚世炎帝",
@@ -268588,7 +268736,8 @@
       "searchText": "焚世炎帝 14190 九如 50 9★ 5000個【大波斯聖徽】 找 波斯西市【波斯聖寶商】換取 14190 焚世炎帝",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4937
+      "collectOrder": 4937,
+      "reverseDropCount": 0
     },
     {
       "name": "冰界海后",
@@ -268610,7 +268759,8 @@
       "searchText": "冰界海后 14223 九如 50 9★ 4000【大波斯聖徽】 找 波斯西市【波斯聖寶商】換取 終末之塔第 13 層小怪【爬脊獸】 第 143 層守關者【褪殼白飛黽】 14223 冰界海后",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4938
+      "collectOrder": 4938,
+      "reverseDropCount": 0
     },
     {
       "name": "浩天將神",
@@ -268632,7 +268782,8 @@
       "searchText": "浩天將神 14299 九如 50 9★ 5000個【波斯聖徽】 找 波斯西市【波斯祕寶商】換取 終末之塔第126層守關者【翻江裂地鮫】 【虛空禍心】怪物【虛淵鬥靈】 14299 浩天將神",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4939
+      "collectOrder": 4939,
+      "reverseDropCount": 0
     },
     {
       "name": "凱旋獅王",
@@ -268653,7 +268804,8 @@
       "searchText": "凱旋獅王 14376 九如 50 9★ 5000個【雄獅勛章】 找 靜默之丘【拜金仙女】換取 終末之塔第 16 層守關者【雙天兇狂】 14376 凱旋獅王",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4940
+      "collectOrder": 4940,
+      "reverseDropCount": 0
     },
     {
       "name": "霜血霸蜥",
@@ -268675,7 +268827,8 @@
       "searchText": "霜血霸蜥 14424 九如 50 9★ 4000個【雄獅勛章】 找 靜默之丘【拜金仙女】換取 終末之塔第 26 層守關者【虛空神凜冰麒】 【赫勒神殿遺址】小怪【護棺刃鱷】 14424 霜血霸蜥",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4941
+      "collectOrder": 4941,
+      "reverseDropCount": 0
     },
     {
       "name": "破界皇龍",
@@ -268696,7 +268849,8 @@
       "searchText": "破界皇龍 14412 九如 50 9★ 5000個【雄獅勛章】 找 靜默之丘【拜金仙女】換取 終末之塔第 23 層守關者【虛空魔鴆毒麒】 14412 破界皇龍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4942
+      "collectOrder": 4942,
+      "reverseDropCount": 0
     },
     {
       "name": "炎獄魔眼",
@@ -268739,7 +268893,8 @@
       "searchText": "[地煞] 14459 十錦 20 10★ 神兵塚 14459 [地煞]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4944
+      "collectOrder": 4944,
+      "reverseDropCount": 0
     },
     {
       "name": "[三途棺差]",
@@ -268763,7 +268918,8 @@
       "searchText": "[三途棺差] 14460 十錦 20 10★ 恨生不歸途 三途之都 枉死之城 14460 [三途棺差]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4945
+      "collectOrder": 4945,
+      "reverseDropCount": 0
     },
     {
       "name": "[索命牛頭]",
@@ -268783,7 +268939,8 @@
       "searchText": "[索命牛頭] 14461 十錦 20 10★ 九曲邪徑 14461 [索命牛頭]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4946
+      "collectOrder": 4946,
+      "reverseDropCount": 0
     },
     {
       "name": "[追魂馬面]",
@@ -268803,7 +268960,8 @@
       "searchText": "[追魂馬面] 14462 十錦 20 10★ 九曲邪徑 14462 [追魂馬面]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4947
+      "collectOrder": 4947,
+      "reverseDropCount": 0
     },
     {
       "name": "[拘魂白無常]",
@@ -268825,7 +268983,8 @@
       "searchText": "[拘魂白無常] 14463 十錦 20 10★ 悲歡渡口 永劫刑場 九曲邪徑 14463 [拘魂白無常]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4948
+      "collectOrder": 4948,
+      "reverseDropCount": 0
     },
     {
       "name": "[提刑黑無常]",
@@ -268847,7 +269006,8 @@
       "searchText": "[提刑黑無常] 14464 十錦 20 10★ 悲歡渡口 永劫刑場 九曲邪徑 14464 [提刑黑無常]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4949
+      "collectOrder": 4949,
+      "reverseDropCount": 0
     },
     {
       "name": "[雪峰野人]",
@@ -268871,7 +269031,8 @@
       "searchText": "[雪峰野人] 14465 十錦 20 10★ 登天棧道 懸空仙嶺 青藏高原 14465 [雪峰野人]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4950
+      "collectOrder": 4950,
+      "reverseDropCount": 0
     },
     {
       "name": "[藏地氂牛]",
@@ -268895,7 +269056,8 @@
       "searchText": "[藏地氂牛] 14466 十錦 20 10★ 登天棧道 懸空仙嶺 青藏高原 14466 [藏地氂牛]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4951
+      "collectOrder": 4951,
+      "reverseDropCount": 0
     },
     {
       "name": "[幽谷翔龍]",
@@ -268918,7 +269080,8 @@
       "searchText": "[幽谷翔龍] 14467 十錦 20 10★ 登天棧道 懸空仙嶺 青藏高原 大梵聖湖 14467 [幽谷翔龍]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4952
+      "collectOrder": 4952,
+      "reverseDropCount": 0
     },
     {
       "name": "[輪迴外邪]",
@@ -268943,7 +269106,8 @@
       "searchText": "[輪迴外邪] 14468 十錦 20 10★ 懸空仙嶺 青藏高原 大梵聖湖 萬岳聖峰 14468 [輪迴外邪]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4953
+      "collectOrder": 4953,
+      "reverseDropCount": 0
     },
     {
       "name": "[半身虎人]",
@@ -268965,7 +269129,8 @@
       "searchText": "[半身虎人] 14469 十錦 20 10★ 黃塵荒漠 聖域之門 飛簷頂徑 14469 [半身虎人]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4954
+      "collectOrder": 4954,
+      "reverseDropCount": 0
     },
     {
       "name": "[駱駝]",
@@ -268988,7 +269153,8 @@
       "searchText": "[駱駝] 14470 十錦 20 10★ 黃塵荒漠 聖域之門 14470 [駱駝]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4955
+      "collectOrder": 4955,
+      "reverseDropCount": 0
     },
     {
       "name": "[焚怒之火]",
@@ -269010,7 +269176,8 @@
       "searchText": "[焚怒之火] 14471 十錦 20 10★ 飛簷頂徑 波斯西市 法誡參道 14471 [焚怒之火]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4956
+      "collectOrder": 4956,
+      "reverseDropCount": 0
     },
     {
       "name": "[騰湧之水]",
@@ -269032,7 +269199,8 @@
       "searchText": "[騰湧之水] 14472 十錦 20 10★ 飛簷頂徑 波斯西市 法誡參道 14472 [騰湧之水]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4957
+      "collectOrder": 4957,
+      "reverseDropCount": 0
     },
     {
       "name": "[巨憾之土]",
@@ -269053,7 +269221,8 @@
       "searchText": "[巨憾之土] 14473 十錦 20 10★ 清教院街 波斯西市 14473 [巨憾之土]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4958
+      "collectOrder": 4958,
+      "reverseDropCount": 0
     },
     {
       "name": "[嘯狂之風]",
@@ -269075,7 +269244,8 @@
       "searchText": "[嘯狂之風] 14474 十錦 20 10★ 清教院街 波斯西市 飛簷頂徑 14474 [嘯狂之風]",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4959
+      "collectOrder": 4959,
+      "reverseDropCount": 0
     },
     {
       "name": "劫‧修羅魔君",
@@ -269097,7 +269267,8 @@
       "searchText": "劫‧修羅魔君 14475 十錦 50 10★ 5000 個【大雄獅勳章】 找 靜默之丘【團長希羅尼】換取 終末之塔第 33 層守關者【黑獄破城象】 【劫獸三兇錦囊】抽取 14475 劫‧修羅魔君",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4960
+      "collectOrder": 4960,
+      "reverseDropCount": 0
     },
     {
       "name": "劫‧無界閻羅",
@@ -269119,7 +269290,8 @@
       "searchText": "劫‧無界閻羅 14506 十錦 50 10★ 5000 個【大雄獅勳章】 找 靜默之丘【團長希羅尼】換取 終末之塔第 36 層守關者【冥瘴崩山牛】 【劫獸三兇錦囊】抽取 14506 劫‧無界閻羅",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4961
+      "collectOrder": 4961,
+      "reverseDropCount": 0
     },
     {
       "name": "劫‧邪幻魔帝",
@@ -269141,7 +269313,8 @@
       "searchText": "劫‧邪幻魔帝 14528 十錦 50 10★ 5000 個【大雄獅勳章】 找 靜默之丘【團長希羅尼】換取 終末之塔第 39 層守關者【禍星虛天監】 【劫獸三兇錦囊】抽取 14528 劫‧邪幻魔帝",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4962
+      "collectOrder": 4962,
+      "reverseDropCount": 0
     },
     {
       "name": "聖翼不死鳥",
@@ -269164,7 +269337,8 @@
       "searchText": "聖翼不死鳥 14527 十錦 50 10★ 4000 個【大雄獅勳章】 找 靜默之丘【團長希羅尼】換取 終末之塔第 29 層守關者【虛空神燹鳳麒】 終末之塔第 43 層守關者【王谷聖蜂守】 終末之塔第 89 層守關者【輾州魔軍司】 14527 聖翼不死鳥",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4963
+      "collectOrder": 4963,
+      "reverseDropCount": 0
     },
     {
       "name": "蒼濤聖玉蛟",
@@ -269189,7 +269363,8 @@
       "searchText": "蒼濤聖玉蛟 14641 十錦 50 10★ 4000 個【九天仙印】 找 浮世夢鄉【還真大仙】換取 終末之塔第 43 層守關者【王谷聖蜂守】 終末之塔第 56 層守關者【虛座‧塞拉比斯】 終末之塔第 63 層守關者【衛皇凶赦殘豹】 終末之塔第 86 層守關者【仇燄魔翼龍】 終末之塔第 93 層守關者【百層捍衛者】 14641 蒼濤聖玉蛟",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4964
+      "collectOrder": 4964,
+      "reverseDropCount": 0
     },
     {
       "name": "煌翠玉蝶仙",
@@ -269217,7 +269392,8 @@
       "searchText": "煌翠玉蝶仙 14743 十錦 50 10★ 5000 個【九天仙印】 找 浮世夢鄉【還真大仙】換取 修羅級無限鬥界副本【無限天寶箱】 七寶仙境任一【岩羅角獸】 【仙露花精】 終末之塔第 46 層守關者【王谷獸騎守】 終末之塔第 53 層守關者【虛統‧賽特】 終末之塔第 66 層守關者【衛皇人面獅身】 終末之塔第 83 層守關者【忌天魔將像】 終末之塔第 96 層守關者【虛還武典化靈】 14743 煌翠玉蝶仙",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4965
+      "collectOrder": 4965,
+      "reverseDropCount": 0
     },
     {
       "name": "真九皇天尊龍",
@@ -269242,7 +269418,8 @@
       "searchText": "真九皇天尊龍 14763 十錦 50 10★ 5000 個【大九天仙印】 找 浮世夢鄉【無欲大仙】換取 一般級無限鬥界副本【絕對無限寶箱】 修羅級無限鬥界副本【大無限天寶箱】 終末之塔第 49 層守關者【王谷書藏司】 終末之塔第 59 層守關者【虛龍‧阿佩普】 終末之塔第 99 層守關者【操炎赤靈王】 14763 真九皇天尊龍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4966
+      "collectOrder": 4966,
+      "reverseDropCount": 0
     },
     {
       "name": "天尊雷神王",
@@ -269267,7 +269444,8 @@
       "searchText": "天尊雷神王 14930 十錦 50 10★ 5000 個【無限天印】 找 四聖祭台【無忌大仙】換取 修羅級無限鬥界副本【絕對無限天寶箱】 太陽神大道小怪【雪槍狂豹】 終末之塔第 46 層守關者【王谷獸騎守】 終末之塔第 53 層守關者【虛統‧賽特】 終末之塔第 69 層守關者【衛皇巨劍神座】 14930 天尊雷神王",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4967
+      "collectOrder": 4967,
+      "reverseDropCount": 0
     },
     {
       "name": "天尊風神王",
@@ -269292,7 +269470,8 @@
       "searchText": "天尊風神王 14931 十錦 50 10★ 5000 個【大無限天印】 找 四聖祭台【無忌大仙】換取 一般級魔君天都副本【天命寶箱】 終末之塔第 49 層守關者【王谷書藏司】 終末之塔第 56 層守關者【虛座‧塞拉比斯】 終末之塔第 71 層守關者【冥河緝獵手】 終末之塔第 103 層守關者【阿樊怛】 14931 天尊風神王",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4968
+      "collectOrder": 4968,
+      "reverseDropCount": 0
     },
     {
       "name": "新紀神燹鳳麒",
@@ -269317,7 +269496,8 @@
       "searchText": "新紀神燹鳳麒 15030 十錦 50 10★ 5000 個【御時天令】找 異時界‧亂藤林【時空聖像】換取 【一般級魔君天都】副本【天命逆轉寶箱、真天命逆轉寶箱】 終末之塔第 59 層守關者【虛龍‧阿佩普】 終末之塔第 75 層守關者【冥河黑門將】 終末之塔第 79 層守關者【金字塔殉司】 終末之塔第 109 層守關者【操毒鴆靈王】 15030 新紀神燹鳳麒",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4969
+      "collectOrder": 4969,
+      "reverseDropCount": 0
     },
     {
       "name": "絕曆神凜冰麒",
@@ -269338,7 +269518,8 @@
       "searchText": "絕曆神凜冰麒 15107 十錦 50 10★ 5000 個【御時天令】找 異時界‧亂藤林【時空聖像】 換取 終末之塔第 69 層守關者【衛皇巨劍神座】 15107 絕曆神凜冰麒",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4970
+      "collectOrder": 4970,
+      "reverseDropCount": 0
     },
     {
       "name": "狂宇魔鴆毒麒",
@@ -269360,7 +269541,8 @@
       "searchText": "狂宇魔鴆毒麒 15227 十錦 50 10★ 5000 個 【御時天令】 找 異時界‧亂藤林 【時空聖像】換取 【修羅級魔君天都】副本【天意逆轉寶箱、真天意逆轉寶箱】 終末之塔第 71 層守關者【冥河緝獵手】 15227 狂宇魔鴆毒麒",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4971
+      "collectOrder": 4971,
+      "reverseDropCount": 0
     },
     {
       "name": "符兵　龍驤",
@@ -269382,7 +269564,8 @@
       "searchText": "符兵 龍驤  十錦 50 10★ 3000 個【無限天印】 找 四聖祭台【無忌大仙】換取 終末之塔第 63 層守關者【衛皇凶赦殘豹】 終末之塔第 106 層守關者【阿樊怛Ⅱ】 15031 符兵　龍驤",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4972
+      "collectOrder": 4972,
+      "reverseDropCount": 0
     },
     {
       "name": "護天聖將烈魂",
@@ -269404,7 +269587,8 @@
       "searchText": "護天聖將烈魂 15375 十錦 50 10★ 5000 個【大御時天令】 找 異時界‧亂藤林【時空聖像】換取 終末之塔第 66 層守關者【衛皇人面獅身】 終末之塔第 75 層守關者【冥河黑門將】 15375 護天聖將烈魂",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4973
+      "collectOrder": 4973,
+      "reverseDropCount": 0
     },
     {
       "name": "化靈四聖太宰",
@@ -269425,7 +269609,8 @@
       "searchText": "化靈四聖太宰 15380 十錦 50 10★ 終末之塔第 79 層守關者【金字塔殉司】 終末之塔第 83 層守關者【忌天魔將像】 15380 化靈四聖太宰",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4974
+      "collectOrder": 4974,
+      "reverseDropCount": 0
     },
     {
       "name": "元始劍靈",
@@ -269445,7 +269630,8 @@
       "searchText": "元始劍靈 15457 十錦 50 10★ 終末之塔第 86 層守關者【仇燄魔翼龍】 15457 元始劍靈",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4975
+      "collectOrder": 4975,
+      "reverseDropCount": 0
     },
     {
       "name": "虛主化尊",
@@ -269466,7 +269652,8 @@
       "searchText": "虛主化尊 15643 十錦 50 10★ 終末之塔第 89 層守關者【輾州魔軍司】 終末之塔第 93 層守關者【百層捍衛者】 15643 虛主化尊",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4976
+      "collectOrder": 4976,
+      "reverseDropCount": 0
     },
     {
       "name": "終末尊主",
@@ -269488,7 +269675,8 @@
       "searchText": "終末尊主 15726 十錦 50 10★ 終末之塔第 96 層守關者【虛還武典化靈】 終末之塔第 103 層守關者【阿樊怛】 15726 終末尊主",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4977
+      "collectOrder": 4977,
+      "reverseDropCount": 0
     },
     {
       "name": "赤綾烈緋神",
@@ -269510,7 +269698,8 @@
       "searchText": "赤綾烈緋神 15869 十錦 50 10★ 終末之塔第 99 層守關者【操炎赤靈王】 終末之塔第 109 層守關者【操毒鴆靈王】 終末之塔第 116 層守關者【萬牲聚魂偶】 15869 赤綾烈緋神",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4978
+      "collectOrder": 4978,
+      "reverseDropCount": 0
     },
     {
       "name": "幽神阿努比斯",
@@ -269535,7 +269724,8 @@
       "searchText": "幽神阿努比斯 15931 十錦 50 10★ 5000個【安卡命符】 找 王都盧索【律法將莫汗】換取 【一般級神王金字塔】副本第二Boss【冥者阿奴比斯】 終末之塔第 60 層守關者【終劫阿奴比斯】 終末之塔第 119 層守關者【殛端電靈王】 終末之塔第 129 層守關者【悽璽凍靈王】 【頂天封獸禮券錦囊】 15931 幽神阿努比斯",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4979
+      "collectOrder": 4979,
+      "reverseDropCount": 0
     },
     {
       "name": "逆神阿努比斯",
@@ -269558,7 +269748,8 @@
       "searchText": "逆神阿努比斯 16118 十錦 50 10★ 5000個【大安卡命符】 找 王都盧索【律法將莫汗】 【修羅級神王金字塔】副本第二Boss【冥者阿奴比斯】 終末之塔第70層守關者【再生黑后】 【頂天封獸禮券錦囊】 16118 逆神阿努比斯",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4980
+      "collectOrder": 4980,
+      "reverseDropCount": 0
     },
     {
       "name": "綿柔喜羊駝",
@@ -269580,7 +269771,8 @@
       "searchText": "綿柔喜羊駝 16352 十錦 50 10★ 3500個【龍城玉徽】 找 西教場【陷陣天帥】 終末之塔第 80 層守關者【冥還黑后】 【通寶花園【通寶院華寶箱】\n【神疆封獸禮券錦囊】\n【雙極封獸禮券錦囊】 16352 綿柔喜羊駝",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4981
+      "collectOrder": 4981,
+      "reverseDropCount": 0
     },
     {
       "name": "九尾妖仙妲己",
@@ -269605,7 +269797,8 @@
       "searchText": "九尾妖仙妲己 16313 十錦 50 10★ 5000個【龍城玉徽】 找 西教場【陷陣天帥】 【一般級皇龍祕殿】副本第三層Boss【禍國九尾狐】 【頂天封獸禮券錦囊】 【神疆封獸禮券錦囊】 【雙極封獸禮券錦囊】 終末之塔第 139 層守關者【無方冥念王】 16313 九尾妖仙妲己",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4982
+      "collectOrder": 4982,
+      "reverseDropCount": 0
     },
     {
       "name": "傾國金色九尾",
@@ -269630,7 +269823,8 @@
       "searchText": "傾國金色九尾 16453 十錦 50 10★ 3500個【大龍城玉徽】 找 西教場【陷陣天帥】換取 【修羅級皇龍祕殿】副本第四層Boss【虛還大秦始皇帝】 終末之塔第 100 層守關者【百朝虛霸。始皇帝】 【頂天封獸禮券錦囊】 【神疆封獸禮券錦囊】 【雙極封獸禮券錦囊】 16453 傾國金色九尾",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4983
+      "collectOrder": 4983,
+      "reverseDropCount": 0
     },
     {
       "name": "覆朝嫣紅九尾",
@@ -269652,7 +269846,8 @@
       "searchText": "覆朝嫣紅九尾 16926 十錦 50 10★ 【帝.七寶仙境】任一【仙露花精，問鼎仙龍】 【神疆封獸禮券錦囊】 【雙極封獸禮券錦囊】 16926 覆朝嫣紅九尾",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4984
+      "collectOrder": 4984,
+      "reverseDropCount": 0
     },
     {
       "name": "影咒獸．玉犬",
@@ -269674,7 +269869,8 @@
       "searchText": "影咒獸．玉犬 17046 十錦 50 10★ 【帝.七寶仙境】任一【步天敖犬，霧隱忍武】 【神疆封獸禮券錦囊】 【雙極封獸禮券錦囊】 17046 影咒獸．玉犬",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4985
+      "collectOrder": 4985,
+      "reverseDropCount": 0
     },
     {
       "name": "影咒獸．鴞",
@@ -269695,7 +269891,8 @@
       "searchText": "影咒獸．鴞 17047 十錦 50 10★ 【神疆封獸禮券錦囊】 【雙極封獸禮券錦囊】 17047 影咒獸．鴞",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4986
+      "collectOrder": 4986,
+      "reverseDropCount": 0
     },
     {
       "name": "影咒獸．脫兔",
@@ -269897,7 +270094,8 @@
       "searchText": "歧異霸王龍 17957 十錦 50 17957 歧異霸王龍",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4995
+      "collectOrder": 4995,
+      "reverseDropCount": 0
     },
     {
       "name": "影咒獸．刁蛇",
@@ -269915,7 +270113,8 @@
       "searchText": "影咒獸．刁蛇 17726 十錦 50 17726 影咒獸．刁蛇",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4996
+      "collectOrder": 4996,
+      "reverseDropCount": 0
     },
     {
       "name": "影咒獸．垣鹿",
@@ -269933,7 +270132,8 @@
       "searchText": "影咒獸．垣鹿 17727 十錦 50 17727 影咒獸．垣鹿",
       "taskFlag": false,
       "shopFlag": false,
-      "collectOrder": 4997
+      "collectOrder": 4997,
+      "reverseDropCount": 0
     }
   ]
 }

@@ -53,6 +53,9 @@ window.SZO_SCRIPT_GROUPS = {
     "js/calc/jiangshen-calc.js"
   ],
   "pages": [
+    "data/jewels.js",
+    "data/abyss-exchanges.js",
+    "js/features/abyss-item.js",
     "data/equipment-taxonomy.js",
     "data/item-buffs.js",
     "data/item-contents.js",
@@ -74,6 +77,9 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/monster-page.js"
   ],
   "page_item": [
+    "data/jewels.js",
+    "data/abyss-exchanges.js",
+    "js/features/abyss-item.js",
     "data/equipment-taxonomy.js",
     "data/item-buffs.js",
     "data/item-contents.js",
@@ -98,6 +104,7 @@ window.SZO_SCRIPT_GROUPS = {
   "page_map": [
     "js/pages/map-page.js"
   ],
+  "page_abyss": ["data/jewels.js", "data/abyss-exchanges.js", "js/pages/abyss-page.js"],
   "page_qa": [
     "js/pages/qa-page.js"
   ],

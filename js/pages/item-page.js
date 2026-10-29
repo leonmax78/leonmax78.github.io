@@ -35,6 +35,12 @@ function itemStatus(it){
 }
 function itemDetailRows(it){
  const rows=[];
+ const gem=window.SZO_JEWELS?.gems?.[String(it.ID)];
+ if(gem){
+  rows.push(['寶石形狀',['','圓弧','三角','四方','五稜','六緯'][Number(gem.Shape)]],['寶石品級',gem.Grade]);
+  for(const [key,label] of [['Base_HP','生命'],['Base_MP','法力'],['Base_Con','體魄'],['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','敏捷'],['Extra_Def','防禦'],['Magic_Att','術攻'],['Magic_Def','術防']])if(Number(gem[key]))rows.push([label,'+'+gem[key]]);
+  if(Number(gem.Grade)>6)rows.push(['開放狀態','資料預載；本次最高開放品級 6']);
+ }
  for(const k of ITEM_DETAIL_ORDER){
   if(k==='DamageMin'&&ITEM_DETAIL_ORDER.includes('DamageMax')&&it.DamageMin!==undefined&&it.DamageMax!==undefined){
    rows.push([window.SZO_DISPLAY.label('Damage'),`${it.DamageMin}-${it.DamageMax}`]);
@@ -67,7 +73,7 @@ function itemDetailRows(it){
   }
  }
  if(window.SZO_DISPLAY.itemVisible.includes('Help')&&it.Help)rows.push([window.SZO_DISPLAY.label('Help'),it.Help]);
- return rows;
+ return gem?rows.filter((row,index)=>rows.findIndex(other=>other[0]===row[0])===index):rows;
 }
 
 function itemAbilityFields(it){
@@ -493,7 +499,7 @@ function itemContentsHTML(it){
  if(it.Type!=='BONUS')return '';
  const contents=window.SZO_ITEM_CONTENTS?.[String(it.ID)];
  if(!contents)return '<div class="muted itemContentsUnavailable">目前資料未提供可確認的內容物清單。</div>';
- return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><p class="muted">機率依原始內容物權重換算。</p><div class="itemContentsGrid">${contents.ids.map(id=>{
+ return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><p class="muted">${esc(contents.revision||'機率依原始內容物權重換算。')}</p><div class="itemContentsGrid">${contents.ids.map(id=>{
   const entry=itemIndex[id];
   const rate=Number.isFinite(contents.rates?.[id])?contents.rates[id].toFixed(6).replace(/\.?0+$/,'')+'%':'資料未提供';
   return entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span><span class="itemContentRate">機率 ${rate}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）<div class="itemContentRate">機率 ${rate}</div></div>`;
@@ -522,7 +528,7 @@ function itemDetailBodyHTML(it){
  groups.element.sort((a,b)=>elementOrder.indexOf(a[0])-elementOrder.indexOf(b[0]));
  const section=(key,title)=>groups[key].length?`<section class="itemDetailSection itemSection-${key}" data-item-section="${key}" aria-label="${title}"><h2>${title}</h2><div class="itemSectionGrid">${groups[key].map(([k,v])=>`<div class="kv"><div class="k${key==='special'&&k===title?' itemRepeatedLabel':''}">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join('')}</div>${key==='special'?itemApprovedStatusHTML(it):''}</section>`:'';
  const hero=itemThumbHTML(it).replace('assetThumb itemThumb','assetHero itemHero');
- return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}${itemContentsHTML(it)}${itemRecipeFlowHTML(it)}</div>`;
+ return `<div class="itemGroupedDetail"><header class="itemIdentity">${hero}<h1>${esc(nameOf(it))}</h1></header>${window.SZO_EQUIPMENT_COMPARE?.toolbar(it)||''}${section('basic','基本資料')}${section('ability','能力數值')}${section('element','屬性傷害與抗性')}${section('special',window.SZO_DISPLAY.label(itemRemovesStatus(it)?'RemoveStatus':'ExtraStatus'))}${section('help','道具說明')}${window.SZO_ABYSS_ITEM_HTML?.(it)||''}${itemContentsHTML(it)}${itemRecipeFlowHTML(it)}</div>`;
 }
 
 function showItem(id,skipPush){

@@ -489,9 +489,11 @@ function ensureMonsterDropItemNames(id){
 
 function monsterDropRows(m){
  syncMonsterItemDataForDrops();
- return parseDrop(m.DropItem).map(([iid,rate])=>{
+ const drops=parseDrop(m.DropItem).filter(([iid])=>!(m.RemovedDrops||[]).includes(String(iid)));
+ for(const iid of m.AnnouncedDrops||[])if(!drops.some(([id])=>String(id)===String(iid)))drops.push([iid,null]);
+ return drops.map(([iid,rate])=>{
   const it=itemIndex[String(iid).trim()]||{};
-  return [iid,it.Name||it.name||`道具 ID ${iid}`,rate.toFixed(6)+'%'];
+  return [iid,it.Name||it.name||`道具 ID ${iid}`,m.DropRevision?'改版機率待確認':rate.toFixed(6)+'%'];
  });
 }
 

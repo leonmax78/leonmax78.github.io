@@ -20,7 +20,10 @@ for(const item of items){
    weights[fields[i]]=(weights[fields[i]]||0)+weight;
   }
  }
- if(ids.length)byId[item.ID]={sourceId:source.ID,ids,rates:Object.fromEntries(ids.map(id=>[id,weights[id]/total*100]))};
+ if(source.DropRevision){
+  const revised=[...new Set([...ids.filter(id=>!(source.RemovedDrops||[]).includes(id)),...(source.AnnouncedDrops||[])])];
+  byId[item.ID]={sourceId:source.ID,ids:revised,rates:Object.fromEntries(revised.map(id=>[id,null])),revision:source.DropRevision};
+ }else if(ids.length)byId[item.ID]={sourceId:source.ID,ids,rates:Object.fromEntries(ids.map(id=>[id,weights[id]/total*100]))};
 }
 fs.writeFileSync(path.join(root,'data/item-contents.js'),'window.SZO_ITEM_CONTENTS='+JSON.stringify(byId)+';\n');
 console.log('Indexed contents for '+Object.keys(byId).length+' containers.');

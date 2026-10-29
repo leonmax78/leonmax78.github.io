@@ -348,7 +348,7 @@
     }catch(e){}
     const target=shard[id]||[];
     const mapped=(target||[]).map(function(row){
-      return {monster:{ID:row.monsterId,Name:row.monsterName},monsterId:row.monsterId,monsterName:row.monsterName,rate:Number(row.rate)||0,weight:Number(row.weight)||0};
+      return {monster:{ID:row.monsterId,Name:row.monsterName},monsterId:row.monsterId,monsterName:row.monsterName,rate:row.rate==null?null:Number(row.rate),weight:Number(row.weight)||0,revision:row.revision};
     });
     try{dropReverse[id]=mapped;}catch(e){}
     window.dropReverse=window.dropReverse||{};
@@ -380,6 +380,7 @@
     return sameId || null;
   }
   function formatRate(rate){
+    if(rate==null)return '改版機率待確認';
     const n=Number(rate)||0;
     return n.toFixed(6)+'%';
   }

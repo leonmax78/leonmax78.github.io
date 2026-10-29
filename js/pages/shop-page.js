@@ -349,7 +349,7 @@
           <input id="shopSearch" value="${escHtml(state.query)}" placeholder="搜尋商品 / 商店 / 地圖，例如：虎皮、京城、打鐵店長" autocomplete="off">
           <button type="button" class="ghost shopSearchBtn" data-shop-search>搜尋</button>
         </div>
-        <div class="shopSearchNote">備注：部分商品受名聲影響，最多享八折優惠</div>
+        <div class="shopSearchNote">備注：部分商品受名聲影響，最多享七五折優惠。</div>
         ${renderItemSuggestions()}
       </div>
       <div class="shopPicker">

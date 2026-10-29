@@ -7,6 +7,12 @@
       "shopName": "火雲洞府特殊商人",
       "items": [
         {
+          "itemId": 32200,
+          "name": "萬能寶石鑿",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
           "itemId": 29862,
           "name": "武魂碎片：紅夜叉",
           "sellPrice": 1500000000,
@@ -295,6 +301,12 @@
       "shopName": "古北大營特殊商人",
       "items": [
         {
+          "itemId": 32200,
+          "name": "萬能寶石鑿",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
           "itemId": 29862,
           "name": "武魂碎片：紅夜叉",
           "sellPrice": 1500000000,
@@ -582,6 +594,12 @@
       "shopId": 433,
       "shopName": "蠱毒洞府特殊商人",
       "items": [
+        {
+          "itemId": 32200,
+          "name": "萬能寶石鑿",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
         {
           "itemId": 29862,
           "name": "武魂碎片：紅夜叉",
@@ -895,6 +913,12 @@
       "shopName": "統萬大營特殊商人",
       "items": [
         {
+          "itemId": 32200,
+          "name": "萬能寶石鑿",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
           "itemId": 29862,
           "name": "武魂碎片：紅夜叉",
           "sellPrice": 1500000000,
@@ -1171,6 +1195,12 @@
       "shopName": "怒雪洞府特殊商人",
       "items": [
         {
+          "itemId": 32200,
+          "name": "萬能寶石鑿",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
+        {
           "itemId": 29862,
           "name": "武魂碎片：紅夜叉",
           "sellPrice": 1500000000,
@@ -1440,6 +1470,12 @@
       "shopId": 438,
       "shopName": "蒼狼大營特殊商人",
       "items": [
+        {
+          "itemId": 32200,
+          "name": "萬能寶石鑿",
+          "sellPrice": 1250000000,
+          "buyPrice": null
+        },
         {
           "itemId": 29862,
           "name": "武魂碎片：紅夜叉",

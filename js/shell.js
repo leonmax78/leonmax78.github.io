@@ -24,6 +24,7 @@
   <div class="drawerBody">
     <div class="navGroup" id="navGroup">
       <button class="navBtn major active" data-view="home">首頁 <span>›</span></button>
+      <button class="navBtn major" data-view="abyss">深淵資料、神魂寶石 <span>›</span></button>
       <button class="navBtn major" data-view="jiang">降神、經驗、修練試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
         <div class="subMenuNote">降神、經驗、修練相關功能</div>
