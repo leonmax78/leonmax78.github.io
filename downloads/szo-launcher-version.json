@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.35",
-  "published_at": "2026-10-29 14:21",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.35.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.35.7z",
+  "version": "2.5.36",
+  "published_at": "2026-10-29 14:38",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.36.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.36.7z",
   "page_url": "downloads/",
-  "notes": "修正部分電腦無法偵測 27.0.0.1 更新的問題；官方更新檔存在檢查改用與實際下載相同的連線方式；檢查時停用舊快取，降低不同電腦取得不一致結果的情況。"
+  "notes": "改善遊戲更新下載流程，改用較大的讀取緩衝區；下載中斷重試時會從已下載的位置繼續，不再刪除後整包重抓；新增背景維持間隔選項，可選擇 0.2、0.5、1 或 2 秒。"
 }
