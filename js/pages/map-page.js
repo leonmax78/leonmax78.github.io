@@ -619,6 +619,12 @@
   }
 
   function areaLabels(stage){
+    if(Number(stage.stageId) === 381){
+      return '<span class="mapExitDirection" style="left:10px;top:8px"><b aria-hidden="true">↖</b><span>往低鳴裂口</span></span>' +
+        '<span class="mapExitDirection" style="right:10px;top:8px" aria-label="東北出口"><b aria-hidden="true">↗</b></span>' +
+        '<span class="mapExitDirection" style="left:10px;bottom:8px" aria-label="西南出口"><b aria-hidden="true">↙</b></span>' +
+        '<span class="mapExitDirection" style="right:10px;bottom:8px" aria-label="東南出口"><b aria-hidden="true">↘</b></span>';
+    }
     if(Number(stage.stageId) === 15 && (stage.monsters || []).some(m => m.activity === '虛空群魔大遊行')){
       return [
         {name:'第一區', x:82, y:61},
