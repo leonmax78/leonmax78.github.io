@@ -16,7 +16,10 @@ assert.notDeepEqual([...new Set(names(37))],[...new Set(names(38))]);
   await page.route('**/*',r=>{const u=new URL(r.request().url());if(u.origin!=='https://preview.test')return r.abort();const file=path.join(root,decodeURIComponent(u.pathname).replace(/^\//,'')||'index.html');return fs.existsSync(file)&&fs.statSync(file).isFile()?r.fulfill({path:file}):r.fulfill({status:404,body:''});});
   await page.goto('https://preview.test');await page.waitForFunction(()=>window.SZO_READY);
   await page.evaluate(async()=>{await loadScriptGroupOnce('page_map');await renderStageMapPage();closeDrawer();});
+  assert.equal(await page.locator('#mapStageSelect optgroup[label="終末之塔"] option').count(),0);
+  await page.selectOption('#mapCategorySelect','tower');
   assert.equal(await page.locator('#mapStageSelect optgroup[label="終末之塔"] option').count(),180);
+  assert.equal(await page.locator('#mapStageSelect optgroup[label="一般地圖"] option').count(),0);
   for(const floor of [37,38,162,173,180]){
    const stage=towers.find(s=>s.areas.some(a=>a.floor===floor));
    await page.selectOption('#mapStageSelect',`${stage.stageId}:${floor}`,{force:true});

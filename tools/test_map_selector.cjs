@@ -17,6 +17,16 @@ async function run(engine,mobile){
   assert((await page.evaluate(()=>document.activeElement.textContent)).includes('086'));
   await input.fill('001');assert((await page.locator('#mapStageChoices button').first().innerText()).includes('001'));
   await input.press('Escape');assert((await input.inputValue()).includes('086'));
+  await page.selectOption('#mapCategorySelect','tower');
+  assert.equal(await page.locator('#mapStageSelect option').count(),180);
+  await input.fill('37樓');await page.locator('#mapStageChoices button').getByText('終末之塔 37樓',{exact:true}).click();
+  assert.deepEqual(await page.locator('.mapAreaLabel').allTextContents(),['37樓']);
+  await page.waitForFunction(()=>document.querySelector('#mapImage')?.naturalWidth>0);
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:path.join(root,`outputs/map-category-${mobile?'mobile':'desktop'}.png`)});
+  await page.selectOption('#mapCategorySelect','general');
+  assert.equal(await page.locator('#mapStageSelect option[value*=" "]').count(),0);
+  assert.equal(await page.locator('#mapStageSelect optgroup[label="終末之塔"]').count(),0);
   console.log(`${mobile?'Mobile':'Desktop'}: map selector selected position and search passed.`);
  }finally{await browser.close();}
 }
