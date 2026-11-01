@@ -26,6 +26,11 @@ async function run(engine,width){
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.selectOption('#mapGroupSelect','終末之塔');
   assert.equal(await page.locator('#mapStageSelect option').count(),180);
+  await page.selectOption('#mapGroupSelect','虛空大秘境');
+  assert.equal(await page.locator('.mapSide:not(.mapChestSide):not(.mapNpcSide) .mapMarkerChoice').count() >= 28,true);
+  await page.locator('[data-map-all="monster"]').click();
+  assert.equal(await page.locator('.mapMarkerChoice input:checked').count(),28);
+  await page.screenshot({path:path.join(root,`outputs/secret-realm-${width}.png`)});
   await page.evaluate(async()=>{await loadScriptGroupOnce('page_monster');window.v88MonsterMap='';await renderMonsterPage();});
   await page.waitForFunction(()=>document.querySelector('#monsterMapMain')&&!document.querySelector('#monsterMapMain').disabled);
   await page.selectOption('#monsterMapCategorySelect','特殊地圖');await page.selectOption('#monsterMapGroupSelect','聯動');
@@ -40,6 +45,11 @@ async function run(engine,width){
    await page.evaluate(()=>setView('autodata'));
    await page.waitForFunction(()=>document.querySelector('#ae-mapCategorySelect'));
    await page.locator('#ae-tab-map').click();
+   await page.selectOption('#ae-mapCategorySelect','特殊地圖');
+   await page.selectOption('#ae-mapGroupSelect','虛空大秘境');
+   await page.selectOption('#ae-map','300');
+   assert((await page.locator('#ae-map-info').innerText()).includes('索魂狼'));
+   await page.selectOption('#ae-mapCategorySelect','一般地圖');
    await page.selectOption('#ae-mapGroupSelect','地火神兵');assert.equal(await page.locator('#ae-map option[value="154"]').count(),1);
    assert.equal(await page.locator('#ae-map option[value="155"]').count(),1);
    await page.selectOption('#ae-mapCategorySelect','特殊地圖');await page.selectOption('#ae-mapGroupSelect','聯動');
