@@ -78,6 +78,8 @@ def build():
         report.append({'stage':sid,'regions':membership,'entryMonsters':unresolved,'floors':[
             {'floor':a['floor'],'monsters':sorted({m['name'] for m in stage['monsters'] if m.get('floor')==a['floor']})} for a in stage['areas']]})
     (ROOT/'data/stage_maps.json').write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+    from sync_tower_locations import sync
+    sync()
     (ROOT/'reports/tower-floor-audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(f'Updated {len(report)} tower maps / 180 floors; only 3 entry-island monster points are unnumbered.')
 

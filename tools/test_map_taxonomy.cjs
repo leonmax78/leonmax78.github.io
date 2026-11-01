@@ -33,6 +33,11 @@ async function run(engine,width){
   await page.screenshot({path:path.join(root,`outputs/secret-realm-${width}.png`)});
   await page.evaluate(async()=>{await loadScriptGroupOnce('page_monster');window.v88MonsterMap='';await renderMonsterPage();});
   await page.waitForFunction(()=>document.querySelector('#monsterMapMain')&&!document.querySelector('#monsterMapMain').disabled);
+  await page.selectOption('#monsterMapCategorySelect','特殊地圖');
+  await page.selectOption('#monsterMapGroupSelect','終末之塔');
+  await page.selectOption('#monsterMapMain','tower:174');
+  await page.waitForFunction(()=>document.querySelector('#monsterResultsMain').textContent.includes('終末之塔第174層'));
+  assert((await page.locator('#monsterResultsMain').innerText()).includes('白堊魔蠶'));
   await page.selectOption('#monsterMapCategorySelect','特殊地圖');await page.selectOption('#monsterMapGroupSelect','聯動');
   assert.deepEqual(await page.locator('#monsterMapSeriesSelect option').allTextContents(),Object.keys(series));
   await page.selectOption('#monsterMapSeriesSelect','絕代');
