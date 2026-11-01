@@ -261,8 +261,7 @@ function renderMonsterPage(){
   window.ensureMonsterSearchIndexLoaded().then(ok=>{if(ok)renderMonsterPage();else byId('reader').innerHTML='<section class="card"><h1>怪物、封獸查詢</h1><div class="empty">怪物資料載入失敗，請重新整理一次。</div></section>';});
   return;
  }
- byId('reader').innerHTML=`<section class="card monsterSearchPage latestSearchPage"><h1>怪物、封獸查詢</h1>
-  <div class="monsterModeSwitch"><button type="button" class="${beastMode?'':'active'}" onclick="setMonsterQueryMode('monster')">查詢怪物</button><button type="button" class="${beastMode?'active':''}" onclick="setMonsterQueryMode('beast')">查詢封獸</button></div>
+ byId('reader').innerHTML=`<section class="card monsterSearchPage latestSearchPage"><h1>${beastMode?'查詢封獸':'查詢怪物'}</h1>
   ${beastMode?`<div class="beastStarPicker" aria-label="封甕星級">${beastStarsHTML(window.v88BeastStars||2)}</div>`:''}
   <div class="latestQueryLayout">
     <div class="latestMainPane">

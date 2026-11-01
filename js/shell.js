@@ -38,6 +38,11 @@
         <div id="jiangFields"></div>
       </div>
       <button class="navBtn major" data-view="monster">怪物、封獸查詢 <span>›</span></button>
+      <div class="formBox" id="monsterForm">
+        <div class="formTitle">怪物與封獸</div>
+        <button class="navBtn sub" data-view="monsterQuery">查詢怪物 <span>›</span></button>
+        <button class="navBtn sub" data-view="beastQuery">查詢封獸 <span>›</span></button>
+      </div>
       <button class="navBtn major" data-view="item">道具、掉落查詢、合成模擬 <span>›</span></button>
       <div class="formBox" id="itemForm">
         <div class="subMenuNote">道具相關功能</div>
@@ -45,7 +50,9 @@
         <button class="navBtn sub" data-item-open="reverse">掉落反查 <span>›</span></button>
         <button class="navBtn sub" data-item-open="compound">常用配方合成模擬 <span>›</span></button>
       </div>
+      <button class="navBtn major" data-view="autodata">離線內掛物品編輯 <span>›</span></button>
       <button class="navBtn major" data-view="map">地圖查詢 <span>›</span></button>
+      <!-- The editor stays separate from item search and loads only when opened. -->
       <button class="navBtn major" data-view="soul">武魂能力試算 <span>›</span></button>
       <button class="navBtn major" data-view="collect">武冠收錄資料 <span>›</span></button>
       <div class="formBox" id="collectForm">
@@ -91,6 +98,14 @@
 </div>
 <button id="collectFloatingTopBtn" class="collectTopBtn globalTopBtn" type="button" data-global-top data-collect-top hidden>↑ 回到頂部</button>
 `;
+  // Save-file editing is desktop-only; keep the mobile navigation uncluttered.
+  const editorNav = root.querySelector('[data-view="autodata"]');
+  const editorMobileQuery = window.matchMedia('(max-width: 767px)');
+  const updateEditorNav = () => {
+    editorNav.style.display = editorMobileQuery.matches || /Android|iPhone|iPod|Mobile/i.test(navigator.userAgent) ? 'none' : '';
+  };
+  updateEditorNav();
+  editorMobileQuery.addEventListener('change', updateEditorNav);
 
   window.SZO_SET_GLOBAL_TOP_VISIBLE = function(visible){
     const btn = document.getElementById('collectFloatingTopBtn');

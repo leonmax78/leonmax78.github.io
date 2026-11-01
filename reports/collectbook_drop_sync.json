@@ -1,0 +1,9529 @@
+[
+  {
+    "kind": "weapon",
+    "itemId": "20039",
+    "name": "短劍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20469",
+    "name": "毒匕首",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20470",
+    "name": "烈毒匕首",
+    "before": 22,
+    "after": 22
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20471",
+    "name": "劇毒匕首",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20472",
+    "name": "蠱毒匕首",
+    "before": 21,
+    "after": 21
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20384",
+    "name": "誅鬼劍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20041",
+    "name": "闊劍",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20687",
+    "name": "精鋼闊劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20219",
+    "name": "巨闕劍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20688",
+    "name": "精鋼蛇劍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20510",
+    "name": "玄鐵劍",
+    "before": 44,
+    "after": 44
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20511",
+    "name": "冰靈鋼劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20686",
+    "name": "火靈鋼劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20705",
+    "name": "雷靈鋼劍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21086",
+    "name": "紅蓮劍",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21091",
+    "name": "龍紋劍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21092",
+    "name": "穿心劍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21918",
+    "name": "侏紋雷劍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26174",
+    "name": "西武劍",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27200",
+    "name": "修真劍",
+    "before": 31,
+    "after": 31
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28252",
+    "name": "空蟬劍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28654",
+    "name": "奇杷反覆劍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28655",
+    "name": "紫月追風劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29093",
+    "name": "紫月赤墜劍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23050",
+    "name": "御城劍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29894",
+    "name": "白餘劍",
+    "before": 8,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30519",
+    "name": "魂樂劍",
+    "before": 14,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23280",
+    "name": "蠱心邪劍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21557",
+    "name": "蟾蜍劍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21558",
+    "name": "追魂劍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20761",
+    "name": "冰鏡劍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20762",
+    "name": "火雲劍",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20763",
+    "name": "御雷劍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20764",
+    "name": "辟鬼劍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20765",
+    "name": "弒神劍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20766",
+    "name": "誅仙劍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20767",
+    "name": "滅佛劍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20768",
+    "name": "鬼煞劍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21093",
+    "name": "幽靈劍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21794",
+    "name": "青冥劍",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21541",
+    "name": "洛神劍",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21542",
+    "name": "龍泉劍",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21857",
+    "name": "太阿劍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21858",
+    "name": "太阿神劍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21859",
+    "name": "湛盧劍",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21860",
+    "name": "湛盧神劍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22110",
+    "name": "樓蘭劍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22496",
+    "name": "泉戶劍",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22497",
+    "name": "神隱劍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22498",
+    "name": "村正劍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22499",
+    "name": "赤霄劍",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22865",
+    "name": "天之叢雲劍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22866",
+    "name": "神度無量劍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23140",
+    "name": "誡罪劍",
+    "before": 11,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23141",
+    "name": "動靜止觀劍",
+    "before": 13,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23143",
+    "name": "蓮燁劍",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23145",
+    "name": "因陀羅聖劍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23586",
+    "name": "敗亡劍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23589",
+    "name": "望陽劍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23590",
+    "name": "血瞳赤輝劍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23591",
+    "name": "蒼翡碧熒劍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24140",
+    "name": "太古明律劍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24045",
+    "name": "絕倫劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24659",
+    "name": "太古絕倫劍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24049",
+    "name": "無幻絕倫劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26185",
+    "name": "太古黑曜劍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26194",
+    "name": "太古星辰劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24623",
+    "name": "耀辰天星劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26203",
+    "name": "太古巨帝劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26711",
+    "name": "太古晨光劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26602",
+    "name": "玉宵月蝶劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26605",
+    "name": "天朝萬歸劍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27034",
+    "name": "天鍛‧皇雷劍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27035",
+    "name": "仙鑄‧皇雷劍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27036",
+    "name": "神煉‧皇雷劍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27037",
+    "name": "宇傲‧皇雷劍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27600",
+    "name": "峻霆‧皇雷劍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28351",
+    "name": "星守劍★★★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28811",
+    "name": "北冕劍☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28812",
+    "name": "北冕劍☆☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28813",
+    "name": "北冕劍☆☆☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29343",
+    "name": "帝詔劍☆",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29345",
+    "name": "帝詔劍★☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23419",
+    "name": "乾坤雙極　天劍",
+    "before": 0,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23936",
+    "name": "乾坤無限　天劍",
+    "before": 0,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24536",
+    "name": "乾坤無極　天劍",
+    "before": 0,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26416",
+    "name": "乾坤太極　天劍",
+    "before": 0,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26492",
+    "name": "宙斯神雷劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27436",
+    "name": "五帝太昊劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28776",
+    "name": "焱劍‧雷瓦汀",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29014",
+    "name": "歿劍迪‧亞特",
+    "before": 1,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29664",
+    "name": "龍熙軒轅劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29923",
+    "name": "釋提桓因劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22797",
+    "name": "至尊不動劍",
+    "before": 25,
+    "after": 25
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31073",
+    "name": "殺昇劍",
+    "before": 4,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30204",
+    "name": "光翼翔劍Ⅳ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30621",
+    "name": "赫絕緋暮劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30959",
+    "name": "真龍漢天劍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20043",
+    "name": "短刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20460",
+    "name": "殺豬短刀",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20044",
+    "name": "大刀",
+    "before": 21,
+    "after": 21
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20383",
+    "name": "斬妖刀",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20045",
+    "name": "彎刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20689",
+    "name": "精鋼彎刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20474",
+    "name": "孽魂刃",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20046",
+    "name": "倭刀",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20769",
+    "name": "柳葉刀",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21922",
+    "name": "侏紋雷刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26166",
+    "name": "平西刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26175",
+    "name": "長征刀",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27201",
+    "name": "行天刀",
+    "before": 32,
+    "after": 32
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28253",
+    "name": "冰蛾刀",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28656",
+    "name": "紫月之魂刃",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29094",
+    "name": "紫月金陽刀",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23051",
+    "name": "霸軍刀",
+    "before": 17,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29895",
+    "name": "綒濟刀",
+    "before": 12,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30520",
+    "name": "流櫻刀",
+    "before": 13,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20776",
+    "name": "冰蠶刀",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20777",
+    "name": "炎精刀",
+    "before": 19,
+    "after": 19
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20778",
+    "name": "雷獸刀",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20779",
+    "name": "紫河刀",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20780",
+    "name": "血飲刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20781",
+    "name": "黃泉刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20782",
+    "name": "鬼咬刀",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20783",
+    "name": "蒼龍刀",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21078",
+    "name": "紅蓮刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21081",
+    "name": "鑠金刀",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21083",
+    "name": "伏虎刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21084",
+    "name": "九幽刀",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21308",
+    "name": "斷水刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21309",
+    "name": "海神刃",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21543",
+    "name": "畫影刀",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21544",
+    "name": "蟠龍刀",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21560",
+    "name": "蟾蜍刀",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21561",
+    "name": "追魂刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21795",
+    "name": "赤火刃",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21861",
+    "name": "天晶刀",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21862",
+    "name": "地炙刃",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21863",
+    "name": "天晶雷刀",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21864",
+    "name": "地火炙刃",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22114",
+    "name": "羅剎刀",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22500",
+    "name": "鬼渡刀",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22501",
+    "name": "虎徹刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22502",
+    "name": "村雨刀",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22503",
+    "name": "昆吾刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22867",
+    "name": "秋水太刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22868",
+    "name": "雲燿太刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23146",
+    "name": "斬業刀",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23147",
+    "name": "計都奔烈刀",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23149",
+    "name": "修羅刀",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23592",
+    "name": "熾獄刀",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23595",
+    "name": "魑魅刀",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23596",
+    "name": "閻魔羅闍刀",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24141",
+    "name": "太古無界刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26186",
+    "name": "太古波斯刀",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26195",
+    "name": "太古相元刀",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24660",
+    "name": "太古太法刀",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26065",
+    "name": "龍魂冠軍刀",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26721",
+    "name": "太古滅幻刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26609",
+    "name": "龍脊刀",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26610",
+    "name": "傲天龍心刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26611",
+    "name": "絕地神業刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27038",
+    "name": "天鍛‧炎魄刀",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27039",
+    "name": "仙鑄‧炎魄刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27040",
+    "name": "神煉‧炎魄刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27041",
+    "name": "宇傲‧炎魄刀",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27604",
+    "name": "峻霆‧炎魄刀",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27607",
+    "name": "真宇傲炎魄刀",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28352",
+    "name": "流螢斬★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28353",
+    "name": "流螢斬★★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28814",
+    "name": "武座刃☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28816",
+    "name": "武座刃☆☆☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29349",
+    "name": "君諭刀☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23420",
+    "name": "乾坤雙極　地刃",
+    "before": 0,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23937",
+    "name": "乾坤無限　地刃",
+    "before": 0,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24537",
+    "name": "乾坤無極　地刃",
+    "before": 0,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26417",
+    "name": "乾坤太極　地刃",
+    "before": 0,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26493",
+    "name": "波塞頓聖刀",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26959",
+    "name": "三皇聖羲刀",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28777",
+    "name": "滅刃‧達因斯",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29015",
+    "name": "煌刀瑟‧凱布",
+    "before": 1,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29665",
+    "name": "千古一帝刀",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29924",
+    "name": "武烈春秋刀",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28184",
+    "name": "大聖明王刀",
+    "before": 24,
+    "after": 24
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31074",
+    "name": "蛇眼刀",
+    "before": 2,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30210",
+    "name": "璇蟬鳴刀Ⅴ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30622",
+    "name": "滅裂曉光刀",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30960",
+    "name": "帝凰霸星斬",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20963",
+    "name": "旋月刃",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21437",
+    "name": "彈指神通",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21456",
+    "name": "百鎖連環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21457",
+    "name": "鬼魅無影",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21554",
+    "name": "七煞天羅",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22126",
+    "name": "封神針",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22127",
+    "name": "含沙射影",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22128",
+    "name": "暴雨梨花",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22129",
+    "name": "九轉金蓮",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22519",
+    "name": "絃葦飛刺",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22520",
+    "name": "若越旋",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22521",
+    "name": "筑刃旋",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23164",
+    "name": "雀屏針",
+    "before": 11,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23166",
+    "name": "飛獨鈷",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23610",
+    "name": "閻羅鐵扇",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23612",
+    "name": "一見發財",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23613",
+    "name": "大羅金仙倒",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24144",
+    "name": "太古血燕鈸",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24663",
+    "name": "太古金剛環",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24643",
+    "name": "連星弩",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26189",
+    "name": "太古連星弩",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26198",
+    "name": "太古通天盤",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24749",
+    "name": "廿四宮神弩",
+    "before": 5,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26078",
+    "name": "五星限命",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26082",
+    "name": "驚雷天閃銃",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26629",
+    "name": "琉光八雲冕",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27042",
+    "name": "天鍛‧亂蝶花",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27043",
+    "name": "仙鑄‧亂蝶花",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27045",
+    "name": "宇傲‧亂蝶花",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27610",
+    "name": "元宙‧亂蝶花",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27611",
+    "name": "真宇傲亂蝶花",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28356",
+    "name": "瞬光劃★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28817",
+    "name": "宗正裁☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29355",
+    "name": "龍掣爪☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29357",
+    "name": "龍掣爪★☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26806",
+    "name": "光凰無限翼",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28191",
+    "name": "激光滅辰剎",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28576",
+    "name": "九界樹聖箭",
+    "before": 2,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26494",
+    "name": "哈帝斯魔銃",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27437",
+    "name": "九龍翔瑞爪",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28778",
+    "name": "狼鎖‧格雷普",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29016",
+    "name": "戰鋒柏‧賽特",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29666",
+    "name": "陳橋燭影殲",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29925",
+    "name": "樓寒末仇藜",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30623",
+    "name": "鳳仙赭霞砲",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30961",
+    "name": "烈虎嘯江震",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31111",
+    "name": "獵仙飛索Ⅰ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31113",
+    "name": "獵仙飛索Ⅲ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26176",
+    "name": "潮洋扇",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27202",
+    "name": "道玄杖",
+    "before": 25,
+    "after": 25
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28254",
+    "name": "泰斗拂",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29095",
+    "name": "紫月雁玉笏",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23052",
+    "name": "點星斗",
+    "before": 11,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29896",
+    "name": "金官撢",
+    "before": 11,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30521",
+    "name": "王蛇鎮",
+    "before": 11,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20814",
+    "name": "天馬尾",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20815",
+    "name": "海龍鬚",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20816",
+    "name": "火龍鬚",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20818",
+    "name": "地龍鬚",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20934",
+    "name": "玄陰拂塵",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21098",
+    "name": "百靈狐尾",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21099",
+    "name": "仙鶴拂塵",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21552",
+    "name": "清虛骨杖",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21553",
+    "name": "搖光拂塵",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21865",
+    "name": "銀羽扇",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21866",
+    "name": "玉翎扇",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22118",
+    "name": "青羅蛇杖",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22119",
+    "name": "白露蛇杖",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22120",
+    "name": "翡翠神杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22121",
+    "name": "蒼穹神杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22510",
+    "name": "裂戒御祓",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22511",
+    "name": "平魔御祓",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22513",
+    "name": "御敷如意",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22871",
+    "name": "松風御祓",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22872",
+    "name": "櫻華御祓",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23152",
+    "name": "星暉拂塵",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23153",
+    "name": "昊陽拂塵",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23154",
+    "name": "瑤台拂塵",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23157",
+    "name": "迦樓羅羽拂",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23598",
+    "name": "三途鬼拂",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23600",
+    "name": "隍土鎮剎拂",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23601",
+    "name": "喚魂白幡",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23602",
+    "name": "贖世淨業幡",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23603",
+    "name": "慈護超生幡",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24661",
+    "name": "太古聖儀拂塵",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26187",
+    "name": "太古仙雀翼",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26196",
+    "name": "太古時光儀",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26071",
+    "name": "聖臨神子心",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26616",
+    "name": "舞真碧羽扇",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26617",
+    "name": "仙導天督扇",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27046",
+    "name": "天鍛‧星霜絲",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27047",
+    "name": "仙鑄‧星霜絲",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27048",
+    "name": "神煉‧星霜絲",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27049",
+    "name": "宇傲‧星霜絲",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27612",
+    "name": "峻霆‧星霜絲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27614",
+    "name": "元宙‧星霜絲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27615",
+    "name": "真宇傲星霜絲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28359",
+    "name": "衡星斗★★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28360",
+    "name": "衡星斗★★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28820",
+    "name": "七公扇☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29361",
+    "name": "皇麟扇☆",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29363",
+    "name": "皇麟扇★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26495",
+    "name": "雅典娜戰印",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26961",
+    "name": "太上天尊蘆",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28779",
+    "name": "尊號‧加拉爾",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29017",
+    "name": "冥鎌歐‧西斯",
+    "before": 1,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29667",
+    "name": "周武克殷幟",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29926",
+    "name": "太伯妙香晷",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31075",
+    "name": "古淵絲",
+    "before": 3,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30219",
+    "name": "絃霧靈拂Ⅳ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30624",
+    "name": "冰輪夢蜃扇",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30962",
+    "name": "晉日炎武權",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20402",
+    "name": "佛光法杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20403",
+    "name": "慈悲法杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20820",
+    "name": "水輪法杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20821",
+    "name": "火輪法杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20823",
+    "name": "地輪法杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26178",
+    "name": "禱告法杖",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27204",
+    "name": "迴夢禪杖",
+    "before": 28,
+    "after": 28
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28256",
+    "name": "巖禪杖",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28659",
+    "name": "紫月星空杖",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23054",
+    "name": "聖木杖",
+    "before": 15,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29898",
+    "name": "蛇陵杖",
+    "before": 10,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30523",
+    "name": "巨樹杖",
+    "before": 11,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21051",
+    "name": "晶石禪杖",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20938",
+    "name": "普羅法杖",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20939",
+    "name": "明王法杖",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20940",
+    "name": "金鋼法杖",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21134",
+    "name": "玉羅金杖",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21135",
+    "name": "玉佛寶杖",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21549",
+    "name": "梵天法杖",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21550",
+    "name": "菩提法杖",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21551",
+    "name": "達摩法杖",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21871",
+    "name": "光焰寶杖",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21872",
+    "name": "光焰聖火杖",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22122",
+    "name": "羅剎禪杖",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22123",
+    "name": "黑天禪杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22124",
+    "name": "大羅剎寶杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22125",
+    "name": "大黑天寶杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22514",
+    "name": "安佐禪杖",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22515",
+    "name": "堀路禪杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22517",
+    "name": "彌方禪杖",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22873",
+    "name": "千羽禪杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22874",
+    "name": "金閣禪杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22875",
+    "name": "天聲禪杖",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23158",
+    "name": "彌勒禪杖",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23159",
+    "name": "諸法空相杖",
+    "before": 12,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23160",
+    "name": "不生不滅杖",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23161",
+    "name": "如來聖杖",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23163",
+    "name": "大日梵天杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23604",
+    "name": "獄門邪杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23607",
+    "name": "天儀幡杖",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23608",
+    "name": "極樂往生杖",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23609",
+    "name": "淨土大幡杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24143",
+    "name": "太古藏宗禪杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24662",
+    "name": "太古天樓禪杖",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26188",
+    "name": "太古真知權杖",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24640",
+    "name": "星宮聖杖",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26197",
+    "name": "太古星宮聖杖",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26075",
+    "name": "天羽杖",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26077",
+    "name": "聖翼極光杖",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26622",
+    "name": "皇樓天燈杖",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26623",
+    "name": "普照九華杖",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27050",
+    "name": "天鍛‧釋迦杖",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27053",
+    "name": "宇傲‧釋迦杖",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27616",
+    "name": "峻霆‧釋迦杖",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27619",
+    "name": "真宇傲釋迦杖",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28363",
+    "name": "瀚辰杖★★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28824",
+    "name": "列肆杖☆☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28825",
+    "name": "列肆杖☆☆☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29367",
+    "name": "御天杖☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26496",
+    "name": "維納斯羽杖",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26962",
+    "name": "瀛洲仙華杖",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28780",
+    "name": "銀杖‧米斯汀",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29018",
+    "name": "輝杖瑪‧亞特",
+    "before": 0,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29668",
+    "name": "夏禹九鼎杖",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29927",
+    "name": "日月五峰杖",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31077",
+    "name": "九界杖",
+    "before": 4,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30625",
+    "name": "正見天機杖",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30963",
+    "name": "黃天當立杖",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31123",
+    "name": "渡鴉瞳杖Ⅲ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20054",
+    "name": "蛇矛",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20696",
+    "name": "精鋼戰戟",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20799",
+    "name": "方天畫戟",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20800",
+    "name": "冰牙戰戟",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26171",
+    "name": "望星槍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26177",
+    "name": "止境槍",
+    "before": 19,
+    "after": 19
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27203",
+    "name": "纏仙槍",
+    "before": 30,
+    "after": 30
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28255",
+    "name": "鬼星槍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28658",
+    "name": "紫月鬥靈槍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29096",
+    "name": "紫月丹龍槍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29104",
+    "name": "拉拉放蕩銷魂槍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23053",
+    "name": "龍牙槍",
+    "before": 13,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29897",
+    "name": "閼英槍",
+    "before": 11,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30522",
+    "name": "群雨槍",
+    "before": 10,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21049",
+    "name": "晶石戰戟",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21316",
+    "name": "海龍槍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23358",
+    "name": "海皇槍",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21128",
+    "name": "纏花槍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21317",
+    "name": "狂浪戟",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21546",
+    "name": "斷魂槍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21547",
+    "name": "霸王槍",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21867",
+    "name": "蛇脊矛",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21869",
+    "name": "地靈蛇脊矛",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21868",
+    "name": "離火槍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21870",
+    "name": "天晶離火槍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22134",
+    "name": "噬魂槍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22135",
+    "name": "驚邪槍",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22504",
+    "name": "宇十文字槍",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22505",
+    "name": "菊宗澤紋槍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22869",
+    "name": "灼焰紅蓮槍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22870",
+    "name": "稻妻蒼雷槍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23169",
+    "name": "伐樓拿聖戟",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23614",
+    "name": "衝煞妖龍槍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23615",
+    "name": "皇邪戮神槍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24072",
+    "name": "天嶄五煞槍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24664",
+    "name": "太古碎峰鬥仙槍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26190",
+    "name": "太古不敗神冕槍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26199",
+    "name": "太古絕震武皇槍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27054",
+    "name": "天鍛‧冰王槍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27055",
+    "name": "仙鑄‧冰王槍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27056",
+    "name": "神煉‧冰王槍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27057",
+    "name": "宇傲‧冰王槍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27620",
+    "name": "峻霆‧冰王槍",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27621",
+    "name": "窮極‧冰王槍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27622",
+    "name": "元宙‧冰王槍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27623",
+    "name": "真宇傲冰王槍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28364",
+    "name": "商宿槍★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28365",
+    "name": "商宿槍★★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28366",
+    "name": "商宿槍★★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26497",
+    "name": "阿瑞斯霸槍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26963",
+    "name": "荒神蚩尤槍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28781",
+    "name": "至槍‧岡古尼",
+    "before": 4,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29019",
+    "name": "泣槍奈‧芙蒂",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29669",
+    "name": "天汗蒼狼槍",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29928",
+    "name": "南解雲帝槍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31076",
+    "name": "神族槍",
+    "before": 2,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30230",
+    "name": "赤鴉裂槍Ⅴ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30626",
+    "name": "袚燈笠雲槍",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30964",
+    "name": "飛將霸流戟",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20459",
+    "name": "打狗棒",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20473",
+    "name": "靈木棍",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20057",
+    "name": "渾鐵棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20058",
+    "name": "狼牙棒",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20784",
+    "name": "寒鐵棍",
+    "before": 11,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20787",
+    "name": "雷環鋼棍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26181",
+    "name": "征軍棍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27207",
+    "name": "凌風棍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28259",
+    "name": "螢墟棍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28662",
+    "name": "紫月伏魔棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29100",
+    "name": "紫月沉金棍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29103",
+    "name": "拉拉黯然銷魂棍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23057",
+    "name": "蓮雨棍",
+    "before": 12,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29901",
+    "name": "吐解棍",
+    "before": 7,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30526",
+    "name": "天候棍",
+    "before": 9,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21050",
+    "name": "晶石狼牙棒",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21566",
+    "name": "鼠棍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20791",
+    "name": "寒陰棍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20792",
+    "name": "焚陽棍",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20793",
+    "name": "雷門棍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20794",
+    "name": "地冥棍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20795",
+    "name": "纏雲棍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20796",
+    "name": "封魔棍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20797",
+    "name": "黑雲棍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20798",
+    "name": "五毒棍",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20937",
+    "name": "玉竹棍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21114",
+    "name": "翻花棍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21115",
+    "name": "驚風棍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21116",
+    "name": "虎妖棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21314",
+    "name": "烏金棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22138",
+    "name": "旋龍棍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22139",
+    "name": "金鋼杖",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22506",
+    "name": "芥夜棍",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22507",
+    "name": "川岐棍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23020",
+    "name": "奇稻田櫛棍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24665",
+    "name": "太古擎天雙龍棍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26191",
+    "name": "太古四尊歸元棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26200",
+    "name": "太古琉璃天君棍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26086",
+    "name": "炎龍雙舞棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26632",
+    "name": "華蝶翠棍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26726",
+    "name": "太古華蝶翠棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27058",
+    "name": "天鍛‧織霧棍",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27059",
+    "name": "仙鑄‧織霧棍",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27061",
+    "name": "宇傲‧織霧棍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27624",
+    "name": "峻霆‧織霧棍",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27627",
+    "name": "真宇傲織霧棍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28367",
+    "name": "太微棍★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28368",
+    "name": "太微棍★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28829",
+    "name": "市樓棍☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28830",
+    "name": "市樓棍☆☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28831",
+    "name": "市樓棍☆☆☆",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29379",
+    "name": "傾城棍☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29380",
+    "name": "傾城棍★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29383",
+    "name": "傾城棍★★☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26498",
+    "name": "阿波羅煌棍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26964",
+    "name": "四海蓬萊棍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28782",
+    "name": "歿棍‧納吉法",
+    "before": 4,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29020",
+    "name": "獅棍泰‧芙努",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29670",
+    "name": "泰始宇弘棍",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29929",
+    "name": "龍飛御天棍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31080",
+    "name": "方舟棒",
+    "before": 1,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30231",
+    "name": "綻虹鳳棒Ⅰ",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30234",
+    "name": "綻虹鳳棒Ⅳ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30627",
+    "name": "神翔萬雷棍",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30965",
+    "name": "亂舞南荒棍",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31841",
+    "name": "蒲牢震嶽棍",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31131",
+    "name": "血腥屠夫Ⅰ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31134",
+    "name": "血腥屠夫Ⅳ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20386",
+    "name": "破岩錘",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20051",
+    "name": "蒜頭錘",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20052",
+    "name": "菱角錘",
+    "before": 22,
+    "after": 22
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20809",
+    "name": "碎骨釘錘",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20813",
+    "name": "墓石釘錘",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26180",
+    "name": "破甲錘",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27206",
+    "name": "掠天錘",
+    "before": 26,
+    "after": 26
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28258",
+    "name": "魑妖錘",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28661",
+    "name": "紫月盾峰錘",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29099",
+    "name": "紫月幽陵錘",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23056",
+    "name": "定疆錘",
+    "before": 15,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29900",
+    "name": "新羅錘",
+    "before": 7,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30525",
+    "name": "鬼瓦錘",
+    "before": 16,
+    "after": 19
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21047",
+    "name": "晶石錘",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21138",
+    "name": "巨人錘",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21139",
+    "name": "力震錘",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21140",
+    "name": "龍刺錘",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21141",
+    "name": "龍星錘",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21548",
+    "name": "雷神錘",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21565",
+    "name": "鎮妖錘",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22132",
+    "name": "神武錘",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22133",
+    "name": "天罡錘",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24076",
+    "name": "梵邪霸吼錘",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26192",
+    "name": "太古太荒創始錘",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26201",
+    "name": "太古創世聖王錘",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26088",
+    "name": "闢海神使錘",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26089",
+    "name": "泰坦降誕錘",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26727",
+    "name": "太古璇龍麗錘",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27066",
+    "name": "天鍛‧轟雷錘",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27067",
+    "name": "仙鑄‧轟雷錘",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27068",
+    "name": "神煉‧轟雷錘",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27069",
+    "name": "宇傲‧轟雷錘",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27632",
+    "name": "峻霆‧轟雷錘",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27634",
+    "name": "元宙‧轟雷錘",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28370",
+    "name": "九河錘★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28371",
+    "name": "九河錘★★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28372",
+    "name": "九河錘★★★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28832",
+    "name": "侯欽錘☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28834",
+    "name": "侯欽錘☆☆☆",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29385",
+    "name": "界王錘☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29386",
+    "name": "界王錘★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29389",
+    "name": "界王錘★★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26499",
+    "name": "赫菲煉炎錘",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26965",
+    "name": "六爻初陽錘",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27360",
+    "name": "鳳閣紅鸞錘",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27574",
+    "name": "朱雀宮魔流擊",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28001",
+    "name": "英招虎翼碎",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28783",
+    "name": "神槌‧妙尼爾",
+    "before": 8,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29008",
+    "name": "甦錘納‧努特",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29021",
+    "name": "甦錘納‧努特",
+    "before": 10,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29671",
+    "name": "莽王新朝錘",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29920",
+    "name": "首露伽耶錘",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29930",
+    "name": "首露伽耶錘",
+    "before": 10,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31079",
+    "name": "奇眼錘",
+    "before": 4,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30236",
+    "name": "鵑雪傾錘Ⅰ",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30239",
+    "name": "鵑雪傾錘Ⅳ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30628",
+    "name": "六仙流轉錘",
+    "before": 3,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30956",
+    "name": "輝譽三公錘",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30966",
+    "name": "輝譽三公錘",
+    "before": 10,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31136",
+    "name": "破魔獨錘Ⅰ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20385",
+    "name": "滅魔斧",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20048",
+    "name": "大斧",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20049",
+    "name": "戰斧",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20692",
+    "name": "精鋼戰斧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26179",
+    "name": "衝鋒斧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27205",
+    "name": "雲蛟斧",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28257",
+    "name": "幻魔斧",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28660",
+    "name": "紫月蒼空斧",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29098",
+    "name": "紫月分海斧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23055",
+    "name": "翰祚斧",
+    "before": 17,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29899",
+    "name": "乙那斧",
+    "before": 5,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30524",
+    "name": "綠星斧",
+    "before": 11,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23279",
+    "name": "滅象巨斧",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21046",
+    "name": "晶石斧",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20804",
+    "name": "鳳頭斧",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20845",
+    "name": "虎形斧",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20844",
+    "name": "獵頭斧",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21102",
+    "name": "破浪斧",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21104",
+    "name": "鐵鎖斧",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21105",
+    "name": "盤古斧",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21312",
+    "name": "斷水斧",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21545",
+    "name": "黃泉斧",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22131",
+    "name": "獵影斧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23620",
+    "name": "九陰化尸斧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23621",
+    "name": "奈落冥斬斧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24147",
+    "name": "太古破邪衝冠斧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24666",
+    "name": "太古天鬼怒瀑斧",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24653",
+    "name": "砂嵐削塵斧",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24654",
+    "name": "羅剎滅斬斧",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26210",
+    "name": "太古永凍冰河斧",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26636",
+    "name": "遊雲征斧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26637",
+    "name": "天河星崗斧",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27062",
+    "name": "天鍛‧龍塵斧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27063",
+    "name": "仙鑄‧龍塵斧",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27065",
+    "name": "宇傲‧龍塵斧",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27628",
+    "name": "峻霆‧龍塵斧",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27630",
+    "name": "元宙‧龍塵斧",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28373",
+    "name": "瑤月斧★",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28374",
+    "name": "瑤月斧★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28375",
+    "name": "瑤月斧★★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28836",
+    "name": "帛度斧☆☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28837",
+    "name": "帛度斧☆☆☆",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29393",
+    "name": "河山斧★☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26500",
+    "name": "蓋亞碎界斧",
+    "before": 3,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26966",
+    "name": "七政太歲斧",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27361",
+    "name": "龍池天虛斧",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28784",
+    "name": "冥斧‧提爾鋒",
+    "before": 9,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29009",
+    "name": "闢斧烏‧涅特",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29022",
+    "name": "闢斧烏‧涅特",
+    "before": 11,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29672",
+    "name": "商紂暴政斧",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29921",
+    "name": "尼師今尊斧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29931",
+    "name": "尼師今尊斧",
+    "before": 9,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31078",
+    "name": "鬥羅斧",
+    "before": 5,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30629",
+    "name": "八裂叛伐斧",
+    "before": 5,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30957",
+    "name": "奪政無道斧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30967",
+    "name": "奪政無道斧",
+    "before": 9,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21107",
+    "name": "玄金盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27208",
+    "name": "穹天盾",
+    "before": 29,
+    "after": 29
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28260",
+    "name": "殷水盾",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28663",
+    "name": "紫月萬峰阻",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29101",
+    "name": "紫月拒危盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23058",
+    "name": "雄闕盾",
+    "before": 8,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29902",
+    "name": "瓠公盾",
+    "before": 11,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30527",
+    "name": "將軍盾",
+    "before": 11,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20706",
+    "name": "秘文藤盾",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20707",
+    "name": "秘文燕尾盾",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20708",
+    "name": "秘文長牌盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20824",
+    "name": "獸紋戰盾",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21052",
+    "name": "晶石盾",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21108",
+    "name": "流金盾",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21109",
+    "name": "虎骨盾",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21555",
+    "name": "無影盾",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21556",
+    "name": "封神盾",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22508",
+    "name": "紀狩盾",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23170",
+    "name": "象威巨盾",
+    "before": 7,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23171",
+    "name": "格涅沙聖盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23623",
+    "name": "幽顱泣天盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24148",
+    "name": "太古唐卡繪盾",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24667",
+    "name": "太古曼陀羅金盾",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26193",
+    "name": "太古血誓盾",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26202",
+    "name": "太古驍武十字盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26638",
+    "name": "龍濤盾",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27070",
+    "name": "天鍛‧風雷盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27071",
+    "name": "仙鑄‧風雷盾",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27073",
+    "name": "宇傲‧風雷盾",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27636",
+    "name": "峻霆‧風雷盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27638",
+    "name": "元宙‧風雷盾",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28377",
+    "name": "傾天盾★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28378",
+    "name": "傾天盾★★★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28838",
+    "name": "天紀盾☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26501",
+    "name": "海克力斯盾",
+    "before": 3,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26967",
+    "name": "八卦形意盾",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27576",
+    "name": "玄武宮古魄盾",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28003",
+    "name": "平后句龍盾",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28785",
+    "name": "恆盾‧梅吉奧",
+    "before": 6,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29010",
+    "name": "壑盾伊‧西斯",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29023",
+    "name": "壑盾伊‧西斯",
+    "before": 6,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29673",
+    "name": "蘭陵破陣盾",
+    "before": 2,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29922",
+    "name": "東極通鑑盾",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29932",
+    "name": "東極通鑑盾",
+    "before": 9,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31081",
+    "name": "複合盾",
+    "before": 3,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30249",
+    "name": "鋼鵬衛盾Ⅳ",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30630",
+    "name": "冥淵血鷲盾",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30958",
+    "name": "撐犁孤屠盾",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30968",
+    "name": "撐犁孤屠盾",
+    "before": 8,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20007",
+    "name": "獸骨盔",
+    "before": 41,
+    "after": 41
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20457",
+    "name": "抗毒骨盔",
+    "before": 57,
+    "after": 57
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20458",
+    "name": "附靈骨盔",
+    "before": 63,
+    "after": 63
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20006",
+    "name": "藤盔",
+    "before": 28,
+    "after": 28
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20455",
+    "name": "明光戰盔",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20720",
+    "name": "鎮邪戰盔",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20840",
+    "name": "紫金僧帽",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20944",
+    "name": "鬼王面具",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21167",
+    "name": "赤鐵兜帽",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21881",
+    "name": "侏人面盔",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20945",
+    "name": "刺客面具",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20947",
+    "name": "鷹揚戰盔",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21169",
+    "name": "仙靈道冠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21170",
+    "name": "蛇靈頭箍",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21171",
+    "name": "桃花僧帽",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21215",
+    "name": "紫珊面",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21218",
+    "name": "白虎戰盔",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21219",
+    "name": "九尾頭箍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21221",
+    "name": "真人羽冠",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21477",
+    "name": "黑石戰盔",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21478",
+    "name": "黑武戰盔",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21479",
+    "name": "黑捷戰盔",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21480",
+    "name": "血翼戰盔",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21481",
+    "name": "虎翼戰盔",
+    "before": 19,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21482",
+    "name": "風翼戰盔",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21483",
+    "name": "蝶紋頭巾",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21484",
+    "name": "虎紋頭巾",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21485",
+    "name": "豹紋頭巾",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21486",
+    "name": "鳳雉冠",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21487",
+    "name": "雁翎冠",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21488",
+    "name": "千鶴冠",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21489",
+    "name": "擒龍斗笠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21490",
+    "name": "伏虎斗笠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21491",
+    "name": "除妖斗笠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21492",
+    "name": "斬蛟斗笠",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22143",
+    "name": "樓蘭織巾",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22144",
+    "name": "千手僧帽",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22145",
+    "name": "羅剎覆面",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22146",
+    "name": "玄武戰盔",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22149",
+    "name": "萬佛禪帽",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22794",
+    "name": "月讀紗巾",
+    "before": 6,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23172",
+    "name": "蘭若戰盔",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23173",
+    "name": "戒日塔盔",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23175",
+    "name": "紫懿道冠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23176",
+    "name": "正定佛冠",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23178",
+    "name": "最勝戰盔",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23538",
+    "name": "驕陽武冠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23539",
+    "name": "銀蟒面盔",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23543",
+    "name": "蒼烈戰盔",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23547",
+    "name": "轉輪法頂",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23782",
+    "name": "穹蒼無極限",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23760",
+    "name": "月讀神紗巾",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24001",
+    "name": "南日碟兜",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24979",
+    "name": "月讀紗巾‧帝",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27076",
+    "name": "天鍛‧術幻紗",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27079",
+    "name": "仙鑄‧劍聖盔",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27212",
+    "name": "神煉‧混沌冠",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27213",
+    "name": "宇傲‧混沌冠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27646",
+    "name": "窮極‧武尊盔",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27650",
+    "name": "元宙‧劍聖盔",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27738",
+    "name": "元宙‧混沌冠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27759",
+    "name": "真宇傲月讀巾",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28529",
+    "name": "星兇冠★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28541",
+    "name": "煌月巾★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28542",
+    "name": "煌月巾★★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28531",
+    "name": "星兇冠★★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28543",
+    "name": "煌月巾★★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28951",
+    "name": "鬼兇冠☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28963",
+    "name": "柳月巾☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28952",
+    "name": "鬼兇冠☆☆",
+    "before": 2,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28964",
+    "name": "柳月巾☆☆",
+    "before": 6,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28965",
+    "name": "柳月巾☆☆☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29427",
+    "name": "禪帝頂☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31312",
+    "name": "舞星釩兜Ⅱ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20015",
+    "name": "長絹甲",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20019",
+    "name": "輕藤甲",
+    "before": 25,
+    "after": 25
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20020",
+    "name": "藤甲",
+    "before": 29,
+    "after": 29
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20021",
+    "name": "重藤甲",
+    "before": 24,
+    "after": 24
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20022",
+    "name": "鎖子甲",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20710",
+    "name": "闢邪甲",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20711",
+    "name": "鎮邪甲",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20404",
+    "name": "骨甲",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20405",
+    "name": "重骨甲",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21420",
+    "name": "墨鐵戰鎧",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21422",
+    "name": "追風勁袍",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21423",
+    "name": "護心禪衣",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21421",
+    "name": "疾風勁袍",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21882",
+    "name": "侏人戰鎧",
+    "before": 29,
+    "after": 29
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20948",
+    "name": "虎王鎧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20950",
+    "name": "隱遁軟甲",
+    "before": 29,
+    "after": 29
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21231",
+    "name": "水琉裟",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21233",
+    "name": "蛇靈皮甲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21236",
+    "name": "龍駻甲",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21237",
+    "name": "百靈道袍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21238",
+    "name": "虎妖甲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21239",
+    "name": "悟法服",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21241",
+    "name": "龍骨甲",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21242",
+    "name": "真人羽袍",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21493",
+    "name": "黑石戰鎧",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21494",
+    "name": "黑武戰鎧",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21495",
+    "name": "黑捷戰鎧",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21496",
+    "name": "血翼戰甲",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21497",
+    "name": "虎翼戰甲",
+    "before": 19,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21498",
+    "name": "風翼戰甲",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21499",
+    "name": "蝶紋勁袍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21500",
+    "name": "虎紋勁袍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21501",
+    "name": "豹紋勁袍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21502",
+    "name": "鳳雉羽袍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21503",
+    "name": "雁翎羽袍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21504",
+    "name": "千鶴羽袍",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21505",
+    "name": "擒龍僧衣",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21506",
+    "name": "伏虎僧衣",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21507",
+    "name": "除妖僧衣",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21508",
+    "name": "斬蛟僧衣",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21761",
+    "name": "智者聖甲",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23993",
+    "name": "義者聖甲",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22153",
+    "name": "樓蘭織袍",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22154",
+    "name": "千手僧衣",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22155",
+    "name": "羅剎輕甲",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22156",
+    "name": "玄武重鎧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22159",
+    "name": "萬佛禪衣",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22160",
+    "name": "天羅輕甲",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22394",
+    "name": "無相袈裟",
+    "before": 24,
+    "after": 24
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22628",
+    "name": "天狗法衣",
+    "before": 6,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23182",
+    "name": "蘭若戰甲",
+    "before": 4,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23183",
+    "name": "戒日戰鎧",
+    "before": 5,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23188",
+    "name": "最勝戰鎧",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23190",
+    "name": "煌天道袍",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23379",
+    "name": "真．智者聖甲",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23380",
+    "name": "真．仁者聖甲",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23381",
+    "name": "真．勇者聖甲",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23994",
+    "name": "真．義者聖甲",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23548",
+    "name": "驕陽戰甲",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23549",
+    "name": "銀蟒重鎧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23554",
+    "name": "龍魔鱗鎧",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23555",
+    "name": "阿鼻邪冑",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23783",
+    "name": "寰宇萬象納",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23759",
+    "name": "天狗神法衣",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23841",
+    "name": "無相征鎧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23947",
+    "name": "神棘羅網衣",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24007",
+    "name": "耀宇征冑",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24252",
+    "name": "超．義者聖甲",
+    "before": 0,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26025",
+    "name": "天導禪裟",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24978",
+    "name": "天狗法衣‧帝",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27099",
+    "name": "仙鑄‧劍聖冑",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27102",
+    "name": "仙鑄‧道輝服",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27413",
+    "name": "神煉‧隱遁甲",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27417",
+    "name": "神煉‧無相裟",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27414",
+    "name": "宇傲‧隱遁甲",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27418",
+    "name": "宇傲‧無相裟",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27670",
+    "name": "元宙‧劍聖冑",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27674",
+    "name": "元宙‧禪光衣",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27774",
+    "name": "元宙‧無相裟",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28010",
+    "name": "終．勇者聖甲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28394",
+    "name": "星鋒冑★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28532",
+    "name": "星兇鎧★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28544",
+    "name": "煌天衣★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28533",
+    "name": "星兇鎧★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28545",
+    "name": "煌天衣★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28557",
+    "name": "奇行裟★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28534",
+    "name": "星兇鎧★★★",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28546",
+    "name": "煌天衣★★★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28521",
+    "name": "星．勇者聖甲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28954",
+    "name": "鬼兇鎧☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28955",
+    "name": "鬼兇鎧☆☆",
+    "before": 4,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28967",
+    "name": "柳天衣☆☆",
+    "before": 7,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28968",
+    "name": "柳天衣☆☆☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28948",
+    "name": "昊．仁者聖甲",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29439",
+    "name": "武帝胄☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29451",
+    "name": "道帝袍☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29457",
+    "name": "禪帝衲☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29940",
+    "name": "終極勇者聖甲",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20001",
+    "name": "藤護腕",
+    "before": 31,
+    "after": 31
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20713",
+    "name": "闢邪護腕",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20714",
+    "name": "鎮邪護腕",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20411",
+    "name": "骨護腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20412",
+    "name": "重骨護腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20954",
+    "name": "鬼王護手",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21245",
+    "name": "布衣護腕",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21249",
+    "name": "法意護腕",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21432",
+    "name": "追風護腕",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21434",
+    "name": "法環護腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21883",
+    "name": "侏人護腕",
+    "before": 22,
+    "after": 22
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20953",
+    "name": "虎王爪",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20955",
+    "name": "鷹揚護腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21253",
+    "name": "蛇靈皮腕",
+    "before": 0,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21254",
+    "name": "降龍護手",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21509",
+    "name": "黑石護腕",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21510",
+    "name": "黑武護腕",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21511",
+    "name": "黑捷護腕",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21512",
+    "name": "血翼護腕",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21513",
+    "name": "虎翼護腕",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21514",
+    "name": "風翼護腕",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21515",
+    "name": "蝶紋護腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21516",
+    "name": "虎紋護腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21517",
+    "name": "豹紋護腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21518",
+    "name": "鳳雉護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21519",
+    "name": "雁翎護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21520",
+    "name": "千鶴護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21521",
+    "name": "擒龍護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21522",
+    "name": "伏虎護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21523",
+    "name": "除妖護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21524",
+    "name": "斬蛟護腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22163",
+    "name": "樓蘭織護手",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22164",
+    "name": "千手護腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22165",
+    "name": "羅剎護腕",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22166",
+    "name": "玄武爪",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22169",
+    "name": "萬佛護腕",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22170",
+    "name": "天羅護腕",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22543",
+    "name": "綱岐護腕",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22544",
+    "name": "葵越護腕",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22545",
+    "name": "笠紀護腕",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22546",
+    "name": "伏藏護腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23192",
+    "name": "蘭若護腕",
+    "before": 6,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23193",
+    "name": "戒日護腕",
+    "before": 5,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23195",
+    "name": "紫懿護腕",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23201",
+    "name": "華嚴護腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23559",
+    "name": "銀蟒護腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23561",
+    "name": "三世靈腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23562",
+    "name": "妙法織腕",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23784",
+    "name": "繁星一掌執",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23761",
+    "name": "素盞鳴神鋼腕",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24288",
+    "name": "素盞鳴腕‧絕",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24980",
+    "name": "素盞鳴腕‧帝",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26028",
+    "name": "夜龍腕甲",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26576",
+    "name": "樓至佛腕",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27115",
+    "name": "天鍛‧武尊臂",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27118",
+    "name": "天鍛‧禪光握",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27119",
+    "name": "仙鑄‧劍聖腕",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27120",
+    "name": "仙鑄‧武尊臂",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27123",
+    "name": "仙鑄‧禪光握",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27220",
+    "name": "神煉‧檮杌手",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27746",
+    "name": "元宙‧檮杌手",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27747",
+    "name": "真宇傲檮杌手",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28418",
+    "name": "星蹤手★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28421",
+    "name": "釋星拱★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28535",
+    "name": "星兇手★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28547",
+    "name": "煌嗚腕★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28536",
+    "name": "星兇手★★",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28548",
+    "name": "煌嗚腕★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28957",
+    "name": "鬼兇手☆",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28969",
+    "name": "柳嗚腕☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28958",
+    "name": "鬼兇手☆☆",
+    "before": 3,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28970",
+    "name": "柳嗚腕☆☆",
+    "before": 4,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29475",
+    "name": "幻帝手☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20716",
+    "name": "闢邪皮靴",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20415",
+    "name": "骨靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20396",
+    "name": "重骨靴",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20852",
+    "name": "力士鞋",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20853",
+    "name": "乘波鞋",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20854",
+    "name": "避火鞋",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21151",
+    "name": "仙靈鞋",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21424",
+    "name": "墨鐵戰靴",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21427",
+    "name": "追風靴",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21429",
+    "name": "法環皮靴",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21426",
+    "name": "疾風靴",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20958",
+    "name": "流星靴",
+    "before": 38,
+    "after": 38
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21152",
+    "name": "蛇靈靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21157",
+    "name": "踢斗鞋",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21525",
+    "name": "黑石戰靴",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21526",
+    "name": "黑武戰靴",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21527",
+    "name": "黑捷戰靴",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21528",
+    "name": "血翼戰靴",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21529",
+    "name": "虎翼戰靴",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21530",
+    "name": "風翼戰靴",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21531",
+    "name": "蝶紋靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21532",
+    "name": "虎紋靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21533",
+    "name": "豹紋靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21534",
+    "name": "鳳雉靴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21535",
+    "name": "雁翎靴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21536",
+    "name": "千鶴靴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21537",
+    "name": "擒龍靴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21538",
+    "name": "伏虎靴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21539",
+    "name": "除妖靴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21540",
+    "name": "斬蛟靴",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21926",
+    "name": "侏紋雷靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22173",
+    "name": "樓蘭織鞋",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22174",
+    "name": "千手鞋",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22175",
+    "name": "羅剎皮靴",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22176",
+    "name": "玄武戰靴",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22179",
+    "name": "萬佛靴",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22180",
+    "name": "天羅皮靴",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22555",
+    "name": "笠紀禪靴",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22690",
+    "name": "韋駝天足具",
+    "before": 9,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23202",
+    "name": "蘭若戰靴",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23204",
+    "name": "朱綾護靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23206",
+    "name": "正定禪靴",
+    "before": 4,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23208",
+    "name": "最勝戰靴",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23211",
+    "name": "華嚴禪靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23571",
+    "name": "三世道靴",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23785",
+    "name": "銀河凌虛越",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23762",
+    "name": "韋駝天神足具",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24606",
+    "name": "天揚劍靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24981",
+    "name": "韋駝天足‧帝",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24750",
+    "name": "流星疾靴",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26421",
+    "name": "寰地真仙馳靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26819",
+    "name": "流星雲湘靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27134",
+    "name": "天鍛‧劍聖靴",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27139",
+    "name": "仙鑄‧劍聖靴",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27224",
+    "name": "神煉‧窮奇靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27421",
+    "name": "神煉‧流星靴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27150",
+    "name": "宇傲‧武尊踏",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27225",
+    "name": "宇傲‧窮奇靴",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27422",
+    "name": "宇傲‧流星靴",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27713",
+    "name": "元宙‧道輝步",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27750",
+    "name": "元宙‧窮奇靴",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27778",
+    "name": "元宙‧流星靴",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27717",
+    "name": "真宇傲術幻履",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27718",
+    "name": "真宇傲道輝步",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27719",
+    "name": "真宇傲禪光行",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27779",
+    "name": "真宇傲流星靴",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28430",
+    "name": "遊星足★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28539",
+    "name": "星兇靴★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28551",
+    "name": "煌韋足★★",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28960",
+    "name": "鬼兇靴☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28981",
+    "name": "碧星靴☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28961",
+    "name": "鬼兇靴☆☆",
+    "before": 4,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28973",
+    "name": "柳韋足☆☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28974",
+    "name": "柳韋足☆☆☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28983",
+    "name": "碧星靴☆☆☆",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29493",
+    "name": "劍帝履☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29499",
+    "name": "武帝踏☆",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31327",
+    "name": "舞星鋁行Ⅱ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31288",
+    "name": "騰陽巍立Ⅲ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20254",
+    "name": "護身符",
+    "before": 22,
+    "after": 22
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20259",
+    "name": "翡翠玉鐲",
+    "before": 43,
+    "after": 43
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20256",
+    "name": "翡翠玉珮",
+    "before": 70,
+    "after": 70
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20450",
+    "name": "抗火護符",
+    "before": 48,
+    "after": 48
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20452",
+    "name": "抗冰護符",
+    "before": 53,
+    "after": 53
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20453",
+    "name": "抗雷護符",
+    "before": 40,
+    "after": 40
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20456",
+    "name": "抗冥護符",
+    "before": 47,
+    "after": 47
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20250",
+    "name": "體魄佛珠",
+    "before": 78,
+    "after": 78
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20446",
+    "name": "力量佛珠",
+    "before": 88,
+    "after": 88
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20447",
+    "name": "智力佛珠",
+    "before": 114,
+    "after": 114
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20449",
+    "name": "靈敏佛珠",
+    "before": 86,
+    "after": 86
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20262",
+    "name": "闢邪戒指",
+    "before": 47,
+    "after": 47
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20263",
+    "name": "抗毒玉戒",
+    "before": 44,
+    "after": 44
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20260",
+    "name": "秘符銀鐲",
+    "before": 44,
+    "after": 44
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20261",
+    "name": "靈咒金鐲",
+    "before": 41,
+    "after": 41
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20257",
+    "name": "秘符銀鍊",
+    "before": 66,
+    "after": 66
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20258",
+    "name": "靈咒金鍊",
+    "before": 76,
+    "after": 76
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20959",
+    "name": "咒術指環",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20960",
+    "name": "魔骨項鍊",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20962",
+    "name": "靈玉項鍊",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20916",
+    "name": "負重寶袋",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20639",
+    "name": "滅炎護符",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20640",
+    "name": "避雷護符",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20641",
+    "name": "驅魔護符",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20642",
+    "name": "鐵骨佛珠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20643",
+    "name": "大力佛珠",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20644",
+    "name": "大智佛珠",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "20645",
+    "name": "踩雲佛珠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21142",
+    "name": "鐵尊佛珠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "21960",
+    "name": "水晶掛鍊",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22096",
+    "name": "西域幸運手鐲",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22181",
+    "name": "十全晶鍊",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22182",
+    "name": "十界墜鍊",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22183",
+    "name": "琉璃戒指",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22184",
+    "name": "流光戒指",
+    "before": 22,
+    "after": 22
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22185",
+    "name": "百匯晶鍊",
+    "before": 24,
+    "after": 24
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22186",
+    "name": "百靈墜鍊",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22412",
+    "name": "戰神負重鍊",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22562",
+    "name": "昴泉戒指",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22563",
+    "name": "姬月戒指",
+    "before": 16,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22564",
+    "name": "坤雨珠鍊",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "22565",
+    "name": "震流珠鍊",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23212",
+    "name": "五蘊指環",
+    "before": 12,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23213",
+    "name": "碧血天珠",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23216",
+    "name": "十念指環",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23217",
+    "name": "赦生天珠",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23232",
+    "name": "辯才天墜鍊",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23630",
+    "name": "六滅化神",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23578",
+    "name": "五逆指環",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23579",
+    "name": "墮業墜鍊",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23582",
+    "name": "永劫指環",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23583",
+    "name": "神泣項鍊",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23954",
+    "name": "噬運魔戒",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23955",
+    "name": "蝕元魔鍊",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24036",
+    "name": "小昭德綴",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24037",
+    "name": "大昭聖輪",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24038",
+    "name": "松贊權徽",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24039",
+    "name": "三律唐卡",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24040",
+    "name": "皈天蒼綴",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24041",
+    "name": "萬法光輪",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24042",
+    "name": "吐蕃皇印",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24043",
+    "name": "五令唐卡",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24229",
+    "name": "香格里拉金綴",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24374",
+    "name": "真‧六滅化神",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24611",
+    "name": "先啟禱戒",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24612",
+    "name": "所羅門項鍊",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24613",
+    "name": "祈願神燈",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24614",
+    "name": "真知之徽",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24615",
+    "name": "天語禱戒",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24616",
+    "name": "巴比倫項鍊",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24617",
+    "name": "全能神燈",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24618",
+    "name": "聖君之徽",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24732",
+    "name": "超‧戰神負重鍊",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "24949",
+    "name": "超‧六滅化神",
+    "before": 19,
+    "after": 16
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26046",
+    "name": "瑪瑙十字架",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26047",
+    "name": "冬夜墜鍊",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26048",
+    "name": "福音聖書",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26049",
+    "name": "德古拉魔戒",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26050",
+    "name": "鑽石十字架",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26051",
+    "name": "春曉墜鍊",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26052",
+    "name": "死海聖書",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26053",
+    "name": "索倫魔戒",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26302",
+    "name": "仙氣聚納環",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26434",
+    "name": "鐵帝佛珠",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26592",
+    "name": "翔鳳璃釵",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26593",
+    "name": "舞蝶琉鍊",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26594",
+    "name": "星羽珠簪",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26595",
+    "name": "晶虹珍戒",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26596",
+    "name": "九凰翡釵",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26597",
+    "name": "夢蝶翠鍊",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26598",
+    "name": "幻海磲簪",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26599",
+    "name": "碧洋硨戒",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26777",
+    "name": "力仙佛珠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26778",
+    "name": "智仙佛珠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26779",
+    "name": "風仙佛珠",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26815",
+    "name": "九黎星羅鎖",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "26795",
+    "name": "絕‧六滅化神",
+    "before": 13,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27154",
+    "name": "天鍛‧青龍戒",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27155",
+    "name": "天鍛‧白虎玉",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27156",
+    "name": "天鍛‧朱雀環",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27157",
+    "name": "天鍛‧玄武璧",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27158",
+    "name": "仙鑄‧青龍戒",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27159",
+    "name": "仙鑄‧白虎玉",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27160",
+    "name": "仙鑄‧朱雀環",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27161",
+    "name": "仙鑄‧玄武璧",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27162",
+    "name": "神煉‧青龍戒",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27163",
+    "name": "神煉‧白虎玉",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27164",
+    "name": "神煉‧朱雀環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27165",
+    "name": "神煉‧玄武璧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27166",
+    "name": "宇傲‧青龍戒",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27167",
+    "name": "宇傲‧白虎玉",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27168",
+    "name": "宇傲‧朱雀環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27169",
+    "name": "宇傲‧玄武璧",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27720",
+    "name": "峻霆‧青龍戒",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27721",
+    "name": "峻霆‧白虎玉",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27722",
+    "name": "峻霆‧朱雀環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27723",
+    "name": "峻霆‧玄武璧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27724",
+    "name": "窮極‧青龍戒",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27725",
+    "name": "窮極‧白虎玉",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27726",
+    "name": "窮極‧朱雀環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27727",
+    "name": "窮極‧玄武璧",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27728",
+    "name": "元宙‧青龍戒",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27729",
+    "name": "元宙‧白虎玉",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27730",
+    "name": "元宙‧朱雀環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27731",
+    "name": "元宙‧玄武璧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27732",
+    "name": "真宇傲青龍戒",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27733",
+    "name": "真宇傲白虎玉",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27734",
+    "name": "真宇傲朱雀環",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27735",
+    "name": "真宇傲玄武璧",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27378",
+    "name": "聖白虎之心",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27377",
+    "name": "天機南極儀",
+    "before": 17,
+    "after": 17
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27364",
+    "name": "無‧六滅化神",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27950",
+    "name": "極惡噬運魔戒",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27951",
+    "name": "極惡蝕元魔鍊",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28005",
+    "name": "御月常羲鍊",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28162",
+    "name": "御妖戒‧八歧",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28163",
+    "name": "尋奇鍊‧洪荒",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28185",
+    "name": "終‧六滅化神",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28439",
+    "name": "星龍珠★",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28440",
+    "name": "星龍珠★★",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28441",
+    "name": "星龍珠★★★",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28442",
+    "name": "星虎披★",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28443",
+    "name": "星虎披★★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28444",
+    "name": "星虎披★★★",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28445",
+    "name": "星鳳徽★",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28446",
+    "name": "星鳳徽★★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28447",
+    "name": "星鳳徽★★★",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28448",
+    "name": "星玄卦★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28449",
+    "name": "星玄卦★★",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28450",
+    "name": "星玄卦★★★",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28192",
+    "name": "三花聚頂聖玉",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28193",
+    "name": "醍醐灌頂聖珮",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28572",
+    "name": "真仙氣聚納環",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28523",
+    "name": "創‧六滅化神",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28901",
+    "name": "火煌珠☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28902",
+    "name": "火煌珠☆☆",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28903",
+    "name": "火煌珠☆☆☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28904",
+    "name": "水煌珠☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28905",
+    "name": "水煌珠☆☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28906",
+    "name": "水煌珠☆☆☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28907",
+    "name": "風煌珠☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28908",
+    "name": "風煌珠☆☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28909",
+    "name": "風煌珠☆☆☆",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28910",
+    "name": "地煌珠☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28911",
+    "name": "地煌珠☆☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28912",
+    "name": "地煌珠☆☆☆",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28988",
+    "name": "翼世麒麟之心",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29012",
+    "name": "聰慧神碑‧舒",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "28994",
+    "name": "星‧六滅化神",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29523",
+    "name": "宇帝珮☆",
+    "before": 7,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29524",
+    "name": "宇帝珮★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29525",
+    "name": "宇帝珮★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29526",
+    "name": "宇帝珮★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29527",
+    "name": "宇帝珮★★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29528",
+    "name": "宇帝珮★★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29529",
+    "name": "羲帝綴☆",
+    "before": 7,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29530",
+    "name": "羲帝綴★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29531",
+    "name": "羲帝綴★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29532",
+    "name": "羲帝綴★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29533",
+    "name": "羲帝綴★★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29534",
+    "name": "羲帝綴★★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29535",
+    "name": "慧帝戒☆",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29536",
+    "name": "慧帝戒★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29537",
+    "name": "慧帝戒★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29538",
+    "name": "慧帝戒★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29539",
+    "name": "慧帝戒★★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29540",
+    "name": "慧帝戒★★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29541",
+    "name": "大帝鎮☆",
+    "before": 7,
+    "after": 9
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29542",
+    "name": "大帝鎮★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29543",
+    "name": "大帝鎮★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29544",
+    "name": "大帝鎮★★",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29545",
+    "name": "大帝鎮★★☆",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29546",
+    "name": "大帝鎮★★★",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29691",
+    "name": "開皇白虎之心",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29693",
+    "name": "開皇鳳凰之心",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29683",
+    "name": "皇‧六滅化神",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29942",
+    "name": "終極六滅化神",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30632",
+    "name": "水嶷天佐針",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30633",
+    "name": "火熒天佐徽",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30635",
+    "name": "木篁天佐戒",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30609",
+    "name": "明源雷棲紋",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30970",
+    "name": "南華題命譜",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23069",
+    "name": "溯時仙沙漏",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23064",
+    "name": "雲龍仙煌陣",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29696",
+    "name": "八卦仙天鏡",
+    "before": 6,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29678",
+    "name": "光武仙宮幃",
+    "before": 4,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29832",
+    "name": "奇解仙命域",
+    "before": 7,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29833",
+    "name": "奇解仙氣域",
+    "before": 7,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27985",
+    "name": "高麗太王碑",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29937",
+    "name": "普信仙鐘譜",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "23065",
+    "name": "血海仙虛幡",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "29269",
+    "name": "玄謎虛淵局",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27473",
+    "name": "邪說虛王誌",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "27538",
+    "name": "虛幽邪龍陣",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30701",
+    "name": "妄史虛誕志",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30610",
+    "name": "六脈仙吟賦",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30931",
+    "name": "顛夢虛幻抄",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30903",
+    "name": "王狼雪川檄",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31055",
+    "name": "無方虛衡尺",
+    "before": 1,
+    "after": 1
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31908",
+    "name": "藏龍仙晶洞",
+    "before": 4,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20147",
+    "name": "神行令",
+    "before": 23,
+    "after": 23
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20140",
+    "name": "玄冰旗",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20141",
+    "name": "真火旗",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20142",
+    "name": "雷電旗",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20144",
+    "name": "七星劍匣",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20921",
+    "name": "六合寶鏡",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20150",
+    "name": "太極劍匣",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20154",
+    "name": "玄冰令",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20155",
+    "name": "真火令",
+    "before": 18,
+    "after": 18
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20156",
+    "name": "雷電令",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20920",
+    "name": "血玉蓮花",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20152",
+    "name": "血繩網",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20979",
+    "name": "修羅鬼輪",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23670",
+    "name": "月讀勾玉",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23671",
+    "name": "天照雲錦",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23674",
+    "name": "天地玄冰令",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24172",
+    "name": "天地真火令",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23665",
+    "name": "天地雷電令",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24677",
+    "name": "千淵凝冰盒",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24679",
+    "name": "明祈聖火令",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24678",
+    "name": "奔雷金龍玉",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26217",
+    "name": "慈恩聖母像",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26703",
+    "name": "歸真道卷",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20173",
+    "name": "四方聖光杵",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20171",
+    "name": "甘露寶瓶",
+    "before": 27,
+    "after": 27
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20172",
+    "name": "金日法螺",
+    "before": 37,
+    "after": 37
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20170",
+    "name": "梵天法環",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20178",
+    "name": "風火輪",
+    "before": 19,
+    "after": 19
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20183",
+    "name": "無量佛印",
+    "before": 19,
+    "after": 19
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20924",
+    "name": "舍利寶塔",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20925",
+    "name": "玉漿寶瓶",
+    "before": 21,
+    "after": 21
+  },
+  {
+    "kind": "artifact",
+    "itemId": "21597",
+    "name": "如來法螺",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23673",
+    "name": "七寶金佛尊",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24162",
+    "name": "甘霖寶塔",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24165",
+    "name": "淨邪聖像",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24166",
+    "name": "蓮華聖像",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24674",
+    "name": "如來天掌印",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26218",
+    "name": "聖言石典",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26706",
+    "name": "大千凡剎",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20186",
+    "name": "千幻鏡",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20290",
+    "name": "小鬼罈",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20652",
+    "name": "順風傘",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20190",
+    "name": "妖靈稻草人",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20187",
+    "name": "蔽影傘",
+    "before": 26,
+    "after": 26
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20192",
+    "name": "攝魂鈴",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20650",
+    "name": "人骨手環",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20151",
+    "name": "迷魂幡",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20653",
+    "name": "奪魄幡",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20654",
+    "name": "縛靈幡",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20191",
+    "name": "聚雲袋",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "21596",
+    "name": "惡鬼鼎",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23666",
+    "name": "波動珠",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24155",
+    "name": "聖骸手環",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24158",
+    "name": "通魂連命塔",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24672",
+    "name": "騰沼怒龍玉",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26214",
+    "name": "魔痕鴆爐",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26215",
+    "name": "奇美拉魔像",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26700",
+    "name": "攫虛元手",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20197",
+    "name": "天罡百匯丹",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20198",
+    "name": "歸元聚神丹",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20199",
+    "name": "百草羽仙丹",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20200",
+    "name": "混元一氣丹",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20201",
+    "name": "千靈蕩氣丹",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "artifact",
+    "itemId": "20091",
+    "name": "百草續命丹",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23663",
+    "name": "天地劍佩",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "artifact",
+    "itemId": "23664",
+    "name": "絕壁劍佩",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24149",
+    "name": "氣化活殺丹",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24150",
+    "name": "烈火真劍典",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24152",
+    "name": "天地劍佩‧絕",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "artifact",
+    "itemId": "24669",
+    "name": "碧空蒼星石",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26212",
+    "name": "照心劍玉",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "artifact",
+    "itemId": "26697",
+    "name": "長城劍印",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25046",
+    "name": "鑄煉金塊配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25047",
+    "name": "鑄煉銀塊配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25549",
+    "name": "皇龍純金配方",
+    "before": 16,
+    "after": 18
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25550",
+    "name": "皇龍星銀配方",
+    "before": 20,
+    "after": 23
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25551",
+    "name": "皇龍至鋼配方",
+    "before": 20,
+    "after": 21
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25083",
+    "name": "抗毒符配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25084",
+    "name": "抗盲符配方",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25085",
+    "name": "解定符配方",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25090",
+    "name": "解咒符配方",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25170",
+    "name": "強效金創配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25171",
+    "name": "強效行氣配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25172",
+    "name": "強效聚力配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25174",
+    "name": "強效醒腦配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25175",
+    "name": "強效輕身配方",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25044",
+    "name": "小還丹配方",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25045",
+    "name": "大還丹配方",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25283",
+    "name": "神效醒腦配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25284",
+    "name": "神效輕身配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25186",
+    "name": "劇毒配方",
+    "before": 24,
+    "after": 24
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25187",
+    "name": "蠱毒配方",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25188",
+    "name": "萬蠱毒配方",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25214",
+    "name": "凌虛拂塵配方",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25213",
+    "name": "明王法杖配方",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25032",
+    "name": "掌心雷配方",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25033",
+    "name": "烈火彈配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25078",
+    "name": "寒冰箭配方",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25112",
+    "name": "巨雷石配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25178",
+    "name": "鬼屍牙配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25181",
+    "name": "冰石錐配方",
+    "before": 12,
+    "after": 12
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25189",
+    "name": "晶殼鏢配方",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25190",
+    "name": "火龍彈配方",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25025",
+    "name": "靈絲僧帽配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25026",
+    "name": "靈絲道冠配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25027",
+    "name": "天鐵頭箍配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25028",
+    "name": "銀縷僧帽配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25029",
+    "name": "銀縷道冠配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25030",
+    "name": "怨靈頭箍配方",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25003",
+    "name": "怨靈骨盔配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25006",
+    "name": "附靈骨甲配方",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25018",
+    "name": "靈絲禪衣配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25019",
+    "name": "靈絲道袍配方",
+    "before": 4,
+    "after": 4
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25020",
+    "name": "銀縷禪衣配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25021",
+    "name": "銀縷道袍配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25007",
+    "name": "怨靈骨甲配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25087",
+    "name": "融冰護符配方",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25089",
+    "name": "驅魔護符配方",
+    "before": 20,
+    "after": 20
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25184",
+    "name": "四象護符配方",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25185",
+    "name": "四王佛珠配方",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25192",
+    "name": "鐵骨加持配方",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25193",
+    "name": "大力加持配方",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25195",
+    "name": "踩雲加持配方",
+    "before": 2,
+    "after": 2
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25200",
+    "name": "八卦護符配方",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25201",
+    "name": "八方佛珠配方",
+    "before": 7,
+    "after": 7
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25295",
+    "name": "兵器歸元配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25296",
+    "name": "護甲歸元配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25038",
+    "name": "加持鎧甲配方",
+    "before": 15,
+    "after": 15
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25040",
+    "name": "加持護腕配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25183",
+    "name": "屠妖拂塵配方",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25180",
+    "name": "滅魔禪杖配方",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25002",
+    "name": "劇毒暗器配方",
+    "before": 14,
+    "after": 15
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25191",
+    "name": "蠱毒暗器配方",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25177",
+    "name": "驅魔護甲配方",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25196",
+    "name": "抗火鎧甲配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25197",
+    "name": "抗冰鎧甲配方",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25198",
+    "name": "抗雷鎧甲配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25199",
+    "name": "抗冥鎧甲配方",
+    "before": 5,
+    "after": 5
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25134",
+    "name": "少陰飾品配方",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25135",
+    "name": "太陰飾品配方",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25136",
+    "name": "純陰飾品配方",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25203",
+    "name": "藏鋒配方",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25204",
+    "name": "凝氣配方",
+    "before": 13,
+    "after": 13
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25216",
+    "name": "煉骨配方",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25217",
+    "name": "御力配方",
+    "before": 11,
+    "after": 11
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25218",
+    "name": "釋慧配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25219",
+    "name": "踏雲配方",
+    "before": 10,
+    "after": 10
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25259",
+    "name": "負重煉製配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25261",
+    "name": "尊宮飾品配方",
+    "before": 14,
+    "after": 14
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25262",
+    "name": "御護飾品配方",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25300",
+    "name": "赤邪加持配方",
+    "before": 6,
+    "after": 6
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25270",
+    "name": "凝識配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25280",
+    "name": "麟鋼配方",
+    "before": 3,
+    "after": 3
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25396",
+    "name": "神鋒配方",
+    "before": 9,
+    "after": 9
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25397",
+    "name": "仙識配方",
+    "before": 8,
+    "after": 8
+  },
+  {
+    "kind": "recipe",
+    "itemId": "25559",
+    "name": "皇龍虹鉻配方",
+    "before": 7,
+    "after": 12
+  }
+]

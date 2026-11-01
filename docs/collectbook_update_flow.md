@@ -1,5 +1,18 @@
 # 武冠收錄資料更新流程
 
+## 掉落更新必須同步
+
+道具掉落反查、離線內掛物品編輯、武冠掉落來源共用網站的 `data/drop_reverse.json`。
+`build_data.py` 完成掉落反查重建後，會同步既有武冠的掉落欄位，保留收錄順序、任務、商店及分類。
+若使用其他腳本或手動調整掉落資料，發布前必須執行：
+
+```powershell
+python tools/sync_collectbook_drops.py
+python tools/sync_collectbook_drops.py --check
+```
+
+未知機率保留為未知，不補成零；不能以舊武冠 JSON 覆蓋新版掉落反查。
+
 ## 順序原則
 
 - `data/collectbook_sources.json` 不用名稱排序。

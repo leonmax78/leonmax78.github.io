@@ -373,7 +373,20 @@ async function setView(view){
  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
  if(view==='home'){renderHome(); closeDrawer();}
  else if(view==='jiang'){openJiangMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='monster'){showPageLoading(viewLoadingLabel(view)); await ensureMonsterPageLoaded(); renderMonsterPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='monster'){
+  byId('monsterForm')?.classList.add('active');
+  renderChoiceMenu('怪物、封獸查詢',[
+   {title:'查詢怪物',desc:'',attr:'data-view="monsterQuery"'},
+   {title:'查詢封獸',desc:'',attr:'data-view="beastQuery"'}
+  ]);closeDrawer();
+ }
+ else if(view==='monsterQuery'||view==='beastQuery'){
+  byId('monsterForm')?.classList.add('active');showPageLoading(view==='beastQuery'?'查詢封獸':'查詢怪物');
+  await ensureMonsterPageLoaded();window.v88MonsterMode=view==='beastQuery'?'beast':'monster';renderMonsterPage();closeDrawer();
+ }
+ else if(view==='autodata'){
+  showPageLoading('離線內掛物品編輯');await loadScriptGroupOnce('page_autodata');await renderAutoDataPage();closeDrawer();
+ }
  else if(view==='item'){openItemMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='collect'){showPageLoading(viewLoadingLabel(view)); await ensureCollectPageLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('menu');}
  else if(view==='shop'){showPageLoading(viewLoadingLabel(view)); await ensureShopPageLoaded(); if(typeof renderShopPage==='function')renderShopPage();}

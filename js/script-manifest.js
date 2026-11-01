@@ -1,6 +1,11 @@
 // V237 script manifest: core loads first; large feature data/scripts load on first use.
 // index.html remains a pure entry.  Add/disable modules here, not in index.html.
 window.SZO_SCRIPT_GROUPS = {
+  "page_autodata": [
+    "js/features/autodata/core.js",
+    "js/features/autodata/services.js",
+    "js/pages/autodata-page.js"
+  ],
   "data": [
     "data/refining-policy.js",
     "js/data/display-dictionary.js",

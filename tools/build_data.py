@@ -620,6 +620,8 @@ def main() -> None:
         ["monster_id", "new_name", "old_name", "new_has_drop", "old_has_drop", "action", "reason"],
     )
 
+    from sync_collectbook_drops import sync as sync_collectbook_drops
+    sync_collectbook_drops(ROOT)
     copy_outputs_to_project(load_config())
 
     print(f"道具：{len(items)} 筆")

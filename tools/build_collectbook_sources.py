@@ -500,6 +500,9 @@ def main() -> int:
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    if out_path.resolve() == (ROOT / 'data/collectbook_sources.json').resolve():
+        from sync_collectbook_drops import sync
+        sync(ROOT)
     print(f"Wrote {out_path}")
     print({key: len(data[key]) for key in ("weapon", "artifact", "recipe", "beast")})
     return 0
