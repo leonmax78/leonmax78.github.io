@@ -83,6 +83,7 @@
         })
         .then(data => {
           mapData = data || { stages: [] };
+          mapData.stages=(mapData.stages||[]).filter(s=>SZO_MAP_CLASS.visible(s.stageId));
           const pingxi = (mapData.stages || []).find(stage => Number(stage.stageId) === 15);
           if(pingxi){
             for(const marker of pingxi.monsters || []){
@@ -817,8 +818,8 @@
       return;
     }
     const selectedKey=state.floorStageId===Number(stage.stageId)&&state.floor?`${stage.stageId}:${state.floor}`:String(stage.stageId);
-    const category=stage.mapCategory==='tower'?'終末之塔':'一般地圖';
-    const stageOptions = `<optgroup label="${category}">${stages.filter(s=>(s.mapCategory==='tower')===(category==='終末之塔')).flatMap(s=>{
+    const scope=SZO_MAP_CLASS.get(stage.stageId);
+    const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${stages.filter(s=>SZO_MAP_CLASS.same(s.stageId,scope)).flatMap(s=>{
       const rows=s.mapCategory==='tower'?(s.areas||[]).map(a=>({key:`${s.stageId}:${a.floor}`,label:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
       if(s.mapCategory==='tower'&&selectedKey===String(s.stageId))rows.unshift({key:String(s.stageId),label:s.stageName+'（全圖）'});
       return rows.map(r=>`<option value="${r.key}" ${r.key===selectedKey?'selected':''}>${htmlEscape(r.label)}</option>`);
@@ -829,13 +830,8 @@
         <label>搜尋地圖 / 怪物 / NPC
           <input id="mapSearchInput" value="${htmlEscape(state.query)}" placeholder="例如：京城、大山犬、敖姬">
         </label>
-        <label>地圖分類
-          <select id="mapCategorySelect" aria-label="地圖分類">
-            <option value="general" ${category==='一般地圖'?'selected':''}>一般地圖</option>
-            <option value="tower" ${category==='終末之塔'?'selected':''}>終末之塔</option>
-          </select>
-        </label>
-        <label>${category==='終末之塔'?'樓層':'地圖'}
+        ${SZO_MAP_CLASS.controls('map',scope)}
+        <label>${scope.group==='終末之塔'?'樓層':'地圖'}
           <select id="mapStageSelect">${stageOptions}</select>
         </label>
         <button type="button" class="ghost mapClearSearchBtn" data-map-clear-search>清空搜尋</button>
@@ -1020,9 +1016,11 @@
   });
 
   document.addEventListener('change', ev => {
-    if(ev.target?.id === 'mapCategorySelect'){
-      const tower=ev.target.value==='tower';
-      const first=(mapData?.stages||[]).find(s=>(s.mapCategory==='tower')===tower);
+    const level=ev.target?.id?.match(/^map(Category|Group|Series)Select$/);
+    if(level){
+      const scope=SZO_MAP_CLASS.change(SZO_MAP_CLASS.get(state.stageId),level[1],ev.target.value);
+      const tower=scope.group==='終末之塔';
+      const first=(mapData?.stages||[]).find(s=>SZO_MAP_CLASS.same(s.stageId,scope));
       if(!first)return;
       state.query='';state.npcTarget=null;state.stageId=Number(first.stageId);
       state.floor=tower?first.areas[0].floor:null;

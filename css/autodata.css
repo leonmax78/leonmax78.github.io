@@ -8,6 +8,9 @@
 .ae-page .ae-save button{background:#f2c45c;border-color:#f2c45c;color:#17212b;font-weight:700;padding:12px 20px;min-height:48px;width:100%}
 .ae-page .ae-save button:hover:not(:disabled){background:#ffda84;border-color:#ffda84}
 .ae-search-options{column-gap:18px}
+.ae-map-levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:10px 0}
+.ae-page .ae-map-levels label{display:grid;gap:6px;font-size:13px}
+.ae-map-levels select{width:100%}
 .ae-muted,.ae-page h2 small{font-size:13px;color:#a6bdc6;font-weight:400}
 #ae-filename{overflow-wrap:anywhere;min-width:0}#ae-plan{width:auto;flex:0 1 280px}
 .ae-page label{display:inline-flex;gap:7px;align-items:center;flex-wrap:wrap;max-width:100%}

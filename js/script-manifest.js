@@ -2,6 +2,8 @@
 // index.html remains a pure entry.  Add/disable modules here, not in index.html.
 window.SZO_SCRIPT_GROUPS = {
   "page_autodata": [
+    "data/map-taxonomy.js",
+    "js/features/map-taxonomy.js",
     "js/features/autodata/core.js",
     "js/features/autodata/services.js",
     "js/pages/autodata-page.js"
@@ -58,6 +60,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/calc/jiangshen-calc.js"
   ],
   "pages": [
+    "data/map-taxonomy.js",
+    "js/features/map-taxonomy.js",
     "data/jewels.js",
     "data/abyss-exchanges.js",
     "js/features/abyss-item.js",
@@ -79,6 +83,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/downloads-page.js"
   ],
   "page_monster": [
+    "data/map-taxonomy.js",
+    "js/features/map-taxonomy.js",
     "js/pages/monster-page.js"
   ],
   "page_item": [
@@ -107,6 +113,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/shop-page.js"
   ],
   "page_map": [
+    "data/map-taxonomy.js",
+    "js/features/map-taxonomy.js",
     "js/pages/map-page.js"
   ],
   "page_gems": ["data/jewels.js", "data/abyss-exchanges.js", "js/pages/gem-page.js"],

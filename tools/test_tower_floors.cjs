@@ -17,7 +17,8 @@ assert.notDeepEqual([...new Set(names(37))],[...new Set(names(38))]);
   await page.goto('https://preview.test');await page.waitForFunction(()=>window.SZO_READY);
   await page.evaluate(async()=>{await loadScriptGroupOnce('page_map');await renderStageMapPage();closeDrawer();});
   assert.equal(await page.locator('#mapStageSelect optgroup[label="終末之塔"] option').count(),0);
-  await page.selectOption('#mapCategorySelect','tower');
+  await page.selectOption('#mapCategorySelect','特殊地圖');
+  await page.selectOption('#mapGroupSelect','終末之塔');
   assert.equal(await page.locator('#mapStageSelect optgroup[label="終末之塔"] option').count(),180);
   assert.equal(await page.locator('#mapStageSelect optgroup[label="一般地圖"] option').count(),0);
   for(const floor of [37,38,162,173,180]){
@@ -35,10 +36,12 @@ assert.notDeepEqual([...new Set(names(37))],[...new Set(names(38))]);
   await page.selectOption('#mapStageSelect','287:37',{force:true});
   await page.screenshot({path:path.join(root,'outputs/tower-floor-37.png')});
   await page.evaluate(async()=>{await loadScriptGroupOnce('page_monster');await ensureMonsterSpawnIds();});
-  assert(await page.evaluate(()=>{window.v88MonsterMap='tower:37';return monsterMapIds.get('tower:37').size>0&&monsterMapOptionsHTML().includes('終末之塔');}));
+  assert(await page.evaluate(()=>{window.v88MonsterMap='tower:37';monsterMapControlsHTML();return monsterMapIds.get('tower:37').size>0&&monsterMapOptionsHTML().includes('37樓');}));
   await page.evaluate(()=>setView('autodata'));
-  await page.waitForFunction(()=>document.querySelector('#ae-map option[value="tower:37"]'));
-  await page.locator('#ae-tab-map').click();await page.selectOption('#ae-map','tower:37');
+  await page.waitForFunction(()=>document.querySelector('#ae-mapCategorySelect'));
+  await page.locator('#ae-tab-map').click();
+  await page.selectOption('#ae-mapCategorySelect','特殊地圖');await page.selectOption('#ae-mapGroupSelect','終末之塔');
+  await page.selectOption('#ae-map','tower:37');
   assert((await page.locator('#ae-map-info').innerText()).includes('37樓'));
   const result=await page.evaluate(async()=>{
    const d=await AutoDataServices.loadData();return [37,38].map(f=>{const m=d.maps.find(m=>m.key==='tower:'+f);return {floor:f,names:m.monsterNames,ids:[...m.ids]};});

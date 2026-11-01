@@ -17,7 +17,7 @@
    // Same canonical reverse index as item lookup, including approved drop revisions.
    const dropsByMonster=new Map();
    for(const [id,rows] of Object.entries(reverse))for(const row of rows){const key=String(row.monsterId);if(!dropsByMonster.has(key))dropsByMonster.set(key,new Set());if(byId.has(id))dropsByMonster.get(key).add(id);}
-   const maps=index.stages.flatMap(m=>{
+   const maps=index.stages.filter(m=>SZO_MAP_CLASS.visible(m.stageId)).flatMap(m=>{
     const stage=stages.stages.find(s=>s.stageId===m.stageId);
     if(stage?.mapCategory==='tower')return stage.areas.map(a=>({...m,key:'tower:'+a.floor,category:'終末之塔',floor:a.floor,stageName:a.floor+'樓',ids:new Set(),unknown:0,monsters:0}));
     return [{...m,key:String(m.stageId),category:'一般地圖',ids:new Set(),unknown:0,monsters:0}];

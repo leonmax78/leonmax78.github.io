@@ -75,9 +75,25 @@ function hasMonsterSearchIndex(){return monsterSearchIndexRows().length>0}
 let monsterSpawnIds=null;
 let monsterMapChoices=[];
 let monsterMapIds=new Map();
-function monsterMapOptionsHTML(){
- return '<option value="">全部地圖</option>'+['一般地圖','終末之塔'].map(category=>`<optgroup label="${category}">${monsterMapChoices.filter(s=>s.category===category).map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${s.floor?'':esc(s.id)+' '}${esc(s.name)}</option>`).join('')}</optgroup>`).join('');
+let monsterMapScope=SZO_MAP_CLASS.normalize({});
+function monsterMapControlsHTML(){
+ const selected=monsterMapChoices.find(s=>s.id===window.v88MonsterMap);
+ if(selected)monsterMapScope=SZO_MAP_CLASS.normalize(SZO_MAP_CLASS.get(selected.stageId));
+ return SZO_MAP_CLASS.controls('monsterMap',monsterMapScope);
 }
+function monsterMapOptionsHTML(){
+ return '<option value="">全部地圖</option>'+monsterMapChoices.filter(s=>SZO_MAP_CLASS.same(s.stageId,monsterMapScope)).map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${s.floor?'':esc(s.id)+' '}${esc(s.name)}</option>`).join('');
+}
+document.addEventListener('change',event=>{
+ const kind=event.target?.id?.match(/^monsterMap(Category|Group|Series)Select$/)?.[1];
+ if(!kind)return;
+ monsterMapScope=SZO_MAP_CLASS.change(monsterMapScope,kind,event.target.value);
+ window.v88MonsterMap='';
+ byId('monsterMapLevels').innerHTML=monsterMapControlsHTML();
+ const select=byId('monsterMapMain');select.innerHTML=monsterMapOptionsHTML();
+ if(select.options.length>1)select.selectedIndex=1;
+ searchMonstersMain();
+});
 let monsterInstanceOnlyIds=null;
 let monsterSpawnPromise=null;
 function ensureMonsterSpawnIds(){
@@ -90,6 +106,7 @@ function ensureMonsterSpawnIds(){
     const excluded=new Set(categories.stages.map(s=>Number(s.stageId)));
     const all=new Set(),inside=new Set(),outside=new Set();
     for(const stage of data.stages){
+     if(!SZO_MAP_CLASS.visible(stage.stageId))continue;
      const mapIds=new Set();
      for(const m of stage.monsters||[]){
       if(m.id==null||!Number.isFinite(m.x)||!Number.isFinite(m.y))continue;
@@ -104,9 +121,9 @@ function ensureMonsterSpawnIds(){
         const ids=new Set(stage.monsters.filter(m=>m.floor===area.floor).map(m=>String(m.id)));
         if(!ids.size)continue;
         const id='tower:'+area.floor;monsterMapIds.set(id,ids);
-        monsterMapChoices.push({id,name:area.floor+'樓',floor:area.floor,category:'終末之塔'});
+        monsterMapChoices.push({id,stageId:stage.stageId,name:area.floor+'樓',floor:area.floor,category:'終末之塔'});
        }
-      }else monsterMapChoices.push({id:String(stage.stageId),name:stage.stageName,category:'一般地圖'});
+      }else monsterMapChoices.push({id:String(stage.stageId),stageId:stage.stageId,name:stage.stageName,category:'一般地圖'});
      }
     }
     monsterInstanceOnlyIds=new Set([...inside].filter(id=>!outside.has(id)));
@@ -278,7 +295,7 @@ function renderMonsterPage(){
       <div class="kvGrid">
         <div class="kv"><div class="k">${beastMode?'封獸名稱':'怪物名稱 / ID / 位置 / 種族 / 子分類'}</div><div class="v"><input id="monsterQMain" placeholder="${beastMode?'例如：影咒獸．垣鹿':'例如：黃帝、問頂仙龍、蜘蛛精'}" value="${esc(q)}" oninput="searchMonstersMain()"></div></div>
         ${beastMode?'':`
-        <div class="kv"><div class="k">地圖</div><div class="v"><select id="monsterMapMain" aria-label="地圖" onchange="searchMonstersMain()" ${monsterSpawnIds?'':'disabled'}>${monsterMapOptionsHTML()}</select></div></div>
+        <div class="kv monsterMapFilter"><div id="monsterMapLevels" class="mapTaxonomyLevels">${monsterMapControlsHTML()}</div><label>地圖／樓層<select id="monsterMapMain" aria-label="地圖" onchange="searchMonstersMain()" ${monsterSpawnIds?'':'disabled'}>${monsterMapOptionsHTML()}</select></label></div>
         <div class="kv"><div class="k">種族</div><div class="v"><select id="monsterRaceMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterRaceOptionsHTML(race):monsterIndexRaceOptionsHTML(race)}</select></div></div>
         <div class="kv"><div class="k">子分類</div><div class="v"><select id="monsterSubtypeMain" onchange="searchMonstersMain()">${hasMonsterData()?monsterSubtypeOptionsHTML(subtype,race):monsterIndexSubtypeOptionsHTML(subtype,race)}</select></div></div>
         <div class="kv"><div class="k">最低 Lv</div><div class="v"><input id="monsterMinMain" type="number" value="${esc(min)}" oninput="searchMonstersMain()"></div></div>
@@ -299,6 +316,7 @@ function renderMonsterPage(){
  if(!beastMode)ensureMonsterSpawnIds().then(()=>{
   const select=byId('monsterMapMain');if(!select)return;
   if(window.v88MonsterMap&&!monsterMapIds.has(window.v88MonsterMap))window.v88MonsterMap='';
+  byId('monsterMapLevels').innerHTML=monsterMapControlsHTML();
   select.innerHTML=monsterMapOptionsHTML();select.disabled=false;searchMonstersMain();
  }).catch(()=>{const select=byId('monsterMapMain');if(select){select.innerHTML='<option value="">地圖載入失敗，請重新開啟查詢</option>';}});
  ensureMonsterSearchLocations().then(ok=>{

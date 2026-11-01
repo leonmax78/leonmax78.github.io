@@ -3,6 +3,7 @@
  const C=AutoDataCore,S=AutoDataServices;
  const model={rows:[],meta:null,handle:null,name:'AutoData_3.data',dirty:false,config:S.defaults(),cat:new Set(),selected:new Set(),anchor:{},page:0,sourceMode:'all',csv:null,busy:false};
  let host,data,backupDirectory=null,backupParent='',fileOperation=null,backupList=[];
+ let mapScope=SZO_MAP_CLASS.normalize({});
  const $=id=>host.querySelector('#ae-'+id);
  const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const tr=s=>document.documentElement.lang==='zh-Hans'?SZO_LANGUAGE.toSimple(s):s;
@@ -77,8 +78,11 @@
  }
  function mapChoices(){
   const prior=$('map').value,q=$('map-query').value;
-  const maps=data.maps.filter(m=>S.matches((m.floor?'終末之塔':m.stageId)+' '+m.stageName,q));
-  $('map').innerHTML='<option value="">選擇地圖</option>'+['一般地圖','終末之塔'].map(category=>`<optgroup label="${category}">${maps.filter(m=>m.category===category).map(m=>`<option value="${m.key}">${m.floor?'':m.stageId+' '}${E(m.stageName)}</option>`).join('')}</optgroup>`).join('');
+  const matches=data.maps.filter(m=>S.matches((m.floor?'終末之塔':m.stageId)+' '+m.stageName,q));
+  if(q.trim()&&matches.length&&!matches.some(m=>SZO_MAP_CLASS.same(m.stageId,mapScope)))mapScope=SZO_MAP_CLASS.normalize(SZO_MAP_CLASS.get(matches[0].stageId));
+  const maps=matches.filter(m=>SZO_MAP_CLASS.same(m.stageId,mapScope));
+  $('map-levels').innerHTML=SZO_MAP_CLASS.controls('ae-map',mapScope);
+  $('map').innerHTML='<option value="">選擇地圖／樓層</option>'+maps.map(m=>`<option value="${m.key}">${m.floor?'':m.stageId+' '}${E(m.stageName)}</option>`).join('');
   if(maps.some(m=>m.key===prior))$('map').value=prior;
   else if(maps.length===1)$('map').value=maps[0].key;
   model.page=0;model.cat.clear();render();
@@ -176,6 +180,12 @@
   host.querySelectorAll('[data-source]').forEach(b=>b.onclick=()=>{model.sourceMode=b.dataset.source;model.page=0;model.cat.clear();model.anchor.cat=null;render();});
   host.querySelectorAll('[data-source]').forEach((b,i)=>b.onkeydown=e=>{const tabs=[...host.querySelectorAll('[data-source]')];let next;if(e.key==='ArrowRight')next=(i+1)%tabs.length;else if(e.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=tabs.length-1;else return;e.preventDefault();tabs[next].click();tabs[next].focus();});
   $('map-query').oninput=mapChoices;
+  $('map-levels').onchange=event=>{
+   const kind=event.target.id.match(/^ae-map(Category|Group|Series)Select$/)?.[1];
+   if(!kind)return;
+   mapScope=SZO_MAP_CLASS.change(mapScope,kind,event.target.value);
+   $('map-query').value='';$('map').value='';mapChoices();
+  };
   on('prev',()=>{model.page=Math.max(0,model.page-1);model.anchor.cat=null;});on('next',()=>{model.page++;model.anchor.cat=null;});
   on('select-catalog',()=>{catalogRows().slice(model.page*100,model.page*100+100).forEach(r=>model.cat.add(r.id));});
   on('unselect-catalog',()=>model.cat.clear());on('add',()=>{const r=selectedCatalog();if(!r.length)throw Error('請先選取道具');mergeRows(r);});
@@ -222,7 +232,7 @@
    <div class="ae-columns"><section><h2>道具資料庫</h2>
     <div class="ae-tabs" role="tablist" aria-label="道具篩選"><button id="ae-tab-all" role="tab" data-source="all" aria-selected="true" aria-controls="ae-catalog-panel">全部道具</button><button id="ae-tab-map" role="tab" data-source="map" aria-selected="false" aria-controls="ae-catalog-panel">地圖篩選</button><button id="ae-tab-common" role="tab" data-source="common" aria-selected="false" aria-controls="ae-catalog-panel">常用清單篩選</button></div>
     <div id="ae-catalog-panel" role="tabpanel" aria-labelledby="ae-tab-all">
-    <div id="ae-map-tools" hidden><input id="ae-map-query" aria-label="地圖編號或名稱" placeholder="地圖編號或名稱"><select id="ae-map" aria-label="地圖"></select></div><p id="ae-map-info"></p>
+    <div id="ae-map-tools" hidden><div id="ae-map-levels" class="ae-map-levels"></div><input id="ae-map-query" aria-label="地圖編號或名稱" placeholder="地圖編號、名稱或樓層"><select id="ae-map" aria-label="地圖"></select></div><p id="ae-map-info"></p>
     <div class="ae-toolbar"><input id="ae-query" aria-label="道具 ID 或名稱" placeholder="道具 ID 或名稱"></div><div class="ae-toolbar ae-search-options"><label><input id="ae-fuzzy" type="checkbox" checked>模糊搜尋</label><label><input id="ae-warning" type="checkbox">加入高價道具時提醒（超過 50 萬）</label></div><div class="ae-toolbar"><button id="ae-select-catalog">選取本頁</button><button id="ae-unselect-catalog">取消選取</button><button id="ae-favorite-add">★ 加入常用</button><button id="ae-favorite-remove">☆ 移除常用</button></div>
     <div class="ae-scroll"><table><thead><tr><th>選取</th><th>最愛</th><th>道具</th><th>單價</th></tr></thead><tbody id="ae-catalog"></tbody></table></div>
     <div class="ae-toolbar"><button id="ae-prev" title="上一頁" aria-label="上一頁">←</button><span id="ae-catalog-count"></span><button id="ae-next" title="下一頁" aria-label="下一頁">→</button></div>
