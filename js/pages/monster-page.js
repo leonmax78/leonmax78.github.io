@@ -76,7 +76,7 @@ let monsterSpawnIds=null;
 let monsterMapChoices=[];
 let monsterMapIds=new Map();
 function monsterMapOptionsHTML(){
- return '<option value="">全部地圖</option>'+monsterMapChoices.map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${esc(s.name)}（${esc(s.id)}）</option>`).join('');
+ return '<option value="">全部地圖</option>'+['一般地圖','終末之塔'].map(category=>`<optgroup label="${category}">${monsterMapChoices.filter(s=>s.category===category).map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${s.floor?'':esc(s.id)+' '}${esc(s.name)}</option>`).join('')}</optgroup>`).join('');
 }
 let monsterInstanceOnlyIds=null;
 let monsterSpawnPromise=null;
@@ -97,7 +97,17 @@ function ensureMonsterSpawnIds(){
       mapIds.add(id);
       (excluded.has(Number(stage.stageId))?inside:outside).add(id);
      }
-     if(mapIds.size){monsterMapIds.set(String(stage.stageId),mapIds);monsterMapChoices.push({id:String(stage.stageId),name:stage.stageName});}
+     if(mapIds.size){
+      monsterMapIds.set(String(stage.stageId),mapIds);
+      if(stage.mapCategory==='tower'){
+       for(const area of stage.areas||[]){
+        const ids=new Set(stage.monsters.filter(m=>m.floor===area.floor).map(m=>String(m.id)));
+        if(!ids.size)continue;
+        const id='tower:'+area.floor;monsterMapIds.set(id,ids);
+        monsterMapChoices.push({id,name:area.floor+'樓',floor:area.floor,category:'終末之塔'});
+       }
+      }else monsterMapChoices.push({id:String(stage.stageId),name:stage.stageName,category:'一般地圖'});
+     }
     }
     monsterInstanceOnlyIds=new Set([...inside].filter(id=>!outside.has(id)));
     monsterSpawnIds=all;

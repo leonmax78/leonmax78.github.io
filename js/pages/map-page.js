@@ -25,7 +25,7 @@
     }
   }
   function enterFloatingMap(){
-    if(floatingMap?.open){floatingMap.close();floatingMap.showModal();return;}
+    if(floatingMap?.open){state.floor=null;state.floorStageId=null;floatingMap.close();floatingMap.showModal();return;}
     const reader = document.getElementById('reader');
     mapReturn = {state:{...state,monsters:new Set(state.monsters),npcs:new Set(state.npcs),panels:{...state.panels}},
       focus:document.activeElement,scroll:[reader,...reader.querySelectorAll('*')].filter(el=>el.scrollTop||el.scrollLeft).map(el=>[el,el.scrollTop,el.scrollLeft])};
@@ -43,6 +43,7 @@
       floatingMap.querySelector('[data-map-window-close]').addEventListener('click',closeFloatingMap);
       window.SZO_FLOATING?.enhance(floatingMap);
     }
+    state.floor=null;state.floorStageId=null;
     floatingMap.showModal();
   }
   window.SZO_MAP_FLOAT={close:closeFloatingMap,isOpen:()=>!!floatingMap?.open};
@@ -59,6 +60,8 @@
     query: '',
     npcTarget: null,
     stageId: null,
+    floor: null,
+    floorStageId: null,
     monsters: new Set(),
     npcs: new Set(),
     panels: { monster: true, npc: true, chest: true },
@@ -477,6 +480,7 @@
   }
 
   function applyMapSuggestion(btn){
+    state.floor=null;state.floorStageId=null;
     const kind = btn.dataset.mapSuggest;
     const id = btn.dataset.id || '';
     const stageId = Number(btn.dataset.stage);
@@ -506,6 +510,13 @@
       stage = stages[0];
       state.stageId = Number(stage.stageId);
       autoCheckMatches(stage);
+    }
+    if(stage.mapCategory==='tower' && state.floorStageId===Number(stage.stageId) && state.floor){
+      return {...stage,stageName:`終末之塔 ${state.floor}樓`,
+        monsters:(stage.monsters||[]).filter(m=>m.floor===state.floor),
+        npcs:(stage.npcs||[]).filter(m=>m.floor===state.floor),
+        chests:(stage.chests||[]).filter(m=>m.floor===state.floor),
+        areas:(stage.areas||[]).filter(a=>a.floor===state.floor)};
     }
     return stage;
   }
@@ -643,6 +654,7 @@
   }
 
   function transferLabels(stage){
+    if(stage.mapCategory==='tower')return '';
     const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
     return (stage.transfers || []).map(point => {
       const x = Math.max(105, Math.min(w - 105, point.x));
@@ -750,8 +762,11 @@
     const close=()=>{list.hidden=true;input.setAttribute('aria-expanded','false');input.value=select.selectedOptions[0]?.textContent || '';};
     const show=(query='')=>{
       list.replaceChildren();
+      let lastGroup='';
       for(const option of select.options){
         if(query && !option.textContent.toLowerCase().includes(query.trim().toLowerCase()))continue;
+        const group=option.parentElement.label||'';
+        if(group!==lastGroup){const heading=document.createElement('div');heading.className='muted';heading.textContent=group;list.append(heading);lastGroup=group;}
         const button=document.createElement('button');button.type='button';button.textContent=option.textContent;
         button.setAttribute('role','option');button.setAttribute('aria-selected',String(option.selected));
         button.addEventListener('pointerdown',e=>e.preventDefault());
@@ -801,7 +816,12 @@
         <div class="empty">找不到符合的地圖。</div></section>`;
       return;
     }
-    const stageOptions = stages.map(s => `<option value="${Number(s.stageId)}" ${Number(s.stageId) === Number(stage.stageId) ? 'selected' : ''}>${String(s.stageId).padStart(3,'0')} ${htmlEscape(s.stageName)}</option>`).join('');
+    const selectedKey=state.floorStageId===Number(stage.stageId)&&state.floor?`${stage.stageId}:${state.floor}`:String(stage.stageId);
+    const stageOptions = ['一般地圖','終末之塔'].map(category=>`<optgroup label="${category}">${stages.filter(s=>(s.mapCategory==='tower')===(category==='終末之塔')).flatMap(s=>{
+      const rows=s.mapCategory==='tower'?(s.areas||[]).map(a=>({key:`${s.stageId}:${a.floor}`,label:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
+      if(s.mapCategory==='tower'&&selectedKey===String(s.stageId))rows.unshift({key:String(s.stageId),label:s.stageName+'（全圖）'});
+      return rows.map(r=>`<option value="${r.key}" ${r.key===selectedKey?'selected':''}>${htmlEscape(r.label)}</option>`);
+    }).join('')}</optgroup>`).join('');
     reader.innerHTML = `<section class="card mapPage">
       <h1>地圖查詢</h1>
       <div class="mapToolbar">
@@ -859,6 +879,13 @@
       </div>
     </section>`;
     mountMapSelector();
+    if(state.floorStageId===Number(stage.stageId)&&state.floor){
+      const area=stage.areas?.[0],canvas=reader.querySelector('.mapCanvasWrap');
+      if(area&&canvas)requestAnimationFrame(()=>{
+        canvas.scrollLeft=Math.max(0,area.x*zoomValue()-canvas.clientWidth/2);
+        canvas.scrollTop=Math.max(0,area.y*zoomValue()-canvas.clientHeight/2);
+      });
+    }
     reader.querySelectorAll('[data-map-panel]').forEach(panel => {
       panel.querySelector('summary').addEventListener('click', event => {
         if(event.target.closest('button')) return;
@@ -987,9 +1014,17 @@
 
   document.addEventListener('change', ev => {
     if(ev.target?.id === 'mapStageSelect'){
-      state.stageId = Number(ev.target.value);
+      const [stageId,floor]=ev.target.value.split(':').map(Number);
+      state.stageId = stageId;
+      state.floor = floor||null;
+      state.floorStageId = floor?stageId:null;
+      state.monsters.clear();state.npcs.clear();
       const stage = currentStage();
       if(stage) autoCheckMatches(stage);
+      if(stage&&floor){
+        monsterGroups(stage).forEach(group=>state.monsters.add(monsterGroupKey(group)));
+        (stage.npcs||[]).forEach(n=>state.npcs.add(npcKey(n)));
+      }
       renderLoaded();
     }
   });

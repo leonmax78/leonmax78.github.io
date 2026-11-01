@@ -44,7 +44,7 @@
   model.anchor[kind]=key;render();
  }
  function catalogRows(){
-  const mode=model.sourceMode,map=data.maps.find(m=>String(m.stageId)===$('map').value),q=$('query').value;
+  const mode=model.sourceMode,map=data.maps.find(m=>m.key===$('map').value),q=$('query').value;
   const common=new Set([...model.config.favorites,...model.config.discard.map(r=>r.id)]);
   return data.items.filter(r=>(mode!=='map'||map?.ids.has(r.id))&&(mode!=='common'||common.has(r.id))&&S.matches(r.id+' '+r.name,q,$('fuzzy').checked));
  }
@@ -62,9 +62,9 @@
   $('rows').querySelectorAll('[data-action-index]').forEach(sel=>sel.onchange=()=>run(()=>changed(model.rows.map((r,i)=>i===Number(sel.dataset.actionIndex)?{...r,state:Number(sel.value)}:r))));
   $('rows').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>run(()=>changed(model.rows.filter((_,i)=>i!==Number(b.dataset.delete)))));
   $('row-count').textContent=`${model.rows.length} / 251 筆 · 已選 ${model.selected.size} 筆${model.dirty?' · 尚未儲存':''}`;
-  const map=data.maps.find(m=>String(m.stageId)===$('map').value);
+  const map=data.maps.find(m=>m.key===$('map').value);
   $('map-tools').hidden=model.sourceMode!=='map';
-  $('map-info').textContent=model.sourceMode==='map'?(map?`${map.stageId} ${map.stageName}：${map.ids.size} 種已知掉落道具。${map.unknown||!map.ids.size?'掉落資料尚不完整，不代表沒有掉落物。':''}`:'請選擇地圖'):'';
+  $('map-info').textContent=model.sourceMode==='map'?(map?`${map.floor?'終末之塔':map.stageId} ${map.stageName}：${map.ids.size} 種已知掉落道具。${map.unknown||!map.ids.size?'掉落資料尚不完整，不代表沒有掉落物。':''} 怪物：${map.monsterNames.join('、')||'尚無點位資料'}`:'請選擇地圖'):'';
   host.querySelectorAll('[data-source]').forEach(b=>{const active=b.dataset.source===model.sourceMode;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
   $('catalog-panel').setAttribute('aria-labelledby','ae-tab-'+model.sourceMode);
   host.querySelectorAll('[data-file-required]').forEach(b=>b.disabled=!model.meta||model.busy);
@@ -77,10 +77,10 @@
  }
  function mapChoices(){
   const prior=$('map').value,q=$('map-query').value;
-  const maps=data.maps.filter(m=>S.matches(m.stageId+' '+m.stageName,q));
-  $('map').innerHTML='<option value="">選擇地圖</option>'+maps.map(m=>`<option value="${m.stageId}">${m.stageId} ${E(m.stageName)}</option>`).join('');
-  if(maps.some(m=>String(m.stageId)===prior))$('map').value=prior;
-  else if(maps.length===1)$('map').value=String(maps[0].stageId);
+  const maps=data.maps.filter(m=>S.matches((m.floor?'終末之塔':m.stageId)+' '+m.stageName,q));
+  $('map').innerHTML='<option value="">選擇地圖</option>'+['一般地圖','終末之塔'].map(category=>`<optgroup label="${category}">${maps.filter(m=>m.category===category).map(m=>`<option value="${m.key}">${m.floor?'':m.stageId+' '}${E(m.stageName)}</option>`).join('')}</optgroup>`).join('');
+  if(maps.some(m=>m.key===prior))$('map').value=prior;
+  else if(maps.length===1)$('map').value=maps[0].key;
   model.page=0;model.cat.clear();render();
  }
  function selectedCatalog(){return [...model.cat].map(id=>data.byId.get(id)).filter(Boolean).map(r=>({id:r.id,name:r.name,state:Number($('add-action').value)}));}
@@ -216,7 +216,7 @@
    <p class="ae-notice">請先登出至角色選擇頁面再使用。角色不可在線上，才能讀取與覆蓋 SAVE。存檔只在本機處理，不會上傳。</p>
    <label><input id="ae-offline" type="checkbox">我已登出至角色選擇頁面，角色不在線上</label>
    <div class="ae-toolbar"><button id="ae-open" disabled>上傳檔案</button><input id="ae-file" type="file" accept=".data" hidden disabled><span id="ae-filename">尚未選擇檔案</span></div>
-   <p>請上傳ID_腳色名稱_3.data檔案（不是 _0.data）</p>
+   <p>請上傳ID_角色名稱_3.data檔案（不是 _0.data）</p>
    <div class="ae-toolbar"><button id="ae-backup" data-file-required>備份 DATA 資料</button><button id="ae-restore" data-file-required>還原 DATA 資料</button><input id="ae-restore-file" type="file" accept=".data" hidden></div>
    <p id="ae-save-mode"></p><p id="ae-message" role="status" aria-live="polite">正在載入道具資料…</p><p id="ae-backup-result" class="ae-muted"></p>
    <div class="ae-columns"><section><h2>道具資料庫</h2>
