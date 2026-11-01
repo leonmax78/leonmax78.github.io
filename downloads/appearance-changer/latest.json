@@ -1,10 +1,10 @@
 {
   "display_name": "神州Online角色外觀變更程式 By尼扣扣",
-  "version": "0.1.10",
-  "published_at": "2026-10-29 15:42",
-  "file_name": "SZOAppearance-v0.1.10.zip",
-  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.10.zip",
-  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.10.zip",
-  "sha256": "6b4486da7cc3ee1d676faa3edd2ff2681ded17b9db77556a58eb3e67ca61f663",
-  "notes": "武魂 CHAR3 可獨立選 data1.pak，裝備 ITEM／技能 MAGIC 使用 update.pak。UPDATE 缺少 CHAR3 不再阻擋載入；兩份封包獨立備份還原，紀錄顯示修改封包，支援常用組合跨封包套用。"
+  "version": "0.1.11",
+  "published_at": "2026-11-01 18:52",
+  "file_name": "SZOAppearance-v0.1.11.zip",
+  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.11.zip",
+  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.11.zip",
+  "sha256": "60363cb71e46bda8df812f3ced14a10bf103cc8f7ba2b88575925ab6ac37cbee",
+  "notes": "新增六組可命名自訂換裝方案，儲存目前修改或已選收藏後可一鍵完整切換；未包含的舊修改會還原，跨封包保留驗證與還原機制。停用 UPX 並加入產品版本資訊；若仍遇 Defender 隔離請回報，勿關閉防毒。"
 }
