@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261102-46",
-  "published_at": "2026-11-02 20:45",
-  "file_name": "Wuguan_261102-46.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261102-46.zip",
+  "version": "261102-48",
+  "published_at": "2026-11-02 21:34",
+  "file_name": "Wuguan_261102-48.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261102-48.zip",
   "page_url": "downloads/",
-  "notes": "新增逛街模式與繁簡道具搜尋。攤位上的紅框標籤會比對目前角色的已收／未收狀態，辨識不明時顯示灰色。沿用原本槽位與讀檔，保留四欄七排、舊版校正和手動存檔。",
-  "sha256": "cab055769db1a24fdaf57d7677e2512e5eec14a0996f668e0d4c8433448c4637"
+  "notes": "逛街模式支援 NPC 商店與玩家攤位。修正商店的頭箍辨識，以完整名稱和遊戲圖示核對；保留原本的武冠槽位，校正按鈕移至頂端偵測旁。",
+  "sha256": "8950565574f7a85c8bc7df130b07048c687abfd8b5ad222c01e8ff94bd93b870"
 }
