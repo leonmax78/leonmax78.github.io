@@ -6,6 +6,22 @@
  try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&typeof saved.picks==='object'&&saved.picks)state={level:Number(saved.level)||0,picks:saved.picks};}catch(e){}
  const save=()=>{try{localStorage.setItem(key,JSON.stringify(state));}catch(e){}};
  const detail=g=>Object.entries(stats).filter(([k])=>Number(g[k])).map(([k,n])=>n+' +'+Number(g[k]).toLocaleString()).join('、');
+ function refinePlan(target,rows){
+  const steps=[],total=new Map();
+  function expand(id,count,group){
+   const row=rows.find(r=>r.group===group&&r.rewards.some(p=>p.id===id));
+   if(!row)return false;
+   const times=Math.ceil(count/row.rewards.find(p=>p.id===id).count);
+   for(const m of row.materials){
+    const n=m.count*times;
+    if(group>231&&rows.some(r=>r.group===group-1&&r.rewards.some(p=>p.id===m.id))){
+     expand(m.id,n,group-1);
+    }else total.set(m.id,(total.get(m.id)||0)+n);
+   }
+   steps.push({row,times});return true;
+  }
+  return expand(target,1,233)&&steps.some(s=>s.row.group===231)&&steps.some(s=>s.row.group===232)?{steps,total}:null;
+ }
  window.SZO_GEM_TOTAL=function(level,picks){
   const data=window.SZO_JEWELS,total=Object.fromEntries(Object.keys(stats).map(k=>[k,0]));let equipped=0;
   const slots=data.slots.filter(s=>Number(s.NeedLv)<=level);
@@ -23,8 +39,20 @@
   #gemPage button{font:inherit;color:var(--text,#dce7f5);background:#102a36;border:1px solid #357b83;border-radius:6px;padding:9px 12px;cursor:pointer;max-width:100%;white-space:normal;overflow-wrap:anywhere}#gemPage button:hover{background:#194756}#gemPage button:focus-visible{outline:2px solid #53ded3;outline-offset:2px}#gemPage .gemRecipe button{padding:4px 8px}#gemPage h1{font-size:22px}#gemPage .gemRecipe p{line-height:2}
   #gemPage .gemPicker{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;flex:1;min-width:0}#gemPage .gemPicker label{min-width:0;font-size:12px}#gemPage .gemBatch{align-items:end;flex-wrap:wrap}#gemPage .gemBatch .gemPicker{flex-basis:280px}#gemPage .gemPicker select{margin-top:5px}#gemPage .gemSlotTitle{margin-bottom:8px}
   </style><h1>寶石試算、加工配方</h1><div class="gemTabs" role="tablist"><button role="tab" data-gem-tab="calc" aria-selected="${tab==='calc'}">寶石試算</button><button role="tab" data-gem-tab="recipes" aria-selected="${tab==='recipes'}">加工配方、寶石粉來源</button></div><div id="gemContent"></div></section>`;
+  byId('gemPage').querySelector('.gemTabs').insertAdjacentHTML('beforeend',`<button role="tab" data-gem-tab="plan" aria-selected="${tab==='plan'}">三星合成材料</button>`);
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
   const content=byId('gemContent');
+  if(tab==='plan'){
+   const targets=exchange.rows.filter(r=>r.group===233).flatMap(r=>r.rewards).filter(p=>Number(data.gems[p.id]?.Grade)===3);
+   content.innerHTML=`<div class="gemFilters"><label>形狀<select id="gemPlanShape">${shapes.slice(1).map((n,i)=>`<option value="${i+1}">${n}</option>`).join('')}</select></label><label>目標三星寶石（能力）<select id="gemPlanTarget"></select></label></div><div id="gemPlanResult" aria-live="polite"></div>`;
+   const materials=ps=>ps.map(p=>`<button type="button" data-item="${esc(p.id)}">${esc(name(p.id))}</button> × ${p.count.toLocaleString()}`).join('、');
+   const refresh=()=>{
+    const id=byId('gemPlanTarget').value,plan=refinePlan(id,exchange.rows);
+    byId('gemPlanResult').innerHTML=plan?`<article class="gemRecipe"><h2>製作 1 顆${esc(name(id))}</h2><h3>從零開始：材料總計</h3><p>${materials(Array.from(plan.total,([id,count])=>({id,count})))}</p></article>`+plan.steps.map(({row,times})=>`<article class="gemRecipe"><h3>${row.group-230} 星 · ${esc(name(row.rewards[0].id))} × ${times*row.rewards[0].count}</h3><p>精製 ${times} 次：${materials(row.materials.map(m=>({...m,count:m.count*times})))}</p></article>`).join(''):'<p>沒有完整的一至三星精製配方。</p>';
+   };
+   const choose=()=>{byId('gemPlanTarget').innerHTML=targets.filter(p=>String(data.gems[p.id].Shape)===byId('gemPlanShape').value).map(p=>`<option value="${p.id}">${esc(name(p.id))}（${esc(detail(data.gems[p.id]))}）</option>`).join('');refresh();};
+   byId('gemPlanShape').onchange=choose;byId('gemPlanTarget').onchange=refresh;choose();return;
+  }
   if(tab==='recipes'){
    const rows=exchange.rows.filter(r=>r.group===220||(r.group>=221&&r.group<=226)||(r.group>=231&&r.group<=233));
    const link=p=>`<button type="button" data-item="${esc(p.id)}">${esc(name(p.id))}</button> × ${p.count.toLocaleString()}`;
