@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "260925-45",
-  "published_at": "2026-09-25 14:12",
-  "file_name": "Wuguan_260925-45.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_260925-45.zip",
+  "version": "261102-46",
+  "published_at": "2026-11-02 20:45",
+  "file_name": "Wuguan_261102-46.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261102-46.zip",
   "page_url": "downloads/",
-  "notes": "新增封獸一至十星偵測、總分與收藏率；收藏率依已收筆數計算並無條件捨去小數。匯出總表及未收清單包含封獸與捕捉出處。保留舊版角色存檔與道具校正設定，封獸請另行校正。來源未提供的捕捉位置會明確標示；部分封獸模板為推估，偵測結果可手動修正。更新包僅含正式版，不附DEMO或使用者存檔。43版以前更新後若仍開啟舊程式，請改執行同資料夾的「武冠判讀_正式版.exe」。",
-  "sha256": "28f87954d6f6e3ffd5e3be21e4706891be20bf5ad7d4c4fd7098f4abcb72e836"
+  "notes": "新增逛街模式與繁簡道具搜尋。攤位上的紅框標籤會比對目前角色的已收／未收狀態，辨識不明時顯示灰色。沿用原本槽位與讀檔，保留四欄七排、舊版校正和手動存檔。",
+  "sha256": "cab055769db1a24fdaf57d7677e2512e5eec14a0996f668e0d4c8433448c4637"
 }
