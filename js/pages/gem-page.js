@@ -2,7 +2,7 @@
  const shapes=['','圓弧','三角','四方','五稜','六緯'];
  const stats={Base_HP:'生命',Base_MP:'法力',Base_Con:'體魄',Base_Str:'力量',Base_Int:'智慧',Base_Dex:'敏捷',Extra_Def:'防禦',Magic_Att:'術攻',Magic_Def:'術防'};
  const key='szo-gem-calculator-v1';
- let state={level:5000,picks:{}},tab='calc';
+ let state={level:5000,picks:{}},tab='plan';
  try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&typeof saved.picks==='object'&&saved.picks)state={level:Number(saved.level)||0,picks:saved.picks};}catch(e){}
  const save=()=>{try{localStorage.setItem(key,JSON.stringify(state));}catch(e){}};
  const detail=g=>Object.entries(stats).filter(([k])=>Number(g[k])).map(([k,n])=>n+' +'+Number(g[k]).toLocaleString()).join('、');
@@ -38,8 +38,14 @@
   #gemPage .gemSlots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}#gemPage .gemSlot{min-width:0;padding:12px;border:1px solid var(--border,#354557);border-radius:8px}#gemPage select,#gemPage input{max-width:100%;width:100%;min-width:0}#gemPage .gemShape{padding:18px 0;border-top:1px solid var(--border,#354557)}#gemPage .gemShape h2{font-size:18px}#gemPage .gemTotals{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 0}#gemPage .gemBatch{display:flex;gap:8px;max-width:620px;margin:12px 0}#gemPage .gemBatch button{flex-shrink:0}#gemPage .gemFilters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;margin:16px 0}#gemPage .gemRecipe{padding:16px 0;border-bottom:1px solid var(--border,#354557);overflow-wrap:anywhere}#gemPage .gemRecipe h3{font-size:16px}#gemPage .gemSlot small{display:block;margin-top:8px}#gemPage .gemSlot:has(select:disabled){opacity:.55}
   #gemPage button{font:inherit;color:var(--text,#dce7f5);background:#102a36;border:1px solid #357b83;border-radius:6px;padding:9px 12px;cursor:pointer;max-width:100%;white-space:normal;overflow-wrap:anywhere}#gemPage button:hover{background:#194756}#gemPage button:focus-visible{outline:2px solid #53ded3;outline-offset:2px}#gemPage .gemRecipe button{padding:4px 8px}#gemPage h1{font-size:22px}#gemPage .gemRecipe p{line-height:2}
   #gemPage .gemPicker{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;flex:1;min-width:0}#gemPage .gemPicker label{min-width:0;font-size:12px}#gemPage .gemBatch{align-items:end;flex-wrap:wrap}#gemPage .gemBatch .gemPicker{flex-basis:280px}#gemPage .gemPicker select{margin-top:5px}#gemPage .gemSlotTitle{margin-bottom:8px}
-  </style><h1>寶石試算、加工配方</h1><div class="gemTabs" role="tablist"><button role="tab" data-gem-tab="calc" aria-selected="${tab==='calc'}">寶石試算</button><button role="tab" data-gem-tab="recipes" aria-selected="${tab==='recipes'}">加工配方、寶石粉來源</button></div><div id="gemContent"></div></section>`;
-  byId('gemPage').querySelector('.gemTabs').insertAdjacentHTML('beforeend',`<button role="tab" data-gem-tab="plan" aria-selected="${tab==='plan'}">三星合成材料</button>`);
+  #gemPage .gemRule{border-left:4px solid #dda84d;padding:8px 12px;background:var(--panel);line-height:1.65}
+  #gemPage .gemShopping{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,195px),1fr));gap:4px 24px}
+  #gemPage .gemShopping li{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border,#354557);padding:6px 0;gap:8px}
+  #gemPage .gemShopping button{border:0;background:transparent;text-align:left;padding:4px 0}
+  #gemPage .gemShopping strong{white-space:nowrap;font-variant-numeric:tabular-nums}
+  #gemPage .gemStep{margin:12px 0;padding:6px 0;border-bottom:1px solid var(--border,#354557)}
+  #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
+  </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
   const content=byId('gemContent');
   if(tab==='plan'){
@@ -48,7 +54,7 @@
    const materials=ps=>ps.map(p=>`<button type="button" data-item="${esc(p.id)}">${esc(name(p.id))}</button> × ${p.count.toLocaleString()}`).join('、');
    const refresh=()=>{
     const id=byId('gemPlanTarget').value,plan=refinePlan(id,exchange.rows);
-    byId('gemPlanResult').innerHTML=plan?`<article class="gemRecipe"><h2>製作 1 顆${esc(name(id))}</h2><h3>從零開始：材料總計</h3><p>${materials(Array.from(plan.total,([id,count])=>({id,count})))}</p></article>`+plan.steps.map(({row,times})=>`<article class="gemRecipe"><h3>${row.group-230} 星 · ${esc(name(row.rewards[0].id))} × ${times*row.rewards[0].count}</h3><p>精製 ${times} 次：${materials(row.materials.map(m=>({...m,count:m.count*times})))}</p></article>`).join(''):'<p>沒有完整的一至三星精製配方。</p>';
+    byId('gemPlanResult').innerHTML=plan?`<p class="gemRule"><strong>升星不能混搭</strong>：每升一星，需要 3 顆同形狀、同顏色的前一星寶石。一星則由普通材料製作。</p><h2>${esc(name(id))} × 1</h2><h3>備料總清單</h3><ul class="gemShopping">${Array.from(plan.total,([mid,n])=>`<li><button type="button" data-item="${esc(mid)}">${esc(name(mid))}</button><strong>× ${n.toLocaleString()}</strong></li>`).join('')}</ul><h3>精製順序</h3>`+plan.steps.map(({row,times},i)=>`<details class="gemStep"><summary>${esc(name(row.rewards[0].id))} × ${times*row.rewards[0].count}</summary>${i?`<p>每顆需要：${materials(row.materials)}</p>`:''}<p>製作 ${times} 顆共需：${materials(row.materials.map(m=>({...m,count:m.count*times})))}</p></details>`).join(''):'<p>沒有完整的一至三星精製配方。</p>';
    };
    const choose=()=>{byId('gemPlanTarget').innerHTML=targets.filter(p=>String(data.gems[p.id].Shape)===byId('gemPlanShape').value).map(p=>`<option value="${p.id}">${esc(name(p.id))}（${esc(detail(data.gems[p.id]))}）</option>`).join('');refresh();};
    byId('gemPlanShape').onchange=choose;byId('gemPlanTarget').onchange=refresh;choose();return;
