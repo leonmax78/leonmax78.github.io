@@ -31,6 +31,15 @@ async function run(engine,mobile){
   const recipe=await page.evaluate(()=>eqAllowedRecipes().find(r=>r.effects?.length)?.id);assert(recipe);
   await page.evaluate(id=>eqAddRecipe(id),recipe);
   assert(await page.evaluate(()=>eqSelectedRecipes().length===1&&Object.keys(eqEffectAccumulator()).length>0));
+  const hidden=await page.evaluate(()=>{
+   const eq=eqEquipList().find(e=>e.display_type==='暗器');
+   openEquipmentSim(eq.uid);
+   const recipes=eqAllowedRecipes();
+   const recipe=recipes.find(r=>r.name==='耀迅配方');
+   if(recipe)eqAddRecipe(recipe.id);
+   return {allowed:recipes.map(r=>r.name),added:eqSelectedRecipes().some(x=>x.recipe.name==='耀迅配方')};
+  });
+  assert(hidden.added&&hidden.allowed.includes('耀武配方')&&!hidden.allowed.includes('伊訓配方'));
   await page.evaluate(()=>renderEquipmentCompoundPage());await page.locator('#eqClearFilters').click();
   await page.locator('#eqMainSearch').fill('仙器');await page.getByRole('option',{name:'仙器',exact:true}).click();
   assert(await page.evaluate(()=>eqFilteredEquipment().length>0&&eqFilteredEquipment().every(e=>e.main_category==='仙器')));

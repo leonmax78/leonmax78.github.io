@@ -25,7 +25,7 @@ function parseCompoundIniMulti(text){
  push();return data.filter(x=>x&&(x.ID!==undefined||x.Name!==undefined||x.Item!==undefined));
 }
 
-function compTypeToDisplay(code){return ITEM_TYPE_MAP[String(code||'').trim()]||String(code||'').trim()}
+function compTypeToDisplay(code){const key=String(code||'').trim();return window.SZO_DISPLAY.values.Type[key]||key}
 
 function compGroupFromStable(stable,types){
  const s=Number(stable)||0;
