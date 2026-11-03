@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.42",
-  "published_at": "2026-11-03 17:30",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.42.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.42.7z",
+  "version": "2.5.43",
+  "published_at": "2026-11-03 17:48",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.43.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.43.7z",
   "page_url": "downloads/",
-  "notes": "修正單一帳號在登入畫面辨識無法暫時取得前景焦點時，可能被誤判為登入失敗並連續開啟多個遊戲視窗；畫面辨識拿不到焦點時改為安全退回固定等待，不再觸發重新啟動，真正輸入帳密無法取得焦點時才保留重試機制；保留批次登入兩階段流程。"
+  "notes": "修正 Windows 顯示縮放或遊戲畫面縮放時，開始遊戲的邏輯座標直接交給實體滑鼠，可能偏移到第三個角色欄位；所有實體滑鼠點擊會先將遊戲客戶區座標轉換成實體螢幕座標，備援畫面擷取也使用相同轉換；點擊日誌新增實際螢幕座標。"
 }
