@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261102-48",
-  "published_at": "2026-11-02 21:34",
-  "file_name": "Wuguan_261102-48.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261102-48.zip",
+  "version": "261104-49",
+  "published_at": "2026-11-04 01:21",
+  "file_name": "Wuguan_261104-49.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261104-49.zip",
   "page_url": "downloads/",
-  "notes": "逛街模式支援 NPC 商店與玩家攤位。修正商店的頭箍辨識，以完整名稱和遊戲圖示核對；保留原本的武冠槽位，校正按鈕移至頂端偵測旁。",
-  "sha256": "8950565574f7a85c8bc7df130b07048c687abfd8b5ad222c01e8ff94bd93b870"
+  "notes": "修正逛街模式無法辨識含全形空格的道具名稱，例如「乾坤雙極　天劍」。沿用原本角色槽位與校正設定。",
+  "sha256": "f459401754776b54fe3d10a242b06c686032cba88fb090740e5a51a4ca858c0a"
 }
