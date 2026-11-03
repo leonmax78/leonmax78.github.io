@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.38",
-  "published_at": "2026-11-03 15:23",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.38.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.38.7z",
+  "version": "2.5.39",
+  "published_at": "2026-11-03 16:19",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.39.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.39.7z",
   "page_url": "downloads/",
-  "notes": "改善帳號欄位焦點確認、清除、輸入驗證及安全重試；多開的前景鍵盤與滑鼠操作加入全域鎖定；開始遊戲會確認角色畫面與轉場結果，必要時最多重試三次；登入日誌新增 PID、前景視窗、重試、座標及確認結果，並區分操作完成、已確認進入遊戲與結果未確認。"
+  "notes": "修正 2.5.38 可能沿用登入畫面的不可讀狀態，導致已進入角色選擇畫面仍停止登入；送出帳密後會重設該遊戲視窗的畫面偵測狀態，再重新確認角色畫面；勾選開啟後最大化時，只會在確認進入遊戲世界後最大化，失敗或結果未確認時維持原尺寸。"
 }
