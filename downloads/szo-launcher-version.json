@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.41",
-  "published_at": "2026-11-03 17:01",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.41.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.41.7z",
+  "version": "2.5.42",
+  "published_at": "2026-11-03 17:30",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.42.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.42.7z",
   "page_url": "downloads/",
-  "notes": "批次登入改為先完成所有帳號的登入、選角及保護密碼操作，不再等待第一個帳號的世界畫面確認才處理下一個；全部登入操作送出後，再統一確認各遊戲視窗是否進入世界並執行最大化；保留全部視窗先填完帳密、再依序登入的既有流程。"
+  "notes": "修正單一帳號在登入畫面辨識無法暫時取得前景焦點時，可能被誤判為登入失敗並連續開啟多個遊戲視窗；畫面辨識拿不到焦點時改為安全退回固定等待，不再觸發重新啟動，真正輸入帳密無法取得焦點時才保留重試機制；保留批次登入兩階段流程。"
 }
