@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.45",
-  "published_at": "2026-11-03 19:15",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.45.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.45.7z",
+  "version": "2.5.46",
+  "published_at": "2026-11-04 20:05",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.46.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.46.7z",
   "page_url": "downloads/",
-  "notes": "強化剪貼簿被系統、輸入法或防毒軟體短暫占用時的自動重試；修正多開時第一個視窗可能略過帳密輸入的問題；勾選開啟後最大化遊戲視窗時，多開排列固定為預設；增加剪貼簿與帳密填入失敗診斷日誌。"
+  "notes": "剪貼簿被其他程式長時間占用時改用逐字輸入帳密，多開時填入失敗的視窗會自動補填；帳密設定檔改為安全寫入並自動備份，損毀時可自動還原；畫面偵測改為一次擷取，降低多開登入時的 CPU 負擔；可一次刪除多筆帳密並支援 Delete、F2、Ctrl+A 快捷鍵；啟動器更新檢查加入逾時。"
 }
