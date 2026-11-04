@@ -1,4 +1,5 @@
 // V242 script loader: load manifest files in order, then start the app.
+// V662: scripts download in parallel; dynamic scripts with async=false still execute in insertion order.
 (function(){
   if(/^#reverse-\d+$/i.test(location.hash || '')){
     try{ history.replaceState(history.state, '', location.pathname + location.search); }catch(e){}
@@ -32,10 +33,14 @@
 
   (async function(){
     try{
-      for(let i = 0; i < list.length; i++){
-        setStatus('載入模組 ' + (i + 1) + '/' + list.length);
-        await loadOne(list[i]);
-      }
+      // Download all manifest scripts in parallel; async=false keeps execution in list order.
+      let done = 0;
+      setStatus('載入模組 0/' + list.length);
+      await Promise.all(list.map(src => loadOne(src).then(result => {
+        done++;
+        setStatus('載入模組 ' + done + '/' + list.length);
+        return result;
+      })));
       if(typeof window.SZOAppInit === 'function') await window.SZOAppInit();
       window.SZO_READY = true;
       document.documentElement.classList.add('szo-ready');

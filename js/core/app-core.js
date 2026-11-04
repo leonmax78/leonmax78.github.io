@@ -68,10 +68,8 @@ async function loadScriptGroupOnce(groupName){
  const list=groups[groupName]||[];
  if(!list.length)return true;
  if(lazyScriptGroupLoads[groupName])return lazyScriptGroupLoads[groupName];
- lazyScriptGroupLoads[groupName]=(async()=>{
-  for(const src of list)await loadScriptOnce(src);
-  return true;
- })();
+ // V662: insert the whole group at once so files download in parallel; async=false keeps execution order.
+ lazyScriptGroupLoads[groupName]=Promise.all(list.map(src=>loadScriptOnce(src))).then(()=>true);
  return lazyScriptGroupLoads[groupName];
 }
 window.loadScriptGroupOnce = loadScriptGroupOnce;

@@ -66,7 +66,9 @@
     npcs: new Set(),
     panels: { monster: true, npc: true, chest: true },
     composing: false,
-    zoom: 1
+    zoom: 1,
+    maximized: false,
+    listHidden: false
   };
 
   function htmlEscape(s){
@@ -695,10 +697,11 @@
     if(overlay) overlay.innerHTML = markerDots(target);
   }
 
+  const MIN_ZOOM = 0.25;
   function zoomValue(){
     const n = Number(state.zoom);
     if(!Number.isFinite(n)) return 1;
-    return Math.max(0.5, Math.min(5, n));
+    return Math.max(MIN_ZOOM, Math.min(5, n));
   }
 
   function applyZoomToDom(stage){
@@ -713,15 +716,55 @@
     }
     if(imageStage) imageStage.style.transform = `scale(${z})`;
     if(label) label.textContent = `${Math.round(z * 100)}%`;
+    const input = document.getElementById('mapZoomInput');
+    if(input && Number(input.value) !== z) input.value = String(z);
   }
 
+  // V662: fit the whole stage into the visible map frame (used by the 符合畫面 button and when maximizing).
+  function fitZoomToFrame(mode){
+    const target = currentStage();
+    const wrap = document.querySelector('.mapCanvasWrap');
+    if(!target || !wrap) return;
+    const bar = wrap.querySelector('.mapZoomBar');
+    const w = Math.max(80, wrap.clientWidth - 24);
+    const h = Math.max(80, wrap.clientHeight - (bar ? bar.offsetHeight : 0) - 24);
+    const fitW = w / (Number(target.width) || 1), fitH = h / (Number(target.height) || 1);
+    // 'height' fills the frame's height (phones held upright) and leaves sideways dragging; default shows the whole map.
+    // 'fill' covers the whole frame (crop is reached by dragging).
+    const raw = mode === 'height' ? fitH : mode === 'fill' ? Math.max(fitW, fitH) : Math.min(fitW, fitH);
+    state.zoom = Math.max(MIN_ZOOM, Math.min(5, Math.floor(raw * 100) / 100));
+    applyZoomToDom(target);
+    wrap.scrollTop = 0;
+    wrap.scrollLeft = Math.max(0, (wrap.scrollWidth - wrap.clientWidth) / 2);
+  }
+
+  function autoFitMode(){
+    return window.matchMedia && window.matchMedia('(max-width: 760px) and (orientation: portrait)').matches ? 'height' : 'contain';
+  }
+
+  function setMapMaximized(on){
+    state.maximized = !!on;
+    state.fitKey = null;
+    // Phones: start with the marker list tucked away so the map gets the whole screen.
+    if(state.maximized && window.matchMedia && window.matchMedia('(max-width: 760px)').matches) state.listHidden = true;
+    renderLoaded();
+    requestAnimationFrame(() => {
+      fitZoomToFrame(state.maximized ? autoFitMode() : 'contain');
+      document.querySelector(state.maximized ? '[data-map-max]' : '.mapCanvasWrap [data-map-max]')?.focus({ preventScroll: true });
+    });
+  }
+
+  function assetManifest(){
+    // Same lookup as js/data/asset-media.js: the bundle registers itself under SZO_DATA_BUNDLES.
+    return (window.SZO_DATA_BUNDLES && window.SZO_DATA_BUNDLES.asset_manifest) || window.SZO_ASSET_MANIFEST || {};
+  }
   function assetBase(){
-    return (window.SZO_ASSET_MANIFEST && window.SZO_ASSET_MANIFEST.base) || 'assets/test-media';
+    return (assetManifest().base) || 'assets/test-media';
   }
 
   function assetVersion(){
     return String(
-      (window.SZO_ASSET_MANIFEST && window.SZO_ASSET_MANIFEST.version) ||
+      (assetManifest().version) ||
       document.body?.dataset?.version ||
       'dev'
     );
@@ -837,7 +880,7 @@
         <button type="button" class="ghost mapClearSearchBtn" data-map-clear-search>清空搜尋</button>
       </div>
       ${renderMapSuggestions()}
-      <div class="mapLayout">
+      <div class="mapLayout${state.maximized ? ' mapMaximized' : ''}${state.listHidden ? ' mapListHidden' : ''}">
         ${stage.flags?.includes('STAGE_FLAG_ForbidGive')?'<p class="notice" style="grid-column:1/-1">此地圖禁止交易／給予道具。</p>':''}
         <aside class="mapLeftPane">
         <details class="mapSide mapMonsterSide" data-map-panel="monster" ${state.panels.monster ? 'open' : ''}>
@@ -864,8 +907,14 @@
         </aside>
         <div class="mapCanvasWrap">
           <div class="mapZoomBar">
+            <div class="mapViewTools">
+              <button type="button" class="ghost mapToolBtn" data-map-list-toggle aria-pressed="${state.listHidden ? 'true' : 'false'}">${state.listHidden ? '顯示清單' : '隱藏清單'}</button>
+              <button type="button" class="ghost mapToolBtn" data-map-fit title="整張地圖縮放到可見範圍">整張地圖</button>
+              <button type="button" class="ghost mapToolBtn" data-map-fill title="地圖填滿整個框，超出部分可拖曳查看">填滿畫面</button>
+              <button type="button" class="ghost mapToolBtn mapMaxBtn" data-map-max aria-pressed="${state.maximized ? 'true' : 'false'}" title="${state.maximized ? '結束放大（Esc）' : '地圖佔滿整個視窗'}">${state.maximized ? '結束放大' : '放大地圖'}</button>
+            </div>
             <label>縮放
-              <input id="mapZoomInput" type="range" min="0.5" max="5" step="0.05" value="${zoomValue()}">
+              <input id="mapZoomInput" type="range" min="${MIN_ZOOM}" max="5" step="0.01" value="${zoomValue()}">
             </label>
             <span>${Math.round(zoomValue() * 100)}%</span>
           </div>
@@ -882,6 +931,12 @@
       </div>
     </section>`;
     mountMapSelector();
+    // V662: in maximized mode, a newly chosen stage is fitted to the window automatically.
+    const fitKey = `${stage.stageId}:${state.floor || ''}`;
+    if(state.maximized && state.fitKey !== fitKey && !(state.floorStageId===Number(stage.stageId)&&state.floor)){
+      state.fitKey = fitKey;
+      requestAnimationFrame(() => fitZoomToFrame(autoFitMode()));
+    }
     if(state.floorStageId===Number(stage.stageId)&&state.floor){
       const area=stage.areas?.[0],canvas=reader.querySelector('.mapCanvasWrap');
       if(area&&canvas)requestAnimationFrame(()=>{
@@ -1104,6 +1159,28 @@
     const attr = `data-map-${kind}`;
     document.querySelectorAll(`input[${attr}]`).forEach(input => { input.checked = !!all; });
     updateMapSelectionDom(stage);
+  });
+
+  document.addEventListener('click', ev => {
+    const tool = ev.target?.closest?.('[data-map-max],[data-map-fit],[data-map-fill],[data-map-list-toggle]');
+    if(!tool || !tool.closest('.mapPage')) return;
+    ev.preventDefault();
+    if(tool.hasAttribute('data-map-max')){ setMapMaximized(!state.maximized); return; }
+    if(tool.hasAttribute('data-map-fit')){ fitZoomToFrame('contain'); return; }
+    if(tool.hasAttribute('data-map-fill')){ fitZoomToFrame('fill'); return; }
+    state.listHidden = !state.listHidden;
+    const layout = tool.closest('.mapLayout');
+    layout?.classList.toggle('mapListHidden', state.listHidden);
+    tool.textContent = state.listHidden ? '顯示清單' : '隱藏清單';
+    tool.setAttribute('aria-pressed', state.listHidden ? 'true' : 'false');
+  });
+
+  document.addEventListener('keydown', ev => {
+    if(ev.key !== 'Escape' || !state.maximized || floatingMap?.open) return;
+    if(document.querySelector('dialog[open], .mapShopBackdrop')) return; // let an open preview/panel close first
+    if(!document.querySelector('.mapLayout.mapMaximized')) return;
+    ev.preventDefault();
+    setMapMaximized(false);
   });
 
   document.addEventListener('click', ev => {

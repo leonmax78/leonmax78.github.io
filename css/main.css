@@ -4212,3 +4212,50 @@ body{
  .itemDetailSection{padding:12px 0}
  .itemSection-special{padding:8px 12px}
 }
+
+
+/* V662 map view tools: hide list, fit to frame, maximize */
+.mapZoomBar{flex-wrap:wrap}
+.mapViewTools{display:flex;flex-wrap:wrap;gap:6px;margin-right:auto}
+.mapToolBtn{min-height:34px;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:900;white-space:nowrap}
+.mapToolBtn[aria-pressed="true"]{border-color:#2dd4bf;color:#a7f3d0}
+.mapLayout.mapListHidden{grid-template-columns:minmax(0,1fr)}
+.mapLayout.mapListHidden>.mapLeftPane{display:none}
+/* V662: bigger map in the normal page view — frame almost as tall as the window, narrower list column */
+@media(min-width:761px){
+  .mapPage{max-width:none}
+  .mapLayout:not(.mapMaximized){grid-template-columns:minmax(220px,280px) minmax(0,1fr)}
+  .mapLayout:not(.mapMaximized) .mapCanvasWrap{height:clamp(520px,calc(100dvh - 90px),1400px)}
+  .mapLayout:not(.mapMaximized)>.mapLeftPane{max-height:clamp(520px,calc(100dvh - 90px),1400px)}
+  .mapLayout.mapListHidden:not(.mapMaximized){grid-template-columns:minmax(0,1fr)}
+}
+.mapZoomBar{padding:6px 10px}
+/* The unscaled stage (e.g. 2240px) used to stretch the scroll area past the scaled map, leaving blank space to drag into */
+.mapZoomSurface{overflow:clip;overflow-clip-margin:24px}
+.floatingMapBody [data-map-max]{display:none}
+.mapLayout.mapMaximized{position:fixed;inset:0;z-index:10050;margin:0;padding:10px;gap:10px;background:#020817;grid-template-columns:minmax(260px,320px) minmax(0,1fr);align-items:stretch}
+.mapLayout.mapMaximized.mapListHidden{grid-template-columns:minmax(0,1fr)}
+.mapLayout.mapMaximized>.mapLeftPane{max-height:none;min-height:0;height:calc(100dvh - 20px)}
+.mapLayout.mapMaximized .mapCanvasWrap{height:calc(100dvh - 20px)}
+.mapLayout.mapMaximized>.notice{display:none}
+body:has(.mapLayout.mapMaximized){overflow:hidden}
+/* .card's backdrop-filter would make the fixed overlay relative to the card instead of the window */
+.mapPage:has(.mapLayout.mapMaximized){backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transform:none!important;filter:none!important}
+body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
+@media(max-width:760px){
+  .mapZoomBar{justify-content:flex-start}
+  .mapZoomBar input{width:120px}
+  .mapLayout.mapMaximized{grid-template-columns:minmax(0,1fr);padding:6px}
+  .mapLayout.mapMaximized:not(.mapListHidden)>.mapLeftPane{position:absolute;z-index:30;left:6px;top:62px;bottom:6px;width:min(300px,82vw);height:auto;background:#020817;box-shadow:12px 0 28px rgba(0,0,0,.5);border-radius:16px}
+  .mapLayout.mapMaximized .mapCanvasWrap{height:calc(100dvh - 12px)}
+}
+
+/* V662 desktop: collapsible function menu */
+.drawerCollapseBtn,.drawerExpandBtn{display:none}
+@media(min-width:980px){
+  .drawerCollapseBtn{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:34px;padding:4px 10px;font-size:18px;line-height:1}
+  html.szoDrawerCollapsed .app{padding-left:46px!important}
+  html.szoDrawerCollapsed .drawer{transform:translateX(-100%)!important;visibility:hidden}
+  html.szoDrawerCollapsed .drawerExpandBtn{display:flex;align-items:center;justify-content:center;position:fixed;left:0;top:60px;bottom:0;width:40px;z-index:1100;padding:0;border:0;border-right:1px solid rgba(45,212,191,.35);border-radius:0;background:linear-gradient(180deg,rgba(8,16,31,.97),rgba(10,16,29,.96));color:#a7f3d0;font-weight:900;font-size:15px;letter-spacing:.2em;writing-mode:vertical-rl;cursor:pointer}
+  html.szoDrawerCollapsed .drawerExpandBtn:hover{background:#10223a}
+}

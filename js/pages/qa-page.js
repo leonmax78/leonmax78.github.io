@@ -51,8 +51,12 @@
     const n = Number(rate);
     return Number.isFinite(n) ? `${n.toFixed(6)}%` : '';
   }
+  function assetManifest(){
+    // Same lookup as js/data/asset-media.js: the bundle registers itself under SZO_DATA_BUNDLES.
+    return (window.SZO_DATA_BUNDLES && window.SZO_DATA_BUNDLES.asset_manifest) || window.SZO_ASSET_MANIFEST || {};
+  }
   function assetBase(){
-    return (window.SZO_ASSET_MANIFEST && window.SZO_ASSET_MANIFEST.base) || 'assets/test-media';
+    return (assetManifest().base) || 'assets/test-media';
   }
   function itemIcon(item){
     const media = window.SZO_ASSET_MEDIA;
