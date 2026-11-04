@@ -20,7 +20,7 @@
 <div class="backdrop" id="backdrop"></div>
 <div class="app">
 <aside class="drawer" id="drawer">
-  <div class="drawerHead"><div><div class="drawerTitle">功能選單</div><div class="muted" style="font-size:12px">選好後回到閱讀頁</div></div><button class="ghost closeOnly" id="closeMenuBtn">✕</button></div>
+  <div class="drawerHead"><div><div class="drawerTitle">功能選單</div><div class="muted" style="font-size:12px">選好後回到閱讀頁</div></div><button class="ghost closeOnly" id="closeMenuBtn">✕</button><button type="button" class="ghost drawerCollapseBtn" id="drawerCollapseBtn" title="收合功能選單" aria-label="收合功能選單">«</button></div>
   <div class="drawerBody">
     <div class="navGroup" id="navGroup">
       <button class="navBtn major active" data-view="home">首頁 <span>›</span></button>
@@ -96,6 +96,7 @@
     <div id="siteInfoBody"></div>
   </section>
 </div>
+<button type="button" class="drawerExpandBtn" id="drawerExpandBtn" title="展開功能選單" aria-label="展開功能選單">☰ 選單</button>
 <button id="collectFloatingTopBtn" class="collectTopBtn globalTopBtn" type="button" data-global-top data-collect-top hidden>↑ 回到頂部</button>
 `;
   // Save-file editing is desktop-only; keep the mobile navigation uncluttered.
@@ -312,6 +313,20 @@
     document.addEventListener('visibilitychange', () => {
       if(document.visibilityState === 'visible') checkFreshData();
     });
+  })();
+
+  // V662：桌機版左側功能選單可收合，讓地圖等內容區更寬；狀態記在本機瀏覽器。
+  (function(){
+    const KEY = 'szo:drawerCollapsed';
+    const root = document.documentElement;
+    function apply(on){
+      root.classList.toggle('szoDrawerCollapsed', !!on);
+      try{ localStorage.setItem(KEY, on ? '1' : '0'); }catch(e){}
+      try{ window.dispatchEvent(new Event('resize')); }catch(e){}
+    }
+    try{ if(localStorage.getItem(KEY) === '1') root.classList.add('szoDrawerCollapsed'); }catch(e){}
+    document.getElementById('drawerCollapseBtn')?.addEventListener('click', () => apply(true));
+    document.getElementById('drawerExpandBtn')?.addEventListener('click', () => apply(false));
   })();
 
 })();

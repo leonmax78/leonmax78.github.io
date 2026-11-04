@@ -1,0 +1,48 @@
+# Publish the site with GitHub Actions instead of publishing the whole branch.
+# tools/build_pages_site.py copies only what the live site needs into _site/
+# (no PNG map originals, development folders or older desktop-tool downloads).
+#
+# Takes effect once Settings → Pages → Build and deployment → Source is set to "GitHub Actions".
+# To roll back: set Source back to "Deploy from a branch" (main, / root); nothing in the repo changes.
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:          # build and check only; never deploys
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  # Deploys queue one after another; pull-request checks run separately.
+  group: ${{ github.event_name == 'pull_request' && format('pages-pr-{0}', github.ref) || 'pages' }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build site folder
+        run: python3 tools/build_pages_site.py --out _site --check
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
+      - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

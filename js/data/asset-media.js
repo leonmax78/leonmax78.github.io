@@ -44,7 +44,7 @@
   function monsterPortraitSrc(monster){
     const id=String(monster&&(monster.ID!==undefined?monster.ID:monster.id)||'').trim();
     const beast=id&&(window.SZO_BEASTS||[]).find(row=>String(row.monsterId)===id&&row.portrait);
-    if(beast)return `${base().replace(/\/assets\/test-media$/, '')}/${beast.portrait}?v=528`;
+    if(beast)return beastPortraitSrc(beast.portrait);
     if(id&&monsterPortraitOverrides[id])return `${base()}/${monsterPortraitOverrides[id]}${mediaVersion()}`;
     const pic=String(monster&&(monster.Pic!==undefined?monster.Pic:monster.pic)||'').trim();
     return pic&&setOf('monster').has(pic)?`${base()}/monster-portraits/m${pic}.png${mediaVersion()}`:'';
@@ -53,7 +53,14 @@
     const id=String(soul&&(soul.ID!==undefined?soul.ID:soul.id)||'').trim();
     return id&&setOf('soul').has(id)?`${base()}/soul-portraits/s${id}.png${mediaVersion()}`:'';
   }
+  // V662: one URL per beast portrait so list rows and detail views share a single request.
+  const BEAST_PORTRAIT_VERSION='528';
+  function beastPortraitSrc(path){
+    const clean=String(path||'').replace(/^\/+/, '');
+    return `${base().replace(/\/assets\/test-media$/, '')}/${clean}?v=${BEAST_PORTRAIT_VERSION}`;
+  }
   function img(src,alt,cls){
+    if(src&&/^\/?assets\/beast-portraits\/[^?]+$/.test(String(src)))src=beastPortraitSrc(src);
     return src?`<span class="${cls||'assetThumb'}"><img src="${esc(src)}" alt="${esc(alt||'')}" loading="lazy" decoding="async" onerror="this.closest('.assetThumb,.assetHero')?.remove()"></span>`:'';
   }
   window.SZO_ASSET_MEDIA={manifest,itemIconSrc,monsterPortraitSrc,soulPortraitSrc,img};
