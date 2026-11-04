@@ -4259,3 +4259,9 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
   html.szoDrawerCollapsed .drawerExpandBtn{display:flex;align-items:center;justify-content:center;position:fixed;left:0;top:60px;bottom:0;width:40px;z-index:1100;padding:0;border:0;border-right:1px solid rgba(45,212,191,.35);border-radius:0;background:linear-gradient(180deg,rgba(8,16,31,.97),rgba(10,16,29,.96));color:#a7f3d0;font-weight:900;font-size:15px;letter-spacing:.2em;writing-mode:vertical-rl;cursor:pointer}
   html.szoDrawerCollapsed .drawerExpandBtn:hover{background:#10223a}
 }
+/* V663: 1:1 map tiles from R2 layered over the 1/8 map image */
+.mapImageStage .mapTileLayer{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.mapImageStage .mapTileLayer img{position:absolute;display:block;max-width:none;opacity:0;transition:opacity .15s ease}
+.mapImageStage .mapTileLayer img.ready{opacity:1}
+/* V663: markers and labels stop growing past 200% so the 1:1 view stays readable (anchor point stays fixed) */
+.mapImageStage .mapDot,.mapImageStage .mapAreaLabel,.mapImageStage .mapTransferLabel{transform-origin:0 0;scale:min(1,calc(2 / var(--mz,1)))}

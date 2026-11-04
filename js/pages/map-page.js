@@ -698,10 +698,82 @@
   }
 
   const MIN_ZOOM = 0.25;
+  // Site map images are 1/8 of the game, so 800% equals the game's 1:1 view (detail comes from R2 tiles).
+  const MAX_ZOOM = 8;
   function zoomValue(){
     const n = Number(state.zoom);
     if(!Number.isFinite(n)) return 1;
-    return Math.max(MIN_ZOOM, Math.min(5, n));
+    return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, n));
+  }
+
+  // ---- 1:1 tiles (Cloudflare R2). The 1/8 image stays underneath as the fallback. ----
+  const TILE_BASE = 'https://pub-61de3bce509e4bdbbc3565a6e823fd8a.r2.dev/tiles/';
+  const tileMeta = new Map();
+  let tileFrame = 0;
+  function loadTileMeta(stageId){
+    if(tileMeta.has(stageId)) return tileMeta.get(stageId);
+    const id = String(stageId).padStart(3, '0');
+    const p = fetch(`${TILE_BASE}stage${id}/meta.json`, { cache: 'no-cache' })
+      .then(r => r.ok ? r.json() : null)
+      .then(m => { tileMeta.set(stageId, m || null); return m || null; })
+      .catch(() => { tileMeta.set(stageId, null); return null; });
+    tileMeta.set(stageId, p);
+    return p;
+  }
+  function scheduleTiles(){
+    if(tileFrame) return;
+    tileFrame = requestAnimationFrame(() => { tileFrame = 0; updateTiles(); });
+  }
+  function updateTiles(){
+    const stage = currentStage();
+    const layer = document.querySelector('.mapTileLayer');
+    const wrap = document.querySelector('.mapCanvasWrap');
+    const imageStage = document.querySelector('.mapImageStage');
+    if(!stage || !layer || !wrap || !imageStage) return;
+    const sid = Number(stage.stageId);
+    const meta = tileMeta.get(sid);
+    if(meta === undefined || meta instanceof Promise){ Promise.resolve(loadTileMeta(sid)).then(scheduleTiles); return; }
+    if(!meta || layer.dataset.stage !== String(sid)){ layer.innerHTML = ''; layer.dataset.stage = String(sid); if(!meta) return; }
+    const z = zoomValue();
+    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const k = meta.w / (Number(stage.width) || 1);           // game pixels per site-image pixel (8, or 16 for 峨嵋山)
+    if(z * dpr <= 1.05){ layer.innerHTML = ''; return; }      // the 1/8 image is already sharp enough
+    const Z = meta.maxZoom;
+    const perScreen = k / (z * dpr);                           // game pixels per screen pixel
+    const L = Math.max(0, Math.min(Z, Z - Math.max(0, Math.floor(Math.log2(Math.max(perScreen, 1e-6))))));
+    const ts = meta.tile * Math.pow(2, Z - L) / k;            // tile size in site-image pixels
+    const rs = imageStage.getBoundingClientRect(), rw = wrap.getBoundingClientRect();
+    const pad = 64;
+    const x0 = Math.max(0, (Math.max(rw.left, rs.left) - rs.left - pad) / z);
+    const y0 = Math.max(0, (Math.max(rw.top, rs.top) - rs.top - pad) / z);
+    const x1 = Math.min(Number(stage.width), (Math.min(rw.right, rs.right) - rs.left + pad) / z);
+    const y1 = Math.min(Number(stage.height), (Math.min(rw.bottom, rs.bottom) - rs.top + pad) / z);
+    if(x1 <= x0 || y1 <= y0) return;
+    const id = String(sid).padStart(3, '0');
+    const want = new Set();
+    for(let ty = Math.floor(y0 / ts); ty * ts < y1; ty++){
+      for(let tx = Math.floor(x0 / ts); tx * ts < x1; tx++){
+        if(want.size > 400) break;
+        const key = `${L}/${tx}_${ty}`;
+        want.add(key);
+        if(layer.querySelector(`img[data-tile="${key}"]`)) continue;
+        const img = document.createElement('img');
+        img.dataset.tile = key;
+        img.alt = '';
+        img.decoding = 'async';
+        img.style.cssText = `left:${tx * ts}px;top:${ty * ts}px;width:${ts}px;height:${ts}px`;
+        img.onerror = () => img.remove();
+        img.onload = () => {
+          img.classList.add('ready');
+          // once this level is showing, drop tiles of other levels underneath it
+          layer.querySelectorAll('img[data-level]').forEach(o => { if(o.dataset.level !== String(L) && !want.has(o.dataset.tile)) o.remove(); });
+        };
+        img.dataset.level = String(L);
+        img.src = `${TILE_BASE}stage${id}/${key}.webp?v=${encodeURIComponent(meta.ver || '')}`;
+        layer.appendChild(img);
+      }
+    }
+    layer.querySelectorAll('img[data-level]').forEach(o => { if(o.dataset.level === String(L) && !want.has(o.dataset.tile)) o.remove(); });
   }
 
   function applyZoomToDom(stage){
@@ -714,10 +786,12 @@
       surface.style.width = `${Math.round((Number(target.width) || 1) * z)}px`;
       surface.style.height = `${Math.round((Number(target.height) || 1) * z)}px`;
     }
-    if(imageStage) imageStage.style.transform = `scale(${z})`;
+    if(imageStage){ imageStage.style.transform = `scale(${z})`; imageStage.style.setProperty('--mz', String(z)); }
     if(label) label.textContent = `${Math.round(z * 100)}%`;
     const input = document.getElementById('mapZoomInput');
     if(input && Number(input.value) !== z) input.value = String(z);
+    if(label && z >= MAX_ZOOM) label.textContent = '1:1';
+    scheduleTiles();
   }
 
   // V662: fit the whole stage into the visible map frame (used by the 符合畫面 button and when maximizing).
@@ -732,7 +806,7 @@
     // 'height' fills the frame's height (phones held upright) and leaves sideways dragging; default shows the whole map.
     // 'fill' covers the whole frame (crop is reached by dragging).
     const raw = mode === 'height' ? fitH : mode === 'fill' ? Math.max(fitW, fitH) : Math.min(fitW, fitH);
-    state.zoom = Math.max(MIN_ZOOM, Math.min(5, Math.floor(raw * 100) / 100));
+    state.zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, Math.floor(raw * 100) / 100));
     applyZoomToDom(target);
     wrap.scrollTop = 0;
     wrap.scrollLeft = Math.max(0, (wrap.scrollWidth - wrap.clientWidth) / 2);
@@ -914,14 +988,15 @@
               <button type="button" class="ghost mapToolBtn mapMaxBtn" data-map-max aria-pressed="${state.maximized ? 'true' : 'false'}" title="${state.maximized ? '結束放大（Esc）' : '地圖佔滿整個視窗'}">${state.maximized ? '結束放大' : '放大地圖'}</button>
             </div>
             <label>縮放
-              <input id="mapZoomInput" type="range" min="${MIN_ZOOM}" max="5" step="0.01" value="${zoomValue()}">
+              <input id="mapZoomInput" type="range" min="${MIN_ZOOM}" max="${MAX_ZOOM}" step="0.01" value="${zoomValue()}">
             </label>
-            <span>${Math.round(zoomValue() * 100)}%</span>
+            <span>${zoomValue() >= MAX_ZOOM ? '1:1' : Math.round(zoomValue() * 100) + '%'}</span>
           </div>
           <div class="mapLoading" id="mapImageLoading">地圖載入中</div>
           <div class="mapZoomSurface" style="width:${Math.round((Number(stage.width)||1)*zoomValue())}px;height:${Math.round((Number(stage.height)||1)*zoomValue())}px;">
-            <div class="mapImageStage" style="transform:scale(${zoomValue()});width:${Number(stage.width)||1}px;height:${Number(stage.height)||1}px;">
+            <div class="mapImageStage" style="transform:scale(${zoomValue()});--mz:${zoomValue()};width:${Number(stage.width)||1}px;height:${Number(stage.height)||1}px;">
               <img id="mapImage" src="${htmlEscape(withAssetVersion(stage.image))}" alt="${htmlEscape(stage.stageName)}" decoding="async" fetchpriority="high">
+              <div class="mapTileLayer" aria-hidden="true"></div>
               <div class="mapAreaOverlay">${areaLabels(stage)}</div>
               <div class="mapTransferOverlay">${transferLabels(stage)}</div>
               <div class="mapOverlay">${markerDots(stage)}</div>
@@ -963,6 +1038,7 @@
       else img.addEventListener('load', done, { once: true });
       img.addEventListener('error', () => { loading.textContent = '地圖載入失敗'; }, { once: true });
     }
+    scheduleTiles();
   }
 
   async function renderStageMapPage(){
@@ -1027,6 +1103,8 @@
     if(ev.target?.id === 'mapSearchInput') state.composing = true;
   });
 
+  document.addEventListener('scroll', ev => { if(ev.target?.classList?.contains('mapCanvasWrap')) scheduleTiles(); }, true);
+  window.addEventListener('resize', scheduleTiles);
   document.addEventListener('pointerdown', startMapDrag, true);
   document.addEventListener('pointermove', moveMapDrag, true);
   document.addEventListener('pointerup', endMapDrag, true);
