@@ -735,9 +735,9 @@
     if(meta === undefined || meta instanceof Promise){ Promise.resolve(loadTileMeta(sid)).then(scheduleTiles); return; }
     if(!meta || layer.dataset.stage !== String(sid)){ layer.innerHTML = ''; layer.dataset.stage = String(sid); if(!meta) return; }
     const z = zoomValue();
-    const dpr = Math.min(window.devicePixelRatio || 1, 3);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const k = meta.w / (Number(stage.width) || 1);           // game pixels per site-image pixel (8, or 16 for 峨嵋山)
-    if(z * dpr <= 1.05){ layer.innerHTML = ''; return; }      // the 1/8 image is already sharp enough
+    if(z <= 1.25){ layer.innerHTML = ''; return; }            // normal browsing uses the 1/8 image only; tiles start once zoomed in
     const Z = meta.maxZoom;
     const perScreen = k / (z * dpr);                           // game pixels per screen pixel
     const L = Math.max(0, Math.min(Z, Z - Math.max(0, Math.floor(Math.log2(Math.max(perScreen, 1e-6))))));
