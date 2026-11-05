@@ -12,6 +12,8 @@ BASE = 'https://sites.google.com/view/szounofficial/'
 TRADE = ['300級龍涉大川繼鱗武匣','299級古文明東西霸武匣','288級三分鼎鋒真王武匣','277級南辰時祿機神兵匣','266-級東明開天釋達神匣','255級萬帝天尊極武神匣','233級冥府皇統法老征匣','222級阿薩群鋒巨武神匣','200級創宇諸恆極兵神匣','199級永恆山海唯武神匣','188級鎮天聖守星武神匣','177級天尊帝宿超武神匣','168級仙儀丹曦帝武玉匣','155級奧林帕斯神兵聖櫃','145級盡宇絕兵聖箱','133級仙魔極兵聖箱','123級元極兵聖匣','111級尊佛極兵聖匣']
 WEAPONS = {'SWORD','BLADE','WHISK','STAFF','HIDDEN_WEAPON','HIDDEN_WEAPON2','SPEAR','ROD','AXE','HAMMER','SHIELD'}
 ARMOR = {'HELMET','ARMOR','BRACER','BOOT'}
+# Source-page spellings that differ from the game ITEM name (user-confirmed).
+SOURCE_NAME_FIXES = {'祓燈笠雲槍':'袚燈笠雲槍'}  # 277級南辰時祿機神兵匣, ID 30616 / 30626
 
 class Text(HTMLParser):
     def __init__(self):
@@ -98,6 +100,7 @@ def main():
                 if re.match(r'^名稱\s*[:：]?$',part) or re.match(r'^名稱\s*[:：]',part):
                     text=norm(''.join(p.parts[n:n+5]))
                     text=re.sub(r'^名稱[:：]?', '',text)
+                    for wrong,right in SOURCE_NAME_FIXES.items():text=text.replace(wrong,right)
                     candidates.append(text)
             matched=[]
             for item in items:
