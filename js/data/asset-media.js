@@ -21,26 +21,12 @@
   }
   const monsterPortraitOverrides={
     '15714':'monster-portraits/m15714.png',
-    // 1105 update: these monsters moved to new colour-table Pics (MONSTER2.OBD "MiscAttrib" variants).
-    // Until those recoloured portraits are rendered, show a portrait of the same sprite (colour may differ).
-    '18246':'monster-portraits/m6507.png', // 覆甲劍狂：新 Pic 8970（m692）尚無頭像
-    '18247':'monster-portraits/m8932.png', // 死誓巫卜：新 Pic 8971（m1004）尚無頭像
-    '18248':'monster-portraits/m8934.png', // 瘋盲淵兵：新 Pic 8972（m1006）尚無頭像
-    '18250':'monster-portraits/m8844.png', // 歧路石衛：新 Pic 8973（m968）尚無頭像
-    '18252':'monster-portraits/m5938.png', // 捨心半獸：新 Pic 8974（m666）尚無頭像
-    '18257':'monster-portraits/m8937.png', // 群蛛育母：新 Pic 8976（m1009）尚無頭像
-    '18258':'monster-portraits/m8931.png', // 六剋法馬：新 Pic 8977（m1003）尚無頭像
+    // 1105 update: rendered portraits for these Pics are not exact yet (BIAS recolour, or a colour table without an index),
+    // so they keep a portrait of the same sprite until confirmed in game.
     '18259':'monster-portraits/m5230.png', // 叫喚之手：新 Pic 8978（m230）尚無頭像
-    '18260':'monster-portraits/m5154.png', // 吐朽殘花：新 Pic 8979（m154）尚無頭像
-    '18261':'monster-portraits/m8936.png', // 淵藪蟹母：新 Pic 8980（m1008）尚無頭像
     '18262':'monster-portraits/m6481.png', // 咒鋼蛛王：新 Pic 8522（m823）尚無頭像
-    '18264':'monster-portraits/m6529.png', // 淵澤納迦：新 Pic 8982（m681）尚無頭像
-    '18267':'monster-portraits/m8927.png', // 萬屍血膠：新 Pic 8975（m999）尚無頭像
     '18268':'monster-portraits/m5773.png', // 古神凝視：新 Pic 8984（m615）尚無頭像
-    '18269':'monster-portraits/m8933.png', // 墮天遺骼：新 Pic 8985（m1005）尚無頭像
-    '18270':'monster-portraits/m8932.png', // 獻命司祭：新 Pic 8986（m1004）尚無頭像
     '18273':'monster-portraits/m8762.png', // 縫合鏖魔：新 Pic 8987（m56）尚無頭像
-    '18274':'monster-portraits/m6517.png', // 背信邪龍：新 Pic 8988（m702）尚無頭像
   };
   function pad4(v){const n=parseInt(String(v||'').trim(),10);return Number.isFinite(n)?String(n%10000).padStart(4,'0'):''}
   function legacyIconSuffixes(iconId,itemType){
