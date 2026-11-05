@@ -1061,27 +1061,74 @@
   }
 
   let mapDragState = null;
+  // V664: two-finger pinch zoom (touch) and Ctrl+wheel / trackpad pinch (desktop), anchored at the fingers or cursor.
+  const mapPointers = new Map();
+  let mapPinch = null;
   function dragTargetAllowed(target){
     if(!target?.closest) return false;
     if(target.closest('.mapZoomBar,.mapDot,button,input,select,label,a')) return false;
     return !!target.closest('.mapCanvasWrap');
   }
+  function zoomAround(wrap, nextZoom, clientX, clientY){
+    const imageStage = wrap.querySelector('.mapImageStage');
+    if(!imageStage) return;
+    const z0 = zoomValue();
+    const r0 = imageStage.getBoundingClientRect();
+    const px = (clientX - r0.left) / z0, py = (clientY - r0.top) / z0;   // map point under the fingers
+    state.zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, nextZoom));
+    applyZoomToDom();
+    const z1 = zoomValue();
+    const r1 = imageStage.getBoundingClientRect();
+    wrap.scrollLeft += r1.left + px * z1 - clientX;
+    wrap.scrollTop += r1.top + py * z1 - clientY;
+  }
+  function pinchMetrics(){
+    const [a, b] = [...mapPointers.values()];
+    return { dist: Math.hypot(a.x - b.x, a.y - b.y) || 1, x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  }
+  function startPinch(wrap){
+    if(mapDragState){ mapDragState.wrap.classList.remove('dragging'); mapDragState = null; }
+    const m = pinchMetrics();
+    mapPinch = { wrap, startDist: m.dist, startZoom: zoomValue(), x: m.x, y: m.y };
+  }
+  function startDragFrom(wrap, pointerId, x, y){
+    mapDragState = { wrap, pointerId, x, y };
+    wrap.classList.add('dragging');
+  }
   function startMapDrag(ev){
     if(ev.button !== undefined && ev.button !== 0) return;
-    if(!dragTargetAllowed(ev.target)) return;
-    const wrap = ev.target.closest('.mapCanvasWrap');
+    const wrap = ev.target?.closest?.('.mapCanvasWrap');
     if(!wrap) return;
-    mapDragState = {
-      wrap,
-      pointerId: ev.pointerId,
-      x: ev.clientX,
-      y: ev.clientY
-    };
-    wrap.classList.add('dragging');
+    // A second finger anywhere on the map starts a pinch, even over a marker.
+    if(mapPointers.size === 1 && ev.pointerType === 'touch' && [...mapPointers.values()][0].wrap === wrap){
+      mapPointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY, wrap });
+      try{ wrap.setPointerCapture(ev.pointerId); }catch(e){}
+      startPinch(wrap);
+      ev.preventDefault();
+      return;
+    }
+    if(!dragTargetAllowed(ev.target)) return;
+    mapPointers.clear();
+    mapPinch = null;
+    mapPointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY, wrap });
+    startDragFrom(wrap, ev.pointerId, ev.clientX, ev.clientY);
     try{ wrap.setPointerCapture(ev.pointerId); }catch(e){}
     ev.preventDefault();
   }
   function moveMapDrag(ev){
+    const pt = mapPointers.get(ev.pointerId);
+    if(!pt) return;
+    pt.x = ev.clientX; pt.y = ev.clientY;
+    if(mapPinch && mapPointers.size >= 2){
+      const m = pinchMetrics();
+      // follow the fingers' midpoint while zooming around it
+      mapPinch.wrap.scrollLeft -= m.x - mapPinch.x;
+      mapPinch.wrap.scrollTop -= m.y - mapPinch.y;
+      mapPinch.x = m.x; mapPinch.y = m.y;
+      zoomAround(mapPinch.wrap, mapPinch.startZoom * m.dist / mapPinch.startDist, m.x, m.y);
+      ev.preventDefault();
+      return;
+    }
     if(!mapDragState || mapDragState.pointerId !== ev.pointerId) return;
     const dx = ev.clientX - mapDragState.x;
     const dy = ev.clientY - mapDragState.y;
@@ -1092,12 +1139,32 @@
     ev.preventDefault();
   }
   function endMapDrag(ev){
-    if(!mapDragState || mapDragState.pointerId !== ev.pointerId) return;
-    const wrap = mapDragState.wrap;
-    wrap.classList.remove('dragging');
-    try{ wrap.releasePointerCapture(ev.pointerId); }catch(e){}
-    mapDragState = null;
+    const pt = mapPointers.get(ev.pointerId);
+    if(!pt) return;
+    mapPointers.delete(ev.pointerId);
+    try{ pt.wrap.releasePointerCapture(ev.pointerId); }catch(e){}
+    if(mapPinch){
+      mapPinch = null;
+      // one finger still down: keep dragging with it
+      const [[id, rest] = []] = [...mapPointers.entries()];
+      if(rest) startDragFrom(rest.wrap, id, rest.x, rest.y);
+      return;
+    }
+    if(mapDragState && mapDragState.pointerId === ev.pointerId){
+      mapDragState.wrap.classList.remove('dragging');
+      mapDragState = null;
+    }
   }
+  // Trackpad pinch arrives as wheel + ctrlKey; Ctrl+mouse wheel zooms too. Plain wheel still scrolls.
+  document.addEventListener('wheel', ev => {
+    if(!ev.ctrlKey) return;
+    const wrap = ev.target?.closest?.('.mapCanvasWrap');
+    if(!wrap) return;
+    ev.preventDefault();
+    // mouse wheels send ~100 per notch, trackpads a few units per event; cap each step at ±25%
+    const factor = Math.max(0.8, Math.min(1.25, Math.exp(-ev.deltaY * 0.0025)));
+    zoomAround(wrap, zoomValue() * factor, ev.clientX, ev.clientY);
+  }, { passive: false, capture: true });
 
   document.addEventListener('compositionstart', ev => {
     if(ev.target?.id === 'mapSearchInput') state.composing = true;

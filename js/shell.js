@@ -99,6 +99,12 @@
 <button type="button" class="drawerExpandBtn" id="drawerExpandBtn" title="展開功能選單" aria-label="展開功能選單">☰ 選單</button>
 <button id="collectFloatingTopBtn" class="collectTopBtn globalTopBtn" type="button" data-global-top data-collect-top hidden>↑ 回到頂部</button>
 `;
+  // V664：首頁就是這張背景圖；外框建好就先畫出來，不必等全部模組載完（app-core 的 renderHome 之後會畫出相同內容）。
+  const firstReader = root.querySelector('#reader');
+  if(firstReader && !firstReader.firstChild){
+    document.body.classList.add('isHomeView');
+    firstReader.innerHTML = '<section class="homeBlank" aria-label="首頁"></section>';
+  }
   // Save-file editing is desktop-only; keep the mobile navigation uncluttered.
   const editorNav = root.querySelector('[data-view="autodata"]');
   const editorMobileQuery = window.matchMedia('(max-width: 767px)');
