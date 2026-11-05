@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261105-50",
-  "published_at": "2026-11-05 19:20",
-  "file_name": "Wuguan_261105-50.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261105-50.zip",
+  "version": "261105-51",
+  "published_at": "2026-11-05 20:28",
+  "file_name": "Wuguan_261105-51.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261105-51.zip",
   "page_url": "downloads/",
-  "notes": "逛街模式新增背包與武冠鋒雲錄的道具判讀：滑鼠移到道具上，提示框旁顯示已收納／未收納／非武冠；封甕依「種類」顯示封獸收納狀態。新增高單價物品警告（紅字與提示音，可勾選開關），清單可用網站相同篩選自訂。未辨識的道具改顯示「非武冠」。小視窗預設避開偵測區並記住位置。沿用原本角色槽位與校正設定。",
-  "sha256": "9f6b7c18babce59a4a8bba91fe37e455bb3e8f5eeb12e582c18cc3b93ab361d7"
+  "notes": "修正 50 版：滑鼠先移到背包道具上再開攤位時，攤位幾乎辨識不出來（整列顯示非武冠）。「非武冠」只用在確定辨識為非武冠的道具，沒辨識出來的恢復顯示「未確認」。沿用原本角色槽位與校正設定。",
+  "sha256": "80c9e3e93dd8836d7419c2143712020ca263be3d80aaec7d33024e087e333a72"
 }
