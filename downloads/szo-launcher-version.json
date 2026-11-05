@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.50",
-  "published_at": "2026-11-05 20:10",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.50.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.50.7z",
+  "version": "2.5.51",
+  "published_at": "2026-11-06 00:16",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.51.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.51.7z",
   "page_url": "downloads/",
-  "notes": "修正在 2560×1440 等大螢幕使用多開排列時，遊戲視窗被放大導致保護密碼沒有自動輸入、停在保護密碼畫面的問題；多開排列現在只縮小、不放大超過遊戲原始大小。"
+  "notes": "修正多開排列將遊戲視窗縮小後，保護密碼鍵盤無法被偵測、因而沒有自動輸入保護密碼的問題；保護密碼偵測逾時時不再誤記為登入完成。"
 }
