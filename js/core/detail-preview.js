@@ -19,7 +19,7 @@
   bar.addEventListener('pointerup',()=>drag=null);
   bar.addEventListener('lostpointercapture',()=>drag=null);
  }};
- const snapshots=new Map();let sequence=0,dialog,request=0,afterClose=null,trail=[],origin=null;
+ const snapshots=new Map();let sequence=0,dialog,request=0,afterClose=null,trail=[],origin=null,openedAboveMap=false;
  function capture(){
   const reader=document.getElementById('reader');if(!reader)return null;
   const key=history.state?.szoSnapshot||'detail-'+(++sequence);
@@ -57,6 +57,7 @@
  }
  async function open(kind,id,push=true,highlightItemId=''){
   shell();const ticket=++request;
+  openedAboveMap=!!window.SZO_MAP_FLOAT?.isOpen();
   if(dialog.open&&window.SZO_MAP_FLOAT?.isOpen()){dialog.close();dialog.showModal();}
   if(!dialog.open){origin=document.activeElement;trail=[];if(push){capture();history.pushState({...history.state,szoPreview:{kind,id,highlightItemId}},'',location.href);}dialog.showModal();document.body.classList.add('detailPreviewOpen');}
   trail.push({kind,id,highlightItemId});dialog.querySelector('[data-preview-back]').hidden=trail.length<2;
@@ -99,7 +100,8 @@
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
  function pop(event){
-  window.SZO_MAP_FLOAT?.close();
+  // A preview opened above a map owns this history entry, not the map below.
+  if(!dialog?.open || !openedAboveMap)window.SZO_MAP_FLOAT?.close();
   if(event.state?.szoPreview){open(event.state.szoPreview.kind,event.state.szoPreview.id,false,event.state.szoPreview.highlightItemId);return true;}
   if(dialog?.open){hide();const next=afterClose;afterClose=null;next?.();return true;}
   if(restore(event.state?.szoSnapshot))return true;
