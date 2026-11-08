@@ -47,7 +47,11 @@
  function catalogRows(){
   const mode=model.sourceMode,map=data.maps.find(m=>m.key===$('map').value),q=$('query').value;
   const common=new Set([...model.config.favorites,...model.config.discard.map(r=>r.id)]);
-  return data.items.filter(r=>(mode!=='map'||map?.ids.has(r.id))&&(mode!=='common'||common.has(r.id))&&S.matches(r.id+' '+r.name,q,$('fuzzy').checked));
+  return data.items.filter(r=>(mode!=='monster'||data.dropsByMonster.get($('monster').value)?.has(r.id))&&(mode!=='map'||map?.ids.has(r.id))&&(mode!=='common'||common.has(r.id))&&S.matches(r.id+' '+r.name,q,$('fuzzy').checked));
+ }
+ function monsterChoices(){
+  const q=$('monster-query').value;
+  $('monster').innerHTML='<option value="">選擇怪物</option>'+[...data.monsterIds].filter(([id,m])=>S.matches(id+' '+m.Name,q,true)).map(([id,m])=>`<option value="${E(id)}">${E(m.Name)}（${E(id)}）</option>`).join('');
  }
  function render(){
   if(!host?.isConnected||!data||!$('catalog'))return;
@@ -65,6 +69,9 @@
   $('row-count').textContent=`${model.rows.length} / 251 筆 · 已選 ${model.selected.size} 筆${model.dirty?' · 尚未儲存':''}`;
   const map=data.maps.find(m=>m.key===$('map').value);
   $('map-tools').hidden=model.sourceMode!=='map';
+  $('monster-tools').hidden=model.sourceMode!=='monster';
+  if(model.sourceMode==='monster'&&!$('monster').options.length)monsterChoices();
+  $('monster-info').textContent=$('monster').value&&!data.dropsByMonster.get($('monster').value)?.size?'目前沒有這隻怪物的已知掉落資料。':'';
   $('map-info').textContent=model.sourceMode==='map'?(map?`${map.floor?'終末之塔':map.stageId} ${map.stageName}：${map.ids.size} 種已知掉落道具。${map.unknown||!map.ids.size?'掉落資料尚不完整，不代表沒有掉落物。':''} 怪物：${map.monsterNames.join('、')||'尚無點位資料'}`:'請選擇地圖'):'';
   host.querySelectorAll('[data-source]').forEach(b=>{const active=b.dataset.source===model.sourceMode;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;});
   $('catalog-panel').setAttribute('aria-labelledby','ae-tab-'+model.sourceMode);
@@ -176,7 +183,8 @@
   });
   $('restore-file').onchange=()=>run(async()=>{const f=$('restore-file').files[0];if(!f)return;const b=new Uint8Array(await f.arrayBuffer());if(!S.canRestore(model.meta.source,b))throw Error('備份的其他角色設定不同，禁止還原到此檔案；請確認是否同一角色版本');await saveOriginal(b);$('restore-file').value='';});
   ['query','row-query'].forEach(id=>$(id).oninput=()=>{model.page=0;model.cat.clear();render();});
-  ['map','fuzzy'].forEach(id=>$(id).onchange=()=>{model.page=0;model.cat.clear();model.anchor.cat=null;render();});
+  ['map','monster','fuzzy'].forEach(id=>$(id).onchange=()=>{model.page=0;model.cat.clear();model.anchor.cat=null;render();});
+  $('monster-query').oninput=()=>{monsterChoices();$('monster').onchange();};
   host.querySelectorAll('[data-source]').forEach(b=>b.onclick=()=>{model.sourceMode=b.dataset.source;model.page=0;model.cat.clear();model.anchor.cat=null;render();});
   host.querySelectorAll('[data-source]').forEach((b,i)=>b.onkeydown=e=>{const tabs=[...host.querySelectorAll('[data-source]')];let next;if(e.key==='ArrowRight')next=(i+1)%tabs.length;else if(e.key==='ArrowLeft')next=(i+tabs.length-1)%tabs.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=tabs.length-1;else return;e.preventDefault();tabs[next].click();tabs[next].focus();});
   $('map-query').oninput=mapChoices;
@@ -230,8 +238,9 @@
    <div class="ae-toolbar"><button id="ae-backup" data-file-required>備份 DATA 資料</button><button id="ae-restore" data-file-required>還原 DATA 資料</button><input id="ae-restore-file" type="file" accept=".data" hidden></div>
    <p id="ae-save-mode"></p><p id="ae-message" role="status" aria-live="polite">正在載入道具資料…</p><p id="ae-backup-result" class="ae-muted"></p>
    <div class="ae-columns"><section><h2>道具資料庫</h2>
-    <div class="ae-tabs" role="tablist" aria-label="道具篩選"><button id="ae-tab-all" role="tab" data-source="all" aria-selected="true" aria-controls="ae-catalog-panel">全部道具</button><button id="ae-tab-map" role="tab" data-source="map" aria-selected="false" aria-controls="ae-catalog-panel">地圖篩選</button><button id="ae-tab-common" role="tab" data-source="common" aria-selected="false" aria-controls="ae-catalog-panel">常用清單篩選</button></div>
+    <div class="ae-tabs" role="tablist" aria-label="道具篩選"><button id="ae-tab-all" role="tab" data-source="all" aria-selected="true" aria-controls="ae-catalog-panel">全部道具</button><button id="ae-tab-monster" role="tab" data-source="monster" aria-selected="false" aria-controls="ae-catalog-panel">怪物篩選</button><button id="ae-tab-map" role="tab" data-source="map" aria-selected="false" aria-controls="ae-catalog-panel">地圖篩選</button><button id="ae-tab-common" role="tab" data-source="common" aria-selected="false" aria-controls="ae-catalog-panel">常用清單篩選</button></div>
     <div id="ae-catalog-panel" role="tabpanel" aria-labelledby="ae-tab-all">
+    <div id="ae-monster-tools" hidden><input id="ae-monster-query" aria-label="搜尋怪物名稱或 ID" placeholder="搜尋怪物名稱或 ID"><select id="ae-monster" aria-label="選擇怪物"></select><span id="ae-monster-info"></span></div>
     <div id="ae-map-tools" hidden><div id="ae-map-levels" class="ae-map-levels"></div><input id="ae-map-query" aria-label="地圖編號或名稱" placeholder="地圖編號、名稱或樓層"><select id="ae-map" aria-label="地圖"></select></div><p id="ae-map-info"></p>
     <div class="ae-toolbar"><input id="ae-query" aria-label="道具 ID 或名稱" placeholder="道具 ID 或名稱"></div><div class="ae-toolbar ae-search-options"><label><input id="ae-fuzzy" type="checkbox" checked>模糊搜尋</label><label><input id="ae-warning" type="checkbox">加入高價道具時提醒（超過 50 萬）</label></div><div class="ae-toolbar"><button id="ae-select-catalog">選取本頁</button><button id="ae-unselect-catalog">取消選取</button><button id="ae-favorite-add">★ 加入常用</button><button id="ae-favorite-remove">☆ 移除常用</button></div>
     <div class="ae-scroll"><table><thead><tr><th>選取</th><th>最愛</th><th>道具</th><th>單價</th></tr></thead><tbody id="ae-catalog"></tbody></table></div>

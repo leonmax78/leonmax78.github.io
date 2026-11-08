@@ -45,7 +45,8 @@
    if(key===18){if(type!==6)throw Error('物品欄位類型不符');names=p+5;}
    if(key===19){if(type!==4)throw Error('狀態欄位類型不符');states=p+5;}
    p+=5;
-   if(type===1)p+=4;
+   if(type===7)p+=8; // Opaque fixed-width payload; retained verbatim in prefix/suffix.
+   else if(type===1)p+=4;
    else if(type===2){if(bytes[p]>1)throw Error('開關欄位格式不符');p++;}
    else if(type===4){const n=rd(bytes,p);if(n>10000)throw Error('設定陣列過長');p+=4+n*4;}
    else if(type===6){const n=rd(bytes,p);if(n>10000)throw Error('設定陣列過長');p+=4;for(let i=0;i<n;i++){const len=rd(bytes,p);if(len>65536||p+5+len>bytes.length||bytes[p+4+len]!==0)throw Error('字串欄位損壞');p+=5+len;}}
@@ -71,7 +72,7 @@
   for(const r of rows){wr(out,p,r.raw.length);p+=4;out.set(r.raw,p);p+=r.raw.length;out[p++]=0;}
   out.set(meta.bridge,p);p+=5;wr(out,p,rows.length);p+=4;for(const r of rows){wr(out,p,r.state);p+=4;}out.set(meta.suffix,p);
   const check=parse(out);
-  if(!equal(check.prefix,meta.prefix)||!equal(check.suffix,meta.suffix)||check.arr.length!==rows.length)throw Error('輸出驗證失敗');
+  if(!equal(check.prefix,meta.prefix)||!equal(check.suffix,meta.suffix)||check.arr.length!==rows.length||!rows.every((r,i)=>r.state===check.arr[i].state&&equal(r.raw,check.arr[i].raw)))throw Error('輸出驗證失敗');
   return out;
  }
  const ACTIONS=['保存','丟棄','賣出'];

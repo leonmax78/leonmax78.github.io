@@ -31,7 +31,7 @@
      for(const itemId of dropsByMonster.get(id)||[])m.ids.add(itemId);
     }
    }
-   return {items,byId,byName,maps};
+   return {items,byId,byName,maps,monsterIds,dropsByMonster};
   })().catch(e=>{promise=null;throw e;});
   return promise;
  }
@@ -73,7 +73,7 @@
  function canRestore(current,backup){
   const a=C.parse(current),b=C.parse(backup);
   // Only restore the item list. Other character settings must be identical.
-  return C.equal(C.serialize(a,[]),C.serialize(b,[]));
+  return C.equal(a.prefix,b.prefix)&&C.equal(a.suffix,b.suffix);
  }
  root.AutoDataServices={normalize,matches,loadData,defaults,readSettings,saveSettings,bytes,verifiedWrite,createBackup,listBackups,backupAndWrite,canRestore};
 })(window);

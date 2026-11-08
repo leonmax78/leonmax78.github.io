@@ -13,7 +13,12 @@ for(const n of [0,1,47,127,251]){
 assert.throws(()=>C.serialize(meta,Array.from({length:252},()=>({name:'測試',state:0}))));
 assert.throws(()=>C.parse(source.subarray(0,source.length-1)));
 const bad=Buffer.from(source);bad[4]=0;assert.throws(()=>C.parse(bad));
-const corrupt=Buffer.from(source);corrupt.writeUInt32LE(999,meta.start);assert.throws(()=>C.parse(corrupt));
+const corrupt=Buffer.from(C.serialize(meta,[{name:'測試',state:0}]));corrupt.writeUInt32LE(999,C.parse(corrupt).start);assert.throws(()=>C.parse(corrupt));
+// An opaque pair of words can contain bytes resembling another keyed field.
+const opaque=Buffer.concat([source.subarray(0,1038),Buffer.from([8,0,0,0,7,19,0,0,0,4,255,0,128])]);
+assert(C.equal(C.serialize(C.parse(opaque),[]),opaque));
+assert(C.equal(C.serialize(C.parse(opaque),[{name:'靈木',state:1}]).subarray(0,opaque.length),opaque));
+assert.throws(()=>C.parse(opaque.subarray(0,-1)));
 const invalidState=C.serialize(meta,[{name:'測試',state:0}]);invalidState.writeUInt32LE?.(3,0);
 assert.throws(()=>C.serialize(meta,[{name:'測試',state:3}]));
 assert.throws(()=>C.serialize(meta,[{name:'測試',raw:Uint8Array.of(65),state:0}]));
