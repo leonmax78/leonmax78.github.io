@@ -21,12 +21,6 @@
   }
   const monsterPortraitOverrides={
     '15714':'monster-portraits/m15714.png',
-    // 1105 update: rendered portraits for these Pics are not exact yet (BIAS recolour, or a colour table without an index),
-    // so they keep a portrait of the same sprite until confirmed in game.
-    '18259':'monster-portraits/m5230.png', // 叫喚之手：新 Pic 8978（m230）尚無頭像
-    '18262':'monster-portraits/m6481.png', // 咒鋼蛛王：新 Pic 8522（m823）尚無頭像
-    '18268':'monster-portraits/m5773.png', // 古神凝視：新 Pic 8984（m615）尚無頭像
-    '18273':'monster-portraits/m8762.png', // 縫合鏖魔：新 Pic 8987（m56）尚無頭像
   };
   function pad4(v){const n=parseInt(String(v||'').trim(),10);return Number.isFinite(n)?String(n%10000).padStart(4,'0'):''}
   function legacyIconSuffixes(iconId,itemType){
