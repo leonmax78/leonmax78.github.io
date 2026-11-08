@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261105-51",
-  "published_at": "2026-11-05 20:28",
-  "file_name": "Wuguan_261105-51.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261105-51.zip",
+  "version": "261108-52",
+  "published_at": "2026-11-08 20:26",
+  "file_name": "Wuguan_261108-52.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261108-52.zip",
   "page_url": "downloads/",
-  "notes": "修正 50 版：滑鼠先移到背包道具上再開攤位時，攤位幾乎辨識不出來（整列顯示非武冠）。「非武冠」只用在確定辨識為非武冠的道具，沒辨識出來的恢復顯示「未確認」。沿用原本角色槽位與校正設定。",
-  "sha256": "80c9e3e93dd8836d7419c2143712020ca263be3d80aaec7d33024e087e333a72"
+  "notes": "攤位新增星數版本辨識（例如鬼帝鎧★★☆），原本認不出的星數裝備會再單獨讀 ★／☆ 並以圖示確認。背包、武冠提示框與攤位分開判讀。修正提示框名稱過長時可能出錯。沿用原本角色槽位與校正設定。",
+  "sha256": "0e1fe9799b199feadd5c114acbef511b5ab385a7358d13f1575ef1971ec577f1"
 }
