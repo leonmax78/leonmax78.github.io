@@ -18,3 +18,5 @@
   MIXER2 only -> 50% alpha; DARKLIGHT kept opaque.
 - TABLE without MiscAttrib uses table 0 (object field zero-initialised).
 - render_exact.py runs with SZOAssetTool (palette fix applied) + szo_bias.py; it is kept here for reference.
+- Subtype 4 frames (24 Pics, e.g. 水母/年獸/大黑天): rows point to 2-byte pixels (palette index, alpha) using the
+  container palette, plus an opaque subtype-2 TLHS embedded at header offset 0x34 drawn on top (t4_decode.py).
