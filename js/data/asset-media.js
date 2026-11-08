@@ -43,7 +43,7 @@
   }
   function monsterPortraitSrc(monster){
     const id=String(monster&&(monster.ID!==undefined?monster.ID:monster.id)||'').trim();
-    const beast=id&&(window.SZO_BEASTS||[]).find(row=>String(row.monsterId)===id&&row.portrait);
+    const beast=id&&(window.SZO_BEASTS||[]).find(row=>String(row.monsterId)===id&&row.portrait&&!/beast-pending-/.test(row.portrait)); // placeholders fall back to the monster portrait
     if(beast)return beastPortraitSrc(beast.portrait);
     if(id&&monsterPortraitOverrides[id])return `${base()}/${monsterPortraitOverrides[id]}${mediaVersion()}`;
     const pic=String(monster&&(monster.Pic!==undefined?monster.Pic:monster.pic)||'').trim();
