@@ -1,6 +1,6 @@
 -- 玩家交易區。請在聊天室所用的同一個 Supabase 專案 SQL Editor 執行一次。
 -- 需要先執行過 supabase/chat.sql（共用 szo_chat_bans 停權名單與匿名登入設定）。
--- 貼文不會自動下架：由發文者在同一瀏覽器標記成交或刪除，或由站長在後台處理。
+-- 貼文 14 天後自動下架（發文者可延長）；也可由發文者刪除，或由站長在後台處理。
 -- 每篇最多 3 張圖片，存放在公開的 Storage bucket「trade-images」，路徑為「使用者ID/檔名」。
 begin;
 
@@ -277,5 +277,36 @@ $$;
 revoke all on function public.szo_update_trade_post(uuid,text,text,text,text,text,text,text[]) from public, anon;
 grant execute on function public.szo_update_trade_post(uuid,text,text,text,text,text,text,text[]) to authenticated;
 
+
+-- ===== 以下為後續新增：14 天下架與延長（同 supabase/trade-expiry.sql） =====
+-- 貼文最多顯示 14 天；發文者可隨時按「延長」重新計算 14 天。
+-- 過期貼文只有發文者本人看得到（可延長或刪除），其他人看不到。
+alter table public.szo_trade_posts add column if not exists expires_at timestamptz not null default (now() + interval '14 days');
+
+drop policy if exists szo_trade_read on public.szo_trade_posts;
+create policy szo_trade_read on public.szo_trade_posts for select to anon, authenticated
+  using (not is_removed and (expires_at > now() or user_id = (select auth.uid())));
+
+-- 發文者本人：延長 14 天（從現在起算）。
+create or replace function public.szo_extend_trade_post(p_id uuid)
+returns public.szo_trade_posts
+language plpgsql security definer set search_path = '' as $$
+declare
+  uid uuid := auth.uid();
+  result public.szo_trade_posts;
+begin
+  if uid is null then raise exception 'TRADE_AUTH_REQUIRED'; end if;
+  if exists(select 1 from public.szo_chat_bans b where b.user_id = uid)
+  then raise exception 'TRADE_BANNED'; end if;
+  update public.szo_trade_posts
+    set expires_at = clock_timestamp() + interval '14 days', updated_at = clock_timestamp()
+    where id = p_id and user_id = uid and not is_removed
+    returning * into result;
+  if not found then raise exception 'TRADE_NOT_OWNER'; end if;
+  return result;
+end;
+$$;
+revoke all on function public.szo_extend_trade_post(uuid) from public, anon;
+grant execute on function public.szo_extend_trade_post(uuid) to authenticated;
 
 commit;

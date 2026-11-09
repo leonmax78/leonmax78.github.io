@@ -1,11 +1,25 @@
 // 玩家交易區：販賣／收購留言板。資料存在聊天室同一個 Supabase 專案（supabase/trade.sql）。
 // 瀏覽不需登入；刊登、標記成交、刪除需先通過人機驗證取得匿名身分（與聊天室共用）。
-// 貼文不會自動下架，由發文者本人或站長手動處理。
+// 貼文顯示 14 天後自動下架（只剩發文者看得到），發文者可隨時延長；站長可在後台處理。
 (function(){
   const SUPABASE_SRC = 'js/vendor/supabase/supabase-2.118.0.js';
   const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
   const KIND_LABEL = { sell: '販賣', buy: '收購' };
   const SERVERS = ['北斗', '文昌', '祿存'];
+  const DAY = 86400000;
+
+  // 剩餘天數；沒有 expires_at（資料庫尚未更新）時回傳 null。
+  function daysLeft(post){
+    if(!post.expires_at) return null;
+    const left = new Date(post.expires_at).getTime() - Date.now();
+    return Number.isFinite(left) ? left : null;
+  }
+  function expiryLabel(left){
+    if(left === null) return '';
+    if(left <= 0) return '已過期';
+    if(left < DAY) return `剩不到 1 天`;
+    return `剩 ${Math.ceil(left / DAY)} 天`;
+  }
   const IMAGE_BUCKET = 'trade-images';
   const MAX_IMAGES = 3;
   const MAX_IMAGE_SIDE = 1280;
@@ -201,6 +215,7 @@
   function visiblePosts(){
     const query = state.query.trim().toLowerCase();
     return state.posts.filter(post =>
+      (daysLeft(post) === null || daysLeft(post) > 0 || (state.uid && post.user_id === state.uid)) &&
       (state.filter === 'all' || post.kind === state.filter) &&
       (!state.server || post.server === state.server) &&
       (!state.hideDone || post.status !== 'done') &&
@@ -220,17 +235,22 @@
     list.innerHTML = rows.map(post => {
       const mine = state.uid && post.user_id === state.uid;
       const done = post.status === 'done';
+      const left = daysLeft(post);
+      const expired = left !== null && left <= 0;
       const tools = mine ? `<div class="tradeOwnerTools">
+          ${left !== null ? `<button type="button" data-trade-extend="${esc(post.id)}">延長 14 天</button>` : ''}
           <button type="button" data-trade-edit="${esc(post.id)}">編輯</button>
           <button type="button" data-trade-status="${esc(post.id)}" data-next="${done ? 'open' : 'done'}">${done ? '重新上架' : '標記已成交'}</button>
           <button type="button" class="danger" data-trade-remove="${esc(post.id)}" data-images="${esc(JSON.stringify(post.images || []))}">刪除</button>
         </div>` : '';
-      return `<li class="tradePost ${done ? 'isDone' : ''}" data-kind="${esc(post.kind)}">
+      return `<li class="tradePost ${done ? 'isDone' : ''} ${expired ? 'isExpired' : ''}" data-kind="${esc(post.kind)}">
         <header>
           <span class="tradeKind ${esc(post.kind)}">${esc(KIND_LABEL[post.kind] || post.kind)}</span>
           ${post.server ? `<span class="tradeServer">${esc(post.server)}</span>` : ''}
           ${done ? '<span class="tradeDoneBadge">已成交</span>' : ''}
           ${mine ? '<span class="tradeMineBadge">我的貼文</span>' : ''}
+          ${expired ? '<span class="tradeExpiredBadge">已過期，只有你看得到</span>'
+            : left !== null ? `<span class="tradeExpiry">${esc(expiryLabel(left))}</span>` : ''}
           <time datetime="${esc(post.created_at)}">${esc(timeLabel(post.created_at))}${post.edited_at ? '（已編輯）' : ''}</time>
         </header>
         <h3 translate="no">${esc(post.title)}</h3>
@@ -253,7 +273,8 @@
       const client = await getClient();
       const query = columns => client.from('szo_trade_posts').select(columns)
         .order('created_at', { ascending: false }).limit(500);
-      let result = await query('id,user_id,kind,server,title,price,contact,note,status,created_at,images,edited_at');
+      let result = await query('id,user_id,kind,server,title,price,contact,note,status,created_at,images,edited_at,expires_at');
+      if(result.error) result = await query('id,user_id,kind,server,title,price,contact,note,status,created_at,images,edited_at');
       // 資料庫還沒加上新欄位時，改用舊欄位讀取，避免整頁讀不到。
       if(result.error) result = await query('id,user_id,kind,title,price,contact,note,status,created_at,images');
       if(result.error) throw result.error;
@@ -449,6 +470,11 @@
           () => say('無法自動複製，請手動選取飛鴿 ID。'));
         return;
       }
+      const extend = event.target.closest('[data-trade-extend]');
+      if(extend){
+        ownerAction(client => client.rpc('szo_extend_trade_post', { p_id: extend.dataset.tradeExtend }), '已延長，從現在起算 14 天。');
+        return;
+      }
       const status = event.target.closest('[data-trade-status]');
       if(status){
         const next = status.dataset.next;
@@ -536,7 +562,7 @@
           <button type="button" data-trade-cancel>取消</button>
           <button type="button" class="primary" data-trade-submit>送出刊登</button>
         </div>
-        <p class="tradeHint">刊登後可在同一個瀏覽器編輯、標記已成交或刪除。貼文不會自動下架，成交後請記得處理。</p>
+        <p class="tradeHint">貼文顯示 14 天後自動下架，可在同一個瀏覽器隨時「延長 14 天」、編輯、標記已成交或刪除。</p>
       </form>
       <div class="tradeMeta"><span class="tradeStatus" role="status" aria-live="polite"></span><span class="tradeCount"></span></div>
       <ol class="tradeList" aria-label="交易貼文"></ol>

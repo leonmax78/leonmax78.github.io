@@ -75,3 +75,7 @@
 .tradeServerFilter{padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:inherit;font-size:14px}
 .tradeServer{padding:2px 8px;border-radius:999px;font-weight:700;background:#a78bfa26;color:#c4b5fd;border:1px solid #a78bfa80}
 .tradeToolbar .tradeServerFilter{width:auto;flex:0 0 auto;max-width:100%}
+/* 下架期限 */
+.tradeExpiry{font-size:12px;color:var(--muted)}
+.tradeExpiredBadge{padding:2px 8px;border-radius:999px;font-weight:700;background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 55%,transparent)}
+.tradePost.isExpired{opacity:.7;border-style:dashed}
