@@ -333,3 +333,142 @@
   })();
 
 })();
+
+// V680: header search shows grouped suggestions (items / monsters / maps / NPCs) while typing.
+(function(){
+  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4 };
+  let mapIndex = null, timer = 0, active = -1, rows = [], composing = false, seq = 0;
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
+  const input = () => document.getElementById('globalSearchInput');
+  function box(){
+    let el = document.getElementById('globalSuggest');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'globalSuggest'; el.className = 'globalSuggest'; el.hidden = true; el.setAttribute('role', 'listbox');
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+  async function loadMapIndex(){
+    if(mapIndex) return mapIndex;
+    const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+    mapIndex = fetch('data/stage_map_index.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    return mapIndex;
+  }
+  function rank(list, getName, q, limit, bonus){
+    const out = [], seen = new Set();
+    for(let i = 0; i < list.length; i++){
+      const name = getName(list[i]); const n = norm(name);
+      if(!n || !n.includes(q)) continue;
+      const score = (n === q ? 0 : n.startsWith(q) ? 1 : 2) * 1e6 + (bonus ? bonus(list[i]) : 0) + n.length * 1000 + i / 1e3;
+      out.push({ row: list[i], name, score });
+    }
+    out.sort((a,b) => a.score - b.score);
+    const res = [];
+    for(const r of out){ const key = r.name + '|' + (r.row.level || ''); if(seen.has(key)) continue; seen.add(key); res.push(r); if(res.length >= limit) break; }
+    return res;
+  }
+  async function compute(raw){
+    const q = norm(raw);
+    if(!q) return [];
+    try{ if(typeof window.ensureSearchIndexLoaded === 'function') await window.ensureSearchIndexLoaded(); }catch(e){}
+    const idx = (window.SZO_DATA_BUNDLES || {}).search_index || {};
+    const maps = await loadMapIndex();
+    const out = [];
+    for(const r of rank(idx.items || [], x => x.name, q, LIMIT.item)) out.push({ kind: 'item', label: r.name, sub: 'ID ' + r.row.id, id: r.row.id });
+    for(const r of rank(idx.monsters || [], x => x.name, q, LIMIT.monster)) out.push({ kind: 'monster', label: r.name, sub: r.row.level ? 'Lv.' + r.row.level : '', id: r.row.id });
+    for(const r of rank(maps.stages || [], x => x.stageName, q, LIMIT.map)) out.push({ kind: 'map', label: r.name, sub: '', id: r.row.stageId });
+    const npcs = (maps.npcs || []).map(([name, stageId, npcId, shop, stageName]) => ({ name, stageId, npcId, shop, stageName }));
+    npcs.sort((a,b) => b.shop - a.shop);
+    const npcCount = new Map();
+    for(const n of npcs) npcCount.set(n.name, (npcCount.get(n.name) || 0) + 1);
+    for(const r of rank(npcs, x => x.name, q, LIMIT.npc, x => x.shop ? 0 : 500000)){
+      const more = npcCount.get(r.name) > 1 ? ` 等 ${npcCount.get(r.name)} 處` : '';
+      out.push({ kind: 'npc', label: r.name, sub: r.row.stageName + more + (r.row.shop ? '・商店' : ''), id: r.row.npcId, stageId: r.row.stageId, stageName: r.row.stageName, shop: r.row.shop });
+    }
+    return out;
+  }
+  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC' };
+  function render(raw){
+    const el = box(); if(!el) return;
+    if(!rows.length){ el.hidden = true; el.innerHTML = ''; return; }
+    let last = '';
+    el.innerHTML = rows.map((r, i) => {
+      const head = r.kind !== last ? `<div class="gsHead">${KIND[r.kind]}</div>` : '';
+      last = r.kind;
+      return `${head}<div role="option" tabindex="-1" class="gsRow${i === active ? ' active' : ''}" data-gs="${i}"><b>${esc(r.label)}</b><small>${esc(r.sub)}</small></div>`;
+    }).join('') + `<div role="option" tabindex="-1" class="gsAll${active === rows.length ? ' active' : ''}" data-gs="all">查看「${esc(raw)}」的全部結果</div>`;
+    place(el);
+    el.hidden = false;
+  }
+  function place(el){
+    const form = document.getElementById('globalSearchForm');
+    if(!form) return;
+    const r = form.getBoundingClientRect();
+    const narrow = window.innerWidth < 600;
+    el.style.top = Math.round(r.bottom + 6) + 'px';
+    el.style.left = narrow ? '12px' : Math.round(r.left) + 'px';
+    el.style.width = narrow ? 'calc(100vw - 24px)' : Math.max(320, Math.round(r.width)) + 'px';
+  }
+  window.addEventListener('resize', () => { const el = document.getElementById('globalSuggest'); if(el && !el.hidden) place(el); });
+  window.addEventListener('scroll', () => { const el = document.getElementById('globalSuggest'); if(el && !el.hidden) place(el); }, { passive: true });
+  function hide(){ const el = box(); if(el){ el.hidden = true; } active = -1; }
+  async function update(){
+    const raw = String(input()?.value || '').trim();
+    const my = ++seq;
+    if(!raw){ rows = []; hide(); return; }
+    const next = await compute(raw);
+    if(my !== seq) return;
+    rows = next; active = -1; render(raw);
+  }
+  async function openRow(r){
+    hide();
+    try{
+      if(r.kind === 'item'){ if(window.ensureItemPageLoaded) await window.ensureItemPageLoaded(); if(window.showItem) window.showItem(r.id); }
+      else if(r.kind === 'monster'){ if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
+      else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, ''); }
+      else if(r.kind === 'npc'){
+        if(r.shop){ if(window.ensureShopPageLoaded) await window.ensureShopPageLoaded(); if(window.openShopNpc){ await window.openShopNpc(r.stageId, r.id); return; } }
+        if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.stageName, r.label, r.id);
+      }
+    }catch(e){ console.error(e); }
+  }
+  function submitAll(){ hide(); document.getElementById('globalSearchForm')?.requestSubmit?.(); }
+  document.addEventListener('input', ev => {
+    if(ev.target?.id !== 'globalSearchInput' || composing) return;
+    clearTimeout(timer); timer = setTimeout(update, 180);
+  });
+  document.addEventListener('compositionstart', ev => { if(ev.target?.id === 'globalSearchInput') composing = true; });
+  document.addEventListener('compositionend', ev => { if(ev.target?.id === 'globalSearchInput'){ composing = false; clearTimeout(timer); timer = setTimeout(update, 120); } });
+  document.addEventListener('focusin', ev => { if(ev.target?.id === 'globalSearchInput' && rows.length && ev.target.value.trim()) render(ev.target.value.trim()); });
+  document.addEventListener('keydown', ev => {
+    if(ev.target?.id !== 'globalSearchInput' || ev.isComposing) return;
+    const el = box(); const open = el && !el.hidden && rows.length;
+    if(ev.key === 'Escape'){ hide(); return; }
+    if(!open) return;
+    if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
+      ev.preventDefault();
+      const n = rows.length + 1;
+      active = ev.key === 'ArrowDown' ? (active + 1) % n : (active - 1 + n) % n;
+      render(ev.target.value.trim());
+      return;
+    }
+    if(ev.key === 'Enter' && active >= 0 && active < rows.length){
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      openRow(rows[active]);
+      return;
+    }
+    if(ev.key === 'Enter') hide();
+  }, true);
+  document.addEventListener('click', ev => {
+    const hit = ev.target?.closest?.('#globalSuggest [data-gs]');
+    if(hit){
+      ev.preventDefault(); ev.stopPropagation();
+      if(hit.dataset.gs === 'all') submitAll(); else openRow(rows[Number(hit.dataset.gs)]);
+      return;
+    }
+    if(!ev.target?.closest?.('#globalSearchForm,#globalSuggest')) hide();
+  }, true);
+  document.addEventListener('submit', ev => { if(ev.target?.id === 'globalSearchForm') hide(); }, true);
+})();

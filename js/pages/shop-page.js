@@ -592,4 +592,12 @@
   window.preloadShopData = loadShopData;
   window.showShopItem = showShopItem;
   window.openShopLocation = openShopLocation;
+  window.openShopNpc = async function(stageId, npcId){
+    await loadShopData();
+    state.mode = 'sell';
+    state.query = '';
+    const loc = shopLocations().find(row => Number(row.stageId) === Number(stageId) && String(row.npcId) === String(npcId));
+    if(loc){ state.stageId = loc.stageId; state.activeKey = loc.key; }
+    await renderShopPage();
+  };
 })();

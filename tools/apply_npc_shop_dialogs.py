@@ -34,3 +34,6 @@ for stage in data['stages']:
 data['version'] = 'stage-map-1105-shop-dialogs'
 path.write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
 print(f'primary changed {changed}, newly marked {added}')
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build_npc_index
+build_npc_index.main()
