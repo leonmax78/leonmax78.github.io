@@ -1,6 +1,6 @@
-# 玩家交易版：Supabase 設定
+# 玩家交易區：Supabase 設定
 
-交易版與四海聊天室共用同一個 Supabase 專案、匿名登入、Turnstile 人機驗證與停權名單（`szo_chat_bans`）。
+交易區與四海聊天室共用同一個 Supabase 專案、匿名登入、Turnstile 人機驗證與停權名單（`szo_chat_bans`）。
 網站設定沿用 `data/chat-config.json`，不需要另外新增金鑰。
 
 ## 建立資料表（只需執行一次）
@@ -26,5 +26,5 @@
 - **刪除貼文**：Table Editor → `szo_trade_posts` → 將該列 `is_removed` 改為 `true`（隱藏，保留紀錄），或直接刪除該列。
 - **刪除圖片**：Storage → `trade-images` → 依 `user_id` 資料夾找到檔案刪除（貼文中的 `images` 欄位列出檔名）。若要整篇處理，建議先把貼文 `is_removed` 設為 `true`，再刪除圖片。
 - **用量**：Dashboard → Usage 查看 Storage 空間與流量；免費方案有上限，接近上限時可清除舊圖片。
-- **停權**：把該貼文的 `user_id` 加入 `szo_chat_bans`（聊天室與交易版同時停權）。
+- **停權**：把該貼文的 `user_id` 加入 `szo_chat_bans`（聊天室與交易區同時停權）。
 - **調整頻率限制**：修改 `supabase/trade.sql` 中 `60 seconds` 與 `>= 10`，重新執行函式定義即可。

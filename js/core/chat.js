@@ -127,7 +127,7 @@
     try{
       await script('js/vendor/supabase/supabase-2.118.0.js');
       if(token!==generation)return;
-      // 與交易版共用同一個連線（同一組匿名身分），避免同頁出現兩個登入實例。
+      // 與交易區共用同一個連線（同一組匿名身分），避免同頁出現兩個登入實例。
       if(!client)client=window.__szoSupabase=window.__szoSupabase||window.supabase.createClient(config.url,config.publishableKey,{auth:{storageKey:'szo-chat-auth',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false},global:{fetch:boundedFetch}});
       client.auth.startAutoRefresh();
       const existing=await client.auth.getSession();

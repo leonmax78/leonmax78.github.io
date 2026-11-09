@@ -275,7 +275,7 @@ function viewLoadingLabel(view){
   map:'地圖查詢',
   qa:'全站搜尋',
   downloads:'工具下載區',
-  trade:'玩家交易版',
+  trade:'玩家交易區',
   soul:'武魂能力試算',
   reverse:'掉落反查'
  };
@@ -326,7 +326,7 @@ function viewLoadingLabel(view){
   collect:'武冠收錄資料',
   shop:'商店販賣資訊',
   downloads:'工具下載區',
-  trade:'玩家交易版',
+  trade:'玩家交易區',
   soul:'武魂能力試算',
   reverse:'掉落反查'
  };
@@ -381,7 +381,7 @@ async function setView(view){
  keepNavGroupOpen(view);
  if(view==='home'){renderHome(); closeDrawer();}
  else if(view==='mapMenu'){openMapMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='trade'){showPageLoading('玩家交易版'); await ensureTradePageLoaded(); if(typeof renderTradePage==='function')renderTradePage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='trade'){showPageLoading('玩家交易區'); await ensureTradePageLoaded(); if(typeof renderTradePage==='function')renderTradePage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='jiang'){openJiangMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='monster'){
   byId('monsterForm')?.classList.add('active');

@@ -60,7 +60,7 @@
         <button class="navBtn sub" data-view="shop">商店販賣資訊 <span>›</span></button>
       </div>
       <!-- The editor stays separate from item search and loads only when opened. -->
-      <button class="navBtn major" data-view="trade">玩家交易版 <span>›</span></button>
+      <button class="navBtn major" data-view="trade">玩家交易區 <span>›</span></button>
       <button class="navBtn major" data-view="downloads">工具下載區 <span>›</span></button>
     </div>
     <div class="navGroup" id="manualGroup" style="display:none">
