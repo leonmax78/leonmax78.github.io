@@ -128,6 +128,12 @@ async function ensureDownloadsPageLoaded(){
 }
 window.ensureDownloadsPageLoaded = ensureDownloadsPageLoaded;
 
+async function ensureTradePageLoaded(){
+ if(typeof window.renderTradePage==='function')return true;
+ return await loadScriptGroupOnce('page_trade');
+}
+window.ensureTradePageLoaded = ensureTradePageLoaded;
+
 function prefetchResourceOnce(href,asType){
  if(!href||document.querySelector(`link[data-szo-prefetch="${href}"]`))return;
  const link=document.createElement('link');
@@ -231,7 +237,7 @@ function renderChoiceMenu(title, rows){
 
 function renderJiangHome(){
  document.body.classList.remove('isHomeView');
- renderChoiceMenu('降神、經驗、修練、寶石試算',[
+ renderChoiceMenu('降神、經驗、修練、寶石、武魂試算',[
   {title:'副降神模擬',desc:'試算副降神能力與需求',attr:'data-jiang="support"'},
   {title:'副降神組合推薦方案',desc:'依星等推薦物理、術法、防禦組合',attr:'data-jiang="recommend"'},
   {title:'主降神比較',desc:'比較主降神能力差異',attr:'data-jiang="compare"'},
@@ -239,7 +245,8 @@ function renderJiangHome(){
   {title:'星等/靈氣試算',desc:'星等與靈氣相關試算',attr:'data-jiang="starAura"'},
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
   {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
-  {title:'寶石試算、加工配方',desc:'',attr:'data-view="gems"'}
+  {title:'寶石試算、加工配方',desc:'',attr:'data-view="gems"'},
+  {title:'武魂能力試算',desc:'武魂能力與成長試算',attr:'data-view="soul"'}
  ]);
 }
 
@@ -268,6 +275,7 @@ function viewLoadingLabel(view){
   map:'地圖查詢',
   qa:'全站搜尋',
   downloads:'工具下載區',
+  trade:'玩家交易版',
   soul:'武魂能力試算',
   reverse:'掉落反查'
  };
@@ -318,6 +326,7 @@ function viewLoadingLabel(view){
   collect:'武冠收錄資料',
   shop:'商店販賣資訊',
   downloads:'工具下載區',
+  trade:'玩家交易版',
   soul:'武魂能力試算',
   reverse:'掉落反查'
  };
@@ -369,7 +378,10 @@ async function setView(view){
  if(typeof window.SZO_SET_GLOBAL_TOP_VISIBLE === 'function') window.SZO_SET_GLOBAL_TOP_VISIBLE(view !== 'home');
  document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
+ keepNavGroupOpen(view);
  if(view==='home'){renderHome(); closeDrawer();}
+ else if(view==='mapMenu'){openMapMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='trade'){showPageLoading('玩家交易版'); await ensureTradePageLoaded(); if(typeof renderTradePage==='function')renderTradePage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='jiang'){openJiangMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='monster'){
   byId('monsterForm')?.classList.add('active');
@@ -386,7 +398,7 @@ async function setView(view){
   showPageLoading('離線內掛物品編輯');await loadScriptGroupOnce('page_autodata');await renderAutoDataPage();closeDrawer();
  }
  else if(view==='item'){openItemMenuOnly(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='collect'){showPageLoading(viewLoadingLabel(view)); await ensureCollectPageLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('menu');}
+ else if(view==='collect'){showPageLoading(viewLoadingLabel(view)); await ensureCollectPageLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('menu'); keepNavGroupOpen('collect');}
  else if(view==='shop'){showPageLoading(viewLoadingLabel(view)); await ensureShopPageLoaded(); if(typeof renderShopPage==='function')renderShopPage();}
  else if(view==='map'){showPageLoading(viewLoadingLabel(view),'地圖載入中，請稍候。'); await ensureMapPageLoaded(); if(typeof renderStageMapPage==='function')renderStageMapPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
@@ -396,6 +408,7 @@ async function setView(view){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));
   document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
+  keepNavGroupOpen('soul');
   showPageLoading(viewLoadingLabel(view));
   await ensureSoulDataLoaded();
   if(typeof window.renderSoulCalcPage==='function') window.renderSoulCalcPage();
@@ -461,10 +474,29 @@ function openItemMenuOnly(){
  document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='item'));
  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
  byId('itemForm')?.classList.add('active');
- renderChoiceMenu('道具、掉落查詢、合成模擬',[
+ renderChoiceMenu('道具、掉落查詢、合成模擬、武冠收錄',[
   {title:'道具查詢',desc:'搜尋道具名稱、ID、類型、等級與專剋',attr:'data-item-open="item"'},
   {title:'掉落反查',desc:'用道具名稱或 ID 查詢掉落怪物與位置',attr:'data-item-open="reverse"'},
-  {title:'裝備合成',desc:'查詢裝備合成來源與材料',attr:'data-item-open="compound"'}
+  {title:'裝備合成',desc:'查詢裝備合成來源與材料',attr:'data-item-open="compound"'},
+  {title:'武冠收錄資料',desc:'武冠鋒雲錄能力值、武防、法器、配方、封獸出處',attr:'data-view="collect"'}
+ ]);
+}
+// 子功能所屬的選單群組：開啟子功能時保持該群組展開，並標示群組按鈕。
+const SZO_NAV_PARENT={soul:['jiangForm','jiang'],gems:['jiangForm','jiang'],collect:['itemForm','item'],map:['mapForm','mapMenu'],shop:['mapForm','mapMenu']};
+function keepNavGroupOpen(view){
+ const parent=SZO_NAV_PARENT[view];
+ if(!parent)return;
+ byId(parent[0])?.classList.add('active');
+ document.querySelector(`.navBtn.major[data-view="${parent[1]}"]`)?.classList.add('active');
+}
+function openMapMenuOnly(){
+ currentView='mapMenu';
+ document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='mapMenu'));
+ document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
+ byId('mapForm')?.classList.add('active');
+ renderChoiceMenu('地圖、商店查詢',[
+  {title:'地圖查詢',desc:'查看地圖、怪物與 NPC 位置',attr:'data-view="map"'},
+  {title:'商店販賣資訊',desc:'查詢 NPC 商店販賣的物品與價格',attr:'data-view="shop"'}
  ]);
 }
 async function setItemSub(kind){

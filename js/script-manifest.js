@@ -124,6 +124,9 @@ window.SZO_SCRIPT_GROUPS = {
   "page_downloads": [
     "js/pages/downloads-page.js"
   ],
+  "page_trade": [
+    "js/pages/trade-page.js"
+  ],
   "features_equipment": [
     "js/features/equipment/display-and-random-sim.js",
     "js/features/equipment/special-equipment-filter.js",

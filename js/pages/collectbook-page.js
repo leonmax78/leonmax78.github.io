@@ -866,7 +866,8 @@
   function syncNav(kind){
     document.querySelectorAll('.navBtn[data-view]').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'collect'));
     document.querySelectorAll('.formBox').forEach(box => box.classList.remove('active'));
-    by('collectForm')?.classList.add('active');
+    // 武冠收錄資料已移到「道具、掉落查詢、合成模擬、武冠收錄」群組底下。
+    if(typeof keepNavGroupOpen === 'function') keepNavGroupOpen('collect');
     document.querySelectorAll('[data-collect-open]').forEach(btn => btn.classList.toggle('active', btn.dataset.collectOpen === kind));
   }
   function renderBonusPage(){
