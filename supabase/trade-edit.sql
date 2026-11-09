@@ -45,3 +45,6 @@ revoke all on function public.szo_update_trade_post(uuid,text,text,text,text,tex
 grant execute on function public.szo_update_trade_post(uuid,text,text,text,text,text,text[]) to authenticated;
 
 commit;
+
+-- 讓 API 立即讀到新欄位與新函式。
+notify pgrst, 'reload schema';
