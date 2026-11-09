@@ -793,7 +793,7 @@
       surface.style.width = `${Math.round((Number(target.width) || 1) * z)}px`;
       surface.style.height = `${Math.round((Number(target.height) || 1) * z)}px`;
     }
-    if(imageStage){ imageStage.style.transform = `scale(${z})`; imageStage.style.setProperty('--mz', String(z)); }
+    if(imageStage){ imageStage.style.transform = `scale(${z})`; imageStage.style.setProperty('--mz', String(z)); imageStage.classList.toggle('lifeSize', z >= MAX_ZOOM); }
     if(label) label.textContent = `${Math.round(z * 100)}%`;
     const input = document.getElementById('mapZoomInput');
     if(input && Number(input.value) !== z) input.value = String(z);
@@ -1001,7 +1001,7 @@
           </div>
           <div class="mapLoading" id="mapImageLoading">地圖載入中</div>
           <div class="mapZoomSurface" style="width:${Math.round((Number(stage.width)||1)*zoomValue())}px;height:${Math.round((Number(stage.height)||1)*zoomValue())}px;">
-            <div class="mapImageStage" style="transform:scale(${zoomValue()});--mz:${zoomValue()};width:${Number(stage.width)||1}px;height:${Number(stage.height)||1}px;">
+            <div class="mapImageStage${zoomValue() >= MAX_ZOOM ? ' lifeSize' : ''}" style="transform:scale(${zoomValue()});--mz:${zoomValue()};width:${Number(stage.width)||1}px;height:${Number(stage.height)||1}px;">
               <img id="mapImage" src="${htmlEscape(withAssetVersion(stage.image))}" alt="${htmlEscape(stage.stageName)}" decoding="async" fetchpriority="high">
               <div class="mapTileLayer" aria-hidden="true"></div>
               <div class="mapAreaOverlay">${areaLabels(stage)}</div>

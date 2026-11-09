@@ -4321,3 +4321,8 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .shopPreview .shopPreviewServer{margin:4px 0 6px}
 .shopPreview .shopBlock{margin:10px 0}
 .shopPreview h3{font-size:14px;margin:12px 0 6px;color:var(--muted);letter-spacing:.08em}
+/* 1:1 map zoom: monsters and NPCs drawn at their real in-game size (stage is 1/8 scale, zoomed x8) */
+.mapImageStage.lifeSize .mapDot.withImage{width:0;height:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;transform:none;scale:none}
+.mapImageStage.lifeSize .mapDot.withImage img{position:absolute;left:0;top:0;width:auto;height:auto;max-width:none;max-height:none;transform-origin:50% 100%;transform:translate(-50%,-100%) scale(.125);image-rendering:auto}
+.mapImageStage.lifeSize .mapDot.withImage:hover img,.mapImageStage.lifeSize .mapDot.withImage:focus-visible img{filter:drop-shadow(0 0 12px #fff)}
+.mapImageStage.lifeSize .mapDot.shopNpcDot img{filter:drop-shadow(0 0 10px rgba(251,191,36,.9))}
