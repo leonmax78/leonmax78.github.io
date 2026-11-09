@@ -110,7 +110,7 @@
       const value=await response.json();
       if(token!==generation||panel.hidden)return;
       if(client&&config&&(config.url!==value.url||config.publishableKey!==value.publishableKey)){
-        client.auth.stopAutoRefresh();client=null;rows.clear();render();
+        client.auth.stopAutoRefresh();client=null;window.__szoSupabase=null;rows.clear();render();
       }
       config=value;
       if(!config.enabled){offline('聊天室準備中，尚未開放連線。');log.dataset.empty='尚未開放';return;}
@@ -127,7 +127,8 @@
     try{
       await script('js/vendor/supabase/supabase-2.118.0.js');
       if(token!==generation)return;
-      if(!client)client=window.supabase.createClient(config.url,config.publishableKey,{auth:{storageKey:'szo-chat-auth',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false},global:{fetch:boundedFetch}});
+      // 與交易版共用同一個連線（同一組匿名身分），避免同頁出現兩個登入實例。
+      if(!client)client=window.__szoSupabase=window.__szoSupabase||window.supabase.createClient(config.url,config.publishableKey,{auth:{storageKey:'szo-chat-auth',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false},global:{fetch:boundedFetch}});
       client.auth.startAutoRefresh();
       const existing=await client.auth.getSession();
       if(existing.error)throw existing.error;

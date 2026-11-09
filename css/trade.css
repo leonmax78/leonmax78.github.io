@@ -1,0 +1,50 @@
+/* 玩家交易版 */
+.tradePage h1{margin:0 0 6px}
+.tradeNotice{margin:0 0 12px;padding:9px 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--danger) 45%,var(--line));background:color-mix(in srgb,var(--danger) 8%,var(--panel2));color:var(--text);font-size:13px;line-height:1.6}
+.tradeToolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.tradeTabs{display:flex;gap:4px}
+.tradePage button{font:inherit;cursor:pointer;border-radius:8px;padding:7px 12px;border:1px solid var(--line);background:var(--panel2);color:var(--text)}
+.tradePage button.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06101f;border:0;font-weight:700}
+.tradePage button.danger{border-color:color-mix(in srgb,var(--danger) 60%,var(--line));color:var(--danger)}
+.tradePage button:disabled{opacity:.55;cursor:not-allowed}
+.tradeTabs button[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--panel2))}
+.tradeSearch{flex:1 1 180px;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:inherit}
+.tradeCheck{display:flex;gap:5px;align-items:center;font-size:13px;color:var(--muted);white-space:nowrap}
+.tradeForm{display:grid;gap:10px;margin:0 0 14px;padding:14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line));background:var(--panel2)}
+.tradeForm[hidden]{display:none}
+.tradeForm label{display:grid;gap:5px;font-size:13px;color:var(--muted)}
+.tradeForm input:not([type="radio"]),.tradeForm textarea{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;font-size:14px}
+.tradeForm textarea{resize:vertical}
+.tradeForm small{justify-self:end;font-size:12px}
+.tradeKindPick{display:flex;gap:16px;border:0;margin:0;padding:0}
+.tradeKindPick legend{font-size:13px;color:var(--muted);margin-bottom:5px}
+.tradeKindPick label{display:flex;gap:6px;align-items:center;color:var(--text);font-size:14px;white-space:nowrap}
+.tradeKindPick input{width:auto;margin:0;flex:none}
+.tradeFormStatus,.tradeStatus{font-size:13px;color:var(--accent)}
+.tradeFormStatus:empty{display:none}
+.tradeFormActions{display:flex;gap:8px;justify-content:flex-end}
+.tradeHint{margin:0;font-size:12px;color:var(--muted)}
+.tradeMeta{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;font-size:13px;color:var(--muted)}
+.tradeList{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.tradeEmpty{padding:24px 8px;text-align:center;color:var(--muted)}
+.tradePost{padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:linear-gradient(135deg,color-mix(in srgb,var(--panel2) 92%,var(--accent2)),var(--panel2));overflow-wrap:anywhere}
+.tradePost.isDone{opacity:.62}
+.tradePost header{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px}
+.tradePost time{margin-left:auto;color:var(--muted)}
+.tradeKind,.tradeDoneBadge,.tradeMineBadge{padding:2px 8px;border-radius:999px;font-weight:700}
+.tradeKind.sell{background:#f59e0b33;color:#fcd34d;border:1px solid #f59e0b88}
+.tradeKind.buy{background:#38bdf833;color:#7dd3fc;border:1px solid #38bdf888}
+.tradeDoneBadge{background:#86efac22;color:var(--ok);border:1px solid #86efac77}
+.tradeMineBadge{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 50%,transparent)}
+.tradePost h3{margin:8px 0 6px;font-size:17px}
+.tradePost dl{display:flex;flex-wrap:wrap;gap:6px 22px;margin:0}
+.tradePost dl div{display:flex;gap:8px;align-items:center}
+.tradePost dt{color:var(--muted);font-size:13px}
+.tradePost dd{margin:0;display:flex;gap:6px;align-items:center;font-weight:700}
+.tradePost .tradeCopy{padding:2px 8px;font-size:12px;font-weight:400}
+.tradeNote{margin:8px 0 0;white-space:pre-wrap;font-size:14px;line-height:1.6;color:color-mix(in srgb,var(--text) 88%,var(--muted))}
+.tradeOwnerTools{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+@media(max-width:600px){
+  .tradeToolbar>[data-trade-new]{flex:1 1 100%}
+  .tradePost time{margin-left:0;flex-basis:100%}
+}
