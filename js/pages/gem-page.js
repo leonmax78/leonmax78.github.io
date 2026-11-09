@@ -64,7 +64,7 @@
   #gemPage .gemShopping button{border:0;background:transparent;text-align:left;padding:4px 0}
   #gemPage .gemShopping strong{text-align:right;font-variant-numeric:tabular-nums}#gemPage .gemShopping span{min-width:0}
   #gemPage .gemStep{margin:12px 0;padding:6px 0;border-bottom:1px solid var(--border,#354557)}
-  #gemPage .gemList{list-style:none;padding:0;margin:0 0 8px}#gemPage .gemList li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:7px 0;border-bottom:1px solid var(--border,#354557)}#gemPage .gemList span{color:var(--muted,#9fb0c4);font-variant-numeric:tabular-nums}
+  #gemPage #gemRecResult .compareTable th:first-child,#gemPage #gemRecResult .compareTable td:first-child{position:sticky;left:0;z-index:1;background:var(--panel2,#0b1527);min-width:4.5em}#gemPage .gemList{list-style:none;padding:0;margin:0 0 8px}#gemPage .gemList li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:7px 0;border-bottom:1px solid var(--border,#354557)}#gemPage .gemList span{color:var(--muted,#9fb0c4);font-variant-numeric:tabular-nums}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
   </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
@@ -82,9 +82,9 @@
   }
 
   if(tab==='recommend'){
-   const TYPES={str:{label:'力量型（物理）',plans:[['A 全湛藍','湛藍'],['B 湛藍穿插多彩','mix:str'],['C 全多彩','多彩']]},
-    dex:{label:'敏捷型（物理）',plans:[['A 全緋紅','緋紅'],['B 緋紅穿插多彩','mix:dex'],['C 全多彩','多彩']]},
-    int:{label:'術法型',plans:[['A 全碧綠','碧綠'],['B 全橄欖（術攻）','橄欖'],['C 術法最高（混搭）','mix:spell'],['D 全多彩','多彩']]},
+   const TYPES={str:{label:'力量型（物理）',calc:['str','破防試算（力×2＋敏÷2）'],plans:[['A 全湛藍','湛藍'],['B 湛藍＋多彩','mix:Base_Str'],['C 破防最高（混搭）','mix:str'],['D 全多彩','多彩']]},
+    dex:{label:'敏捷型（物理）',calc:['dex','破防試算（敏×2＋力÷2）'],plans:[['A 全緋紅','緋紅'],['B 緋紅＋多彩','mix:Base_Dex'],['C 破防最高（混搭）','mix:dex'],['D 全多彩','多彩']]},
+    int:{label:'術法型',calc:['spell','術法試算（術攻＋智×2.4）'],plans:[['A 全碧綠','碧綠'],['B 碧綠＋多彩','mix:Base_Int'],['C 全橄欖','橄欖'],['D 術法最高（混搭）','mix:spell'],['E 全多彩','多彩']]},
     four:{label:'四屬性',plans:[['A 全多彩','多彩']]}};
    const rs=state.rec||(state.rec={});if(!TYPES[rs.type])rs.type='str';rs.level=rs.level||state.level||5000;rs.grade=rs.grade||1;
    const roman=g=>'ⅠⅡⅢⅣⅤⅥ'[g-1];
@@ -97,7 +97,7 @@
     const t=TYPES[rs.type],open=data.slots.filter(s=>Number(s.NeedLv)<=rs.level);
     if(!open.length){byId('gemRecResult').innerHTML='<p>這個等級還沒有開孔（100 等開第 1 格）。</p>';return;}
     const plans=t.plans.map(([title,how])=>{const picks=how.startsWith('mix:')?SZO_GEM_RECOMMEND(rs.level,rs.grade,how.slice(4)):pure(how);return {title,picks,res:SZO_GEM_TOTAL(rs.level,picks)};});
-    const rows=[['Base_Con','體魄'],['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','敏捷'],...(rs.type==='int'?[['Magic_Att','術攻'],['spell','術法換算（智×2.4＋術攻）']]:[])];
+    const rows=[['Base_Con','體魄'],['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','敏捷'],...(t.calc?[t.calc]:[])];
     const val=(p,k)=>k in stats?p.res.total[k]:goalScore(p.res.total,k);
     const table=`<div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${plans.map(p=>`<th>${p.title}</th>`).join('')}</tr></thead><tbody>${rows.map(([k,n])=>{const v=plans.map(p=>val(p,k)),m=Math.max(...v);return `<tr><td>${n}</td>${v.map(x=>`<td class="${m>0&&x===m&&v.some(y=>y!==m)?'supportBest':''}">${fmtScore(x)}</td>`).join('')}</tr>`;}).join('')}</tbody></table></div>`;
     const summary=p=>{const m=new Map();for(const s of open){const id=p.picks[s.ID];if(id)m.set(id,(m.get(id)||0)+1);}return `<ul class="gemList">${[...m].sort((x,y)=>Number(data.gems[x[0]].Shape)-Number(data.gems[y[0]].Shape)).map(([id,n])=>`<li><b>${esc(name(id))} × ${n}</b><span>${esc(gemText(data.gems[id],n))}</span></li>`).join('')}</ul>`;};
