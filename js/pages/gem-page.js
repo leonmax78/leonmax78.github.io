@@ -51,8 +51,6 @@
  window.renderGemPage=function(){
   const data=window.SZO_JEWELS,exchange=window.SZO_ABYSS_EXCHANGES;
   const name=id=>exchange.names[id]||id;
-  const options=(shape,grade)=>'<option value="">未鑲嵌</option>'+Object.values(data.gems).filter(g=>exchange.names[g.ID]&&Number(g.Shape)===shape&&Number(g.Grade)===Number(grade)).map(g=>`<option value="${g.ID}">${esc(name(g.ID).replace(shapes[shape],'').replace(/(?:寶石|晶鑽).*$/,''))}（${esc(detail(g))}）</option>`).join('');
-  const picker=(shape,id,slot)=>{const grade=Number(data.gems[state.picks[slot]]?.Grade)||1;return `<div class="gemPicker"><label>品階<select id="${id}Grade" data-gem-grade="${id}" data-shape="${shape}">${[1,2,3,4,5,6].map(g=>`<option value="${g}"${g===grade?' selected':''}>${g} 階</option>`).join('')}</select></label><label>顏色（能力）<select id="${id}"${slot?` data-gem-slot="${slot}"`:''}>${options(shape,grade)}</select></label></div>`;};
   byId('reader').innerHTML=`<section id="gemPage"><style>
   #gemPage .gemTabs{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}#gemPage .gemTabs button[aria-selected=true]{background:#137b77;color:white}
   #gemPage .gemSlots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}#gemPage .gemSlot{min-width:0;padding:12px;border:1px solid var(--border,#354557);border-radius:8px}#gemPage select,#gemPage input{max-width:100%;width:100%;min-width:0}#gemPage .gemShape{padding:18px 0;border-top:1px solid var(--border,#354557)}#gemPage .gemShape h2{font-size:18px}#gemPage .gemTotals{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 0}#gemPage .gemBatch{display:flex;gap:8px;max-width:620px;margin:12px 0}#gemPage .gemBatch button{flex-shrink:0}#gemPage .gemFilters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;margin:16px 0}#gemPage .gemRecipe{padding:16px 0;border-bottom:1px solid var(--border,#354557);overflow-wrap:anywhere}#gemPage .gemRecipe h3{font-size:16px}#gemPage .gemSlot small{display:block;margin-top:8px}#gemPage .gemSlot:has(select:disabled){opacity:.55}
@@ -65,6 +63,17 @@
   #gemPage .gemShopping strong{text-align:right;font-variant-numeric:tabular-nums}#gemPage .gemShopping span{min-width:0}
   #gemPage .gemStep{margin:12px 0;padding:6px 0;border-bottom:1px solid var(--border,#354557)}
   #gemPage #gemRecResult .compareTable th:first-child,#gemPage #gemRecResult .compareTable td:first-child{position:sticky;left:0;z-index:1;background:var(--panel2,#0b1527);min-width:4.5em}#gemPage .gemList{list-style:none;padding:0;margin:0 0 8px}#gemPage .gemList li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:7px 0;border-bottom:1px solid var(--border,#354557)}#gemPage .gemList span{color:var(--muted,#9fb0c4);font-variant-numeric:tabular-nums}
+  #gemPage .gemCalc{display:grid;gap:12px;align-items:start;grid-template-areas:'side' 'board' 'rest'}#gemPage .gemCalcSide{grid-area:side}#gemPage .gemBoard{grid-area:board}#gemPage .gemCalcRest{grid-area:rest;display:grid;gap:10px;min-width:0}@media(min-width:900px){#gemPage .gemCalc{grid-template-columns:minmax(300px,380px) minmax(0,1fr);grid-template-areas:'side board' 'rest board'}}@media(max-width:600px){#gemPage .gemColors{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}#gemPage .gemBrushRow button{padding:5px 4px;min-width:0;justify-content:center;font-size:14px}#gemPage .gemBrushRow:first-child{display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}}
+  #gemPage .gemCalcSide{display:grid;gap:10px;min-width:0}#gemPage .gemCalcTop{display:flex;gap:12px;align-items:end;flex-wrap:wrap}#gemPage .gemCalcTop label{flex:0 1 160px;font-size:12px}#gemPage .gemCalcTop p{margin:0 0 8px}
+  #gemPage .gemBrushRow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}#gemPage .gemBrushRow button{padding:6px 10px;min-width:40px}#gemPage .gemBrushRow button[aria-pressed=true]{background:#137b77;color:#fff;border-color:#53ded3}
+  #gemPage .gemColors button{display:inline-flex;align-items:center;gap:5px}#gemPage .gemColors i{width:10px;height:10px;border-radius:50%;background:var(--tint,transparent);border:1px solid #8aa}
+  #gemPage .gemHint{font-size:12px;color:var(--muted,#9fb0c4);margin:0}
+  #gemPage .gemTotalGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 12px}#gemPage .gemTotalGrid div{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--border,#263a58);color:var(--muted,#9fb0c4)}#gemPage .gemTotalGrid div.on{color:var(--text,#eaf2ff)}#gemPage .gemTotalGrid b{font-variant-numeric:tabular-nums}
+  #gemPage .gemCalcRest .gemBatch{margin:0;max-width:none}#gemPage .gemCalcRest .gemBatch select{flex:1 1 140px;width:auto}
+  #gemPage .gemBoard{display:grid;gap:6px;min-width:0}#gemPage .gemRow{display:grid;grid-template-columns:44px repeat(6,minmax(0,1fr));gap:5px}
+  #gemPage .gemRowHead{padding:4px 2px;font-size:13px}#gemPage .gemCell{position:relative;aspect-ratio:1;max-height:84px;padding:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;background:color-mix(in srgb,var(--tint) 22%,#0b1527);border:1px solid color-mix(in srgb,var(--tint) 70%,#357b83)}
+  #gemPage .gemCell img{width:58%;height:auto;max-width:40px}#gemPage .gemCell>i{width:40%;aspect-ratio:1;border-radius:50%;background:var(--tint)}#gemPage .gemCell em{position:absolute;top:2px;left:4px;font-style:normal;font-size:11px;color:#ffe08a}#gemPage .gemCell small{font-size:11px;line-height:1.2;white-space:nowrap}
+  #gemPage .gemCell.locked{opacity:.35;border-style:dashed;cursor:not-allowed}#gemPage .gemCell:not(.filled) small{color:var(--muted,#9fb0c4)}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
   </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
@@ -133,18 +142,46 @@
    content.querySelectorAll('[data-powder]').forEach(b=>b.onclick=()=>{byId('gemRecipeSearch').value=name(b.dataset.powder);byId('gemProcess').value='grind';refresh();});refresh();return;
   }
   state.level=Math.max(0,Math.min(20000,Math.floor(Number(state.level)||0)));
-  content.innerHTML=`<label>降神總等級<input id="gemLevel" type="number" min="0" max="20000" value="${state.level}" style="max-width:240px"></label><p id="gemOpened" aria-live="polite"></p><div id="gemTotal" class="gemTotals" aria-live="polite"></div><div class="gemBatch"><button id="gemClear" type="button">清空寶石</button><label>存檔<select id="gemSaveSlot">${LETTERS.map((x,i)=>`<option value="${i}">${x}：${esc(slotLabel(readSlots()[i]))}</option>`).join('')}</select></label><button id="gemSave" type="button">存檔</button><button id="gemLoad" type="button">讀取</button><button id="gemOpenCompare" type="button">存檔比較</button></div><p id="gemSaveNote" aria-live="polite"></p>${[1,2,3,4,5].map(shape=>`<section class="gemShape"><h2>${shapes[shape]}</h2><div class="gemBatch">${picker(shape,'gemBatch'+shape)}<button data-fill-shape="${shape}" type="button">套用已開孔</button></div><div class="gemSlots">${data.slots.filter(s=>Number(s.Shape)===shape).map(s=>`<div class="gemSlot"><div class="gemSlotTitle">第 ${s.ID} 格 · ${Number(s.NeedLv).toLocaleString()} 等</div>${picker(shape,'gemSlot'+s.ID,s.ID)}<small id="gemStat${s.ID}"></small></div>`).join('')}</div></section>`).join('')}`;
+  const COLORS=[['湛藍','力量'],['緋紅','敏捷'],['碧綠','智慧'],['玄黃','體魄'],['多彩','四屬'],['橄欖','術攻'],['鋯褐','生命'],['蒼紫','法力'],['燦黑','防禦'],['霜白','術防']];
+  const TINT={湛藍:'#2f6fd0',緋紅:'#c8434b',碧綠:'#3f9e3a',玄黃:'#b8902c',多彩:'#9b59c9',橄欖:'#7f8f2a',鋯褐:'#9a6233',蒼紫:'#6a4fb0',燦黑:'#555d68',霜白:'#c9d3dd'};
+  const colorOf=id=>{const n=name(id);return (COLORS.find(([c])=>n.includes(c))||[''])[0];};
+  const gemFor=(shape,grade,color)=>Object.values(data.gems).find(g=>exchange.names[g.ID]&&Number(g.Shape)===Number(shape)&&Number(g.Grade)===Number(grade)&&name(g.ID).includes(color));
+  const roman=g=>'ⅠⅡⅢⅣⅤⅥ'[g-1]||'';
+  const brush=state.brush||(state.brush={grade:1,color:'湛藍'});
+  content.innerHTML=`<div class="gemCalc"><div class="gemCalcSide">
+   <div class="gemCalcTop"><label>降神總等級<input id="gemLevel" type="number" min="0" max="20000" value="${state.level}"></label><p id="gemOpened" aria-live="polite"></p></div>
+   <div class="gemBrush"><div class="gemBrushRow" role="group" aria-label="品階">${[1,2,3,4,5,6].map(g=>`<button type="button" data-brush-grade="${g}">${roman(g)}</button>`).join('')}</div>
+   <div class="gemBrushRow gemColors" role="group" aria-label="顏色">${COLORS.map(([c,l])=>`<button type="button" data-brush-color="${c}" style="--tint:${TINT[c]}"><i></i>${l}</button>`).join('')}<button type="button" data-brush-color=""><i></i>清除</button></div>
+   <p class="gemHint">選好品階與顏色後點格子；點左邊形狀名稱可整排套用。</p></div></div>
+   <div class="gemCalcRest"><div id="gemTotal" class="gemTotalGrid" aria-live="polite"></div>
+   <div class="gemBatch"><button id="gemFillAll" type="button">全部套用</button><button id="gemClear" type="button">清空寶石</button></div>
+   <div class="gemBatch"><select id="gemSaveSlot" aria-label="存檔">${LETTERS.map((x,i)=>`<option value="${i}">${x}：${esc(slotLabel(readSlots()[i]))}</option>`).join('')}</select><button id="gemSave" type="button">存檔</button><button id="gemLoad" type="button">讀取</button><button id="gemOpenCompare" type="button">存檔比較</button></div><p id="gemSaveNote" aria-live="polite"></p>
+  </div><div class="gemBoard">${[1,2,3,4,5].map(shape=>`<div class="gemRow"><button type="button" class="gemRowHead" data-fill-shape="${shape}">${shapes[shape]}</button>${data.slots.filter(s=>Number(s.Shape)===shape).map(s=>`<button type="button" class="gemCell" data-cell="${s.ID}"></button>`).join('')}</div>`).join('')}
+   <p id="gemCellNote" class="gemHint" aria-live="polite"></p></div></div>`;
+  const media=window.SZO_ASSET_MEDIA;
   const refresh=()=>{
    const result=SZO_GEM_TOTAL(state.level,state.picks);
    byId('gemOpened').textContent=`已開 ${result.slots} / 30 格 · 已鑲嵌 ${result.equipped} 格`;
-   byId('gemTotal').innerHTML=Object.entries(stats).map(([k,n])=>`<strong>${n} +${result.total[k].toLocaleString()}</strong>`).join('');
-   data.slots.forEach(s=>{byId('gemSlot'+s.ID+'Grade').disabled=Number(s.NeedLv)>state.level;});
-   content.querySelectorAll('[data-gem-slot]').forEach(select=>{const id=select.dataset.gemSlot,slot=data.slots.find(s=>String(s.ID)===id);select.disabled=Number(slot.NeedLv)>state.level;select.value=state.picks[id]||'';const item=items.find(i=>String(i.ID)===select.value),media=window.SZO_ASSET_MEDIA;byId('gemStat'+id).innerHTML=(item&&media?media.img(media.itemIconSrc(item),name(select.value),'assetThumb itemThumb'):'')+esc(select.disabled?'尚未開啟，不計入能力':data.gems[select.value]?detail(data.gems[select.value]):'未鑲嵌');});save();
+   byId('gemTotal').innerHTML=Object.entries(stats).map(([k,n])=>`<div class="${result.total[k]?'on':''}"><span>${n}</span><b>+${result.total[k].toLocaleString()}</b></div>`).join('');
+   content.querySelectorAll('[data-brush-grade]').forEach(b=>b.setAttribute('aria-pressed',Number(b.dataset.brushGrade)===Number(brush.grade)));
+   content.querySelectorAll('[data-brush-color]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.brushColor===brush.color));
+   for(const s of data.slots){const cell=content.querySelector(`[data-cell="${s.ID}"]`),locked=Number(s.NeedLv)>state.level,g=data.gems[state.picks[s.ID]];
+    cell.disabled=locked;cell.classList.toggle('locked',locked);
+    const c=g?colorOf(g.ID):'',item=g&&typeof items!=='undefined'?items.find(i=>String(i.ID)===String(g.ID)):null;
+    cell.style.setProperty('--tint',c?TINT[c]:'transparent');cell.classList.toggle('filled',!!g);
+    cell.title=`第 ${s.ID} 格 · ${Number(s.NeedLv).toLocaleString()} 等`+(g?` · ${name(g.ID)}（${detail(g)}）`:'');
+    cell.innerHTML=g?`${item&&media?media.img(media.itemIconSrc(item),'',''):`<i></i>`}<em>${roman(Number(g.Grade))}</em><small>${esc((COLORS.find(([x])=>x===c)||['',''])[1])}</small>`:`<small>${locked?Number(s.NeedLv).toLocaleString():'＋'}</small>`;}
+   save();
   };
+  const paint=slot=>{if(!brush.color){delete state.picks[slot.ID];return;}const g=gemFor(slot.Shape,brush.grade,brush.color);if(g)state.picks[slot.ID]=g.ID;};
   byId('gemLevel').oninput=()=>{state.level=Math.max(0,Math.min(20000,Math.floor(Number(byId('gemLevel').value)||0)));refresh();};
-  content.querySelectorAll('[data-gem-grade]').forEach(s=>s.onchange=()=>{const select=byId(s.dataset.gemGrade);select.innerHTML=options(Number(s.dataset.shape),s.value);if(select.dataset.gemSlot){state.picks[select.dataset.gemSlot]='';refresh();}});
-  content.querySelectorAll('[data-gem-slot]').forEach(s=>s.onchange=()=>{state.picks[s.dataset.gemSlot]=s.value;refresh();});
-  content.querySelectorAll('[data-fill-shape]').forEach(b=>b.onclick=()=>{const shape=Number(b.dataset.fillShape),id=byId('gemBatch'+shape).value,grade=byId('gemBatch'+shape+'Grade').value;data.slots.filter(s=>Number(s.Shape)===shape&&Number(s.NeedLv)<=state.level).forEach(s=>{state.picks[s.ID]=id;byId('gemSlot'+s.ID+'Grade').value=grade;byId('gemSlot'+s.ID).innerHTML=options(shape,grade);});refresh();});
+  content.querySelectorAll('[data-brush-grade]').forEach(b=>b.onclick=()=>{brush.grade=Number(b.dataset.brushGrade);refresh();});
+  content.querySelectorAll('[data-brush-color]').forEach(b=>b.onclick=()=>{brush.color=b.dataset.brushColor;refresh();});
+  content.querySelectorAll('[data-cell]').forEach(b=>b.onclick=()=>{const slot=data.slots.find(s=>String(s.ID)===b.dataset.cell),cur=state.picks[slot.ID],g=brush.color&&gemFor(slot.Shape,brush.grade,brush.color);
+   if(g&&String(cur)===String(g.ID))delete state.picks[slot.ID];else paint(slot);
+   const now=data.gems[state.picks[slot.ID]];byId('gemCellNote').textContent=`第 ${slot.ID} 格（${shapes[slot.Shape]}）：`+(now?`${name(now.ID)}，${detail(now)}`:'未鑲嵌');refresh();});
+  content.querySelectorAll('[data-fill-shape]').forEach(b=>b.onclick=()=>{data.slots.filter(s=>Number(s.Shape)===Number(b.dataset.fillShape)&&Number(s.NeedLv)<=state.level).forEach(paint);refresh();});
+  byId('gemFillAll').onclick=()=>{data.slots.filter(s=>Number(s.NeedLv)<=state.level).forEach(paint);refresh();};
   byId('gemClear').onclick=()=>{state.picks={};refresh();};
   const slotSel=byId('gemSaveSlot'),relabel=()=>{const a=readSlots();[...slotSel.options].forEach((o,i)=>o.textContent=`${LETTERS[i]}：${slotLabel(a[i])}`);};
   byId('gemSave').onclick=()=>{const a=readSlots(),i=Number(slotSel.value);a[i]={level:state.level,picks:{...state.picks}};writeSlots(a);relabel();byId('gemSaveNote').textContent=`已存入存檔 ${LETTERS[i]}`;};
