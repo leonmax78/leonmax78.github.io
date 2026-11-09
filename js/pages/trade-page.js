@@ -361,7 +361,7 @@
         // 編輯時新圖片用這次儲存的編號命名，不會覆蓋到舊圖片。
         const path = `${state.uid}/${state.pendingId}-${index}.${item.ext}`;
         const upload = await client.storage.from(IMAGE_BUCKET).upload(path, item.blob, { contentType: item.blob.type, upsert: true, cacheControl: '31536000' });
-        if(upload.error) throw new Error('IMAGE_UPLOAD');
+        if(upload.error){ console.warn('[trade] image upload failed', upload.error); throw new Error('IMAGE_UPLOAD'); }
         paths.push(path);
       }
       formSay('送出中…');
