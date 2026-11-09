@@ -1,6 +1,6 @@
 (function(){
  const shapes=['','圓弧','三角','四方','五稜','六緯'];
- const stats={Base_HP:'生命',Base_MP:'法力',Base_Con:'體魄',Base_Str:'力量',Base_Int:'智慧',Base_Dex:'敏捷',Extra_Def:'防禦',Magic_Att:'術攻',Magic_Def:'術防'};
+ const stats={Base_HP:'生命',Base_MP:'精力',Base_Con:'體魄',Base_Str:'力量',Base_Int:'智慧',Base_Dex:'敏捷',Extra_Def:'防禦',Magic_Att:'術攻',Magic_Def:'術防'};
  const key='szo-gem-calculator-v1';
  let state={level:5000,picks:{}},tab='plan';
  try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&typeof saved.picks==='object'&&saved.picks)state={level:Number(saved.level)||0,picks:saved.picks,rec:saved.rec};}catch(e){}
@@ -142,7 +142,7 @@
    content.querySelectorAll('[data-powder]').forEach(b=>b.onclick=()=>{byId('gemRecipeSearch').value=name(b.dataset.powder);byId('gemProcess').value='grind';refresh();});refresh();return;
   }
   state.level=Math.max(0,Math.min(20000,Math.floor(Number(state.level)||0)));
-  const COLORS=[['湛藍','力量'],['緋紅','敏捷'],['碧綠','智慧'],['玄黃','體魄'],['多彩','四屬'],['橄欖','術攻'],['鋯褐','生命'],['蒼紫','法力'],['燦黑','防禦'],['霜白','術防']];
+  const COLORS=[['湛藍','力量'],['緋紅','敏捷'],['碧綠','智慧'],['玄黃','體魄'],['多彩','四屬'],['橄欖','術攻'],['鋯褐','生命'],['蒼紫','精力'],['燦黑','防禦'],['霜白','術防']];
   const TINT={湛藍:'#2f6fd0',緋紅:'#c8434b',碧綠:'#3f9e3a',玄黃:'#b8902c',多彩:'#9b59c9',橄欖:'#7f8f2a',鋯褐:'#9a6233',蒼紫:'#6a4fb0',燦黑:'#555d68',霜白:'#c9d3dd'};
   const colorOf=id=>{const n=name(id);return (COLORS.find(([c])=>n.includes(c))||[''])[0];};
   const gemFor=(shape,grade,color)=>Object.values(data.gems).find(g=>exchange.names[g.ID]&&Number(g.Shape)===Number(shape)&&Number(g.Grade)===Number(grade)&&name(g.ID).includes(color));
