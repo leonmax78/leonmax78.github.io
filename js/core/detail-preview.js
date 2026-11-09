@@ -60,6 +60,7 @@
  }
  async function open(kind,id,push=true,highlightItemId=''){
   shell();const ticket=++request;
+  if(kind==='monster'&&/^\d+:\d+$/.test(String(id)))kind='npc';
   openedAboveMap=!!window.SZO_MAP_FLOAT?.isOpen();
   if(dialog.open&&window.SZO_MAP_FLOAT?.isOpen()){dialog.close();dialog.showModal();}
   if(!dialog.open){origin=document.activeElement;trail=[];if(push){capture();history.pushState({...history.state,szoPreview:{kind,id,highlightItemId}},'',location.href);}dialog.showModal();document.body.classList.add('detailPreviewOpen');}
@@ -94,7 +95,9 @@
     html=await window.renderReversePreviewHTML(id);
    }else{
     await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('怪物資料載入失敗');await ensureMonsterOptionalData('');await ensureItemDataLoaded();
-    const m=monsters.find(row=>String(row.ID)===String(id));if(!m)throw Error('找不到這個怪物');
+    let m=monsters.find(row=>String(row.ID)===String(id));
+    if(!m){await ensureMonsterDataLoaded();if(typeof syncMonsterDataForPage==='function')syncMonsterDataForPage();m=(window.monsters||monsters).find(row=>String(row.ID)===String(id));}
+    if(!m)throw Error('找不到這個怪物');
     monsterName=nameOf(m);
     const drops=monsterDropRows(m);
     html=`<div class="itemGroupedDetail"><header class="itemIdentity">${monsterThumbHTML(m)}<h1>${esc(nameOf(m))}</h1></header><h2>怪物資料</h2>${monsterRowsHTML([['等級',m.Level],['生命',m.HP],['精力',m.MP],['種族',raceName(m.Type)],['位置',locOf(nameOf(m))],['經驗',m.DropExp]],'itemSectionGrid')}<h2>能力</h2>${monsterRowsHTML([['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex],['物理防禦',m.ExtraDef],['術法攻擊',m.MagicAttack],['術法防禦',m.MagicDef]],'itemSectionGrid')}<h2>掉落道具</h2><div class="detailPreviewDrops">${drops.map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}"><span>${esc(name)}</span><small>${esc(rate)}</small></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
