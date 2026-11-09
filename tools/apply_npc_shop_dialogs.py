@@ -10,16 +10,21 @@ ROOT = Path(__file__).resolve().parents[1]
 src = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'tools/data/npc_shop_dialogs_1105.json'
 mapping = json.loads(src.read_text(encoding='utf-8'))
 shop_ids = {s['shopId'] for s in json.loads((ROOT / 'data/shop_all.json').read_text(encoding='utf-8'))['shops']}
-# Old war events no longer run here; list only the everyday shop (user decision 2026-11-10).
-NORMAL_ONLY_STAGES = {8}
+# Old war events (玄州、獄門峽…) no longer run: list only the everyday shop (user decision 2026-11-10).
+# 終末之塔Ⅰ 主宰化體 has no shop there (user-confirmed); the 895 shop stays on 終末之塔ⅩⅧ.
+NO_SHOP = {(284, 11440)}
 path = ROOT / 'data/stage_maps.json'
 data = json.loads(path.read_text(encoding='utf-8'))
 changed = added = 0
 for stage in data['stages']:
     for npc in stage.get('npcs', []):
         rows = [r for r in mapping.get(f"{stage['stageId']}:{npc['id']}", []) if r['id'] in shop_ids]
-        if stage['stageId'] in NORMAL_ONLY_STAGES:
-            rows = [r for r in rows if '事件期間' not in r.get('conds', [])]
+        if (stage['stageId'], npc['id']) in NO_SHOP:
+            npc['shop'] = ''
+            npc['role'] = 'talk'
+            npc.pop('shops', None)
+            continue
+        rows = [r for r in rows if '事件期間' not in r.get('conds', [])]
         if not rows:
             continue
         for r in rows:
