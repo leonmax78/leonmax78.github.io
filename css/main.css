@@ -4342,3 +4342,5 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .npcTalkChoices button{text-align:left;padding:9px 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--accent) 8%,transparent);color:var(--text);font:inherit;cursor:pointer}
 .npcTalkChoices button:hover{background:color-mix(in srgb,var(--accent) 18%,transparent)}
 .npcTalkHint{margin:0;color:var(--muted);font-size:13px}
+.mapShopActions{flex-wrap:wrap}
+.mapShopServer button.active{background:linear-gradient(135deg,#a78bfa,#38bdf8);color:#06111f}
