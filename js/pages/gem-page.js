@@ -11,7 +11,7 @@
  const writeSlots=a=>{try{localStorage.setItem(SLOT_KEY,JSON.stringify(a));}catch(e){}};
  const slotLabel=s=>s?(s.note?s.note+' · ':'')+`降神 ${Number(s.level).toLocaleString()} 等 · 鑲嵌 ${Object.values(s.picks).filter(Boolean).length} 顆`:'空白';
  const GOALS={str:'力量型破防（力×2＋敏÷2）',dex:'敏捷型破防（敏×2＋力÷2）',Base_Int:'智慧',four:'四屬性（體魄＋力量＋智慧＋敏捷）'};
- const goalScore=(t,goal)=>goal==='str'?2*(Number(t.Base_Str)||0)+(Number(t.Base_Dex)||0)/2:goal==='dex'?2*(Number(t.Base_Dex)||0)+(Number(t.Base_Str)||0)/2:goal==='four'?FOUR.reduce((n,k)=>n+(Number(t[k])||0),0):Number(t[goal])||0;
+ const goalScore=(t,goal)=>goal==='spell'?2.4*(Number(t.Base_Int)||0)+(Number(t.Magic_Att)||0):goal==='str'?2*(Number(t.Base_Str)||0)+(Number(t.Base_Dex)||0)/2:goal==='dex'?2*(Number(t.Base_Dex)||0)+(Number(t.Base_Str)||0)/2:goal==='four'?FOUR.reduce((n,k)=>n+(Number(t[k])||0),0):Number(t[goal])||0;
  const fmtScore=v=>Number.isInteger(v)?v.toLocaleString():v.toLocaleString(undefined,{maximumFractionDigits:1});
  const fourSum=g=>FOUR.reduce((n,k)=>n+(Number(g[k])||0),0);
  // Best gem per open slot: highest goal score (break-defense formula for 力量型/敏捷型); ties go to the gem with more of the four main stats (e.g. a 多彩晶鑽 matching a single colour).
@@ -62,8 +62,9 @@
   #gemPage .gemShopping{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,195px),1fr));gap:4px 24px}
   #gemPage .gemShopping li{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border,#354557);padding:6px 0;gap:8px}
   #gemPage .gemShopping button{border:0;background:transparent;text-align:left;padding:4px 0}
-  #gemPage .gemShopping strong{white-space:nowrap;font-variant-numeric:tabular-nums}
+  #gemPage .gemShopping strong{text-align:right;font-variant-numeric:tabular-nums}#gemPage .gemShopping span{min-width:0}
   #gemPage .gemStep{margin:12px 0;padding:6px 0;border-bottom:1px solid var(--border,#354557)}
+  #gemPage .gemList{list-style:none;padding:0;margin:0 0 8px}#gemPage .gemList li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:7px 0;border-bottom:1px solid var(--border,#354557)}#gemPage .gemList span{color:var(--muted,#9fb0c4);font-variant-numeric:tabular-nums}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
   </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['compare','存檔比較'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
@@ -81,26 +82,28 @@
   }
 
   if(tab==='recommend'){
-   const TYPES={str:{label:'力量型（物理）',plans:[['str','A 破防最高','力×2＋敏÷2 分數最高'],['Base_Str','B 力量最高','只看力量數值'],['four','C 四屬性最高','多彩晶鑽為主，四項平均']]},
-    dex:{label:'敏捷型（物理）',plans:[['dex','A 破防最高','敏×2＋力÷2 分數最高'],['Base_Dex','B 敏捷最高','只看敏捷數值'],['four','C 四屬性最高','多彩晶鑽為主，四項平均']]},
-    int:{label:'智慧型（術法）',plans:[['Base_Int','A 智慧最高','只看智慧數值'],['four','B 四屬性最高','多彩晶鑽為主，四項平均']]},
-    four:{label:'四屬性平均',plans:[['four','A 四屬性最高','四項總和最高'],['str','B 偏力量','力×2＋敏÷2 分數最高'],['dex','C 偏敏捷','敏×2＋力÷2 分數最高']]}};
+   const TYPES={str:{label:'力量型（物理）',plans:[['A 全湛藍','湛藍'],['B 湛藍穿插多彩','mix:str'],['C 全多彩','多彩']]},
+    dex:{label:'敏捷型（物理）',plans:[['A 全緋紅','緋紅'],['B 緋紅穿插多彩','mix:dex'],['C 全多彩','多彩']]},
+    int:{label:'術法型',plans:[['A 全碧綠','碧綠'],['B 全橄欖（術攻）','橄欖'],['C 術法最高（混搭）','mix:spell'],['D 全多彩','多彩']]},
+    four:{label:'四屬性',plans:[['A 全多彩','多彩']]}};
    const rs=state.rec||(state.rec={});if(!TYPES[rs.type])rs.type='str';rs.level=rs.level||state.level||5000;rs.grade=rs.grade||1;
    const roman=g=>'ⅠⅡⅢⅣⅤⅥ'[g-1];
-   content.innerHTML=`<p class="gemRule">每一格挑該形狀、該星等裡分數最高的寶石，一次列出 2～3 組方案方便比較。物理職業的破防公式：力量型「力×2＋敏÷2」、敏捷型「敏×2＋力÷2」，所以多彩晶鑽有時雖然力量較低，破防反而較高；同分時改放四項總和較高的。</p><div class="gemFilters"><label>降神總等級<input id="gemRecLevel" type="number" min="0" max="20000" value="${rs.level}"></label><label>寶石星等<select id="gemRecGrade">${[1,2,3,4,5,6].map(g=>`<option value="${g}"${g===Number(rs.grade)?' selected':''}>${roman(g)}（${g} 階）</option>`).join('')}</select></label><label>職業取向<select id="gemRecType">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}"${k===rs.type?' selected':''}>${t.label}</option>`).join('')}</select></label></div><div id="gemRecResult" aria-live="polite"></div>`;
+   const pure=color=>{const picks={};for(const slot of data.slots.filter(s=>Number(s.NeedLv)<=rs.level)){const g=Object.values(data.gems).find(g=>exchange.names[g.ID]&&String(g.Shape)===String(slot.Shape)&&Number(g.Grade)===Number(rs.grade)&&name(g.ID).includes(color));if(g)picks[slot.ID]=g.ID;}return picks;};
+   const gemText=(g,n)=>{const ks=Object.keys(stats).filter(k=>Number(g[k]));const four=FOUR.every(k=>ks.includes(k))&&FOUR.every(k=>Number(g[k])===Number(g.Base_Con))&&ks.length===4;
+    return four?`每顆四屬各 +${Number(g.Base_Con)}｜共各 +${(Number(g.Base_Con)*n).toLocaleString()}`:ks.map(k=>`每顆${stats[k]} +${Number(g[k])}｜共 +${(Number(g[k])*n).toLocaleString()}`).join('；');};
+   content.innerHTML=`<div class="gemFilters"><label>降神總等級<input id="gemRecLevel" type="number" min="0" max="20000" value="${rs.level}"></label><label>寶石星等<select id="gemRecGrade">${[1,2,3,4,5,6].map(g=>`<option value="${g}"${g===Number(rs.grade)?' selected':''}>${roman(g)}（${g} 階）</option>`).join('')}</select></label><label>職業取向<select id="gemRecType">${Object.entries(TYPES).map(([k,t])=>`<option value="${k}"${k===rs.type?' selected':''}>${t.label}</option>`).join('')}</select></label></div><div id="gemRecResult" aria-live="polite"></div>`;
    const refresh=()=>{
     rs.level=Math.max(0,Math.min(20000,Math.floor(Number(byId('gemRecLevel').value)||0)));rs.grade=Number(byId('gemRecGrade').value);rs.type=byId('gemRecType').value;save();
-    const open=data.slots.filter(s=>Number(s.NeedLv)<=rs.level);
+    const t=TYPES[rs.type],open=data.slots.filter(s=>Number(s.NeedLv)<=rs.level);
     if(!open.length){byId('gemRecResult').innerHTML='<p>這個等級還沒有開孔（100 等開第 1 格）。</p>';return;}
-    const plans=TYPES[rs.type].plans.map(([goal,title,desc])=>{const picks=SZO_GEM_RECOMMEND(rs.level,rs.grade,goal);return {goal,title,desc,picks,res:SZO_GEM_TOTAL(rs.level,picks)};});
-    const rows=[['str','力量型破防'],['dex','敏捷型破防'],['four','四屬性合計'],...Object.entries(stats).filter(([k])=>plans.some(p=>p.res.total[k]))];
+    const plans=t.plans.map(([title,how])=>{const picks=how.startsWith('mix:')?SZO_GEM_RECOMMEND(rs.level,rs.grade,how.slice(4)):pure(how);return {title,picks,res:SZO_GEM_TOTAL(rs.level,picks)};});
+    const rows=[['Base_Con','體魄'],['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','敏捷'],...(rs.type==='int'?[['Magic_Att','術攻'],['spell','術法換算（智×2.4＋術攻）']]:[])];
     const val=(p,k)=>k in stats?p.res.total[k]:goalScore(p.res.total,k);
-    const table=`<div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${plans.map(p=>`<th>${p.title}<br><small>${p.desc}</small></th>`).join('')}</tr></thead><tbody>${rows.map(([k,n])=>{const v=plans.map(p=>val(p,k)),m=Math.max(...v);return `<tr><td>${n}</td>${v.map(x=>`<td class="${m>0&&x===m&&v.some(y=>y!==m)?'supportBest':''}">${fmtScore(x)}</td>`).join('')}</tr>`;}).join('')}</tbody></table></div>`;
-    const cards=plans.map((p,pi)=>{const mixed=open.filter(s=>/多彩/.test(name(p.picks[s.ID]||''))).length;return `<details class="gemStep"${pi===0?' open':''}><summary>${p.title}｜${p.desc}${mixed?`｜${mixed} 格多彩晶鑽`:''}</summary><div class="gemSlots">${open.map(s=>`<div class="gemSlot"><div class="gemSlotTitle">第 ${s.ID} 格 · ${shapes[s.Shape]} · ${Number(s.NeedLv).toLocaleString()} 等</div><strong>${esc(name(p.picks[s.ID]))}</strong><small>${esc(detail(data.gems[p.picks[s.ID]]))}</small></div>`).join('')}</div><div class="gemBatch"><button type="button" data-rec-apply="${pi}">套用到鑲嵌能力試算</button><label>存到<select id="gemRecSlot${pi}">${LETTERS.map((x,i)=>`<option value="${i}"${i===pi?' selected':''}>存檔 ${x}</option>`).join('')}</select></label><button type="button" data-rec-save="${pi}">存檔</button></div></details>`;}).join('');
-    const grid=[1,2,3,4,5,6].map(g=>`<tr><th>${roman(g)}</th>${[['str'],['dex'],['Base_Int'],['four']].map(([k])=>`<td>${fmtScore(goalScore(SZO_GEM_TOTAL(rs.level,SZO_GEM_RECOMMEND(rs.level,g,k)).total,k))}</td>`).join('')}</tr>`).join('');
-    byId('gemRecResult').innerHTML=`<h2>${TYPES[rs.type].label} · ${roman(rs.grade)} · 已開 ${open.length} 格</h2>${table}<p id="gemRecNote" aria-live="polite"></p>${cards}<h3>這個等級各星等的最高分</h3><div class="tableWrap"><table class="compareTable"><thead><tr><th>星等</th><th>力量型破防</th><th>敏捷型破防</th><th>智慧</th><th>四屬性</th></tr></thead><tbody>${grid}</tbody></table></div>`;
+    const table=`<div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${plans.map(p=>`<th>${p.title}</th>`).join('')}</tr></thead><tbody>${rows.map(([k,n])=>{const v=plans.map(p=>val(p,k)),m=Math.max(...v);return `<tr><td>${n}</td>${v.map(x=>`<td class="${m>0&&x===m&&v.some(y=>y!==m)?'supportBest':''}">${fmtScore(x)}</td>`).join('')}</tr>`;}).join('')}</tbody></table></div>`;
+    const summary=p=>{const m=new Map();for(const s of open){const id=p.picks[s.ID];if(id)m.set(id,(m.get(id)||0)+1);}return `<ul class="gemList">${[...m].sort((x,y)=>Number(data.gems[x[0]].Shape)-Number(data.gems[y[0]].Shape)).map(([id,n])=>`<li><b>${esc(name(id))} × ${n}</b><span>${esc(gemText(data.gems[id],n))}</span></li>`).join('')}</ul>`;};
+    byId('gemRecResult').innerHTML=`<h2>${t.label} · ${roman(rs.grade)} · 已開 ${open.length} 格</h2>${table}<p id="gemRecNote" aria-live="polite"></p>${plans.map((p,pi)=>`<h3>${p.title}</h3>${summary(p)}<div class="gemBatch"><button type="button" data-rec-apply="${pi}">套用到鑲嵌能力試算</button><label>存到<select id="gemRecSlot${pi}">${LETTERS.map((x,i)=>`<option value="${i}"${i===pi?' selected':''}>存檔 ${x}</option>`).join('')}</select></label><button type="button" data-rec-save="${pi}">存檔</button></div>`).join('')}`;
     content.querySelectorAll('[data-rec-apply]').forEach(b=>b.onclick=()=>{state.level=rs.level;state.picks={...plans[b.dataset.recApply].picks};save();tab='calc';renderGemPage();});
-    content.querySelectorAll('[data-rec-save]').forEach(b=>b.onclick=()=>{const p=plans[b.dataset.recSave],a=readSlots(),i=Number(byId('gemRecSlot'+b.dataset.recSave).value);a[i]={level:rs.level,picks:{...p.picks},note:`${TYPES[rs.type].label.replace(/（.*/,'')} ${p.title} ${roman(rs.grade)}`};writeSlots(a);byId('gemRecNote').textContent=`已把「${p.title}」存入存檔 ${LETTERS[i]}`;});
+    content.querySelectorAll('[data-rec-save]').forEach(b=>b.onclick=()=>{const p=plans[b.dataset.recSave],a=readSlots(),i=Number(byId('gemRecSlot'+b.dataset.recSave).value);a[i]={level:rs.level,picks:{...p.picks},note:`${t.label.replace(/（.*/,'')} ${p.title.replace(/（.*/,'')} ${roman(rs.grade)}`};writeSlots(a);byId('gemRecNote').textContent=`已把「${p.title}」存入存檔 ${LETTERS[i]}`;});
    };
    ['gemRecLevel','gemRecGrade','gemRecType'].forEach(id=>byId(id).addEventListener('input',refresh));refresh();return;
   }
@@ -110,7 +113,7 @@
    const refresh=()=>{
     const cols=[0,1,2,3,4].map(i=>byId('gemCmp'+i).value).filter(v=>v!==''&&slots[v]).map(v=>({label:'存檔 '+LETTERS[v],slot:slots[v],res:SZO_GEM_TOTAL(Number(slots[v].level)||0,slots[v].picks)}));
     if(!cols.length){byId('gemCmpResult').innerHTML='<p>還沒有存檔。請先到「鑲嵌能力試算」或「推薦方案」存檔。</p>';return;}
-    const rows=[...Object.entries(stats),['four','四屬性合計'],['str','力量型破防（力×2＋敏÷2）'],['dex','敏捷型破防（敏×2＋力÷2）']];
+    const rows=[...Object.entries(stats),['four','四屬性合計'],['spell','術法換算（智×2.4＋術攻）']];
     const val=(c,k)=>k in stats?c.res.total[k]:goalScore(c.res.total,k);
     byId('gemCmpResult').innerHTML=`<div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${cols.map(c=>`<th>${c.label}<br><small>${esc(slotLabel(c.slot))}</small></th>`).join('')}</tr></thead><tbody>${rows.map(([k,n])=>{const v=cols.map(c=>val(c,k)),m=Math.max(...v);return `<tr><td>${n}</td>${v.map(x=>`<td class="${m>0&&x===m?'supportBest':''}">${fmtScore(x)}</td>`).join('')}</tr>`;}).join('')}</tbody></table></div>`;
    };
