@@ -13,7 +13,7 @@
 .tradeForm{display:grid;gap:10px;margin:0 0 14px;padding:14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line));background:var(--panel2)}
 .tradeForm[hidden]{display:none}
 .tradeForm label{display:grid;gap:5px;font-size:13px;color:var(--muted)}
-.tradeForm input:not([type="radio"]),.tradeForm textarea{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;font-size:14px}
+.tradeForm input:not([type="radio"]),.tradeForm textarea,.tradeForm select{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;font-size:14px}
 .tradeForm textarea{resize:vertical}
 .tradeForm small{justify-self:end;font-size:12px}
 .tradeKindPick{display:flex;gap:16px;border:0;margin:0;padding:0}
@@ -71,3 +71,7 @@
 .tradeImagePick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
 .tradeImagePick.isDisabled{opacity:.55;cursor:not-allowed}
 .tradeImagePick.isDisabled input{cursor:not-allowed}
+/* 伺服器 */
+.tradeServerFilter{padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:inherit;font-size:14px}
+.tradeServer{padding:2px 8px;border-radius:999px;font-weight:700;background:#a78bfa26;color:#c4b5fd;border:1px solid #a78bfa80}
+.tradeToolbar .tradeServerFilter{width:auto;flex:0 0 auto;max-width:100%}

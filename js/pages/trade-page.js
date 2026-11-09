@@ -5,6 +5,7 @@
   const SUPABASE_SRC = 'js/vendor/supabase/supabase-2.118.0.js';
   const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
   const KIND_LABEL = { sell: '販賣', buy: '收購' };
+  const SERVERS = ['北斗', '文昌', '祿存'];
   const IMAGE_BUCKET = 'trade-images';
   const MAX_IMAGES = 3;
   const MAX_IMAGE_SIDE = 1280;
@@ -26,7 +27,7 @@
 
   const state = {
     config: null, client: null, uid: '', posts: [], loaded: false,
-    filter: 'all', query: '', hideDone: false,
+    filter: 'all', server: '', query: '', hideDone: false,
     captchaToken: '', widget: null, pendingId: null, pendingKey: '', busy: false,
     images: [], editing: null
   };
@@ -201,6 +202,7 @@
     const query = state.query.trim().toLowerCase();
     return state.posts.filter(post =>
       (state.filter === 'all' || post.kind === state.filter) &&
+      (!state.server || post.server === state.server) &&
       (!state.hideDone || post.status !== 'done') &&
       (!query || String(post.title).toLowerCase().includes(query) || String(post.note).toLowerCase().includes(query)));
   }
@@ -226,6 +228,7 @@
       return `<li class="tradePost ${done ? 'isDone' : ''}" data-kind="${esc(post.kind)}">
         <header>
           <span class="tradeKind ${esc(post.kind)}">${esc(KIND_LABEL[post.kind] || post.kind)}</span>
+          ${post.server ? `<span class="tradeServer">${esc(post.server)}</span>` : ''}
           ${done ? '<span class="tradeDoneBadge">已成交</span>' : ''}
           ${mine ? '<span class="tradeMineBadge">我的貼文</span>' : ''}
           <time datetime="${esc(post.created_at)}">${esc(timeLabel(post.created_at))}${post.edited_at ? '（已編輯）' : ''}</time>
@@ -250,8 +253,8 @@
       const client = await getClient();
       const query = columns => client.from('szo_trade_posts').select(columns)
         .order('created_at', { ascending: false }).limit(500);
-      let result = await query('id,user_id,kind,title,price,contact,note,status,created_at,images,edited_at');
-      // 資料庫還沒加上 edited_at 欄位時，改用舊欄位讀取，避免整頁讀不到。
+      let result = await query('id,user_id,kind,server,title,price,contact,note,status,created_at,images,edited_at');
+      // 資料庫還沒加上新欄位時，改用舊欄位讀取，避免整頁讀不到。
       if(result.error) result = await query('id,user_id,kind,title,price,contact,note,status,created_at,images');
       if(result.error) throw result.error;
       state.posts = Array.isArray(result.data) ? result.data : [];
@@ -303,6 +306,7 @@
     $('[data-trade-submit]').textContent = post ? '儲存修改' : '送出刊登';
     if(post){
       form.elements.kind.value = post.kind;
+      form.elements.server.value = post.server || '';
       form.elements.title.value = post.title || '';
       form.elements.price.value = post.price || '';
       form.elements.contact.value = post.contact || '';
@@ -323,7 +327,11 @@
     if(open){
       formSay('');
       if(post){ form.scrollIntoView({ behavior: 'smooth', block: 'start' }); form.elements.title.focus({ preventScroll: true }); return; }
-      try { if(!form.elements.contact.value) form.elements.contact.value = localStorage.getItem('szo.trade.contact') || ''; } catch(_error) {}
+      try {
+        if(!form.elements.contact.value) form.elements.contact.value = localStorage.getItem('szo.trade.contact') || '';
+        const lastServer = localStorage.getItem('szo.trade.server');
+        if(SERVERS.includes(lastServer)) form.elements.server.value = lastServer;
+      } catch(_error) {}
       getClient().then(prepareCaptcha).catch(() => formSay('交易區尚未開放。'));
       form.elements.title.focus();
     }
@@ -336,12 +344,14 @@
     const submitButton = $('[data-trade-submit]');
     const data = {
       kind: form.elements.kind.value,
+      server: form.elements.server.value,
       title: form.elements.title.value.trim(),
       price: form.elements.price.value.trim(),
       contact: form.elements.contact.value.trim(),
       note: form.elements.note.value.trim()
     };
     if(!KIND_LABEL[data.kind]){ formSay('請選擇販賣或收購。'); return; }
+    if(!SERVERS.includes(data.server)){ formSay('請選擇伺服器。'); return; }
     if(!data.title || !data.price || !data.contact){ formSay('請填寫標題、價格與飛鴿 ID。'); return; }
     // 同一份內容重送時沿用同一個編號，伺服器不會重複刊登。
     const key = (state.editing || '') + '|' + JSON.stringify(data) + '|' + state.images.map(item => item.preview).join(',');
@@ -366,14 +376,14 @@
       }
       formSay('送出中…');
       const result = await client.rpc(editing ? 'szo_update_trade_post' : 'szo_create_trade_post', {
-        p_id: editing || state.pendingId, p_kind: data.kind, p_title: data.title,
+        p_id: editing || state.pendingId, p_kind: data.kind, p_server: data.server, p_title: data.title,
         p_price: data.price, p_contact: data.contact, p_note: data.note, p_images: paths
       });
       if(result.error) throw result.error;
       // 儲存成功後才刪掉被移除的舊圖片；刪除失敗不影響貼文。
       const dropped = oldPost ? (oldPost.images || []).filter(path => !paths.includes(path)) : [];
       if(dropped.length) await client.storage.from(IMAGE_BUCKET).remove(dropped).catch(() => null);
-      try { localStorage.setItem('szo.trade.contact', data.contact); } catch(_error) {}
+      try { localStorage.setItem('szo.trade.contact', data.contact); localStorage.setItem('szo.trade.server', data.server); } catch(_error) {}
       state.pendingKey = ''; state.pendingId = null;
       form.reset(); form.elements.contact.value = data.contact; clearImages();
       openForm(false);
@@ -459,6 +469,7 @@
         }, '貼文已刪除。');
       }
     });
+    $('.tradeServerFilter').addEventListener('change', event => { state.server = event.target.value; renderList(); });
     $('.tradeSearch').addEventListener('input', event => { state.query = event.target.value; renderList(); });
     $('.tradeHideDone').addEventListener('change', event => { state.hideDone = event.target.checked; renderList(); });
     $('.tradeForm').addEventListener('submit', event => { event.preventDefault(); submitPost(); });
@@ -476,7 +487,7 @@
     window.v86LastView = 'trade';
     const reader = document.getElementById('reader');
     if(!reader) return;
-    state.widget = null; state.captchaToken = ''; state.images.forEach(releaseImage); state.images = []; state.editing = null;
+    state.widget = null; state.captchaToken = ''; state.images.forEach(releaseImage); state.images = []; state.editing = null; state.server = '';
     reader.innerHTML = `<section class="card tradePage">
       <h1>玩家交易區</h1>
       <p class="tradeNotice">本站僅提供資訊交流，不經手任何交易。交易前請自行確認對方身分，風險自負；請勿張貼帳號、密碼或個人資料。</p>
@@ -486,6 +497,10 @@
           <button type="button" data-trade-filter="sell" aria-pressed="false">販賣</button>
           <button type="button" data-trade-filter="buy" aria-pressed="false">收購</button>
         </div>
+        <select class="tradeServerFilter" aria-label="伺服器篩選">
+          <option value="">全部伺服器</option>
+          ${SERVERS.map(name => `<option value="${name}">${name}</option>`).join('')}
+        </select>
         <input class="tradeSearch" type="search" placeholder="搜尋物品名稱" aria-label="搜尋物品名稱">
         <label class="tradeCheck"><input class="tradeHideDone" type="checkbox"> 隱藏已成交</label>
         <button type="button" data-trade-refresh>重新整理</button>
@@ -497,6 +512,10 @@
           <label><input type="radio" name="kind" value="sell" checked> 販賣</label>
           <label><input type="radio" name="kind" value="buy"> 收購</label>
         </fieldset>
+        <label>伺服器<select name="server" required>
+          <option value="">請選擇</option>
+          ${SERVERS.map(name => `<option value="${name}">${name}</option>`).join('')}
+        </select></label>
         <label>標題（想買或賣的東西）<input name="title" maxlength="40" required placeholder="例：武防 XXX +10"></label>
         <label>價格<input name="price" maxlength="40" required placeholder="例：500 萬、可議"></label>
         <label>飛鴿 ID（遊戲內聯絡用）<input name="contact" maxlength="30" required autocomplete="off"></label>
