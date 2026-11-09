@@ -162,13 +162,23 @@ insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_typ
   values ('trade-images', 'trade-images', true, 1048576, array['image/webp','image/jpeg'])
   on conflict (id) do update set public = true, file_size_limit = 1048576, allowed_mime_types = array['image/webp','image/jpeg'];
 
+-- 停權名單對一般使用者不開放讀取，所以由這個函式代為檢查。
+create or replace function public.szo_trade_upload_allowed()
+returns boolean
+language sql stable security definer set search_path = '' as $$
+  select auth.uid() is not null
+    and not exists(select 1 from public.szo_chat_bans b where b.user_id = auth.uid());
+$$;
+revoke all on function public.szo_trade_upload_allowed() from public, anon;
+grant execute on function public.szo_trade_upload_allowed() to authenticated;
+
 -- 只能上傳到自己的資料夾；被停權者不能上傳。
 drop policy if exists szo_trade_images_insert on storage.objects;
 create policy szo_trade_images_insert on storage.objects for insert to authenticated
   with check (
     bucket_id = 'trade-images'
     and (storage.foldername(name))[1] = (select auth.uid())::text
-    and not exists(select 1 from public.szo_chat_bans b where b.user_id = (select auth.uid()))
+    and (select public.szo_trade_upload_allowed())
   );
 -- 重新送出同一張圖時允許覆蓋自己的檔案。
 drop policy if exists szo_trade_images_update on storage.objects;
