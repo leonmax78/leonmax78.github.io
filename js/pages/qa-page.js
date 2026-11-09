@@ -139,7 +139,7 @@
     window.v86LastView = 'qa';
     reader.innerHTML = `<section class="card qaPage">
       <h1>全站搜尋</h1>
-      <p class="muted">一次搜尋道具、怪物、商店、地圖與掉落資料。</p>
+      <p class="muted">一次搜尋道具、怪物、商店商品、NPC 與地圖。</p>
       <form id="qaForm" class="qaForm">
         <input id="qaInput" value="${html(state.query)}" placeholder="例如：大山犬、短劍、天鐵、老虎皮">
         <button type="button" class="primary" data-qa-search onclick="window.SZO_QA_RUN && window.SZO_QA_RUN()">搜尋</button>
@@ -214,22 +214,31 @@
       })).then(x => x.join(''))}</div>` : '<div class="empty">目前沒有掉落資料。</div>'}
     </div>`;
   }
+  function shopServer(){ try{ return localStorage.getItem('szo-shop-server') === 'free' ? 'free' : 'month'; }catch(e){ return 'month'; } }
+  function npcShopEntries(npc){
+    const list = Array.isArray(npc.shops) && npc.shops.length ? npc.shops : [{ id: npc.shop }];
+    const server = shopServer();
+    return list.filter(s => !s.server || s.server === 'both' || s.server === server);
+  }
   async function shopLocations(){
     const [shopData, maps] = await Promise.all([json('shops'), json('maps')]);
     const shops = new Map((shopData.shops || []).map(shop => [String(shop.shopId), shop]));
     const rows = [];
     for(const stage of maps.stages || []){
       for(const npc of stage.npcs || []){
-        const shopId = String(npc.shop || '').trim();
-        if(!shopId || !shops.has(shopId)) continue;
-        rows.push({
-          stageId: Number(stage.stageId),
-          stageName: stage.stageName || '',
-          npcName: npc.name || '',
-          npcId: String(npc.id || ''),
-          shopId,
-          shop: shops.get(shopId)
-        });
+        for(const entry of npcShopEntries(npc)){
+          const shopId = String(entry.id ?? '').trim();
+          if(!shopId || !shops.has(shopId)) continue;
+          rows.push({
+            stageId: Number(stage.stageId),
+            stageName: stage.stageName || '',
+            npcName: npc.name || '',
+            npcId: String(npc.id || ''),
+            shopId,
+            conds: entry.conds || [],
+            shop: shops.get(shopId)
+          });
+        }
       }
     }
     return rows.sort((a,b) => a.stageId - b.stageId || a.npcName.localeCompare(b.npcName, 'zh-Hant') || Number(a.shopId) - Number(b.shopId));
@@ -280,7 +289,7 @@
       return `<div class="qaList">${rows.slice(0, 16).map(row => {
         const img = itemIcon(row.item);
         return `<div class="qaRow qaShopRow">
-          <strong>${html(row.loc.stageName)} / ${html(row.loc.npcName)}</strong>
+          <strong>${html(row.loc.stageName)} / ${html(row.loc.npcName)}${row.loc.conds?.length ? `<small class="qaCond">${html(row.loc.conds.join('、'))}</small>` : ''}</strong>
           <span>${img ? `<img src="${html(img)}" alt="">` : ''}${html(row.item.name)}</span>
           <b>${html(money(row.priceValue))}</b>
           <div class="qaRowActions">${mapChip(row.loc.stageName, row.loc.npcName)}</div>
@@ -290,7 +299,7 @@
 
     function section(mode, rows){
       return `<div class="qaShopSection">
-        <h3>${mode === 'buy' ? '回收資訊' : '販售資訊'}</h3>
+        <h3>${mode === 'buy' ? '回收資訊' : '販售資訊'}<small class="qaCond">${shopServer() === 'free' ? '免服' : '月服'}</small></h3>
         <div class="qaModeHint">${mode === 'buy' ? '回收依高價優先。' : '販售依低價優先。'}</div>
         ${rowsHtml(rows)}
       </div>`;
@@ -341,7 +350,7 @@
     const mapMatches = (maps.stages || []).filter(stage => norm(stage.stageName).includes(norm(term))).slice(0, 10);
     const shopHtml = await answerShop(term);
     const shopHasResult = !shopHtml.includes('data-qa-shop-empty="all"');
-    const itemSection = itemMatches.length ? `<div class="qaAnswer"><h2>道具</h2><div class="qaList">${itemMatches.map(item => {
+    const itemSection = itemMatches.length ? `<div class="qaAnswer" id="qaSecItem"><h2>道具</h2><div class="qaList">${itemMatches.map(item => {
       const img = itemIcon(item);
       return `<div class="qaRow qaShopRow">
         <strong>${html(itemName(item))}</strong>
@@ -350,7 +359,7 @@
         <div class="qaRowActions">${chip('道具資訊', `data-qa-item="${html(itemId(item))}"`)}${chip('掉落反查', `data-qa-reverse="${html(itemId(item))}"`)}${chip('找商店', `data-qa-shop-item="${html(itemName(item))}"`)}</div>
       </div>`;
     }).join('')}</div></div>` : '';
-    const monsterSection = monsterMatches.length ? `<div class="qaAnswer"><h2>怪物</h2><div class="qaList">${await Promise.all(monsterMatches.map(async monster => {
+    const monsterSection = monsterMatches.length ? `<div class="qaAnswer" id="qaSecMonster"><h2>怪物</h2><div class="qaList">${await Promise.all(monsterMatches.map(async monster => {
       const img = monsterIcon(monster);
       const loc = await locationForMonster(monsterName(monster));
       const locs = String(loc || '').split(/[、,]/).map(x => x.trim()).filter(Boolean);
@@ -361,10 +370,29 @@
         <div class="qaRowActions">${monsterChip(monster)}${locs.slice(0,2).map(x => mapChip(x, monsterName(monster))).join('')}</div>
       </div>`;
     })).then(rows => rows.join(''))}</div></div>` : '';
-    const mapSection = mapMatches.length ? `<div class="qaAnswer"><h2>地圖</h2><div class="qaMapChips">${mapMatches.map(stage => mapChip(stage.stageName, '')).join('')}</div></div>` : '';
-    const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || shopHasResult;
+    const npcRows = [];
+    const seenNpc = new Set();
+    for(const stage of maps.stages || []){
+      for(const npc of stage.npcs || []){
+        const key = npc.name + '|' + stage.stageId;
+        if(seenNpc.has(key) || !norm(npc.name).includes(norm(term))) continue;
+        seenNpc.add(key);
+        npcRows.push({ stage, npc, shop: npcShopEntries(npc)[0] });
+      }
+    }
+    npcRows.sort((a,b) => (b.shop ? 1 : 0) - (a.shop ? 1 : 0) || (norm(a.npc.name) === norm(term) ? -1 : 0) || a.stage.stageId - b.stage.stageId);
+    const npcSection = npcRows.length ? `<div class="qaAnswer" id="qaSecNpc"><h2>NPC</h2><div class="qaList">${npcRows.slice(0, 12).map(({ stage, npc, shop }) => `<div class="qaRow qaShopRow">
+        <strong>${html(npc.name)}</strong>
+        <span>${html(stage.stageName)}${shop ? '・商店' : ''}</span>
+        <b></b>
+        <div class="qaRowActions">${shop ? chip('看商品', `data-qa-npc-shop="${html(stage.stageId)}:${html(npc.id)}"`) : ''}${mapChip(stage.stageName, npc.name)}</div>
+      </div>`).join('')}</div></div>` : '';
+    const mapSection = mapMatches.length ? `<div class="qaAnswer" id="qaSecMap"><h2>地圖</h2><div class="qaMapChips">${mapMatches.map(stage => mapChip(stage.stageName, '')).join('')}</div></div>` : '';
+    const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || npcRows.length || shopHasResult;
     if(!hasAny) return '<div class="empty">目前找不到符合的資料，可以換更短或更完整的關鍵字。</div>';
-    return `${itemSection}${monsterSection}${mapSection}${shopHasResult ? shopHtml : ''}`;
+    const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
+      .filter(x => x[2]).map(([id, label, n]) => `<button type="button" class="qaNavChip" data-qa-jump="${id}">${label}<b>${n}</b></button>`).join('');
+    return `<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${npcSection}${mapSection}`;
   }
   async function runQuestion(query){
     state.query = String(query || '').trim();
@@ -405,6 +433,15 @@
       ev.preventDefault();
       ev.stopPropagation();
       runQuestion(by('qaInput')?.value || '');
+      return;
+    }
+    const jump = ev.target.closest?.('[data-qa-jump]');
+    if(jump){ by(jump.dataset.qaJump)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const npcShop = ev.target.closest?.('[data-qa-npc-shop]');
+    if(npcShop){
+      const [sid, nid] = String(npcShop.dataset.qaNpcShop).split(':');
+      if(typeof window.ensureShopPageLoaded === 'function') await window.ensureShopPageLoaded();
+      if(typeof window.openShopNpc === 'function') await window.openShopNpc(sid, nid);
       return;
     }
     const ex = ev.target.closest?.('[data-qa-example]');

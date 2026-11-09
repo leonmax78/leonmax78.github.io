@@ -4305,3 +4305,15 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .shopCondId{font-size:12px;color:var(--muted)}
 .shopCondNote{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5}
 @media(max-width:760px){.shopPickerMode .shopModeTabs{width:auto;flex:1 1 140px}}
+/* Header search suggestions */
+.globalSuggest{position:fixed;z-index:200;max-height:min(70vh,520px);overflow:auto;padding:6px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--line));border-radius:14px;background:var(--panel2,#0b1527);box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.globalSuggest .gsHead{font-size:11.5px;letter-spacing:.12em;color:var(--muted);padding:8px 10px 3px}
+.globalSuggest .gsRow,.globalSuggest .gsAll{display:flex;box-sizing:border-box;align-items:baseline;justify-content:space-between;gap:10px;text-align:left;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:var(--text);font:inherit;cursor:pointer;min-height:0}
+.globalSuggest .gsRow b{font-weight:800;min-width:0;overflow-wrap:anywhere}
+.globalSuggest .gsRow small{color:var(--muted);font-size:12px;white-space:nowrap}
+.globalSuggest .gsRow:hover,.globalSuggest .gsRow.active,.globalSuggest .gsAll:hover,.globalSuggest .gsAll.active{background:color-mix(in srgb,var(--accent) 18%,transparent)}
+.globalSuggest .gsAll{justify-content:center;margin-top:4px;border-top:1px solid var(--line);border-radius:0 0 9px 9px;color:var(--accent);font-weight:800}
+.qaNav{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 12px}
+.qaNavChip{display:inline-flex;gap:6px;align-items:center;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:800;cursor:pointer}
+.qaNavChip b{font-size:12px;padding:0 7px;border-radius:999px;background:color-mix(in srgb,var(--accent) 30%,transparent)}
+.qaCond{display:inline-block;margin-left:8px;font-size:12px;font-weight:600;color:var(--muted)}
