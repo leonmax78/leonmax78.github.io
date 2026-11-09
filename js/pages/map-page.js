@@ -349,6 +349,7 @@
             <button type="button" class="${activeMode === 'sell' ? 'active' : ''}" data-map-shop-mode="sell">販賣</button>
             <button type="button" class="${activeMode === 'buy' ? 'active' : ''}" data-map-shop-mode="buy">回收</button>
           </div>
+          <button type="button" class="ghost mapShopOpenPage" data-map-shop-npc-talk>NPC 對話</button>
           <button type="button" class="ghost mapShopOpenPage" data-map-shop-open-page>查看商店頁</button>
         </div>
         <div class="mapShopItems">
@@ -691,7 +692,8 @@
       const inner = marker.role === 'trap' ? '<span class="trapSpark" aria-hidden="true">✦</span>' : src ? `<img src="${htmlEscape(src)}" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.parentElement.classList.remove('withImage')"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
       const shopAttrs = marker.kind === 'npc' && marker.shop ? ` data-map-shop="${htmlEscape(npcShopFor(marker))}"${(marker.shops || []).some(s => s.server === 'free') ? ' data-map-shop-variant="1"' : ''} data-map-shop-stage="${htmlEscape(stage.stageId)}" data-map-shop-stage-name="${htmlEscape(stage.stageName || '')}" data-map-shop-npc="${htmlEscape(marker.id || '')}" data-map-shop-name="${htmlEscape(marker.name || '')}" data-map-shop-x="${htmlEscape(marker.x ?? '')}" data-map-shop-y="${htmlEscape(marker.y ?? '')}" data-map-shop-coord-x="${htmlEscape(marker.coordX ?? marker.x ?? '')}" data-map-shop-coord-y="${htmlEscape(marker.coordY ?? marker.y ?? '')}"` : '';
       const monsterAttrs = marker.kind === 'monster' ? ` data-map-monster-dot="1" data-map-monster="${htmlEscape(marker.id || '')}" data-map-monster-stage="${htmlEscape(stage.stageId)}" data-map-monster-stage-name="${htmlEscape(stage.stageName || '')}" data-map-monster-name="${htmlEscape(marker.name || '')}" data-map-monster-level="${htmlEscape(marker.level || '')}" data-map-monster-pic="${htmlEscape(marker.pic || '')}" data-map-monster-area="${htmlEscape(markerAreaLabel(marker))}"` : '';
-      return `<button type="button" class="mapDot ${cls}${src ? ' withImage' : ''}${marker.shop ? ' shopNpcDot' : ''}" style="left:${left}%;top:${top}%;" title="${htmlEscape(markerLabel(marker))}"${shopAttrs}${monsterAttrs}>
+      const npcAttrs = marker.kind === 'npc' && marker.role !== 'trap' && !marker.shop && Number.isFinite(Number(marker.id)) ? ` data-map-npc-dot="${htmlEscape(stage.stageId)}:${htmlEscape(marker.id)}"` : '';
+      return `<button type="button" class="mapDot ${cls}${src ? ' withImage' : ''}${marker.shop ? ' shopNpcDot' : ''}" style="left:${left}%;top:${top}%;" title="${htmlEscape(markerLabel(marker))}"${shopAttrs}${monsterAttrs}${npcAttrs}>
         ${inner}
       </button>`;
     }).join('');
@@ -1276,6 +1278,12 @@
         return;
       }
     }
+    const npcDot = ev.target?.closest?.('.mapDot[data-map-npc-dot]');
+    if(npcDot && window.SZO_PREVIEW){
+      ev.preventDefault();
+      window.SZO_PREVIEW.open('npc', npcDot.dataset.mapNpcDot);
+      return;
+    }
     const shopDot = ev.target?.closest?.('[data-map-shop]');
     if(shopDot){
       ev.preventDefault();
@@ -1351,6 +1359,14 @@
       showMapShopPanel(window.__szoMapShopMarker, mode.dataset.mapShopMode || 'sell');
       return;
     }
+    const npcTalk = ev.target?.closest?.('[data-map-shop-npc-talk]');
+    if(npcTalk && window.__szoMapShopMarker && window.SZO_PREVIEW){
+      ev.preventDefault();
+      const marker = window.__szoMapShopMarker;
+      closeMapShopPanel();
+      window.SZO_PREVIEW.open('npc', `${marker.stageId}:${marker.id}`);
+      return;
+    }
     const openPage = ev.target?.closest?.('[data-map-shop-open-page]');
     if(openPage && window.__szoMapShopMarker){
       ev.preventDefault();
@@ -1392,6 +1408,86 @@
       ev.preventDefault();
       closeMapMonsterPanel();
     }
+  });
+
+
+  // ---- NPC info + dialogue viewer (data/npc-talk/n{id}.json, from the game's NPC.INI + MSG files) ----
+  const npcTalkCache = new Map();
+  const npcTalkState = { data: null, path: [], key: '' };
+  async function loadNpcTalk(id){
+    if(!npcTalkCache.has(id)){
+      const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+      npcTalkCache.set(id, fetch(`data/npc-talk/n${id}.json?v=${v}`, { cache: 'force-cache' }).then(r => r.ok ? r.json() : null).catch(() => null));
+    }
+    return npcTalkCache.get(id);
+  }
+  function talkLine(data, id, depth = 0){
+    const m = data.msgs[String(id)];
+    if(!m || depth > 6) return '';
+    if(m.x && m.n?.length) return talkLine(data, m.n[0], depth + 1);
+    return m.m || '';
+  }
+  function npcTalkHTML(){
+    const { data, path } = npcTalkState;
+    if(!data) return '<p>這個 NPC 沒有對話資料。</p>';
+    let id = path[path.length - 1];
+    let m = data.msgs[String(id)];
+    // a designer branch with one way forward is skipped
+    while(m && m.x && (m.n || []).length === 1 && !m.o){ id = m.n[0]; m = data.msgs[String(id)]; }
+    if(!m) return '<p>這個 NPC 沒有對話資料。</p>';
+    const nav = `<div class="npcTalkNav">${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-back>← 上一句</button>' : ''}${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-restart>回到開頭</button>' : ''}</div>`;
+    if(m.x){
+      return `${nav}<p class="npcTalkHint">這裡會依任務、名聲或身上物品等條件，接到下列其中一段：</p><div class="npcTalkChoices">${(m.n || []).map(n => `<button type="button" data-npc-talk-go="${n}">${htmlEscape(talkLine(data, n).slice(0, 48) || '（無對話）')}</button>`).join('')}</div>`;
+    }
+    const who = m.p ? '你' : data.n;
+    const shop = (m.s || []).length ? `<p class="npcTalkHint">此時會打開商店。</p>` : '';
+    let next = '';
+    if(m.o?.length) next = `<div class="npcTalkChoices">${m.o.map(([label, j]) => `<button type="button" ${j ? `data-npc-talk-go="${j}"` : 'disabled'}>${htmlEscape(label)}</button>`).join('')}</div>`;
+    else if((m.n || []).length === 1) next = `<div class="npcTalkChoices"><button type="button" data-npc-talk-go="${m.n[0]}">繼續 ▸</button></div>`;
+    else if((m.n || []).length > 1) next = `<p class="npcTalkHint">接下來依條件會是：</p><div class="npcTalkChoices">${m.n.map(n => `<button type="button" data-npc-talk-go="${n}">${htmlEscape(talkLine(data, n).slice(0, 48) || '（無對話）')}</button>`).join('')}</div>`;
+    else if(!shop) next = '<p class="npcTalkHint">（對話結束）</p>';
+    return `${nav}<div class="npcTalkBubble${m.p ? ' you' : ''}"><b>${htmlEscape(who)}</b><p>${htmlEscape(m.m || '').replace(/\n/g, '<br>')}</p></div>${shop}${next}`;
+  }
+  window.renderNpcPreviewHTML = async function(key){
+    const [stageId, npcId] = String(key).split(':');
+    await ensureMapDataLoaded();
+    const stage = (mapData.stages || []).find(s => String(s.stageId) === String(stageId));
+    const marker = stage?.npcs?.find(n => String(n.id) === String(npcId)) || {};
+    const data = await loadNpcTalk(npcId);
+    npcTalkState.data = data; npcTalkState.path = data ? [data.t] : []; npcTalkState.key = key;
+    const src = markerImage(Object.assign({ kind: 'npc' }, marker));
+    const name = data?.n || marker.name || 'NPC';
+    const places = (mapData.stages || []).filter(s => (s.npcs || []).some(n => String(n.id) === String(npcId))).map(s => s.stageName);
+    const roles = { shop: '商人', function: '功能 NPC', mission: '任務 NPC', talk: '對話 NPC', normal: 'NPC' };
+    return `<div class="itemGroupedDetail npcPreview">
+      <header class="itemIdentity">${src ? `<span class="npcPreviewSprite"><img src="${htmlEscape(src)}" alt=""></span>` : ''}<div><h1>${htmlEscape(name)}</h1>
+        <div class="npcPreviewMeta">${htmlEscape(roles[marker.role] || 'NPC')}${data?.d ? '・' + htmlEscape(data.d) : ''}</div>
+        <div class="npcPreviewMeta">${htmlEscape(stage?.stageName || '')}${places.length > 1 ? `（共 ${places.length} 張地圖：${htmlEscape([...new Set(places)].slice(0, 6).join('、'))}${places.length > 6 ? '…' : ''}）` : ''}</div></div></header>
+      <h2>對話</h2><div class="npcTalk" data-npc-talk-key="${htmlEscape(key)}">${npcTalkHTML()}</div>
+    </div>`;
+  };
+  window.openNpcMapFromKey = async function(key){
+    const [stageId, npcId] = String(key).split(':');
+    await ensureMapDataLoaded();
+    const stage = (mapData.stages || []).find(s => String(s.stageId) === String(stageId));
+    const npc = stage?.npcs?.find(n => String(n.id) === String(npcId));
+    if(stage) await window.openMapSearchLocation(stage.stageName, npc?.name || '', npcId);
+  };
+  window.npcPreviewHasShop = async function(key){
+    const [stageId, npcId] = String(key).split(':');
+    await ensureMapDataLoaded();
+    const stage = (mapData.stages || []).find(s => String(s.stageId) === String(stageId));
+    return !!stage?.npcs?.find(n => String(n.id) === String(npcId))?.shop;
+  };
+  document.addEventListener('click', ev => {
+    const box = ev.target?.closest?.('.npcTalk');
+    if(!box || box.dataset.npcTalkKey !== npcTalkState.key) return;
+    const go = ev.target.closest('[data-npc-talk-go]');
+    if(go){ ev.preventDefault(); npcTalkState.path.push(Number(go.dataset.npcTalkGo)); }
+    else if(ev.target.closest('[data-npc-talk-back]')){ ev.preventDefault(); if(npcTalkState.path.length > 1) npcTalkState.path.pop(); }
+    else if(ev.target.closest('[data-npc-talk-restart]')){ ev.preventDefault(); npcTalkState.path = npcTalkState.path.slice(0, 1); }
+    else return;
+    box.innerHTML = npcTalkHTML();
   });
 
   window.openMonsterMapLocations = async function(monsterId, monsterName){
