@@ -380,6 +380,7 @@
       await loadPosts();
       say(editing ? '已儲存修改。' : '刊登成功！');
     } catch(error) {
+      console.warn('[trade] submit failed', error);
       formSay(errorText(error));
     } finally {
       state.busy = false; submitButton.disabled = false;
@@ -397,6 +398,7 @@
       await loadPosts();
       say(okText);
     } catch(error) {
+      console.warn('[trade] action failed', error);
       say(errorText(error));
     } finally { state.busy = false; }
   }
