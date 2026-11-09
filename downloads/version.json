@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261108-52",
-  "published_at": "2026-11-08 20:26",
-  "file_name": "Wuguan_261108-52.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261108-52.zip",
+  "version": "261110-53",
+  "published_at": "2026-11-10 00:34",
+  "file_name": "Wuguan_261110-53.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261110-53.zip",
   "page_url": "downloads/",
-  "notes": "攤位新增星數版本辨識（例如鬼帝鎧★★☆），原本認不出的星數裝備會再單獨讀 ★／☆ 並以圖示確認。背包、武冠提示框與攤位分開判讀。修正提示框名稱過長時可能出錯。沿用原本角色槽位與校正設定。",
-  "sha256": "0e1fe9799b199feadd5c114acbef511b5ab385a7358d13f1575ef1971ec577f1"
+  "notes": "支援簡體中文 Windows：直接執行神州Online、視窗標題變成亂碼時，也能認出遊戲視窗（逛街模式、小視窗、F8 預設格線），不需改系統地區。遊戲內文字仍須正常顯示。沿用原本角色槽位與校正設定。",
+  "sha256": "2d089377b0116c4959fa500bc3dcc407d33e026c5311a7b5677be316bc508b97"
 }
