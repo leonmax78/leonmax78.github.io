@@ -431,7 +431,7 @@
       else if(r.kind === 'monster'){ if(P) return P.open('monster', r.id); if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
       else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, ''); }
       else if(r.kind === 'npc'){
-        if(r.shop && P) return P.open('npcshop', r.stageId + ':' + r.id);
+        if(P) return P.open(r.shop ? 'npcshop' : 'npc', r.stageId + ':' + r.id);
         if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.stageName, r.label, r.id);
       }
     }catch(e){ console.error(e); }

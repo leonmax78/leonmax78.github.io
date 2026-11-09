@@ -58,6 +58,15 @@ def extract_install(game, dest):
             p = os.path.join(dest, n); os.makedirs(os.path.dirname(p), exist_ok=True)
             open(p, 'wb').write(extract(data, r))
 
+
+def _reach(msgs, t):
+    acc, st = set(), [t]
+    while st:
+        m = st.pop()
+        if m in acc or m not in msgs: continue
+        acc.add(m); e = msgs[m]; st += [j for _, j in e.get('o', [])] + e.get('n', [])
+    return acc
+
 if __name__ == '__main__':
     tmp = tempfile.mkdtemp()
     extract_install(sys.argv[1], tmp)
@@ -252,3 +261,56 @@ if __name__ == '__main__':
     target = sys.argv[2] if len(sys.argv) > 2 else os.path.join(SITE, 'tools/data/npc_shop_dialogs.json')
     Path(target).write_text(json.dumps(out, ensure_ascii=False, indent=0), encoding='utf-8')
     print(len(rows), 'merchant placements ->', target)
+
+    # NPC dialogue trees for the map's NPC panel: data/npc-talk/n{id}.json
+    site=json.load(open(f'{SITE}/data/stage_maps.json'))
+    ids=sorted({n['id'] for s in site['stages'] for n in s.get('npcs',[]) if isinstance(n['id'],int)})
+    INTERNAL=('檢查','接檢查','判斷','事件對話','事件買賣')
+    msgs={};npcout={}
+    def walk(mid,depth):
+        if mid in msgs or mid<=0 or depth>14: return
+        d=ALL.get(mid) or legacy.get(mid)
+        if not d: return
+        e={'m':d.get('Msg',[''])[0].replace('\\n','\n')}
+        if e['m'].startswith(INTERNAL): e['x']=1
+        elif not d.get('Face') and re.search(r'（\d+）.*接|接.*（\d+）|^(完成|檢查|判斷|事件|接)', e['m']): e['x']=1
+        elif not d.get('Face'): e['p']=1
+        opts=[]
+        for i in range(1,10):
+            lab=(d.get(f'OptStr{i}') or [''])[0]; j=(d.get(f'OptJump{i}') or [''])[0]
+            if lab: opts.append([lab,int(j) if j.strip().isdigit() else 0])
+        nxt=[];shops=[]
+        for k in d:
+            if k=='Jump':
+                for v in d[k]:
+                    if v.strip().isdigit(): nxt.append(int(v))
+            if k.startswith('Trigger'):
+                for v in d[k]:
+                    p=parse_trigger(v)
+                    if not p: continue
+                    for c,ps in p[1]:
+                        if c==12 and ps and ps[0].isdigit(): nxt.append(int(ps[0]))
+                        if c in (5,60): shops.append(int(ps[0]) if ps and ps[0].lstrip('-').isdigit() else 0)
+        if opts: e['o']=opts
+        if nxt: e['n']=list(dict.fromkeys(nxt))
+        if shops: e['s']=sorted(set(shops))
+        msgs[mid]=e
+        for _,j in opts: walk(j,depth+1)
+        for j in nxt: walk(j,depth+1)
+    for i in ids:
+        d=npcs.get(i)
+        if not d: continue
+        t=int(d['Talk'][0]) if d.get('Talk') and d['Talk'][0].isdigit() else 0
+        npcout[i]={'n':d['Name'][0] if d.get('Name') else '','t':t}
+        if d.get('Describe'): npcout[i]['d']=d['Describe'][0]
+        walk(t,0)
+
+
+    talk_dir = Path(SITE) / 'data/npc-talk'
+    talk_dir.mkdir(parents=True, exist_ok=True)
+    for old in talk_dir.glob('n*.json'):
+        old.unlink()
+    for i, info in npcout.items():
+        part = dict(info); part['msgs'] = {m: msgs[m] for m in sorted(_reach(msgs, info['t']))}
+        (talk_dir / f'n{i}.json').write_text(json.dumps(part, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    print(len(npcout), 'npc talk files ->', talk_dir)
