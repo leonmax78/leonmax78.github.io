@@ -1032,32 +1032,60 @@ h1{font-size:24px;line-height:1.22;margin:0 0 8px}h2{font-size:19px;margin:0 0 1
 .soulQuick button, .quickBtns button{position:relative;z-index:6;pointer-events:auto!important;cursor:pointer;}
 
 /* V263 framework appearance settings */
-.uiSettingsPanel{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.58);display:grid;place-items:center;padding:18px}
+.uiSettingsPanel{position:fixed;inset:0;z-index:120;background:rgba(2,6,14,.62);backdrop-filter:blur(3px);display:grid;place-items:center;padding:18px}
 .uiSettingsPanel[hidden]{display:none}
-.uiSettingsCard{width:min(840px,100%);max-height:calc(100vh - 36px);overflow:auto;border:1px solid color-mix(in srgb,var(--accent2) 44%,var(--line));border-radius:22px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 98%,#000),color-mix(in srgb,var(--panel2) 98%,#000));box-shadow:var(--shadow);padding:16px}
-.uiSettingsHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid rgba(148,163,184,.18);padding-bottom:12px;margin-bottom:12px}
-.uiSettingsHead h2{margin:0 0 4px;font-size:22px}
-.uiSettingsHead p{margin:0;color:var(--muted);line-height:1.5}
-.uiSettingsSection{margin-top:12px}
-.uiSettingsSection h3{margin:0 0 8px;color:#dbeafe}
-.uiSettingGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.themeGrid{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.uiSettingChoice{border:1px solid rgba(148,163,184,.24);background:var(--panel2);color:var(--text);border-radius:16px;padding:13px;text-align:left;display:grid;gap:5px}
-.uiSettingChoice b{font-size:16px;color:#fff}
-.uiSettingChoice.active{border-color:var(--accent);background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 24%,transparent),color-mix(in srgb,var(--accent2) 18%,transparent));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 24%,transparent)}
-.uiSettingsPreview{border:1px solid rgba(148,163,184,.2);border-radius:18px;padding:14px;background:radial-gradient(circle at 0 0,color-mix(in srgb,var(--accent) 22%,transparent),transparent 36%),color-mix(in srgb,var(--panel2) 70%,transparent);display:grid;gap:10px}
-.uiPreviewTitle{font-size:18px;font-weight:1000;color:#fff}
-.uiPreviewCards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.uiPreviewCards span{height:42px;border:1px solid rgba(148,163,184,.22);border-radius:12px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 28%,transparent),color-mix(in srgb,var(--accent2) 16%,transparent))}
-.uiColorGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.uiColorPicker{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(148,163,184,.2);border-radius:14px;padding:10px 12px;background:rgba(8,18,37,.45);color:#bfdbfe;margin:0}
-.uiColorPicker input{width:64px;height:38px;padding:2px;border-radius:10px}
-.uiSettingsFooter{display:flex;justify-content:flex-end;border-top:1px solid rgba(148,163,184,.18);margin-top:14px;padding-top:12px}
+.uiSettingsCard{width:min(860px,100%);max-height:calc(100dvh - 36px);display:flex;flex-direction:column;border:1px solid color-mix(in srgb,var(--accent) 34%,var(--line));border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 96%,var(--accent) 4%),var(--panel2));box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.03) inset;overflow:hidden;animation:uiSheetIn .18s ease-out}
+@keyframes uiSheetIn{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
+.uiSettingsHead{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:16px 18px 12px;border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.uiSettingsHead h2{margin:0 0 2px;font-size:20px;letter-spacing:.04em}
+.uiSettingsHead p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.uiCloseBtn{flex:0 0 auto;width:38px;height:38px;border-radius:50%;padding:0;display:grid;place-items:center;font-size:16px;line-height:1;background:transparent;border:1px solid color-mix(in srgb,var(--line) 80%,transparent);color:var(--muted)}
+.uiCloseBtn:hover{color:var(--text);border-color:var(--accent)}
+.uiSettingsBody{overflow:auto;padding:16px 18px;display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:18px;align-items:start}
+.uiSettingsControls h3{margin:0 0 10px;font-size:13px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+.uiSettingsControls h3:not(:first-child){margin-top:18px}
+.uiThemeGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.uiThemeCard{display:flex;align-items:center;gap:10px;text-align:left;padding:9px;border-radius:14px;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);background:color-mix(in srgb,var(--panel2) 80%,transparent);color:var(--text);cursor:pointer;transition:border-color .15s,transform .15s,background .15s}
+.uiThemeCard:hover{transform:translateY(-1px);border-color:color-mix(in srgb,var(--sw-a) 60%,var(--line))}
+.uiThemeCard.active{border-color:var(--sw-a);background:color-mix(in srgb,var(--sw-a) 12%,var(--panel2));box-shadow:0 0 0 1px var(--sw-a) inset}
+.uiSwatch{flex:0 0 auto;width:44px;height:44px;border-radius:11px;background:linear-gradient(160deg,var(--sw-panel),var(--sw-bg));border:1px solid var(--sw-line);display:grid;grid-template-columns:1fr;align-content:center;gap:4px;padding:7px;position:relative}
+.uiSwatch i{display:block;height:6px;border-radius:3px;background:var(--sw-line)}
+.uiSwatch i:first-child{background:var(--sw-a);width:80%}
+.uiSwatch i:nth-child(2){background:var(--sw-b);width:55%}
+.uiThemeCard.active .uiSwatch::after{content:"✓";position:absolute;right:-6px;top:-6px;width:18px;height:18px;border-radius:50%;background:var(--sw-a);color:#0b0f14;font-size:11px;font-weight:900;display:grid;place-items:center}
+.uiThemeText{display:grid;gap:1px;min-width:0}
+.uiThemeText b{font-size:15px;color:var(--text)}
+.uiThemeText small{font-size:11.5px;color:var(--muted);line-height:1.35}
+.uiQuickAccents{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.uiDot{width:30px;height:30px;padding:0;border-radius:50%;background:var(--dot);border:2px solid color-mix(in srgb,var(--dot) 60%,#000);cursor:pointer;transition:transform .12s}
+.uiDot:hover{transform:scale(1.1)}
+.uiDot.active{box-shadow:0 0 0 2px var(--panel2),0 0 0 4px var(--dot)}
+.uiColorGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;opacity:.75}
+.uiColorGrid.active{opacity:1}
+.uiColorPicker{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid color-mix(in srgb,var(--line) 85%,transparent);border-radius:12px;padding:8px 10px 8px 12px;background:color-mix(in srgb,var(--panel2) 80%,transparent);color:var(--text);margin:0;font-size:14px}
+.uiColorPicker input{width:52px;height:32px;padding:2px;border-radius:8px;cursor:pointer}
+.uiSettingsPreview{position:sticky;top:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,var(--bg),var(--bg2));font-size:12px}
+.uiMiniTop{display:flex;align-items:center;gap:6px;padding:8px;background:color-mix(in srgb,var(--panel) 85%,#000);border-bottom:1px solid var(--line)}
+.uiMiniLogo{font-family:"Noto Serif TC",serif;font-weight:900;color:var(--text);letter-spacing:.1em}
+.uiMiniSearch{flex:1;height:14px;border-radius:7px;background:var(--panel2);border:1px solid var(--line)}
+.uiMiniBtn{width:26px;height:14px;border-radius:7px;background:color-mix(in srgb,var(--accent) 35%,var(--panel2));border:1px solid var(--accent)}
+.uiMiniMain{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:8px}
+.uiMiniNav{display:grid;gap:5px;align-content:start}
+.uiMiniNav i{height:12px;border-radius:5px;background:var(--panel);border:1px solid var(--line)}
+.uiMiniNav i.on{background:color-mix(in srgb,var(--accent) 30%,var(--panel));border-color:var(--accent)}
+.uiMiniCard{display:grid;gap:6px;align-content:start;padding:9px;border-radius:10px;background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.uiMiniCard b{font-size:13px}
+.uiMiniTag{justify-self:start;padding:0 7px;border-radius:999px;font-size:10.5px;color:var(--accent2);border:1px solid color-mix(in srgb,var(--accent2) 60%,transparent)}
+.uiMiniLine{height:6px;border-radius:3px;background:color-mix(in srgb,var(--text) 18%,transparent)}
+.uiMiniLine.short{width:60%}
+.uiMiniAction{justify-self:end;padding:2px 10px;border-radius:7px;font-size:11px;font-weight:700;background:var(--accent);color:#0b0f14}
+.uiSettingsFooter{display:flex;justify-content:space-between;gap:10px;padding:12px 18px;border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);background:color-mix(in srgb,var(--panel2) 92%,#000)}
+.uiDoneBtn{background:var(--accent);color:#0b0f14;border:1px solid var(--accent);font-weight:800;padding-inline:22px}
 body[data-layout="wide"] .app{max-width:1680px}
 body[data-layout="wide"] .topline{max-width:1680px}
 body[data-layout="wide"] .reader{max-width:1260px!important}
 body[data-layout="wide"] .latestQueryLayout{grid-template-columns:minmax(0,1fr) 360px}
-body[data-theme="azure"],body[data-theme="violet"],body[data-theme="ember"],body[data-theme="custom"]{background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--bg) 72%,var(--bg2)) 48%,var(--bg2))}
+body[data-theme="azure"],body[data-theme="violet"],body[data-theme="ember"],body[data-theme="ink"],body[data-theme="cinnabar"],body[data-theme="custom"]{background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--bg) 72%,var(--bg2)) 48%,var(--bg2))}
 body[data-card-style="flat"] .card,body[data-card-style="flat"] .kv,body[data-card-style="flat"] .resultItem{box-shadow:none;background:var(--panel2)}
 body[data-density="compact"] .card{padding:12px;border-radius:18px}
 body[data-density="compact"] .content{padding-top:10px}
@@ -1065,7 +1093,7 @@ body[data-density="compact"] .kv,body[data-density="compact"] .resultItem{paddin
 body[data-density="compact"] input,body[data-density="compact"] select{padding:9px}
 body[data-density="compact"] .navBtn{padding:10px}
 body[data-motion="reduced"] *,body[data-motion="reduced"] *::before,body[data-motion="reduced"] *::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
-@media(max-width:560px){.uiSettingsHead{display:grid}.uiSettingGrid,.uiColorGrid{grid-template-columns:1fr}.uiSettingsCard{padding:14px}}
+@media(max-width:560px){.uiSettingsPanel{place-items:end center;padding:0}.uiSettingsCard{max-height:92dvh;border-radius:20px 20px 0 0;animation-name:uiSheetUp}.uiSettingsBody{grid-template-columns:1fr;gap:14px;padding:14px 16px}.uiSettingsHead{padding:14px 16px 10px}.uiSettingsFooter{padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}.uiThemeGrid{grid-template-columns:1fr 1fr;gap:8px}.uiThemeCard{padding:7px;gap:8px}.uiSwatch{width:38px;height:38px;padding:6px}.uiSettingsPreview{position:static}.uiColorGrid{grid-template-columns:1fr 1fr}}
 
 /* V281 mobile header: keep the maker signature visible. */
 @media(max-width:520px){
@@ -4265,3 +4293,6 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .mapImageStage .mapTileLayer img.ready{opacity:1}
 /* V663: markers and labels stop growing past 200% so the 1:1 view stays readable (anchor point stays fixed) */
 .mapImageStage .mapDot,.mapImageStage .mapAreaLabel,.mapImageStage .mapTransferLabel{transform-origin:0 0;scale:min(1,calc(2 / var(--mz,1)))}
+
+@keyframes uiSheetUp{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.uiSettingsCard{animation:none}}
