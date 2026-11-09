@@ -528,6 +528,15 @@
     if(wheelSelect(select, ev.deltaY)) ev.preventDefault();
   }, { capture: true, passive: false });
   document.addEventListener('click', ev => {
+    const previewServer = ev.target?.closest?.('[data-shop-preview-server]');
+    if(previewServer){
+      ev.preventDefault();
+      state.server = previewServer.dataset.shopPreviewServer === 'free' ? 'free' : 'month';
+      try{ localStorage.setItem('szo-shop-server', state.server); }catch(e){}
+      const body = previewServer.closest('.detailPreviewBody');
+      window.renderShopNpcPreviewHTML(previewServer.dataset.key).then(html => { if(body) body.innerHTML = html; });
+      return;
+    }
     const server = ev.target?.closest?.('[data-shop-server]');
     if(server){
       ev.preventDefault();
@@ -592,6 +601,24 @@
   window.preloadShopData = loadShopData;
   window.showShopItem = showShopItem;
   window.openShopLocation = openShopLocation;
+  window.renderShopNpcPreviewHTML = async function(key){
+    await loadShopData();
+    const [stageId, npcId] = String(key).split(':');
+    const locs = shopLocations().filter(row => Number(row.stageId) === Number(stageId) && String(row.npcId) === String(npcId));
+    if(!locs.length) return '<p>這個 NPC 目前沒有商店資料。</p>';
+    const block = (loc, mode) => {
+      const rows = mergeDisplayItems((loc.shop?.items || []).filter(item => itemHasMode(item, mode)));
+      if(!rows.length) return '';
+      const prev = state.mode; state.mode = mode;
+      const html = `<h3>${mode === 'buy' ? '回收' : '販售'}</h3>${shopRows(rows)}`;
+      state.mode = prev;
+      return html;
+    };
+    return `<div class="shopPage shopPreview"><h1>${escHtml(locs[0].stageName)} / ${escHtml(locs[0].npcName)}</h1>
+      <div class="shopModeTabs shopServerTabs shopPreviewServer" role="group" aria-label="伺服器"><button type="button" class="${state.server === 'month' ? 'active' : ''}" data-shop-preview-server="month" data-key="${escHtml(key)}">月服</button><button type="button" class="${state.server === 'free' ? 'active' : ''}" data-shop-preview-server="free" data-key="${escHtml(key)}">免服</button></div>
+      ${locs.map(loc => `<section class="shopBlock">${conditionChips(loc) || `<div class="shopConds"><span class="shopCondId">Shop ${escHtml(loc.shopId)}</span></div>`}${block(loc, 'sell')}${block(loc, 'buy')}</section>`).join('')}
+    </div>`;
+  };
   window.openShopNpc = async function(stageId, npcId){
     await loadShopData();
     state.mode = 'sell';
