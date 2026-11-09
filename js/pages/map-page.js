@@ -349,6 +349,10 @@
             <button type="button" class="${activeMode === 'sell' ? 'active' : ''}" data-map-shop-mode="sell">販賣</button>
             <button type="button" class="${activeMode === 'buy' ? 'active' : ''}" data-map-shop-mode="buy">回收</button>
           </div>
+          ${marker.variant ? `<div class="mapShopModes mapShopServer" role="group" aria-label="伺服器">
+            <button type="button" class="${shopServer() === 'month' ? 'active' : ''}" data-map-shop-server="month">月服</button>
+            <button type="button" class="${shopServer() === 'free' ? 'active' : ''}" data-map-shop-server="free">免服</button>
+          </div>` : ''}
           <button type="button" class="ghost mapShopOpenPage" data-map-shop-npc-talk>NPC 對話</button>
           <button type="button" class="ghost mapShopOpenPage" data-map-shop-open-page>查看商店頁</button>
         </div>
@@ -1353,6 +1357,19 @@
   });
 
   document.addEventListener('click', ev => {
+    const serverBtn = ev.target?.closest?.('[data-map-shop-server]');
+    if(serverBtn && window.__szoMapShopMarker){
+      ev.preventDefault();
+      try{ localStorage.setItem('szo-shop-server', serverBtn.dataset.mapShopServer === 'free' ? 'free' : 'month'); }catch(e){}
+      const marker = window.__szoMapShopMarker;
+      const stage = (mapData?.stages || []).find(s => Number(s.stageId) === Number(marker.stageId));
+      const npc = stage?.npcs?.find(n => String(n.id) === String(marker.id));
+      if(npc) marker.shop = npcShopFor(npc);
+      showMapShopPanel(marker, window.__szoMapShopMode || 'sell');
+      const overlay = document.querySelector('.mapOverlay');
+      if(overlay && stage) overlay.innerHTML = markerDots(stage);
+      return;
+    }
     const mode = ev.target?.closest?.('[data-map-shop-mode]');
     if(mode && window.__szoMapShopMarker){
       ev.preventDefault();
@@ -1445,7 +1462,8 @@
     if(m.o?.length) next = `<div class="npcTalkChoices">${m.o.map(([label, j]) => `<button type="button" ${j ? `data-npc-talk-go="${j}"` : 'disabled'}>${htmlEscape(label)}</button>`).join('')}</div>`;
     else if((m.n || []).length === 1) next = `<div class="npcTalkChoices"><button type="button" data-npc-talk-go="${m.n[0]}">繼續 ▸</button></div>`;
     else if((m.n || []).length > 1) next = `<p class="npcTalkHint">接下來依條件會是：</p><div class="npcTalkChoices">${m.n.map(n => `<button type="button" data-npc-talk-go="${n}">${htmlEscape(talkLine(data, n).slice(0, 48) || '（無對話）')}</button>`).join('')}</div>`;
-    else if(!shop) next = '<p class="npcTalkHint">（對話結束）</p>';
+    else if(!shop) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
+    if(shop && !next) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
     return `${nav}<div class="npcTalkBubble${m.p ? ' you' : ''}"><b>${htmlEscape(who)}</b><p>${htmlEscape(m.m || '').replace(/\n/g, '<br>')}</p></div>${shop}${next}`;
   }
   window.renderNpcPreviewHTML = async function(key){
@@ -1486,6 +1504,7 @@
     if(go){ ev.preventDefault(); npcTalkState.path.push(Number(go.dataset.npcTalkGo)); }
     else if(ev.target.closest('[data-npc-talk-back]')){ ev.preventDefault(); if(npcTalkState.path.length > 1) npcTalkState.path.pop(); }
     else if(ev.target.closest('[data-npc-talk-restart]')){ ev.preventDefault(); npcTalkState.path = npcTalkState.path.slice(0, 1); }
+    else if(ev.target.closest('[data-npc-talk-end]')){ ev.preventDefault(); window.SZO_PREVIEW?.close(); return; }
     else return;
     box.innerHTML = npcTalkHTML();
   });
