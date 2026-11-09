@@ -27,7 +27,7 @@
     config: null, client: null, uid: '', posts: [], loaded: false,
     filter: 'all', query: '', hideDone: false,
     captchaToken: '', widget: null, pendingId: null, pendingKey: '', busy: false,
-    images: []
+    images: [], editing: null
   };
   const scripts = new Map();
 
@@ -135,6 +135,9 @@
     return { blob, ext: blob.type === 'image/webp' ? 'webp' : 'jpg', preview: URL.createObjectURL(blob) };
   }
 
+  // 編輯時保留的舊圖片 { path, preview }；新選的圖片 { blob, ext, preview }。只有新圖片需要釋放預覽網址。
+  function releaseImage(item){ if(item && item.blob) URL.revokeObjectURL(item.preview); }
+
   function renderImagePicks(){
     const box = $('.tradeImagePicks');
     if(!box) return;
@@ -162,7 +165,7 @@
   }
 
   function clearImages(){
-    state.images.forEach(item => URL.revokeObjectURL(item.preview));
+    state.images.forEach(releaseImage);
     state.images = [];
     renderImagePicks();
   }
@@ -205,6 +208,7 @@
       const mine = state.uid && post.user_id === state.uid;
       const done = post.status === 'done';
       const tools = mine ? `<div class="tradeOwnerTools">
+          <button type="button" data-trade-edit="${esc(post.id)}">編輯</button>
           <button type="button" data-trade-status="${esc(post.id)}" data-next="${done ? 'open' : 'done'}">${done ? '重新上架' : '標記已成交'}</button>
           <button type="button" class="danger" data-trade-remove="${esc(post.id)}" data-images="${esc(JSON.stringify(post.images || []))}">刪除</button>
         </div>` : '';
@@ -213,7 +217,7 @@
           <span class="tradeKind ${esc(post.kind)}">${esc(KIND_LABEL[post.kind] || post.kind)}</span>
           ${done ? '<span class="tradeDoneBadge">已成交</span>' : ''}
           ${mine ? '<span class="tradeMineBadge">我的貼文</span>' : ''}
-          <time datetime="${esc(post.created_at)}">${esc(timeLabel(post.created_at))}</time>
+          <time datetime="${esc(post.created_at)}">${esc(timeLabel(post.created_at))}${post.edited_at ? '（已編輯）' : ''}</time>
         </header>
         <h3 translate="no">${esc(post.title)}</h3>
         <dl>
@@ -233,10 +237,11 @@
     say('讀取貼文中…');
     try {
       const client = await getClient();
-      const result = await client.from('szo_trade_posts')
-        .select('id,user_id,kind,title,price,contact,note,status,created_at,images')
-        .order('created_at', { ascending: false })
-        .limit(500);
+      const query = columns => client.from('szo_trade_posts').select(columns)
+        .order('created_at', { ascending: false }).limit(500);
+      let result = await query('id,user_id,kind,title,price,contact,note,status,created_at,images,edited_at');
+      // 資料庫還沒加上 edited_at 欄位時，改用舊欄位讀取，避免整頁讀不到。
+      if(result.error) result = await query('id,user_id,kind,title,price,contact,note,status,created_at,images');
       if(result.error) throw result.error;
       state.posts = Array.isArray(result.data) ? result.data : [];
       state.loaded = true;
@@ -278,13 +283,35 @@
     return client;
   }
 
-  function openForm(open){
+  function setFormMode(post){
+    state.editing = post ? post.id : null;
+    state.pendingKey = ''; state.pendingId = null;
+    const form = $('.tradeForm');
+    form.reset(); clearImages();
+    $('[data-trade-form-title]').textContent = post ? '編輯貼文' : '刊登新貼文';
+    $('[data-trade-submit]').textContent = post ? '儲存修改' : '送出刊登';
+    if(post){
+      form.elements.kind.value = post.kind;
+      form.elements.title.value = post.title || '';
+      form.elements.price.value = post.price || '';
+      form.elements.contact.value = post.contact || '';
+      form.elements.note.value = post.note || '';
+      state.images = (Array.isArray(post.images) ? post.images : []).map(path => ({ path, preview: imageUrl(path) }));
+    }
+    $('[data-trade-note-length]').textContent = Array.from(form.elements.note.value).length + ' / 300';
+    renderImagePicks();
+  }
+
+  function openForm(open, post){
     const form = $('.tradeForm');
     if(!form) return;
+    if(open) setFormMode(post || null);
+    else if(state.editing) setFormMode(null);
     form.hidden = !open;
     $('[data-trade-new]').hidden = open;
     if(open){
       formSay('');
+      if(post){ form.scrollIntoView({ behavior: 'smooth', block: 'start' }); form.elements.title.focus({ preventScroll: true }); return; }
       try { if(!form.elements.contact.value) form.elements.contact.value = localStorage.getItem('szo.trade.contact') || ''; } catch(_error) {}
       getClient().then(prepareCaptcha).catch(() => formSay('交易區尚未開放。'));
       form.elements.title.focus();
@@ -306,33 +333,41 @@
     if(!KIND_LABEL[data.kind]){ formSay('請選擇販賣或收購。'); return; }
     if(!data.title || !data.price || !data.contact){ formSay('請填寫標題、價格與飛鴿 ID。'); return; }
     // 同一份內容重送時沿用同一個編號，伺服器不會重複刊登。
-    const key = JSON.stringify(data) + '|' + state.images.map(item => item.preview).join(',');
+    const key = (state.editing || '') + '|' + JSON.stringify(data) + '|' + state.images.map(item => item.preview).join(',');
     if(state.pendingKey !== key){ state.pendingKey = key; state.pendingId = crypto.randomUUID(); }
     state.busy = true; submitButton.disabled = true;
     formSay('送出中…');
     try {
       const client = await ensureSignedIn();
       const paths = [];
+      const editing = state.editing;
+      const oldPost = editing ? state.posts.find(post => post.id === editing) : null;
+      if(editing && (!oldPost || oldPost.user_id !== state.uid)) throw new Error('TRADE_NOT_OWNER');
       for(let index = 0; index < state.images.length; index++){
-        formSay(`上傳圖片 ${index + 1} / ${state.images.length}…`);
         const item = state.images[index];
+        if(item.path){ paths.push(item.path); continue; }
+        formSay(`上傳圖片 ${index + 1} / ${state.images.length}…`);
+        // 編輯時新圖片用這次儲存的編號命名，不會覆蓋到舊圖片。
         const path = `${state.uid}/${state.pendingId}-${index}.${item.ext}`;
         const upload = await client.storage.from(IMAGE_BUCKET).upload(path, item.blob, { contentType: item.blob.type, upsert: true, cacheControl: '31536000' });
         if(upload.error) throw new Error('IMAGE_UPLOAD');
         paths.push(path);
       }
       formSay('送出中…');
-      const result = await client.rpc('szo_create_trade_post', {
-        p_id: state.pendingId, p_kind: data.kind, p_title: data.title,
+      const result = await client.rpc(editing ? 'szo_update_trade_post' : 'szo_create_trade_post', {
+        p_id: editing || state.pendingId, p_kind: data.kind, p_title: data.title,
         p_price: data.price, p_contact: data.contact, p_note: data.note, p_images: paths
       });
       if(result.error) throw result.error;
+      // 儲存成功後才刪掉被移除的舊圖片；刪除失敗不影響貼文。
+      const dropped = oldPost ? (oldPost.images || []).filter(path => !paths.includes(path)) : [];
+      if(dropped.length) await client.storage.from(IMAGE_BUCKET).remove(dropped).catch(() => null);
       try { localStorage.setItem('szo.trade.contact', data.contact); } catch(_error) {}
       state.pendingKey = ''; state.pendingId = null;
       form.reset(); form.elements.contact.value = data.contact; clearImages();
       openForm(false);
       await loadPosts();
-      say('刊登成功！');
+      say(editing ? '已儲存修改。' : '刊登成功！');
     } catch(error) {
       formSay(errorText(error));
     } finally {
@@ -371,10 +406,16 @@
       if(drop){
         const index = Number(drop.dataset.tradeImageDrop);
         const [item] = state.images.splice(index, 1);
-        if(item) URL.revokeObjectURL(item.preview);
+        releaseImage(item);
         state.pendingKey = ''; renderImagePicks(); return;
       }
       if(event.target.closest('[data-trade-new]')){ openForm(true); return; }
+      const edit = event.target.closest('[data-trade-edit]');
+      if(edit){
+        const post = state.posts.find(item => item.id === edit.dataset.tradeEdit);
+        if(post && state.uid && post.user_id === state.uid) openForm(true, post);
+        return;
+      }
       if(event.target.closest('[data-trade-submit]')){ submitPost(); return; }
       if(event.target.closest('[data-trade-cancel]')){ openForm(false); return; }
       if(event.target.closest('[data-trade-refresh]')){ loadPosts(); return; }
@@ -423,7 +464,7 @@
     window.v86LastView = 'trade';
     const reader = document.getElementById('reader');
     if(!reader) return;
-    state.widget = null; state.captchaToken = ''; state.images.forEach(item => URL.revokeObjectURL(item.preview)); state.images = [];
+    state.widget = null; state.captchaToken = ''; state.images.forEach(releaseImage); state.images = []; state.editing = null;
     reader.innerHTML = `<section class="card tradePage">
       <h1>玩家交易區</h1>
       <p class="tradeNotice">本站僅提供資訊交流，不經手任何交易。交易前請自行確認對方身分，風險自負；請勿張貼帳號、密碼或個人資料。</p>
@@ -439,6 +480,7 @@
         <button type="button" class="primary" data-trade-new>我要刊登</button>
       </div>
       <form class="tradeForm" hidden>
+        <h2 class="tradeFormTitle" data-trade-form-title>刊登新貼文</h2>
         <fieldset class="tradeKindPick"><legend>類型</legend>
           <label><input type="radio" name="kind" value="sell" checked> 販賣</label>
           <label><input type="radio" name="kind" value="buy"> 收購</label>
@@ -463,7 +505,7 @@
           <button type="button" data-trade-cancel>取消</button>
           <button type="button" class="primary" data-trade-submit>送出刊登</button>
         </div>
-        <p class="tradeHint">刊登後可在同一個瀏覽器標記已成交或刪除。貼文不會自動下架，成交後請記得處理。</p>
+        <p class="tradeHint">刊登後可在同一個瀏覽器編輯、標記已成交或刪除。貼文不會自動下架，成交後請記得處理。</p>
       </form>
       <div class="tradeMeta"><span class="tradeStatus" role="status" aria-live="polite"></span><span class="tradeCount"></span></div>
       <ol class="tradeList" aria-label="交易貼文"></ol>
