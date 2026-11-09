@@ -13,7 +13,7 @@
    - `szo_update_trade_post`：發文者本人編輯內容與圖片（貼文會顯示「已編輯」）
    - `szo_set_trade_post_status`：發文者本人標記已成交／重新上架
    - `szo_remove_trade_post`：發文者本人刪除
-   - Storage bucket `trade-images`：公開讀取，單檔 1 MB，只接受 webp／jpeg；只能上傳到自己的資料夾，被停權者不能上傳
+   - Storage bucket `trade-images`：公開讀取，單檔 1 MB，只接受 webp／jpeg；只能上傳到自己的資料夾（被停權者無法刊登）
 
 ## 已建立過交易區的專案
 
