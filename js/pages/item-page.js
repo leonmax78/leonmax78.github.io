@@ -38,7 +38,7 @@ function itemDetailRows(it){
  const gem=window.SZO_JEWELS?.gems?.[String(it.ID)];
  if(gem){
   rows.push(['寶石形狀',['','圓弧','三角','四方','五稜','六緯'][Number(gem.Shape)]],['寶石品級',gem.Grade]);
-  for(const [key,label] of [['Base_HP','生命'],['Base_MP','法力'],['Base_Con','體魄'],['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','敏捷'],['Extra_Def','防禦'],['Magic_Att','術攻'],['Magic_Def','術防']])if(Number(gem[key]))rows.push([label,'+'+gem[key]]);
+  for(const [key,label] of [['Base_HP','生命'],['Base_MP','精力'],['Base_Con','體魄'],['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','敏捷'],['Extra_Def','防禦'],['Magic_Att','術攻'],['Magic_Def','術防']])if(Number(gem[key]))rows.push([label,'+'+gem[key]]);
   if(Number(gem.Grade)>6)rows.push(['開放狀態','資料預載；本次最高開放品級 6']);
  }
  for(const k of ITEM_DETAIL_ORDER){
