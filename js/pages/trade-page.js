@@ -1,4 +1,4 @@
-// 玩家交易版：販賣／收購留言板。資料存在聊天室同一個 Supabase 專案（supabase/trade.sql）。
+// 玩家交易區：販賣／收購留言板。資料存在聊天室同一個 Supabase 專案（supabase/trade.sql）。
 // 瀏覽不需登入；刊登、標記成交、刪除需先通過人機驗證取得匿名身分（與聊天室共用）。
 // 貼文不會自動下架，由發文者本人或站長手動處理。
 (function(){
@@ -242,7 +242,7 @@
       state.loaded = true;
       say('');
     } catch(error) {
-      say(String(error?.message) === 'config_error' ? '交易版尚未開放。' : '貼文讀取失敗，請稍後按「重新整理」。');
+      say(String(error?.message) === 'config_error' ? '交易區尚未開放。' : '貼文讀取失敗，請稍後按「重新整理」。');
     }
     renderList();
   }
@@ -286,7 +286,7 @@
     if(open){
       formSay('');
       try { if(!form.elements.contact.value) form.elements.contact.value = localStorage.getItem('szo.trade.contact') || ''; } catch(_error) {}
-      getClient().then(prepareCaptcha).catch(() => formSay('交易版尚未開放。'));
+      getClient().then(prepareCaptcha).catch(() => formSay('交易區尚未開放。'));
       form.elements.title.focus();
     }
   }
@@ -425,7 +425,7 @@
     if(!reader) return;
     state.widget = null; state.captchaToken = ''; state.images.forEach(item => URL.revokeObjectURL(item.preview)); state.images = [];
     reader.innerHTML = `<section class="card tradePage">
-      <h1>玩家交易版</h1>
+      <h1>玩家交易區</h1>
       <p class="tradeNotice">本站僅提供資訊交流，不經手任何交易。交易前請自行確認對方身分，風險自負；請勿張貼帳號、密碼或個人資料。</p>
       <div class="tradeToolbar">
         <div class="tradeTabs" role="group" aria-label="類型篩選">

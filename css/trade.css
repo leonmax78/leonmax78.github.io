@@ -1,4 +1,4 @@
-/* 玩家交易版 */
+/* 玩家交易區 */
 .tradePage h1{margin:0 0 6px}
 .tradeNotice{margin:0 0 12px;padding:9px 12px;border-radius:10px;border:1px solid color-mix(in srgb,var(--danger) 45%,var(--line));background:color-mix(in srgb,var(--danger) 8%,var(--panel2));color:var(--text);font-size:13px;line-height:1.6}
 .tradeToolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}

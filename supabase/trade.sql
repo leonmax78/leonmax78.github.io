@@ -1,4 +1,4 @@
--- 玩家交易版。請在聊天室所用的同一個 Supabase 專案 SQL Editor 執行一次。
+-- 玩家交易區。請在聊天室所用的同一個 Supabase 專案 SQL Editor 執行一次。
 -- 需要先執行過 supabase/chat.sql（共用 szo_chat_bans 停權名單與匿名登入設定）。
 -- 貼文不會自動下架：由發文者在同一瀏覽器標記成交或刪除，或由站長在後台處理。
 -- 每篇最多 3 張圖片，存放在公開的 Storage bucket「trade-images」，路徑為「使用者ID/檔名」。
