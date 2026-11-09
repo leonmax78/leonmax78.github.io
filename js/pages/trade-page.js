@@ -5,6 +5,9 @@
   const SUPABASE_SRC = 'js/vendor/supabase/supabase-2.118.0.js';
   const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
   const KIND_LABEL = { sell: '販賣', buy: '收購' };
+  const IMAGE_BUCKET = 'trade-images';
+  const MAX_IMAGES = 3;
+  const MAX_IMAGE_SIDE = 1280;
   const ERRORS = {
     TRADE_RATE_LIMIT: '刊登太快了，請隔 1 分鐘再試。',
     TRADE_DAILY_LIMIT: '今天的刊登次數已達上限（10 篇），請明天再試。',
@@ -12,6 +15,8 @@
     TRADE_INVALID: '欄位格式不符，請檢查標題、價格與飛鴿 ID 的長度。',
     TRADE_NOT_OWNER: '只能管理自己在這個瀏覽器刊登的貼文。',
     TRADE_AUTH_REQUIRED: '請先完成人機驗證。',
+    IMAGE_UPLOAD: '圖片上傳失敗，請稍後再試，或先移除圖片再刊登。',
+    IMAGE_READ: '這張圖片無法讀取，請改用 JPG 或 PNG。',
     captcha_failed: '人機驗證未通過，請重新驗證。',
     over_request_rate_limit: '操作太頻繁，請稍後再試。',
     over_request_rate_limit_anonymous: '驗證次數過多，請稍後再試。',
@@ -21,7 +26,8 @@
   const state = {
     config: null, client: null, uid: '', posts: [], loaded: false,
     filter: 'all', query: '', hideDone: false,
-    captchaToken: '', widget: null, pendingId: null, pendingKey: '', busy: false
+    captchaToken: '', widget: null, pendingId: null, pendingKey: '', busy: false,
+    images: []
   };
   const scripts = new Map();
 
@@ -95,6 +101,88 @@
     return `${time.getFullYear()}-${pad(time.getMonth() + 1)}-${pad(time.getDate())}`;
   }
 
+  function imageUrl(path){
+    return state.config ? `${state.config.url.replace(/\/$/, '')}/storage/v1/object/public/${IMAGE_BUCKET}/${String(path).split('/').map(encodeURIComponent).join('/')}` : '';
+  }
+
+  // 上傳前在瀏覽器壓縮：最長邊 1280px，優先 WebP，不支援時改 JPEG。
+  async function compressImage(file){
+    let source;
+    try { source = await createImageBitmap(file); }
+    catch(_error) {
+      source = await new Promise((resolve, reject) => {
+        const image = new Image(), url = URL.createObjectURL(file);
+        image.onload = () => { URL.revokeObjectURL(url); resolve(image); };
+        image.onerror = () => { URL.revokeObjectURL(url); reject(new Error('IMAGE_READ')); };
+        image.src = url;
+      });
+    }
+    const width = source.width, height = source.height;
+    if(!width || !height) throw new Error('IMAGE_READ');
+    const scale = Math.min(1, MAX_IMAGE_SIDE / Math.max(width, height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#000'; context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(source, 0, 0, canvas.width, canvas.height);
+    if(source.close) source.close();
+    const encode = (type, quality) => new Promise(resolve => canvas.toBlob(resolve, type, quality));
+    let blob = await encode('image/webp', 0.82);
+    if(!blob || blob.type !== 'image/webp') blob = await encode('image/jpeg', 0.85);
+    if(blob && blob.size > 950 * 1024) blob = await encode(blob.type, 0.6);
+    if(!blob) throw new Error('IMAGE_READ');
+    return { blob, ext: blob.type === 'image/webp' ? 'webp' : 'jpg', preview: URL.createObjectURL(blob) };
+  }
+
+  function renderImagePicks(){
+    const box = $('.tradeImagePicks');
+    if(!box) return;
+    box.innerHTML = state.images.map((item, index) => `<figure>
+        <img src="${esc(item.preview)}" alt="待上傳圖片 ${index + 1}">
+        <button type="button" data-trade-image-drop="${index}" aria-label="移除圖片">✕</button>
+      </figure>`).join('');
+    const add = $('[data-trade-image-add]');
+    if(add) add.disabled = state.images.length >= MAX_IMAGES;
+    $('[data-trade-image-count]').textContent = `${state.images.length} / ${MAX_IMAGES}`;
+  }
+
+  async function addImages(files){
+    const list = Array.from(files || []).filter(file => /^image\//.test(file.type));
+    if(!list.length) return;
+    const room = MAX_IMAGES - state.images.length;
+    if(room <= 0){ formSay(`每篇最多 ${MAX_IMAGES} 張圖片。`); return; }
+    if(list.length > room) formSay(`每篇最多 ${MAX_IMAGES} 張圖片，只加入前 ${room} 張。`);
+    for(const file of list.slice(0, room)){
+      try { state.images.push(await compressImage(file)); }
+      catch(error) { formSay(errorText(error)); }
+    }
+    state.pendingKey = '';
+    renderImagePicks();
+  }
+
+  function clearImages(){
+    state.images.forEach(item => URL.revokeObjectURL(item.preview));
+    state.images = [];
+    renderImagePicks();
+  }
+
+  function openViewer(src){
+    let viewer = document.querySelector('.tradeViewer');
+    if(!viewer){
+      viewer = document.createElement('div');
+      viewer.className = 'tradeViewer';
+      viewer.setAttribute('role', 'dialog');
+      viewer.setAttribute('aria-label', '查看圖片');
+      viewer.innerHTML = '<img alt="交易圖片"><button type="button" aria-label="關閉">✕</button>';
+      viewer.addEventListener('click', () => { viewer.hidden = true; });
+      document.addEventListener('keydown', event => { if(event.key === 'Escape') viewer.hidden = true; });
+      document.body.append(viewer);
+    }
+    viewer.querySelector('img').src = src;
+    viewer.hidden = false;
+  }
+
   function visiblePosts(){
     const query = state.query.trim().toLowerCase();
     return state.posts.filter(post =>
@@ -118,7 +206,7 @@
       const done = post.status === 'done';
       const tools = mine ? `<div class="tradeOwnerTools">
           <button type="button" data-trade-status="${esc(post.id)}" data-next="${done ? 'open' : 'done'}">${done ? '重新上架' : '標記已成交'}</button>
-          <button type="button" class="danger" data-trade-remove="${esc(post.id)}">刪除</button>
+          <button type="button" class="danger" data-trade-remove="${esc(post.id)}" data-images="${esc(JSON.stringify(post.images || []))}">刪除</button>
         </div>` : '';
       return `<li class="tradePost ${done ? 'isDone' : ''}" data-kind="${esc(post.kind)}">
         <header>
@@ -134,6 +222,8 @@
             <button type="button" class="tradeCopy" data-trade-copy="${esc(post.contact)}">複製</button></dd></div>
         </dl>
         ${post.note ? `<p class="tradeNote" translate="no">${esc(post.note)}</p>` : ''}
+        ${Array.isArray(post.images) && post.images.length ? `<div class="tradeImages">${post.images.map((path, index) =>
+          `<button type="button" class="tradeThumb" data-trade-view="${esc(imageUrl(path))}"><img src="${esc(imageUrl(path))}" alt="${esc(post.title)} 圖片 ${index + 1}" loading="lazy" decoding="async"></button>`).join('')}</div>` : ''}
         ${tools}
       </li>`;
     }).join('');
@@ -144,7 +234,7 @@
     try {
       const client = await getClient();
       const result = await client.from('szo_trade_posts')
-        .select('id,user_id,kind,title,price,contact,note,status,created_at')
+        .select('id,user_id,kind,title,price,contact,note,status,created_at,images')
         .order('created_at', { ascending: false })
         .limit(500);
       if(result.error) throw result.error;
@@ -201,10 +291,11 @@
     }
   }
 
-  async function submitPost(event){
-    event.preventDefault();
+  // 網站的 patch-13 會把所有按鈕改成 type="button"，所以不依賴表單 submit 事件，直接由按鈕觸發。
+  async function submitPost(){
     if(state.busy) return;
-    const form = event.currentTarget;
+    const form = $('.tradeForm');
+    const submitButton = $('[data-trade-submit]');
     const data = {
       kind: form.elements.kind.value,
       title: form.elements.title.value.trim(),
@@ -215,27 +306,37 @@
     if(!KIND_LABEL[data.kind]){ formSay('請選擇販賣或收購。'); return; }
     if(!data.title || !data.price || !data.contact){ formSay('請填寫標題、價格與飛鴿 ID。'); return; }
     // 同一份內容重送時沿用同一個編號，伺服器不會重複刊登。
-    const key = JSON.stringify(data);
+    const key = JSON.stringify(data) + '|' + state.images.map(item => item.preview).join(',');
     if(state.pendingKey !== key){ state.pendingKey = key; state.pendingId = crypto.randomUUID(); }
-    state.busy = true; form.querySelector('[type="submit"]').disabled = true;
+    state.busy = true; submitButton.disabled = true;
     formSay('送出中…');
     try {
       const client = await ensureSignedIn();
+      const paths = [];
+      for(let index = 0; index < state.images.length; index++){
+        formSay(`上傳圖片 ${index + 1} / ${state.images.length}…`);
+        const item = state.images[index];
+        const path = `${state.uid}/${state.pendingId}-${index}.${item.ext}`;
+        const upload = await client.storage.from(IMAGE_BUCKET).upload(path, item.blob, { contentType: item.blob.type, upsert: true, cacheControl: '31536000' });
+        if(upload.error) throw new Error('IMAGE_UPLOAD');
+        paths.push(path);
+      }
+      formSay('送出中…');
       const result = await client.rpc('szo_create_trade_post', {
         p_id: state.pendingId, p_kind: data.kind, p_title: data.title,
-        p_price: data.price, p_contact: data.contact, p_note: data.note
+        p_price: data.price, p_contact: data.contact, p_note: data.note, p_images: paths
       });
       if(result.error) throw result.error;
       try { localStorage.setItem('szo.trade.contact', data.contact); } catch(_error) {}
       state.pendingKey = ''; state.pendingId = null;
-      form.reset(); form.elements.contact.value = data.contact;
+      form.reset(); form.elements.contact.value = data.contact; clearImages();
       openForm(false);
-      say('刊登成功！');
       await loadPosts();
+      say('刊登成功！');
     } catch(error) {
       formSay(errorText(error));
     } finally {
-      state.busy = false; form.querySelector('[type="submit"]').disabled = false;
+      state.busy = false; submitButton.disabled = false;
     }
   }
 
@@ -247,8 +348,8 @@
       if(!state.uid) throw new Error('TRADE_NOT_OWNER');
       const result = await run(client);
       if(result.error) throw result.error;
-      say(okText);
       await loadPosts();
+      say(okText);
     } catch(error) {
       say(errorText(error));
     } finally { state.busy = false; }
@@ -263,7 +364,18 @@
         page.querySelectorAll('[data-trade-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === tab)));
         renderList(); return;
       }
+      const view = event.target.closest('[data-trade-view]');
+      if(view){ openViewer(view.dataset.tradeView); return; }
+      if(event.target.closest('[data-trade-image-add]')){ $('.tradeImageInput').click(); return; }
+      const drop = event.target.closest('[data-trade-image-drop]');
+      if(drop){
+        const index = Number(drop.dataset.tradeImageDrop);
+        const [item] = state.images.splice(index, 1);
+        if(item) URL.revokeObjectURL(item.preview);
+        state.pendingKey = ''; renderImagePicks(); return;
+      }
       if(event.target.closest('[data-trade-new]')){ openForm(true); return; }
+      if(event.target.closest('[data-trade-submit]')){ submitPost(); return; }
       if(event.target.closest('[data-trade-cancel]')){ openForm(false); return; }
       if(event.target.closest('[data-trade-refresh]')){ loadPosts(); return; }
       const copy = event.target.closest('[data-trade-copy]');
@@ -284,12 +396,25 @@
       const remove = event.target.closest('[data-trade-remove]');
       if(remove){
         if(!confirm('確定要刪除這筆貼文嗎？刪除後無法復原。')) return;
-        ownerAction(client => client.rpc('szo_remove_trade_post', { p_id: remove.dataset.tradeRemove }), '貼文已刪除。');
+        let paths = [];
+        try { paths = JSON.parse(remove.dataset.images || '[]'); } catch(_error) { paths = []; }
+        ownerAction(async client => {
+          const result = await client.rpc('szo_remove_trade_post', { p_id: remove.dataset.tradeRemove });
+          // 貼文刪除成功後再刪圖片；圖片刪除失敗不影響貼文已隱藏。
+          if(!result.error && paths.length) await client.storage.from(IMAGE_BUCKET).remove(paths).catch(() => null);
+          return result;
+        }, '貼文已刪除。');
       }
     });
     $('.tradeSearch').addEventListener('input', event => { state.query = event.target.value; renderList(); });
     $('.tradeHideDone').addEventListener('change', event => { state.hideDone = event.target.checked; renderList(); });
-    $('.tradeForm').addEventListener('submit', submitPost);
+    $('.tradeForm').addEventListener('submit', event => { event.preventDefault(); submitPost(); });
+    $('.tradeImageInput').addEventListener('change', event => { addImages(event.target.files); event.target.value = ''; });
+    // 表單開啟時可直接 Ctrl+V 貼上遊戲截圖。
+    $('.tradeForm').addEventListener('paste', event => {
+      const files = Array.from(event.clipboardData?.items || []).filter(item => item.kind === 'file').map(item => item.getAsFile()).filter(Boolean);
+      if(files.length){ event.preventDefault(); addImages(files); }
+    });
     const note = $('.tradeForm').elements.note;
     note.addEventListener('input', () => { $('[data-trade-note-length]').textContent = Array.from(note.value).length + ' / 300'; });
   }
@@ -298,7 +423,7 @@
     window.v86LastView = 'trade';
     const reader = document.getElementById('reader');
     if(!reader) return;
-    state.widget = null; state.captchaToken = '';
+    state.widget = null; state.captchaToken = ''; state.images.forEach(item => URL.revokeObjectURL(item.preview)); state.images = [];
     reader.innerHTML = `<section class="card tradePage">
       <h1>玩家交易版</h1>
       <p class="tradeNotice">本站僅提供資訊交流，不經手任何交易。交易前請自行確認對方身分，風險自負；請勿張貼帳號、密碼或個人資料。</p>
@@ -323,11 +448,20 @@
         <label>飛鴿 ID（遊戲內聯絡用）<input name="contact" maxlength="30" required autocomplete="off"></label>
         <label>補充說明（選填）<textarea name="note" maxlength="300" rows="3" placeholder="例：數量、屬性、交易時間"></textarea>
           <small data-trade-note-length>0 / 300</small></label>
+        <div class="tradeImageField">
+          <div class="tradeImageHead"><span>圖片（選填，最多 ${MAX_IMAGES} 張）</span><small data-trade-image-count>0 / ${MAX_IMAGES}</small></div>
+          <div class="tradeImagePicks"></div>
+          <div class="tradeImageActions">
+            <button type="button" data-trade-image-add>選擇圖片</button>
+            <span>或在這裡按 Ctrl+V 直接貼上截圖</span>
+          </div>
+          <input class="tradeImageInput" type="file" accept="image/*" multiple hidden>
+        </div>
         <div class="tradeCaptcha" translate="no"></div>
         <div class="tradeFormStatus" role="status" aria-live="polite"></div>
         <div class="tradeFormActions">
           <button type="button" data-trade-cancel>取消</button>
-          <button type="submit" class="primary">送出刊登</button>
+          <button type="button" class="primary" data-trade-submit>送出刊登</button>
         </div>
         <p class="tradeHint">刊登後可在同一個瀏覽器標記已成交或刪除。貼文不會自動下架，成交後請記得處理。</p>
       </form>

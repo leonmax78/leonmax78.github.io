@@ -48,3 +48,20 @@
   .tradeToolbar>[data-trade-new]{flex:1 1 100%}
   .tradePost time{margin-left:0;flex-basis:100%}
 }
+/* 圖片 */
+.tradeImageField{display:grid;gap:8px}
+.tradeImageHead{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.tradeImagePicks{display:flex;flex-wrap:wrap;gap:8px}
+.tradeImagePicks:empty{display:none}
+.tradeImagePicks figure{position:relative;margin:0;width:96px;height:96px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000}
+.tradeImagePicks img{width:100%;height:100%;object-fit:cover;display:block}
+.tradePage .tradeImagePicks button{position:absolute;top:4px;right:4px;padding:0;width:24px;height:24px;border-radius:999px;background:#000b;border:1px solid #fff6;font-size:12px;line-height:1}
+.tradeImageActions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:12px;color:var(--muted)}
+.tradeImages{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tradePage button.tradeThumb{padding:0;width:120px;height:90px;border-radius:10px;overflow:hidden;background:#000;cursor:zoom-in}
+.tradeThumb img{width:100%;height:100%;object-fit:cover;display:block}
+.tradeViewer{position:fixed;inset:0;z-index:2000;background:#000d;display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+.tradeViewer[hidden]{display:none}
+.tradeViewer img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}
+.tradeViewer button{position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;width:40px;height:40px;border-radius:999px;border:1px solid #fff6;background:#000a;color:#fff;font-size:18px;cursor:pointer}
+@media(max-width:600px){.tradePage button.tradeThumb{width:96px;height:72px}}
