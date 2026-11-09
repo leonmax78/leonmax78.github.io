@@ -44,9 +44,9 @@
         <button class="navBtn sub" data-view="monsterQuery">查詢怪物 <span>›</span></button>
         <button class="navBtn sub" data-view="beastQuery">查詢封獸 <span>›</span></button>
       </div>
-      <button class="navBtn major" data-view="item">道具、掉落查詢、合成模擬 <span>›</span></button>
+      <button class="navBtn major" data-view="item">道具、掉落查詢、合成模擬、武冠收錄 <span>›</span></button>
       <div class="formBox" id="itemForm">
-        <div class="subMenuNote">道具相關功能</div>
+        <div class="subMenuNote">道具、武冠相關功能</div>
         <button class="navBtn sub" data-item-open="item">道具查詢 <span>›</span></button>
         <button class="navBtn sub" data-item-open="reverse">掉落反查 <span>›</span></button>
         <button class="navBtn sub" data-item-open="compound">常用配方合成模擬 <span>›</span></button>
