@@ -4296,3 +4296,12 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 
 @keyframes uiSheetUp{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
 @media(prefers-reduced-motion:reduce){.uiSettingsCard{animation:none}}
+/* Shop server toggle + dialogue conditions */
+.shopPickerMode{gap:8px;flex-wrap:wrap}
+.shopServerTabs button.active{background:linear-gradient(135deg,#a78bfa,#38bdf8)}
+.shopConds{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.shopCond{font-size:12.5px;font-weight:800;padding:2px 9px;border-radius:999px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));color:var(--text);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.shopCond.server{border-color:#a78bfa;background:rgba(167,139,250,.16)}
+.shopCondId{font-size:12px;color:var(--muted)}
+.shopCondNote{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5}
+@media(max-width:760px){.shopPickerMode .shopModeTabs{width:auto;flex:1 1 140px}}

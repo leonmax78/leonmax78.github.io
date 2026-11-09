@@ -10,6 +10,7 @@
     stageId: null,
     activeKey: '',
     mode: 'sell',
+    server: (function(){ try{ return localStorage.getItem('szo-shop-server') === 'free' ? 'free' : 'month'; }catch(e){ return 'month'; } })(),
     query: '',
     loading: null,
     composing: false,
@@ -92,7 +93,11 @@
       if(!bSkill) return 1;
       return aSkill - bSkill;
     }
-    return a.npcName.localeCompare(b.npcName, 'zh-Hant') || Number(a.shopId) - Number(b.shopId);
+    return a.npcName.localeCompare(b.npcName, 'zh-Hant') || (a.npcId === b.npcId ? (a.variantIndex || 0) - (b.variantIndex || 0) : 0) || Number(a.shopId) - Number(b.shopId);
+  }
+  function npcShopEntries(npc){
+    const list = Array.isArray(npc.shops) && npc.shops.length ? npc.shops : [{ id: npc.shop }];
+    return list.filter(s => !s.server || s.server === 'both' || s.server === state.server);
   }
   function shopLocations(){
     const shops = shopMap();
@@ -100,20 +105,26 @@
     for(const stage of state.maps?.stages || []){
       if(HIDDEN_SHOP_STAGE_IDS.has(Number(stage.stageId))) continue;
       for(const npc of stage.npcs || []){
-        const shopId = String(npc.shop || '').trim();
-        if(!shopId || !shops.has(shopId)) continue;
-        rows.push({
-          key: `${stage.stageId}:${npc.id}:${npc.rawX ?? npc.x}:${npc.rawY ?? npc.y}:${shopId}`,
-          stageId: Number(stage.stageId),
-          stageName: stage.stageName || '',
-          npcId: String(npc.id || ''),
-          npcName: npc.name || '',
-          shopId,
-          x: npc.coordX ?? npc.x ?? '',
-          y: npc.coordY ?? npc.y ?? '',
-          rawX: npc.rawX ?? npc.x ?? '',
-          rawY: npc.rawY ?? npc.y ?? '',
-          shop: shops.get(shopId)
+        const entries = npcShopEntries(npc).filter(e => shops.has(String(e.id ?? '').trim()));
+        entries.forEach((entry, index) => {
+          const shopId = String(entry.id).trim();
+          rows.push({
+            key: `${stage.stageId}:${npc.id}:${npc.rawX ?? npc.x}:${npc.rawY ?? npc.y}:${shopId}`,
+            stageId: Number(stage.stageId),
+            stageName: stage.stageName || '',
+            npcId: String(npc.id || ''),
+            npcName: npc.name || '',
+            shopId,
+            conds: entry.conds || [],
+            note: entry.note || '',
+            serverOnly: entry.server === 'month' || entry.server === 'free' ? entry.server : '',
+            variantIndex: entries.length > 1 ? index + 1 : 0,
+            x: npc.coordX ?? npc.x ?? '',
+            y: npc.coordY ?? npc.y ?? '',
+            rawX: npc.rawX ?? npc.x ?? '',
+            rawY: npc.rawY ?? npc.y ?? '',
+            shop: shops.get(shopId)
+          });
         });
       }
     }
@@ -142,7 +153,7 @@
     return value !== null && value !== undefined && value !== '';
   }
   function itemSearchText(item, loc){
-    return [item.name, loc.stageName, loc.npcName, loc.shopId].join(' ').toLowerCase();
+    return [item.name, loc.stageName, loc.npcName, loc.shopId, ...(loc.conds || [])].join(' ').toLowerCase();
   }
   function itemMatches(item, loc){
     const q = state.query.trim().toLowerCase();
@@ -278,7 +289,8 @@
       <select id="shopNpcSelect">
         ${rows.map(row => {
           const count = filteredItems(row).length;
-          return `<option value="${escHtml(row.key)}" ${row.key === loc?.key ? 'selected' : ''}>${escHtml(row.npcName)}${q ? ` / ${count}筆` : ''}</option>`;
+          const tag = row.variantIndex ? `（${row.conds.join('、') || '一般'}${row.note ? '・' + row.note.slice(0, 10) + '…' : ''}）` : '';
+          return `<option value="${escHtml(row.key)}" ${row.key === loc?.key ? 'selected' : ''}>${escHtml(row.npcName + tag)}${q ? ` / ${count}筆` : ''}</option>`;
         }).join('')}
       </select>
     </label>`;
@@ -302,6 +314,19 @@
       </button>`).join('')}
     </div>`;
   }
+  function conditionChips(loc){
+    const chips = [];
+    if(loc.serverOnly) chips.push(`<span class="shopCond server">${loc.serverOnly === 'free' ? '免服' : '月服'}</span>`);
+    for(const c of loc.conds || []) chips.push(`<span class="shopCond">${escHtml(c)}</span>`);
+    const note = loc.note ? `<div class="shopCondNote">「${escHtml(loc.note)}」</div>` : '';
+    return chips.length || note ? `<div class="shopConds">${chips.join('')}<span class="shopCondId">Shop ${escHtml(loc.shopId)}</span></div>${note}` : '';
+  }
+  function serverTabsHTML(){
+    return `<div class="shopModeTabs shopServerTabs" role="group" aria-label="伺服器">
+      <button type="button" class="${state.server === 'month' ? 'active' : ''}" data-shop-server="month">月服</button>
+      <button type="button" class="${state.server === 'free' ? 'active' : ''}" data-shop-server="free">免服</button>
+    </div>`;
+  }
   function shopBlock(loc, items, extraClass){
     if(!loc) return '<div class="empty">沒有商店資料。</div>';
     return `<div class="shopBlock ${extraClass || ''}">
@@ -309,6 +334,7 @@
         <div>
           <h2>${escHtml(locationTitle(loc))}</h2>
           ${locationSub(loc) ? `<div class="muted">${escHtml(locationSub(loc))}</div>` : ''}
+          ${conditionChips(loc)}
         </div>
         <button type="button" class="ghost shopMapBtn" data-shop-map="${escHtml(loc.key)}">地圖位置</button>
       </div>
@@ -349,13 +375,13 @@
           <input id="shopSearch" value="${escHtml(state.query)}" placeholder="搜尋商品 / 商店 / 地圖，例如：虎皮、京城、打鐵店長" autocomplete="off">
           <button type="button" class="ghost shopSearchBtn" data-shop-search>搜尋</button>
         </div>
-        <div class="shopSearchNote">備注：部分商品受名聲影響，最多享七五折優惠。</div>
+        <div class="shopSearchNote">備注：部分商品受名聲影響，最多享七五折優惠。商店依遊戲對話判斷，有條件的會標在店名下方。</div>
         ${renderItemSuggestions()}
       </div>
       <div class="shopPicker">
         ${stageSelect(loc)}
         ${npcSelect(loc)}
-        <div class="shopPickerMode">${modeTabsHTML()}</div>
+        <div class="shopPickerMode">${serverTabsHTML()}${modeTabsHTML()}</div>
         ${isSearching ? `<div class="shopSearchHint">符合搜尋的商店會依${state.mode === 'buy' ? '回收高價' : '販賣低價'}優先排列。</div>` : ''}
       </div>
       ${isSearching ? searchResults() : shopBlock(loc, items)}
@@ -502,6 +528,20 @@
     if(wheelSelect(select, ev.deltaY)) ev.preventDefault();
   }, { capture: true, passive: false });
   document.addEventListener('click', ev => {
+    const server = ev.target?.closest?.('[data-shop-server]');
+    if(server){
+      ev.preventDefault();
+      state.server = server.dataset.shopServer === 'free' ? 'free' : 'month';
+      try{ localStorage.setItem('szo-shop-server', state.server); }catch(e){}
+      const cur = shopLocations().find(row => row.key === state.activeKey);
+      if(!cur){
+        const [sid, nid] = String(state.activeKey).split(':');
+        const alt = shopLocations().find(row => String(row.stageId) === sid && row.npcId === nid);
+        if(alt) state.activeKey = alt.key;
+      }
+      renderLoaded();
+      return;
+    }
     const mode = ev.target?.closest?.('[data-shop-mode]');
     if(mode){
       ev.preventDefault();
