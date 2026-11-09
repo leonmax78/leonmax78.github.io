@@ -424,12 +424,14 @@
   }
   async function openRow(r){
     hide();
+    input()?.blur();
+    const P = window.SZO_PREVIEW;
     try{
-      if(r.kind === 'item'){ if(window.ensureItemPageLoaded) await window.ensureItemPageLoaded(); if(window.showItem) window.showItem(r.id); }
-      else if(r.kind === 'monster'){ if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
+      if(r.kind === 'item'){ if(P) return P.open('item', r.id); if(window.ensureItemPageLoaded) await window.ensureItemPageLoaded(); if(window.showItem) window.showItem(r.id); }
+      else if(r.kind === 'monster'){ if(P) return P.open('monster', r.id); if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
       else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, ''); }
       else if(r.kind === 'npc'){
-        if(r.shop){ if(window.ensureShopPageLoaded) await window.ensureShopPageLoaded(); if(window.openShopNpc){ await window.openShopNpc(r.stageId, r.id); return; } }
+        if(r.shop && P) return P.open('npcshop', r.stageId + ':' + r.id);
         if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.stageName, r.label, r.id);
       }
     }catch(e){ console.error(e); }

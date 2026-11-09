@@ -53,6 +53,7 @@
    if(e.target.closest('[data-preview-close]'))close();
    if(e.target.closest('[data-preview-back]')&&trail.length>1){trail.pop();const prev=trail.pop();open(prev.kind,prev.id,false,prev.highlightItemId);}
    const action=e.target.closest('[data-preview-full]');if(action)full(action.dataset.previewFull,action.dataset.id);
+   const shopFull=e.target.closest('[data-preview-npcshop-full]');if(shopFull){const [sid,nid]=shopFull.dataset.previewNpcshopFull.split(':');window.SZO_MAP_FLOAT?.close();close(()=>ensureShopPageLoaded().then(()=>window.openShopNpc(sid,nid)).catch(console.error));}
   });
  }
  async function open(kind,id,push=true,highlightItemId=''){
@@ -74,6 +75,9 @@
     await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('怪物資料載入失敗');if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');
     const m=monsters.find(row=>String(row.ID)===String(id));if(!m)throw Error('找不到這個怪物');
     html=`<div class="itemGroupedDetail"><h1>${esc(nameOf(m))}：掉落資料</h1><div class="detailPreviewDrops">${monsterDropRows(m).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}"><span>${esc(name)}</span><small>${esc(rate)}</small></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
+   }else if(kind==='npcshop'){
+    await ensureShopPageLoaded();
+    html=await window.renderShopNpcPreviewHTML(id);
    }else if(kind==='shops'){
     await ensureQaPageLoaded();
     html=await window.renderQaShopPreviewHTML(id);
@@ -96,7 +100,8 @@
     if(drop.dataset.item===String(highlightItemId)){drop.classList.add('searchedDrop');drop.title='本次查詢道具';}
    }
    actions.innerHTML=`<button type="button" data-preview-full="${kind}" data-id="${esc(id)}">前往完整${kind==='item'?'道具':kind==='reverse'?'來源':'怪物'}頁</button>${kind==='item'?`<button type="button" data-rev="${esc(id)}">查詢取得來源</button>`:kind==='monster'?`<button type="button" data-preview-map="${esc(id)}" data-map-name="${esc(monsterName)}">查看地圖位置</button>`:''}`;
-   if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
+   if(kind==='npcshop'){const [sid,nid]=String(id).split(':');actions.innerHTML=`<button type="button" data-preview-npcshop-full="${esc(sid)}:${esc(nid)}">前往商店頁</button>`;}
+   else if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
  function pop(event){

@@ -4317,3 +4317,7 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .qaNavChip{display:inline-flex;gap:6px;align-items:center;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-weight:800;cursor:pointer}
 .qaNavChip b{font-size:12px;padding:0 7px;border-radius:999px;background:color-mix(in srgb,var(--accent) 30%,transparent)}
 .qaCond{display:inline-block;margin-left:8px;font-size:12px;font-weight:600;color:var(--muted)}
+.shopPreview h1{font-size:20px;margin:0 0 4px}
+.shopPreview .shopPreviewServer{margin:4px 0 6px}
+.shopPreview .shopBlock{margin:10px 0}
+.shopPreview h3{font-size:14px;margin:12px 0 6px;color:var(--muted);letter-spacing:.08em}
