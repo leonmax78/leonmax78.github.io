@@ -66,7 +66,7 @@
   #gemPage .gemStep{margin:12px 0;padding:6px 0;border-bottom:1px solid var(--border,#354557)}
   #gemPage .gemList{list-style:none;padding:0;margin:0 0 8px}#gemPage .gemList li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:7px 0;border-bottom:1px solid var(--border,#354557)}#gemPage .gemList span{color:var(--muted,#9fb0c4);font-variant-numeric:tabular-nums}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
-  </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['compare','存檔比較'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
+  </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
   const content=byId('gemContent');
   if(tab==='plan'){
