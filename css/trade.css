@@ -66,3 +66,8 @@
 .tradeViewer button{position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;width:40px;height:40px;border-radius:999px;border:1px solid #fff6;background:#000a;color:#fff;font-size:18px;cursor:pointer}
 @media(max-width:600px){.tradePage button.tradeThumb{width:96px;height:72px}}
 .tradeFormTitle{margin:0;font-size:16px}
+/* 用 label 包住檔案欄位：手機與 App 內建瀏覽器比用程式點擊更穩定 */
+.tradeImagePick{position:relative;overflow:hidden;display:inline-flex;align-items:center;cursor:pointer;border-radius:8px;padding:7px 12px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:14px}
+.tradeImagePick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:0}
+.tradeImagePick.isDisabled{opacity:.55;cursor:not-allowed}
+.tradeImagePick.isDisabled input{cursor:not-allowed}

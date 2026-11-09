@@ -17,6 +17,7 @@
     TRADE_AUTH_REQUIRED: '請先完成人機驗證。',
     IMAGE_UPLOAD: '圖片上傳失敗，請稍後再試，或先移除圖片再刊登。',
     IMAGE_READ: '這張圖片無法讀取，請改用 JPG 或 PNG。',
+    IMAGE_HEIC: '這張是 HEIC 格式，這個瀏覽器無法讀取。請改傳截圖，或在手機相機設定改用「最相容」格式。',
     captcha_failed: '人機驗證未通過，請重新驗證。',
     over_request_rate_limit: '操作太頻繁，請稍後再試。',
     over_request_rate_limit_anonymous: '驗證次數過多，請稍後再試。',
@@ -107,13 +108,14 @@
 
   // 上傳前在瀏覽器壓縮：最長邊 1280px，優先 WebP，不支援時改 JPEG。
   async function compressImage(file){
+    const heic = /hei[cf]/i.test(file.type) || /\.hei[cf]$/i.test(file.name || '');
     let source;
     try { source = await createImageBitmap(file); }
     catch(_error) {
       source = await new Promise((resolve, reject) => {
         const image = new Image(), url = URL.createObjectURL(file);
         image.onload = () => { URL.revokeObjectURL(url); resolve(image); };
-        image.onerror = () => { URL.revokeObjectURL(url); reject(new Error('IMAGE_READ')); };
+        image.onerror = () => { URL.revokeObjectURL(url); reject(new Error(heic ? 'IMAGE_HEIC' : 'IMAGE_READ')); };
         image.src = url;
       });
     }
@@ -145,21 +147,30 @@
         <img src="${esc(item.preview)}" alt="待上傳圖片 ${index + 1}">
         <button type="button" data-trade-image-drop="${index}" aria-label="移除圖片">✕</button>
       </figure>`).join('');
+    const full = state.images.length >= MAX_IMAGES;
     const add = $('[data-trade-image-add]');
-    if(add) add.disabled = state.images.length >= MAX_IMAGES;
+    if(add) add.classList.toggle('isDisabled', full);
+    const input = $('.tradeImageInput');
+    if(input) input.disabled = full;
     $('[data-trade-image-count]').textContent = `${state.images.length} / ${MAX_IMAGES}`;
   }
 
   async function addImages(files){
-    const list = Array.from(files || []).filter(file => /^image\//.test(file.type));
-    if(!list.length) return;
+    // 部分手機瀏覽器（微信、QQ、部分 Android 相簿）選圖時不會帶檔案類型，所以類型空白的也先收下，交給解碼判斷。
+    const all = Array.from(files || []);
+    const list = all.filter(file => /^image\//.test(file.type) || !file.type || file.type === 'application/octet-stream'
+      || /\.(png|jpe?g|webp|gif|bmp|hei[cf])$/i.test(file.name || ''));
+    if(!list.length){ if(all.length) formSay(ERRORS.IMAGE_READ); return; }
+    formSay('處理圖片中…');
+    let failed = '';
     const room = MAX_IMAGES - state.images.length;
     if(room <= 0){ formSay(`每篇最多 ${MAX_IMAGES} 張圖片。`); return; }
-    if(list.length > room) formSay(`每篇最多 ${MAX_IMAGES} 張圖片，只加入前 ${room} 張。`);
+    const note = list.length > room ? `每篇最多 ${MAX_IMAGES} 張圖片，只加入前 ${room} 張。` : '';
     for(const file of list.slice(0, room)){
       try { state.images.push(await compressImage(file)); }
-      catch(error) { formSay(errorText(error)); }
+      catch(error) { failed = errorText(error); }
     }
+    formSay(failed || note);
     state.pendingKey = '';
     renderImagePicks();
   }
@@ -401,7 +412,6 @@
       }
       const view = event.target.closest('[data-trade-view]');
       if(view){ openViewer(view.dataset.tradeView); return; }
-      if(event.target.closest('[data-trade-image-add]')){ $('.tradeImageInput').click(); return; }
       const drop = event.target.closest('[data-trade-image-drop]');
       if(drop){
         const index = Number(drop.dataset.tradeImageDrop);
@@ -494,10 +504,10 @@
           <div class="tradeImageHead"><span>圖片（選填，最多 ${MAX_IMAGES} 張）</span><small data-trade-image-count>0 / ${MAX_IMAGES}</small></div>
           <div class="tradeImagePicks"></div>
           <div class="tradeImageActions">
-            <button type="button" data-trade-image-add>選擇圖片</button>
-            <span>或在這裡按 Ctrl+V 直接貼上截圖</span>
+            <label class="tradeImagePick" data-trade-image-add>選擇圖片
+              <input class="tradeImageInput" type="file" accept="image/*" multiple></label>
+            <span>手機可直接從相簿選截圖；電腦可按 Ctrl+V 貼上</span>
           </div>
-          <input class="tradeImageInput" type="file" accept="image/*" multiple hidden>
         </div>
         <div class="tradeCaptcha" translate="no"></div>
         <div class="tradeFormStatus" role="status" aria-live="polite"></div>
