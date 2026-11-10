@@ -34,6 +34,9 @@
   requestAnimationFrame(()=>{for(const [el,top,left] of saved.scroll){el.scrollTop=top;el.scrollLeft=left;}window.scrollTo({top:saved.y,left:saved.x,behavior:'instant'});saved.focus?.focus({preventScroll:true});});
   return true;
  }
+ function dropStalePreview(){if(history.state?.szoPreview){const st={...history.state};delete st.szoPreview;history.replaceState(st,'',location.href);}}
+ // A reload keeps history.state; the preview it recorded is no longer open.
+ if(history.state?.szoPreview)dropStalePreview();
  function hide(){request++;if(dialog?.open)dialog.close();document.body.classList.remove('detailPreviewOpen');trail=[];origin?.focus({preventScroll:true});}
  function close(callback){afterClose=callback||null;if(history.state?.szoPreview)history.back();else{hide();const next=afterClose;afterClose=null;next?.();}}
  async function navigate(kind,id,skipPush=false){
@@ -63,7 +66,7 @@
   if(kind==='monster'&&/^\d+:\d+$/.test(String(id)))kind='npc';
   openedAboveMap=!!window.SZO_MAP_FLOAT?.isOpen();
   if(dialog.open&&window.SZO_MAP_FLOAT?.isOpen()){dialog.close();dialog.showModal();}
-  if(!dialog.open){origin=document.activeElement;trail=[];if(push){capture();history.pushState({...history.state,szoPreview:{kind,id,highlightItemId}},'',location.href);}dialog.showModal();document.body.classList.add('detailPreviewOpen');}
+  if(!dialog.open){origin=document.activeElement;trail=[];if(push){dropStalePreview();capture();history.pushState({...history.state,szoPreview:{kind,id,highlightItemId}},'',location.href);}dialog.showModal();document.body.classList.add('detailPreviewOpen');}
   trail.push({kind,id,highlightItemId});dialog.querySelector('[data-preview-back]').hidden=trail.length<2;
   const body=dialog.querySelector('.detailPreviewBody'),actions=dialog.querySelector('footer');body.innerHTML='<p role="status">資料載入中…</p>';actions.replaceChildren();body.scrollTop=0;
   try{
@@ -114,6 +117,8 @@
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
  function pop(event){
+  // Closing pops back to the entry under the preview; a preview recorded there is stale (e.g. left over from before a reload).
+  if(dialog?.open&&event.state?.szoPreview){dropStalePreview();hide();const next=afterClose;afterClose=null;next?.();return true;}
   // A preview opened above a map owns this history entry, not the map below.
   if(!dialog?.open || !openedAboveMap)window.SZO_MAP_FLOAT?.close();
   if(event.state?.szoPreview){open(event.state.szoPreview.kind,event.state.szoPreview.id,false,event.state.szoPreview.highlightItemId);return true;}
