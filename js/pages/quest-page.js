@@ -25,14 +25,12 @@
       out += esc(text.slice(last, at)).replace(/\n/g, '<br>');
       last = at + m.length;
       const stageName = data.stages[st] || '';
-      const hasXY = Number(x) || Number(y);
-      const coord = hasXY ? `(${x}, ${y})` : '';
       if(Number(id)){
         out += `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(name)}</button>`;
       }else{
         out += `<b class="questPlace">${esc(name)}</b>`;
       }
-      if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}${coord ? ' ' + esc(coord) : ''}</button>`;
+      if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}</button>`;
       return m;
     });
     out += esc(String(text || '').slice(last)).replace(/\n/g, '<br>');
@@ -103,7 +101,7 @@
     if(!state.group && !state.query) state.group = groups[0] || '';
     const list = filtered(data);
     reader.innerHTML = `<section class="questPage">
-      <div class="questHero"><h1>任務查詢</h1><p class="muted">資料取自遊戲任務檔，點 NPC 名稱看對話，點地圖名稱跳到地圖位置。</p>
+      <div class="questHero"><h1>任務查詢</h1><p class="muted">資料取自遊戲任務檔，點 NPC 名稱看對話，點 📍地圖名稱直接在地圖上顯示位置。</p>
         <input id="questSearch" class="questSearch" type="search" placeholder="搜尋任務、NPC 或任務道具（例如：黑狗血）" value="${esc(state.query)}"></div>
       ${state.query ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個任務 <button type="button" class="ghost" data-quest-clear>清除搜尋</button></p>` : `
       <div class="questTabs" role="tablist">${data.cats.map(c => `<button type="button" role="tab" class="${c === state.cat ? 'active' : ''}" data-quest-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
