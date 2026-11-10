@@ -311,6 +311,7 @@ if __name__ == '__main__':
         if e['m'].startswith(INTERNAL): e['x']=1
         elif not d.get('Face') and re.search(r'（\d+）.*接|接.*（\d+）|^(完成|檢查|判斷|事件|接)', e['m']): e['x']=1
         elif not d.get('Face'): e['p']=1
+        if d.get('Face') and str(d['Face'][0]).strip().isdigit() and not e.get('x'): e['f']=int(d['Face'][0])
         opts=[]
         for i in range(1,10):
             lab=(d.get(f'OptStr{i}') or [''])[0]; j=(d.get(f'OptJump{i}') or [''])[0]

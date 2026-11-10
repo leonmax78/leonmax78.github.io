@@ -1473,15 +1473,17 @@
     else if((m.n || []).length > 1) next = `<p class="npcTalkHint">接下來依條件會是：</p>${branchButtons()}`;
     else if(!shop) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
     if(shop && !next) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
-    return `${nav}<div class="npcTalkBubble${m.p ? ' you' : ''}"><b>${htmlEscape(who)}</b><p>${htmlEscape(m.m || '').replace(/\n/g, '<br>')}</p></div>${effectBox}${shop}${next}`;
+    const face = !m.p && m.f ? `<img class="npcTalkFace" src="${withAssetVersion(`${assetBase()}/npc-faces/f${m.f}.png`)}" alt="" loading="lazy" onerror="this.remove()">` : '';
+    return `${nav}<div class="npcTalkBubble${m.p ? ' you' : ''}${face ? ' hasFace' : ''}">${face}<div class="npcTalkText"><b>${htmlEscape(who)}</b><p>${htmlEscape(m.m || '').replace(/\n/g, '<br>')}</p></div></div>${effectBox}${shop}${next}`;
   }
   window.renderNpcPreviewHTML = async function(key){
-    const [stageId, npcId] = String(key).split(':');
+    const [stageId, npcId, startMsg] = String(key).split(':');
     await ensureMapDataLoaded();
     const stage = (mapData.stages || []).find(s => String(s.stageId) === String(stageId));
     const marker = stage?.npcs?.find(n => String(n.id) === String(npcId)) || {};
     const data = await loadNpcTalk(npcId);
     npcTalkState.data = data; npcTalkState.path = data ? [data.t] : []; npcTalkState.key = key;
+    if(data && startMsg && data.msgs[String(startMsg)] && Number(startMsg) !== data.t) npcTalkState.path.push(Number(startMsg));
     const src = markerImage(Object.assign({ kind: 'npc' }, marker));
     const name = data?.n || marker.name || 'NPC';
     const places = (mapData.stages || []).filter(s => (s.npcs || []).some(n => String(n.id) === String(npcId))).map(s => s.stageName);
@@ -1494,14 +1496,14 @@
     </div>`;
   };
   window.openNpcMapFromKey = async function(key){
-    const [stageId, npcId] = String(key).split(':');
+    const [stageId, npcId, startMsg] = String(key).split(':');
     await ensureMapDataLoaded();
     const stage = (mapData.stages || []).find(s => String(s.stageId) === String(stageId));
     const npc = stage?.npcs?.find(n => String(n.id) === String(npcId));
     if(stage) await window.openMapSearchLocation(stage.stageName, npc?.name || '', npcId);
   };
   window.npcPreviewHasShop = async function(key){
-    const [stageId, npcId] = String(key).split(':');
+    const [stageId, npcId, startMsg] = String(key).split(':');
     await ensureMapDataLoaded();
     const stage = (mapData.stages || []).find(s => String(s.stageId) === String(stageId));
     return !!stage?.npcs?.find(n => String(n.id) === String(npcId))?.shop;

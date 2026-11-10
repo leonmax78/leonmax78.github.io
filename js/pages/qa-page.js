@@ -387,12 +387,19 @@
         <b></b>
         <div class="qaRowActions">${shop ? chip('看商品', `data-qa-npc-shop="${html(stage.stageId)}:${html(npc.id)}"`) : ''}${mapChip(stage.stageName, npc.name)}</div>
       </div>`).join('')}</div></div>` : '';
+    const talkRows = typeof window.szoItemTalkRows === 'function' ? await window.szoItemTalkRows(term, 30).catch(() => []) : [];
+    const talkSection = talkRows.length ? `<div class="qaAnswer" id="qaSecTalk"><h2>兌換・任務對話</h2><div class="qaList">${talkRows.map(r => `<div class="qaRow qaShopRow">
+        <strong>${html(r.label)}</strong>
+        <span>${html(r.sub)}</span>
+        <b></b>
+        <div class="qaRowActions">${chip('看對話', `data-qa-npc-talk="${html(r.key)}"`)}${r.stageName ? mapChip(r.stageName, r.label) : ''}</div>
+      </div>`).join('')}</div></div>` : '';
     const mapSection = mapMatches.length ? `<div class="qaAnswer" id="qaSecMap"><h2>地圖</h2><div class="qaMapChips">${mapMatches.map(stage => mapChip(stage.stageName, '')).join('')}</div></div>` : '';
-    const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || npcRows.length || shopHasResult;
+    const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || npcRows.length || talkRows.length || shopHasResult;
     if(!hasAny) return '<div class="empty">目前找不到符合的資料，可以換更短或更完整的關鍵字。</div>';
-    const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
+    const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecTalk','兌換・任務',talkRows.length],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
       .filter(x => x[2]).map(([id, label, n]) => `<button type="button" class="qaNavChip" data-qa-jump="${id}">${label}<b>${n}</b></button>`).join('');
-    return `<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${npcSection}${mapSection}`;
+    return `<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${talkSection}${npcSection}${mapSection}`;
   }
   async function runQuestion(query){
     state.query = String(query || '').trim();
@@ -437,6 +444,8 @@
     }
     const jump = ev.target.closest?.('[data-qa-jump]');
     if(jump){ by(jump.dataset.qaJump)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const npcTalk = ev.target.closest?.('[data-qa-npc-talk]');
+    if(npcTalk){ ev.preventDefault(); window.SZO_PREVIEW?.open('npc', npcTalk.dataset.qaNpcTalk); return; }
     const npcShop = ev.target.closest?.('[data-qa-npc-shop]');
     if(npcShop){
       const [sid, nid] = String(npcShop.dataset.qaNpcShop).split(':');
