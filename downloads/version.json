@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261110-54",
-  "published_at": "2026-11-10 21:50",
-  "file_name": "Wuguan_261110-54.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261110-54.zip",
+  "version": "261110-55",
+  "published_at": "2026-11-11 01:25",
+  "file_name": "Wuguan_261110-55.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261110-55.zip",
   "page_url": "downloads/",
-  "notes": "新增「全自動」記錄：打開武冠鋒雲錄後按主畫面的「全自動」，程式會自己點分類、子分類與捲軸，逐頁記錄已收／未收，約 10 分鐘完成；動滑鼠或按 Esc 立即停止。需先校正綠框。遊戲延遲、收藏還沒顯示時請勿執行；結束時會顯示花費時間並對照收藏積分。修正主畫面第 7 排被截掉。這是自動操作遊戲，是否使用請自行判斷。沿用原本角色槽位與校正設定。",
-  "sha256": "bdb9b540b95b982df9c7a1f7a05c5ce4eb079dc8720083160224b012218963b8"
+  "notes": "全自動記錄期間會鎖住滑鼠，避免有人碰到滑鼠而中斷或點錯；要中途停止請按鍵盤 Esc，記錄完成、停止或出錯時會自動解鎖，超過 40 分鐘也會強制停止。無法鎖定的電腦會沿用「動滑鼠就停止」。全自動是自動操作遊戲，是否使用請自行判斷。沿用原本角色槽位與校正設定。",
+  "sha256": "1a07dd2f2f30eb4e3261e99465d3e0c001bfc4459208c6d5ee037ac7e9b1dedd"
 }
