@@ -4403,3 +4403,4 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .globalSuggest .gsRow b{flex:0 0 auto;white-space:nowrap;overflow-wrap:normal}
 .globalSuggest .gsRow small{flex:1 1 12em;min-width:0;white-space:normal;text-align:right;line-height:1.5}
 @media (max-width:600px){.globalSuggest .gsRow small{flex-basis:100%;text-align:left}}
+.questBody button.questItemLink{all:unset!important;cursor:pointer!important;color:#f0c674!important;font-weight:700!important;border-bottom:1px dotted currentColor!important}

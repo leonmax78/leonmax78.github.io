@@ -36,8 +36,16 @@ VER_TO_GROUP = {
     '赤膽征長疆': '赤膽征長疆', '神州20': '神州20', '神州20 Ⅱ': '神州20 II', '六宇浮上': '六宇浮上',
     '決戰神州Ⅱ龍川事變': '龍川事變',
 }
-LINK = re.compile(r'<map=(\d+),x=(-?\d+),y=(-?\d+),NPCID=(\d+),([^>]*)>')
+LINK = re.compile(r'<map=(\d+),x=(-?\d+),y=(-?\d+),NPCID=?(\d+),([^>]*)>')
 HIDDEN_SKIP = re.compile(r'^20\d\d|活動|聖靈煉金|改版|咕嚕|暗記|重置|入場|價格|提昇|提升|修煉|速通|禮包|記錄|魂印|Deg|開局|齊備|速軸|兌換|改制|賜福|月費|福袋|倉庫|回籠|衝等|任務記錄|名人堂|付費|暢行')
+MULTI = re.compile(r'<(map=[^<>]*?)>')
+
+
+def split_multi(v):
+    """<map=1,..,A,map=2,..,B> lists alternatives (one NPC per class); emit one link each."""
+    return MULTI.sub(lambda m: '、'.join('<' + part + '>' for part in re.split(r',(?=map=)', m[1])), v or '')
+
+
 BRACKET = re.compile(r'【([^】]+)】')
 
 
@@ -120,11 +128,14 @@ def main(ini):
         item_id.setdefault(r.get('Name'), r.get('ID'))
     long_names = sorted((n for n in item_names if n and len(n) >= 3), key=len, reverse=True)
 
+    ov_path = os.path.join(ROOT, 'tools/data/quest_overrides.json')
+    overrides = json.load(open(ov_path, encoding='utf-8')) if os.path.exists(ov_path) else {}
     out, section = [], 'once'
     by_id = {m.get('ID'): m.get('Name') for m in missions}
     for m in missions:
         mid = int(m.get('ID', 0))
-        steps = [m[k] for k in sorted((k for k in m if re.fullmatch(r'Step\d+', k)), key=lambda k: int(k[4:]))]
+        steps = [split_multi(m[k]) for k in sorted((k for k in m if re.fullmatch(r'Step\d+', k)), key=lambda k: int(k[4:]))]
+        m['Describe'] = split_multi(m.get('Describe', ''))
         if mid >= 20000:
             # 以下隱藏: mostly internal markers; keep the ones that read like real quests.
             if HIDDEN_SKIP.search(m.get('Name', '')) or not steps:
@@ -158,6 +169,13 @@ def main(ini):
             cat, sub = '職業任務', CLASS[cls]
         else:
             cat, sub = '一般任務', sname or '活動與其他'
+        ov = overrides.get(str(mid), {})
+        if ov.get('hide'):
+            continue
+        if ov.get('c'):
+            cat = ov['c']
+        if 'g' in ov:
+            sub = ov['g'] or (sname or '活動與其他')
         fame = []
         if m.get('MinFame'): fame.append(f"名聲 ≥ {m['MinFame']}")
         if m.get('MaxFame'): fame.append(f"名聲 ≤ {m['MaxFame']}")
@@ -185,21 +203,41 @@ def main(ini):
         if fame: row['fm'] = '、'.join(fame)
         if cls is not None: row['cl'] = CLASS[cls]
         if m.get('Sex'): row['sx'] = '男' if m['Sex'] == '0' else '女'
-        if rewards: row['r'] = rewards[:8]
+        if rewards:
+            row['r'] = rewards[:8]
+            ri = sorted({x for r in row['r'] for x in re.findall(r'「(.+?)」', r) if item_id.get(x)})
+            if ri: row['ri'] = [[item_id[x], x] for x in ri]
         if found: row['it'] = [[item_id.get(n, ''), n] for n in sorted(found)]
+        if ov.get('note'): row['tag'] = ov['note']
         if section == 'repeat': row['rp'] = 1
         if section == 'team': row['tm'] = 1
         pre = [by_id.get(x.strip()) for x in m.get('MustFinishMission', '').split(',') if x.strip()]
         if any(pre): row['pre'] = [p for p in pre if p]
         out.append(row)
-    cats = ['資料片任務', '聯動任務', '職業任務', '一般任務', '新手任務']
+    cats = ['資料片任務', '聯動任務', '轉職任務', '職業任務', '一般任務', '新手任務']
+    ver_groups = [g for g in order if g != '中原地圖']
+    if '俠者無敵' in ver_groups:
+        ver_groups.insert(ver_groups.index('俠者無敵') + 1, '時界任務')
     groups = {
+        '資料片任務': ver_groups,
         '聯動任務': tax.get('series', []),
-        '資料片任務': [g for g in order if g != '中原地圖'],
+        '轉職任務': ['二轉', '三轉', '四轉', '五轉'],
         '職業任務': list(CLASS.values()),
         '新手任務': ['義勇軍校場', '勇士', '劍俠', '術者', '道人', '僧侶'],
     }
-    groups['一般任務'] = sorted({r['g'] for r in out if r['c'] == '一般任務'}, key=lambda g: min(r['m'] or 9999 for r in out if r['g'] == g))
+    # 一般任務: by map order (stage id); 活動與其他 last.
+    first_stage = {}
+    for r in out:
+        if r['c'] == '一般任務':
+            first_stage[r['g']] = min(first_stage.get(r['g'], 99999), r['m'] or 99999)
+    groups['一般任務'] = sorted(first_stage, key=lambda g: (g == '活動與其他', first_stage[g], g))
+    for c in cats:  # any group a manual override introduced
+        for g in sorted({r['g'] for r in out if r['c'] == c} - set(groups[c])):
+            groups[c].append(g)
+    gpos = {(c, g): i for c in cats for i, g in enumerate(groups[c])}
+    tag_rank = {'主線任務': 0, '支線任務': 1}
+    out.sort(key=lambda r: (cats.index(r['c']) if r['c'] in cats else 99, gpos.get((r['c'], r['g']), 999),
+                            tag_rank.get(r.get('tag'), 2), (r['m'] or 99999) if r['c'] == '聯動任務' else 0, r['i']))
     data = {'cats': cats, 'groups': groups, 'stages': {str(k): v for k, v in stage_name.items()}, 'quests': out}
     with open(os.path.join(ROOT, 'data/quests.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
