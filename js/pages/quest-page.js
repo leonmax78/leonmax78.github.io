@@ -59,7 +59,7 @@
       String(s).replace(re, (m, at) => {
         if(ids.get(m) === 'm'){
           const st = monsters.get(m), sn = notes.stages?.[st] || '';
-          out += groupNote(s.slice(last, at)) + `<button type="button" class="questMonLink" title="在地圖上看位置" data-quest-map="${esc(sn)}" data-quest-map-name="${esc(m)}" data-quest-map-npc="">${esc(m)}</button>${sn ? `<button type="button" class="questCoord" data-quest-map="${esc(sn)}" data-quest-map-name="${esc(m)}" data-quest-map-npc="">${esc(sn)}</button>` : ''}`;
+          out += groupNote(s.slice(last, at)) + `<button type="button" class="questMonLink" title="${esc(sn ? `${sn}・點擊開啟地圖` : '點擊開啟地圖')}" data-quest-map="${esc(sn)}" data-quest-map-name="${esc(m)}" data-quest-map-npc="">${esc(m)}</button>`;
           last = at + m.length; return m;
         }
         out += groupNote(s.slice(last, at)) + `<button type="button" class="questItemLink" data-quest-item="${esc(ids.get(m))}">${esc(m)}</button>`;
@@ -82,21 +82,22 @@
       let stageName = data.stages[st] || '';
       if(!Number(id) && Object.values(data.stages).includes(name)){
         // The link names a map itself: one chip that opens that map.
-        out += `<button type="button" class="questCoord" title="開啟地圖" data-quest-map="${esc(name)}" data-quest-map-name="" data-quest-map-npc="">${esc(name)}</button>`;
+        out += `<button type="button" class="questMapLink" title="點擊開啟地圖" data-quest-map="${esc(name)}" data-quest-map-name="" data-quest-map-npc="">${esc(name)}</button>`;
         return m;
       }
       if(Number(id)){
-        out += `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(name)}</button>`;
+        const xy = Number(x) || Number(y) ? ` (${x}, ${y})` : '';
+        out += `<button type="button" class="questNpc" title="${esc(`${stageName}${xy}・點擊看對話與地圖位置`)}" data-quest-npc="${esc(st)}:${esc(id)}">${esc(name)}</button>`;
+        return m;
       }else{
         // A place (no NPC): the game's own coordinates from the quest file, as shown in game.
-        out += `<b class="questPlace">${esc(name)}</b>${Number(x) || Number(y) ? `<small class="questGameXY" title="遊戲內座標">(${esc(x)}, ${esc(y)})</small>` : ''}`;
-        if(stageName && (Number(x) || Number(y))){
-          out += `<button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(stageName)}</button>`;
-          return m;
-        }
+        const has = Number(x) || Number(y);
+        out += stageName
+          ? `<button type="button" class="questMapLink" title="${esc(`${stageName}${has ? ` (${x}, ${y})` : ''}・點擊在地圖上標出位置`)}" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc=""${has ? ` data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}"` : ''}>${esc(name)}</button>`
+          : `<b class="questPlace">${esc(name)}</b>`;
+        if(has) out += `<small class="questGameXY" title="遊戲內座標">(${esc(x)}, ${esc(y)})</small>`;
+        return m;
       }
-      if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}</button>`;
-      return m;
     });
     out += link(text.slice(last));
     return out;
@@ -118,7 +119,7 @@
     const items = (q.it || []).map(([id, name]) => id ? `<button type="button" class="questItem" data-quest-item="${esc(id)}">${esc(name)}</button>` : `<span class="questItem">${esc(name)}</span>`).join('');
     return `<div class="questBody">
       ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data, q)}</p>` : ''}
-      ${q.s.length ? `<ol class="questSteps">${q.s.map((s, i) => { const tg = (q.tg || []).find(t => t[0] === i); const pts = (q.pt || []).filter(t => t[0] === i); return `<li>${richText(s, data, q)}${pts.length ? `<div class="questSpots"><span>地點</span>${pts.map(([, st, x, y, msg]) => `<div class="questSpot"><button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="觸發點" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(data.stages[st] || '')}</button><b class="questSpotXY">(${esc(x)}, ${esc(y)})</b>${msg ? `<small>「${esc(msg)}」</small>` : ''}</div>`).join('')}</div>` : ''}${tg ? `<div class="questTargets"><span>對象</span>${tg[1].map(([st, id, nm]) => `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(nm)}</button><button type="button" class="questCoord" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="${esc(nm)}" data-quest-map-npc="${esc(id)}">${esc(data.stages[st] || '')}</button>`).join('<i>、</i>')}</div>` : ''}</li>`; }).join('')}</ol>` : ''}
+      ${q.s.length ? `<ol class="questSteps">${q.s.map((s, i) => { const tg = (q.tg || []).find(t => t[0] === i); const pts = (q.pt || []).filter(t => t[0] === i); return `<li>${richText(s, data, q)}${pts.length ? `<div class="questSpots"><span>地點</span>${pts.map(([, st, x, y, msg]) => `<div class="questSpot"><button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="觸發點" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(data.stages[st] || '')}</button><b class="questSpotXY">(${esc(x)}, ${esc(y)})</b>${msg ? `<small>「${esc(msg)}」</small>` : ''}</div>`).join('')}</div>` : ''}${tg ? `<div class="questTargets"><span>對象</span>${tg[1].map(([st, id, nm]) => `<button type="button" class="questNpc" title="${esc(`${data.stages[st] || ''}・點擊看對話與地圖位置`)}" data-quest-npc="${esc(st)}:${esc(id)}">${esc(nm)}</button>`).join('<i>、</i>')}</div>` : ''}</li>`; }).join('')}</ol>` : ''}
       ${(q.ho || []).length ? `<div class="questMeta"><b>繳交道具與數量</b><ul class="questHandins">${q.ho.map(([id, n, qty, who]) => `<li>${id ? `<button type="button" class="questItemLink" data-quest-item="${esc(id)}">${esc(n)}</button>` : esc(n)} <span>${esc(qty).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</span>${who ? ` <small>${esc(who)}</small>` : ''}</li>`).join('')}</ul></div>` : ''}
       ${items ? `<div class="questMeta"><b>任務道具</b><div class="questItems">${items}</div></div>` : ''}
       ${q.r ? `<div class="questMeta"><b>獎勵${q.rx ? '<small class="questRewardNote">依選擇或結果不同，以下擇一</small>' : ''}</b><ul class="questRewards">${q.r.map(r => `<li>${itemLinker(q.ri)(r).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</li>`).join('')}</ul></div>` : ''}
