@@ -4451,3 +4451,8 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .questTargets{margin:4px 0 2px;font-size:13.5px;line-height:2}
 .questTargets>span{display:inline-block;font-size:11.5px;padding:0 7px;margin-right:6px;border-radius:6px;background:rgba(127,227,211,.14);color:#7fe3d3;font-weight:700}
 .questTargets i{font-style:normal;opacity:.5;margin:0 2px}
+.mapPlacePin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:5;animation:mapPinDrop .5s ease-out}
+.mapPlacePin b{font-size:30px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+.mapPlacePin span{margin-top:2px;padding:2px 8px;border-radius:6px;background:rgba(20,25,30,.92);border:1px solid #ffd166;color:#ffdf8d;font-weight:800;font-size:14px;white-space:nowrap}
+.mapImageStage .mapPlacePin{transform-origin:50% 100%;scale:min(1,calc(2 / var(--mz,1)))}
+@keyframes mapPinDrop{from{transform:translate(-50%,-160%);opacity:0}to{transform:translate(-50%,-100%);opacity:1}}
