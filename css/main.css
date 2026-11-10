@@ -4468,3 +4468,5 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 /* Quest text: places named in a step are links themselves (hover shows map and coordinates) */
 .questBody button.questMapLink{all:unset!important;cursor:pointer!important;display:inline!important;color:#f5c86b!important;font-weight:700!important;border-bottom:1px dashed currentColor!important}
 .questBody button.questMapLink:hover,.questBody button.questNpc:hover,.questBody button.questMonLink:hover{filter:brightness(1.25)}
+.questClasses{margin-bottom:-4px}
+.questClasses button.active{background:#ffd166!important;color:#1b1b1b!important;border-color:#ffd166!important}

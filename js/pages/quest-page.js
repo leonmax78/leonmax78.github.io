@@ -1,6 +1,9 @@
 // Quest guide built from the game's MISSION.INI (data/quests.json, tools/build_quests.py).
 (function(){
-  const state = { cat: '資料片任務', group: '', query: '', open: new Set() };
+  const state = { cat: '資料片任務', group: '', cls: '劍俠', query: '', open: new Set() };
+  const CLASSES = ['劍俠', '勇士', '術者', '道人', '僧侶'];
+  // 職業任務 is split by class first, then by city
+  const inCat = (x, data) => x.c === state.cat && (state.cat !== '職業任務' || x.cl === state.cls);
   let dataPromise = null;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
@@ -156,7 +159,7 @@
     if(q){
       return data.quests.filter(x => norm(x.n).includes(q) || norm(plain(x.d) + plain(x.s.join(''))).includes(q) || (x.it || []).some(([, n]) => norm(n).includes(q)));
     }
-    return data.quests.filter(x => x.c === state.cat && (!state.group || x.g === state.group));
+    return data.quests.filter(x => inCat(x, data) && (!state.group || x.g === state.group));
   }
 
   async function renderQuestPage(){
@@ -164,16 +167,17 @@
     if(!reader) return;
     let data;
     try{ data = await loadQuests(); }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
-    const groups = (data.groups[state.cat] || []).filter(g => data.quests.some(x => x.c === state.cat && x.g === g));
+    const groups = (data.groups[state.cat] || []).filter(g => data.quests.some(x => inCat(x, data) && x.g === g));
+    const classRow = state.cat === '職業任務' ? `<div class="questGroups questClasses">${CLASSES.map(c => `<button type="button" class="${c === state.cls ? 'active' : ''}" data-quest-cls="${esc(c)}">${esc(c)}<b>${data.quests.filter(x => x.c === state.cat && x.cl === c).length}</b></button>`).join('')}</div>` : '';
     if(state.group && !groups.includes(state.group)) state.group = '';
     if(!state.group && !state.query) state.group = groups[0] || '';
     const list = filtered(data);
     reader.innerHTML = `<section class="questPage">
-      <div class="questHero"><h1>任務查詢</h1><p class="muted">資料取自遊戲任務檔，點 NPC 名稱看對話，點 📍地圖名稱直接在地圖上顯示位置。</p>
+      <div class="questHero"><h1>任務查詢</h1><p class="muted">資料取自遊戲任務檔，點 NPC 名稱看對話，點怪物或地點名稱直接在地圖上顯示位置。</p>
         <input id="questSearch" class="questSearch" type="search" placeholder="搜尋任務、NPC 或任務道具（例如：黑狗血）" value="${esc(state.query)}"></div>
       ${state.query ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個任務 <button type="button" class="ghost" data-quest-clear>清除搜尋</button></p>` : `
       <div class="questTabs" role="tablist">${data.cats.map(c => `<button type="button" role="tab" class="${c === state.cat ? 'active' : ''}" data-quest-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
-      <div class="questGroups">${groups.map(g => `<button type="button" class="${g === state.group ? 'active' : ''}" data-quest-group="${esc(g)}">${esc(g)}<b>${data.quests.filter(x => x.c === state.cat && x.g === g).length}</b></button>`).join('')}</div>`}
+      ${classRow}<div class="questGroups">${groups.map(g => `<button type="button" class="${g === state.group ? 'active' : ''}" data-quest-group="${esc(g)}">${esc(g)}<b>${data.quests.filter(x => inCat(x, data) && x.g === g).length}</b></button>`).join('')}</div>`}
       <div class="questList">${list.slice(0, 200).map(q => `<details class="questCard${q.tag === '主線任務' ? ' questMain' : ''}" data-quest-id="${q.i}"${state.open.has(q.i) ? ' open' : ''}><summary>${questHeadHTML(q)}${state.query ? `<small>${esc(q.c)}・${esc(q.g)}</small>` : ''}</summary>${state.open.has(q.i) ? questBodyHTML(q, data) : ''}</details>`).join('') || '<div class="empty">沒有符合的任務。</div>'}</div>
       ${list.length > 200 ? `<p class="muted">只顯示前 200 筆，請輸入更精確的關鍵字。</p>` : ''}
     </section>`;
@@ -209,6 +213,8 @@
     const t = ev.target;
     const cat = t.closest?.('[data-quest-cat]');
     if(cat){ state.cat = cat.dataset.questCat; state.group = ''; renderQuestPage(); return; }
+    const cls = t.closest?.('[data-quest-cls]');
+    if(cls){ state.cls = cls.dataset.questCls; renderQuestPage(); return; }
     const group = t.closest?.('[data-quest-group]');
     if(group){ state.group = group.dataset.questGroup; renderQuestPage(); return; }
     if(t.closest?.('[data-quest-clear]')){ state.query = ''; renderQuestPage(); return; }
