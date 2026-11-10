@@ -24,6 +24,7 @@
   <div class="drawerBody">
     <div class="navGroup" id="navGroup">
       <button class="navBtn major active" data-view="home">首頁 <span>›</span></button>
+      <button class="navBtn major" data-view="quest">任務查詢 <span>›</span></button>
       <button class="navBtn major" data-view="jiang">降神、經驗、修練、寶石、武魂試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
         <div class="subMenuNote">降神、經驗、修練、寶石、武魂相關功能</div>
@@ -52,7 +53,6 @@
         <button class="navBtn sub" data-item-open="compound">常用配方合成模擬 <span>›</span></button>
         <button class="navBtn sub" data-view="collect">武冠收錄資料 <span>›</span></button>
       </div>
-      <button class="navBtn major" data-view="quest">任務查詢 <span>›</span></button>
       <button class="navBtn major" data-view="autodata">離線內掛物品編輯 <span>›</span></button>
       <button class="navBtn major" data-view="mapMenu">地圖、商店查詢 <span>›</span></button>
       <div class="formBox" id="mapForm">
