@@ -152,6 +152,27 @@
     if(input) input.focus();
     if(state.query) runQuestion(state.query);
   }
+  // Recipes (data/recipe-flows.js) that use any of the given items as a material.
+  async function recipesUsing(items, targets){
+    if(!targets.length) return [];
+    if(!window.SZO_RECIPE_FLOWS && typeof loadScriptGroupOnce === 'function') await loadScriptGroupOnce('data_recipes').catch(() => null);
+    const flows = window.SZO_RECIPE_FLOWS || {};
+    const byId = new Map(items.map(it => [itemId(it), it]));
+    const want = new Map(targets.map(it => [itemId(it), itemName(it)]));
+    const out = [], seen = new Set();
+    for(const [recipeId, list] of Object.entries(flows)){
+      for(const f of list){
+        for(const step of f.steps || []) for(const m of step.materials || []){
+          if(!want.has(String(m.id))) continue;
+          const key = recipeId + '|' + f.id + '|' + m.id;
+          if(seen.has(key)) continue; seen.add(key);
+          out.push({ recipeId, recipeName: f.name || itemName(byId.get(recipeId)) || '配方', material: want.get(String(m.id)), qty: m.qty,
+            outputId: f.output || '', outputName: f.output ? itemName(byId.get(String(f.output))) || ('ID ' + f.output) : '' });
+        }
+      }
+    }
+    return out;
+  }
   function chip(label, attrs = ''){
     return `<button type="button" class="qaChip" ${attrs}>${html(label)}</button>`;
   }
@@ -389,25 +410,30 @@
       </div>`).join('')}</div></div>` : '';
     if(typeof window.ensureQuestPageLoaded === 'function') await window.ensureQuestPageLoaded().catch(() => null);
     const questRows = typeof window.szoQuestRows === 'function' ? await window.szoQuestRows(term, 30).catch(() => []) : [];
-    const questSection = questRows.length ? `<div class="qaAnswer" id="qaSecQuest"><h2>任務</h2><div class="qaList">${questRows.map(r => `<div class="qaRow qaShopRow">
-        <strong>${html(r.label)}</strong>
-        <span>${html(r.sub)}</span>
-        <b></b>
-        <div class="qaRowActions">${chip('看任務', `data-qa-quest="${html(r.id)}"`)}</div>
-      </div>`).join('')}</div></div>` : '';
-    const talkRows = typeof window.szoItemTalkRows === 'function' ? await window.szoItemTalkRows(term, 30).catch(() => []) : [];
-    const talkSection = talkRows.length ? `<div class="qaAnswer" id="qaSecTalk"><h2>兌換・任務對話</h2><div class="qaList">${talkRows.map(r => `<div class="qaRow qaShopRow">
-        <strong>${html(r.label)}</strong>
-        <span>${html(r.sub)}</span>
-        <b></b>
-        <div class="qaRowActions">${chip('看對話', `data-qa-npc-talk="${html(r.key)}"`)}${r.stageName ? mapChip(r.stageName, r.label) : ''}</div>
-      </div>`).join('')}</div></div>` : '';
+    const questSection = questRows.length ? `<div class="qaAnswer" id="qaSecQuest"><h2>任務</h2><div class="qaLines">${questRows.map(r => `<div class="qaLine"><span class="qaLineMain"><button type="button" class="qaLink" data-qa-quest="${html(r.id)}">${html(r.label)}</button></span><span class="qaLineGet">${html(r.sub)}</span></div>`).join('')}</div></div>` : '';
+    const talkRows = typeof window.szoItemTalkRows === 'function' ? await window.szoItemTalkRows(term, 400).catch(() => []) : [];
+    const recipeRows = await recipesUsing(items, itemMatches.slice(0, 4));
+    // 取得途徑 / 用途: grouped by item, then by relation; long lists fold.
+    const npcLine = r => `<div class="qaLine"><span class="qaLineMain"><strong>${html(r.label)}</strong>${r.stageName ? `<small>${html(r.stageName)}</small>` : ''}${r.count > 1 ? `<small>${r.count} 段對話</small>` : ''}</span>${r.gets?.length && r.rel !== 'g' ? `<span class="qaLineGet">換得 ${r.gets.slice(0, 4).map(g => html(g)).join('、')}${r.gets.length > 4 ? '…' : ''}</span>` : ''}<span class="qaLineActs"><button type="button" class="qaMini" data-qa-npc-talk="${html(r.key)}">對話</button>${r.stageName ? `<button type="button" class="qaMini" data-qa-map="${html(r.stageName)}" data-qa-map-query="${html(r.label)}">地圖</button>` : ''}</span></div>`;
+    const recipeLine = r => `<div class="qaLine"><span class="qaLineMain"><button type="button" class="qaLink" data-qa-preview-item="${html(r.recipeId)}">${html(r.recipeName)}</button><small>需要 ${html(r.material)} × ${html(r.qty)}</small></span>${r.outputId ? `<span class="qaLineGet">產物 <button type="button" class="qaLink" data-qa-preview-item="${html(r.outputId)}">${html(r.outputName)}</button></span>` : ''}</div>`;
+    const fold = (rows, line, show = 6) => rows.length <= show + 2 ? rows.map(line).join('') : rows.slice(0, show).map(line).join('') + `<details class="qaMore"><summary>顯示其餘 ${rows.length - show} 筆</summary>${rows.slice(show).map(line).join('')}</details>`;
+    const itemOrder = [...new Set([...itemMatches.map(itemName), ...talkRows.map(r => r.item), ...recipeRows.map(r => r.material)])];
+    const block = (title, rows, line) => rows.length ? `<div class="qaGroup"><h3>${html(title)}<b>${rows.length}</b></h3><div class="qaLines">${fold(rows, line)}</div></div>` : '';
+    const perItem = (build) => itemOrder.map(name => { const body = build(name); return body ? `<div class="qaItemBlock">${itemOrder.length > 1 ? `<h4>${html(name)}</h4>` : ''}${body}</div>` : ''; }).join('');
+    const getHtml = perItem(name => block('NPC 給予', talkRows.filter(r => r.item === name && r.rel === 'g'), npcLine));
+    const useHtml = perItem(name => block('可製作（配方材料）', recipeRows.filter(r => r.material === name), recipeLine)
+      + block('交給 NPC 兌換', talkRows.filter(r => r.item === name && r.rel === 't'), npcLine)
+      + block('對話需要持有', talkRows.filter(r => r.item === name && r.rel === 'h'), npcLine));
+    const getCount = talkRows.filter(r => r.rel === 'g').length;
+    const useCount = talkRows.filter(r => r.rel !== 'g').length + recipeRows.length;
+    const getSection = getHtml ? `<div class="qaAnswer" id="qaSecGet"><h2>取得途徑</h2>${getHtml}</div>` : '';
+    const useSection = useHtml ? `<div class="qaAnswer" id="qaSecUse"><h2>用途</h2>${useHtml}</div>` : '';
     const mapSection = mapMatches.length ? `<div class="qaAnswer" id="qaSecMap"><h2>地圖</h2><div class="qaMapChips">${mapMatches.map(stage => mapChip(stage.stageName, '')).join('')}</div></div>` : '';
-    const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || npcRows.length || talkRows.length || questRows.length || shopHasResult;
+    const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || npcRows.length || getCount || useCount || questRows.length || shopHasResult;
     if(!hasAny) return '<div class="empty">目前找不到符合的資料，可以換更短或更完整的關鍵字。</div>';
-    const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecQuest','任務',questRows.length],['qaSecTalk','兌換・任務對話',talkRows.length],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
+    const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecUse','用途',useCount],['qaSecGet','取得途徑',getCount],['qaSecQuest','任務',questRows.length],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
       .filter(x => x[2]).map(([id, label, n]) => `<button type="button" class="qaNavChip" data-qa-jump="${id}">${label}<b>${n}</b></button>`).join('');
-    return `<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${questSection}${talkSection}${npcSection}${mapSection}`;
+    return `<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${useSection}${getSection}${questSection}${npcSection}${mapSection}`;
   }
   async function runQuestion(query){
     state.query = String(query || '').trim();
@@ -452,6 +478,8 @@
     }
     const jump = ev.target.closest?.('[data-qa-jump]');
     if(jump){ by(jump.dataset.qaJump)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const previewItem = ev.target.closest?.('[data-qa-preview-item]');
+    if(previewItem){ ev.preventDefault(); window.SZO_PREVIEW?.open('item', previewItem.dataset.qaPreviewItem); return; }
     const qaQuest = ev.target.closest?.('[data-qa-quest]');
     if(qaQuest){ ev.preventDefault(); window.SZO_PREVIEW?.open('quest', qaQuest.dataset.qaQuest); return; }
     const npcTalk = ev.target.closest?.('[data-qa-npc-talk]');
