@@ -371,16 +371,22 @@
     const names = Object.keys(items).filter(n => norm(n).includes(q))
       .sort((a,b) => (norm(a) === q ? 0 : 1) - (norm(b) === q ? 0 : 1) || a.length - b.length);
     const ORDER = { t: 0, h: 1, g: 2 }, VERB = { t: '交出', h: '持有', g: '獲得' };
-    const out = [];
+    // One row per item × relation × NPC; several dialogue nodes of the same NPC are merged.
+    const out = [], byKey = new Map();
     for(const name of names.slice(0, 6)){
       const list = items[name].slice().sort((a,b) => ORDER[a[3]] - ORDER[b[3]]);
       for(const [npcId, stageId, msgId, kind, other] of list){
+        if(kind === 'h' && byKey.has(`${name}|t|${npcId}`)) continue;  // already listed as hand-in
+        const k = `${name}|${kind}|${npcId}`;
+        const gets = String(other || '').replace(/…$/, '').split('、').filter(Boolean);
+        if(byKey.has(k)){ const r = byKey.get(k); r.count++; for(const g of gets) if(!r.gets.includes(g)) r.gets.push(g); continue; }
         const [npcName, stageName] = npcs[npcId] || ['NPC', ''];
-        out.push({ kind: 'talk', item: name, verb: VERB[kind], label: npcName, sub: `${VERB[kind]}「${name}」${other ? ' → ' + other : ''}${stageName ? '・' + stageName : ''}`, key: `${stageId}:${npcId}:${msgId}`, stageName, npcId });
-        if(limit && out.length >= limit) return out;
+        const row = { kind: 'talk', item: name, rel: kind, verb: VERB[kind], label: npcName, key: `${stageId}:${npcId}:${msgId}`, stageName, npcId, gets, count: 1 };
+        Object.defineProperty(row, 'sub', { enumerable: true, get(){ const g = this.gets; return `${this.verb}「${this.item}」${g.length ? ' → ' + g.slice(0, 4).join('、') + (g.length > 4 ? '…' : '') : ''}${this.stageName ? '・' + this.stageName : ''}`; } });
+        byKey.set(k, row); out.push(row);
       }
     }
-    return out;
+    return limit ? out.slice(0, limit) : out;
   };
   function rank(list, getName, q, limit, bonus){
     const out = [], seen = new Set();

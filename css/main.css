@@ -4404,3 +4404,30 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .globalSuggest .gsRow small{flex:1 1 12em;min-width:0;white-space:normal;text-align:right;line-height:1.5}
 @media (max-width:600px){.globalSuggest .gsRow small{flex-basis:100%;text-align:left}}
 .questBody button.questItemLink{all:unset!important;cursor:pointer!important;color:#f0c674!important;font-weight:700!important;border-bottom:1px dotted currentColor!important}
+
+/* V697: 搜尋結果 — 用途 / 取得途徑 grouped, one-line rows */
+.qaItemBlock{display:grid;gap:12px}
+.qaItemBlock+.qaItemBlock{border-top:1px dashed rgba(45,212,191,.25);padding-top:12px}
+.qaItemBlock h4{margin:0;font-size:16px;color:#facc15}
+.qaGroup{display:grid;gap:6px}
+.qaGroup h3{margin:0;font-size:14px;color:var(--muted,#9fb3d1);display:flex;align-items:center;gap:8px;font-weight:800}
+.qaGroup h3 b{font-size:11.5px;padding:1px 7px;border-radius:999px;background:rgba(45,212,191,.16);color:#7fe3d3}
+.qaLines{display:grid;border:1px solid rgba(45,212,191,.18);border-radius:12px;overflow:hidden;background:#0b1527}
+.qaLine{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:9px 12px;border-top:1px solid rgba(45,212,191,.1)}
+.qaLines>.qaLine:first-child,.qaMore>.qaLine:first-of-type{border-top:0}
+.qaLineMain{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;flex:1 1 auto;min-width:0}
+.qaLineMain strong{font-size:15.5px}
+.qaLineMain small{color:#8ea6c9;font-size:12.5px}
+.qaLineGet{color:#c6d9f6;font-size:13px;flex:1 1 16em}
+.qaLineActs{display:flex;gap:6px;margin-left:auto}
+button.qaMini{padding:4px 10px!important;min-height:0!important;font-size:12.5px!important;border-radius:8px!important;border:1px solid rgba(45,212,191,.35)!important;background:transparent!important;color:#7fe3d3!important;width:auto!important}
+button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bottom:1px dashed rgba(127,227,211,.6)}
+.qaLineGet button.qaLink{font-weight:700;color:#facc15;border-bottom-color:rgba(250,204,21,.5)}
+.qaMore{border-top:1px solid rgba(45,212,191,.1)}
+.qaMore>summary{cursor:pointer;padding:8px 12px;color:#7fe3d3;font-size:13px;font-weight:700}
+.qaMore[open]>summary{border-bottom:1px solid rgba(45,212,191,.1)}
+@media (max-width:600px){.qaAnswer h2{font-size:20px}.qaLine{padding:8px 10px}}
+.itemUsedIn>summary{cursor:pointer;list-style:none}
+.itemUsedIn>summary h2{display:inline}
+.itemUsedIn>summary::before{content:'▸ ';opacity:.6}
+.itemUsedIn[open]>summary::before{content:'▾ '}
