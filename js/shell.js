@@ -336,7 +336,8 @@
 
 // V680: header search shows grouped suggestions (items / monsters / maps / NPCs) while typing.
 (function(){
-  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4 };
+  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4, talk: 4 };
+  let talkIndex = null;
   let mapIndex = null, timer = 0, active = -1, rows = [], composing = false, seq = 0;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
@@ -356,6 +357,30 @@
     mapIndex = fetch('data/stage_map_index.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
     return mapIndex;
   }
+  async function loadTalkIndex(){
+    if(talkIndex) return talkIndex;
+    const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+    talkIndex = fetch('data/npc_item_talk.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    return talkIndex;
+  }
+  // 「交出 / 持有 / 獲得」 rows for an item keyword, best matches first.
+  window.szoItemTalkRows = async function(raw, limit){
+    const q = norm(raw); if(q.length < 2) return [];
+    const t = await loadTalkIndex(); const items = t.items || {}, npcs = t.npcs || {};
+    const names = Object.keys(items).filter(n => norm(n).includes(q))
+      .sort((a,b) => (norm(a) === q ? 0 : 1) - (norm(b) === q ? 0 : 1) || a.length - b.length);
+    const ORDER = { t: 0, h: 1, g: 2 }, VERB = { t: '交出', h: '持有', g: '獲得' };
+    const out = [];
+    for(const name of names.slice(0, 6)){
+      const list = items[name].slice().sort((a,b) => ORDER[a[3]] - ORDER[b[3]]);
+      for(const [npcId, stageId, msgId, kind, other] of list){
+        const [npcName, stageName] = npcs[npcId] || ['NPC', ''];
+        out.push({ kind: 'talk', item: name, verb: VERB[kind], label: npcName, sub: `${VERB[kind]}「${name}」${other ? ' → ' + other : ''}${stageName ? '・' + stageName : ''}`, key: `${stageId}:${npcId}:${msgId}`, stageName, npcId });
+        if(limit && out.length >= limit) return out;
+      }
+    }
+    return out;
+  };
   function rank(list, getName, q, limit, bonus){
     const out = [], seen = new Set();
     for(let i = 0; i < list.length; i++){
@@ -387,9 +412,10 @@
       const more = npcCount.get(r.name) > 1 ? ` 等 ${npcCount.get(r.name)} 處` : '';
       out.push({ kind: 'npc', label: r.name, sub: r.row.stageName + more + (r.row.shop ? '・商店' : ''), id: r.row.npcId, stageId: r.row.stageId, stageName: r.row.stageName, shop: r.row.shop });
     }
+    try{ out.push(...await window.szoItemTalkRows(raw, LIMIT.talk)); }catch(e){}
     return out;
   }
-  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC' };
+  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC', talk: '兌換・任務對話' };
   function render(raw){
     const el = box(); if(!el) return;
     if(!rows.length){ el.hidden = true; el.innerHTML = ''; return; }
@@ -430,6 +456,7 @@
       if(r.kind === 'item'){ if(P) return P.open('item', r.id); if(window.ensureItemPageLoaded) await window.ensureItemPageLoaded(); if(window.showItem) window.showItem(r.id); }
       else if(r.kind === 'monster'){ if(P) return P.open('monster', r.id); if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
       else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, ''); }
+      else if(r.kind === 'talk'){ if(P) return P.open('npc', r.key); }
       else if(r.kind === 'npc'){
         if(P) return P.open(r.shop ? 'npcshop' : 'npc', r.stageId + ':' + r.id);
         if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.stageName, r.label, r.id);

@@ -109,7 +109,7 @@
    }
    actions.innerHTML=`<button type="button" data-preview-full="${kind}" data-id="${esc(id)}">前往完整${kind==='item'?'道具':kind==='reverse'?'來源':'怪物'}頁</button>${kind==='item'?`<button type="button" data-rev="${esc(id)}">查詢取得來源</button>`:kind==='monster'?`<button type="button" data-preview-map="${esc(id)}" data-map-name="${esc(monsterName)}">查看地圖位置</button>`:''}`;
    if(kind==='npcshop'){const [sid,nid]=String(id).split(':');actions.innerHTML=`<button type="button" data-preview-open="npc" data-id="${esc(id)}">NPC 對話</button><button type="button" data-preview-npcshop-full="${esc(sid)}:${esc(nid)}">前往商店頁</button>`;}
-   else if(kind==='npc'){actions.innerHTML=((await window.npcPreviewHasShop(id))?`<button type="button" data-preview-open="npcshop" data-id="${esc(id)}">看商店</button>`:'')+`<button type="button" data-preview-npc-map="${esc(id)}">地圖位置</button>`;}
+   else if(kind==='npc'){actions.innerHTML=((await window.npcPreviewHasShop(id))?`<button type="button" data-preview-open="npcshop" data-id="${esc(id)}">看商店</button>`:'')+(String(id).startsWith(':')?'':`<button type="button" data-preview-npc-map="${esc(id)}">地圖位置</button>`);}
    else if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
