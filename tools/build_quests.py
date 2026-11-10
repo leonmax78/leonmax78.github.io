@@ -136,7 +136,7 @@ def main(ini):
                 for x in (t.get('a') or []):
                     if x.startswith(('完成任務「', '接下任務「')) or (x.startswith('任務「') and x.endswith('結束')):
                         q = Q.search(x).group(1); refs.add(q)
-                        if not x.startswith('接下任務'): done.add(q)
+                        if x.startswith('完成任務'): done.add(q)   # step 15 = quest finished; 任務結束 alone is a reset
             if not refs: continue
             for t in trs:
                 conds = t.get('c') or []
@@ -160,6 +160,7 @@ def main(ini):
                     rw = [x for x in (t.get('a') or []) if x.startswith(REWARD)]
                     if rw:
                         rewards_of.setdefault(q, {}).setdefault((mid_, srv or ''), []).append((who, rw))
+    ALTERNATIVES = set()
     def exp_of(parts):
         tot = 0
         for _, rw in parts:
@@ -183,11 +184,10 @@ def main(ini):
             key = tuple(sorted((w, tuple(v)) for w, v in merged.items()))
             if any(v[1] == key for v in variants): continue
             variants.append([srv, key])
-        # Two untagged variants that differ: the larger one is 月服, the smaller 免服.
-        untagged = [v for v in variants if not v[0]]
-        if len(untagged) == 2 and not any(v[0] for v in variants):
-            untagged.sort(key=lambda v: -exp_of(v[1]))
-            untagged[0][0], untagged[1][0] = '月服', '免服'
+        # Untagged variants are different outcomes (e.g. which goods you sold), not 月服/免服:
+        # only an explicit 免服 branch in the dialogue marks a server.
+        if sum(1 for v in variants if not v[0]) >= 2:
+            ALTERNATIVES.add(q)
         out = []
         order = {'月服': 0, '': 1, '免服': 2}
         for srv, key in sorted(variants, key=lambda v: order.get(v[0], 1)):
@@ -299,6 +299,7 @@ def main(ini):
             row['r'] = rewards[:12]
             ri = sorted({x for r in row['r'] for x in re.findall(r'「(.+?)」', r) if item_id.get(x)})
             if ri: row['ri'] = [[item_id[x], x] for x in ri]
+        if name in ALTERNATIVES: row['rx'] = 1
         if handins: row['ho'] = [[item_id.get(n, ''), n, qty, who] for n, qty, who in handins][:30]
         if found: row['it'] = [[item_id.get(n, ''), n] for n in sorted(found)]
         if ov.get('note'): row['tag'] = ov['note']
@@ -336,6 +337,8 @@ def main(ini):
     with open(os.path.join(ROOT, 'data/quests.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
     from collections import Counter
+    with open(os.path.join(ROOT, 'tools/data/quest_reward_alternatives.txt'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(sorted(r['n'] for r in out if r['n'] in ALTERNATIVES)) + '\n')
     print(len(out), 'quests', Counter(r['c'] for r in out), 'with rewards', sum('r' in r for r in out), 'with items', sum('it' in r for r in out))
 
 
