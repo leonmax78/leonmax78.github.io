@@ -4461,3 +4461,4 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .questSpot{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 6px}
 .questSpotXY{color:#facc15;font-size:13px}
 .questSpot small{color:#9fb3d1;font-size:12.5px}
+.questBody button.questMonLink{all:unset!important;cursor:pointer!important;color:#ff9b9b!important;font-weight:700!important;border-bottom:1px dashed currentColor!important}

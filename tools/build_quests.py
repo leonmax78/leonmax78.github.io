@@ -78,7 +78,11 @@ def main(ini):
     stage_name = {s['stageId']: s['stageName'] for s in smap['stages']}
     npc_pos = {}   # (stage, npc) -> (x, y); npc -> [(stage, x, y)]
     npc_any, npc_name = {}, {}
+    mon_stages = {}   # monster name -> stage ids where it is placed
     for s in smap['stages']:
+        for m in s.get('monsters') or []:
+            if m.get('name') and s['stageId'] not in mon_stages.setdefault(m['name'], []):
+                mon_stages[m['name']].append(s['stageId'])
         for n in s.get('npcs') or []:
             npc_name.setdefault(n['id'], n.get('name', ''))
             xy = (n.get('coordX'), n.get('coordY'))
@@ -260,6 +264,7 @@ def main(ini):
     item_id = {}
     for r in item_rows:
         item_id.setdefault(r.get('Name'), r.get('ID'))
+    mon_names = sorted((n for n in mon_stages if len(n) >= 2), key=len, reverse=True)
     long_names = sorted((n for n in item_names if n and len(n) >= 3), key=len, reverse=True)
 
     ov_path = os.path.join(ROOT, 'tools/data/quest_overrides.json')
@@ -363,6 +368,23 @@ def main(ini):
                 targets.append([si, refs_])
             prev_refs = refs_ or prev_refs
         if targets: row['tg'] = targets
+        # Monsters named in the text → which map to look on: a map named in the same step,
+        # else one the quest visits, else the first map that has it.
+        quest_stages = {int(x[1]) for x in LINK.finditer(m.get('Describe', '') + ''.join(steps))} | ({stage} if stage else set())
+        mons = {}
+        for raw_step in [m.get('Describe', '')] + steps:
+            plain_step = LINK.sub(lambda x: x[5], raw_step)
+            for mn in mon_names:
+                if mn in mons or mn not in plain_step: continue
+                # Two-character names (青龍, 凡人…) are common words: only in a fighting step.
+                if len(mn) == 2 and not re.search(r'打|殺|擊|討伐|消滅|清除|收拾|斬|除|捕', plain_step): continue
+                cands = mon_stages[mn]
+                named = [c for c in cands if stage_name.get(c) and stage_name[c] in plain_step]
+                visited = [c for c in cands if c in quest_stages]
+                mons[mn] = (named or visited or cands)[0]
+        # Drop names inside a longer matched name (蛇女 inside 合成蛇女).
+        mons = {k: v for k, v in mons.items() if not any(k != o and k in o for o in mons)}
+        if mons: row['mo'] = [[k, v] for k, v in mons.items()]
         # Map trigger spots (search points, gates, flags…) per step, in-game coordinates.
         spots, seen_spot = [], set()
         for t in sorted(trigger_spots.get(name, []), key=lambda t: t['step']):

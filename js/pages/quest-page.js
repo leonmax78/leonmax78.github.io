@@ -38,6 +38,9 @@
   }
   function itemLinker(list, notes){
     const items = (list || []).filter(([id, n]) => id && n).sort((a,b) => b[1].length - a[1].length);
+    const monsters = new Map((notes?.mons || []).map(([n, st]) => [n, st]));
+    for(const n of monsters.keys()) if(!items.some(([, x]) => x === n)) items.push(['m', n]);
+    items.sort((a,b) => b[1].length - a[1].length);
     const qtyHTML = t => `<small class="questQty">${esc(t)}</small>`;
     const groupNote = s => {
       let html = esc(s).replace(/\n/g, '<br>');
@@ -54,6 +57,11 @@
     return s => {
       let out = '', last = 0;
       String(s).replace(re, (m, at) => {
+        if(ids.get(m) === 'm'){
+          const st = monsters.get(m), sn = notes.stages?.[st] || '';
+          out += groupNote(s.slice(last, at)) + `<button type="button" class="questMonLink" title="在地圖上看位置" data-quest-map="${esc(sn)}" data-quest-map-name="${esc(m)}" data-quest-map-npc="">${esc(m)}</button>${sn ? `<button type="button" class="questCoord" data-quest-map="${esc(sn)}" data-quest-map-name="${esc(m)}" data-quest-map-npc="">${esc(sn)}</button>` : ''}`;
+          last = at + m.length; return m;
+        }
         out += groupNote(s.slice(last, at)) + `<button type="button" class="questItemLink" data-quest-item="${esc(ids.get(m))}">${esc(m)}</button>`;
         const qty = notes?.byName.get(m);
         // Only when the text does not already give the amount right after the name.
@@ -67,7 +75,7 @@
   function richText(text, data, q){
     let out = '', last = 0;
     text = String(text || '');
-    const link = itemLinker([...(q?.it || []), ...(q?.ri || []), ...(q?.ho || []).map(([id, n]) => [id, n])], qtyNotes(q));
+    const link = itemLinker([...(q?.it || []), ...(q?.ri || []), ...(q?.ho || []).map(([id, n]) => [id, n])], Object.assign(qtyNotes(q), { mons: q?.mo || [], stages: data.stages }));
     text.replace(LINK, (m, st, id, x, y, name, at) => {
       out += link(text.slice(last, at));
       last = at + m.length;
