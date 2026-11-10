@@ -31,6 +31,19 @@ EQUIP = {'SWORD': '劍', 'BLADE': '刀', 'SPEAR': '槍', 'AXE': '斧', 'HAMMER':
          'HIDDEN_WEAPON': '暗器', 'SHIELD': '盾', 'WHISK': '拂塵'}
 TIERS = ['基本', '三轉', '進階', '天照', '覺醒', '密傳', '奧義', '聖傳', '仙傳', '聯動', '通用']
 SECT = {'劍宗': '劍俠', '武宗': '勇士', '術宗': '術者', '道宗': '道人', '禪宗': '僧侶'}
+UNION = {'勇士': 26, '劍俠': 27, '術者': 28, '道人': 29, '僧侶': 30}   # every skill of the class
+TEACH = {
+    '勇士': [(1, '山林地訓練營', '總教頭', '基本'), (101, '京城', '總教頭', '基本'), (151, '祁州城', '總教頭', '基本'),
+             (201, '玄州城', '總教頭', '基本'), (152, '祁州城', '勇士傳功長老', '三轉')],
+    '劍俠': [(2, '葬劍崖護法院', '傳功長者', '基本'), (111, '京城', '傳功長者', '基本'), (161, '祁州城', '傳功長者', '基本'),
+             (211, '玄州城', '傳功長者', '基本'), (163, '祁州城', '劍俠傳功長老', '三轉')],
+    '術者': [(3, '黑水潭地龍穴', '總護法', '基本'), (121, '京城', '總護法', '基本'), (171, '祁州城', '總護法', '基本'),
+             (221, '玄州城', '總護法', '基本'), (172, '祁州城', '術者傳功長老', '三轉')],
+    '道人': [(4, '紫霞山養心觀', '丹靈子', '基本'), (131, '京城', '丹雲子', '基本'), (181, '祁州城', '丹霞子', '基本'),
+             (231, '玄州城', '丹華子', '基本'), (182, '祁州城', '道人傳功長老', '三轉')],
+    '僧侶': [(5, '踏雲頂梵天寺', '智光戒師', '基本'), (141, '京城', '覺塵戒師', '基本'), (191, '祁州城', '靜虛戒師', '基本'),
+             (241, '玄州城', '苦定戒師', '基本'), (192, '祁州城', '僧侶傳功長老', '三轉')],
+}
 TRAINER = {'劍俠': ('京城／祁州城／玄州城「傳功長者」', '祁州城「劍俠傳功長老」'),
            '勇士': ('京城／祁州城／玄州城「總教頭」', '祁州城「勇士傳功長老」'),
            '術者': ('京城／祁州城／玄州城「總護法」', '祁州城「術者傳功長老」'),
@@ -82,6 +95,7 @@ def main(game, out):
     S = f'{cur}/SETTING'
     magic = {int(g(d, 'ID')): d for d in blocks(f'{S}/MAGIC.INI', 'MAGIC') if g(d, 'ID').isdigit()}
     items = {int(g(d, 'ID')): d for d in blocks(f'{S}/ITEM.INI', 'ITEM') if g(d, 'ID').isdigit()}
+    missions = {int(g(d, 'ID')): g(d, 'Name') for d in blocks(f'{S}/MISSION.INI', 'MISSION') if g(d, 'ID').isdigit()}
     msgs = {}
     for p in sorted(glob.glob(f'{S}/MSG[0-9]*.INI'), key=lambda p: int(re.search(r'MSG(\d+)', p).group(1))):
         for d in blocks(p, 'MSG'):
@@ -142,7 +156,7 @@ def main(game, out):
     def jumps_of(acts):
         return {int(ps[0]) for c, ps in acts if c == 12 and ps and ps[0].isdigit()}
 
-    def requirement_paths(node, learn_index, depth=5):
+    def requirement_paths(node, learn_index, depth=10):
         """Requirements on each dialogue path that ends in the learning trigger."""
         trs = triggers(node)
         base = must(trs[learn_index][0], True)
@@ -153,7 +167,7 @@ def main(game, out):
         def up(m, req, dep, seen):
             pars = [q for q in parents.get(m, ()) if q not in seen]
             if dep >= depth or not pars:
-                results.append(req); return
+                results.append((req, not parents.get(m))); return   # a loop back is not a start
             for q in pars:
                 trs = triggers(q)
                 via = next((i for i, (cs, acts) in enumerate(trs) if m in jumps_of(acts)), None)
@@ -166,9 +180,12 @@ def main(game, out):
                     for cs, acts in trs:
                         if cs and jumps_of(acts): r += must(cs, False)
                 up(q, r, dep + 1, seen | {q})
-                if len(results) > 60: return
+                if len(results) > 300: return
         up(node, base, 0, {node})
-        return results
+        # paths that reach the start of a conversation carry all its checks; cut-off ones may miss
+        # the class check, so they only count when nothing complete was found
+        done = [r for r, ok in results if ok]
+        return done or [r for r, _ in results]
 
     def ancestor_texts(node, depth=4):
         out, frontier, seen = [], [node], {node}
@@ -205,20 +222,25 @@ def main(game, out):
     def row(mid):
         d = magic.get(mid, {})
         r = {'id': mid, 'name': g(d, 'Name'), 'classes': set(), 'level': None, 'how': [], 'npcs': set(),
-             'books': set(), 'tier': '', 'ip': '', 'awake': bool(d.get('AvailOnlyDeityAwake')), 'texts': [], 'req': [], 'rank': None, 'trainer': '', 'note': ''}
+             'books': set(), 'tier': '', 'ip': '', 'awake': bool(d.get('AvailOnlyDeityAwake')), 'texts': [], 'req': [], 'rank': None, 'trainer': '', 'note': '', 'places': []}
         return r
 
-    # 1) LEARN tables
+    # 1) LEARN tables: each class teacher opens one table (EVENT_ACT 5, 4th param = LEARN id)
     learn = {int(g(d, 'ID')): [[int(x) for x in re.findall(r'\d+', v)] for v in d['learn']] for d in blocks(f'{S}/LEARN.INI', 'LEARN')}
-    for tid, cls in LEARN_CLASS.items():
-        third = {m for m, *_ in learn[[k for k, v in THIRD.items() if v == cls][0]]}
-        for mid, lv, price in learn[tid]:
-            r = skills.setdefault((mid, cls), row(mid))
-            r['classes'].add(cls); r['level'] = lv if r['level'] is None else min(r['level'], lv)
-            r['tier'] = '三轉' if mid in third else '基本'
-            r['how'].append('職業導師')
-            r['trainer'] = TRAINER[cls][1] if r['tier'] == '三轉' else TRAINER[cls][0]
-
+    npc_at = collections.defaultdict(list)
+    for st in stage_maps['stages']:
+        for n in st.get('npcs') or []:
+            npc_at[(st['stageName'], n['name'])].append(f"({n.get('coordX')},{n.get('coordY')})")
+    for cls, tables in TEACH.items():
+        for tid, stage, npc_nm, tier in tables:
+            for mid, lv, price in learn.get(tid, []):
+                r = skills.setdefault((mid, cls), row(mid))
+                r['classes'].add(cls); r['level'] = lv if r['level'] is None else min(r['level'], lv)
+                if not r['tier'] or tier == '三轉': r['tier'] = tier
+                xy = npc_at.get((stage, npc_nm), [''])[0]
+                r['places'].append(f"{stage}「{npc_nm}」{xy} Lv{lv}")
+                r['how'].append('職業導師')
+    taught = {(m, c) for (m, c) in skills}
     # 2) dialogue teaching
     for mid_node, d in msgs.items():
         for k in d:
@@ -264,8 +286,14 @@ def main(game, out):
                     if level: r['level'] = level if r['level'] is None else min(r['level'], level)
                     if rank: r['rank'] = rank
                     took_txt = '、'.join(f"{g(items.get(i, {}), 'Name') or i}×{n}" for i, n in took)
+                    # a skill handed out when a quest is completed: name that quest
+                    qs = [missions.get(int(ps[0])) for c, ps in acts
+                          if (c == 13 and len(ps) > 1 and ps[1] == '15') or c == 38 if ps and ps[0].isdigit()]
+                    qs = [q for q in qs if q and not q.startswith('[')]
+                    if qs: r['quest'] = qs[0]
                     r['req'].append(f"{'/'.join(c for c in CLS_ORDER if c in classes) or '?'}"
-                                    + (f" Lv{level}" if level else '') + (f" 交{took_txt}" if took_txt else ''))
+                                    + (f" Lv{level}" if level else '') + (f" 交{took_txt}" if took_txt else '')
+                                    + (f"（完成任務「{qs[0]}」）" if qs else ''))
                     r['books'] |= books
                     r['how'].append('對話' + ('' if not books else '：' + '、'.join(sorted(books))))
                     nodes = {mid_node} | parents.get(mid_node, set())
@@ -301,7 +329,11 @@ def main(game, out):
         if not tier:
             if r['classes'] and (r['classes'] <= base_classes.get(name, set()) or (len(r['classes']) == 5 and name in base_classes)):
                 continue        # another way to learn a class skill already listed from the teacher table
-            tier = '三轉' if r['classes'] and len(r['classes']) < 5 else '通用'
+            union = set().union(*[{m for m, *_ in learn.get(t, [])} for c, t in UNION.items() if c in r['classes']]) if r['classes'] else set()
+            if r['classes'] and len(r['classes']) < 5 and mid in union:
+                tier = '基本'; r['note'] = '要解任務取得（職業導師不教）'
+            else:
+                tier = '三轉' if r['classes'] and len(r['classes']) < 5 else '通用'
         # sect named on the book decides the home class (劍宗 → 劍俠 …); others learn it cross-class
         home = [c for s_, c in SECT.items() if s_ in b]
         classes = [c for c in CLS_ORDER if c in r['classes']]
@@ -322,7 +354,7 @@ def main(game, out):
             'awake': r['awake'], 'help': g(d, 'Help').replace('\\n', ' '),
             'how': sorted(set(r['how'])), 'text': r['texts'][0] if r['texts'] else '',
             'note': r['note'],
-            'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'],
+            'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'], 'places': r['places'],
         })
     named = sorted((r['id'], r['ip']) for r in rows if r['ip'] and r['ip'] != '聯動')
     for r in rows:
