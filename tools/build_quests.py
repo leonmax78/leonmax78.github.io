@@ -166,7 +166,7 @@ def main(ini):
         elif sname in NEWBIE_MAPS:
             cat, sub = '新手任務', NEWBIE_MAPS[sname]
         elif cls is not None:
-            cat, sub = '職業任務', CLASS[cls]
+            cat, sub = '職業任務', sname or CLASS[cls]  # grouped by start map; the class shows as a tag
         else:
             cat, sub = '一般任務', sname or '活動與其他'
         ov = overrides.get(str(mid), {})
@@ -222,22 +222,23 @@ def main(ini):
         '資料片任務': ver_groups,
         '聯動任務': tax.get('series', []),
         '轉職任務': ['二轉', '三轉', '四轉', '五轉'],
-        '職業任務': list(CLASS.values()),
         '新手任務': ['義勇軍校場', '勇士', '劍俠', '術者', '道人', '僧侶'],
     }
-    # 一般任務: by map order (stage id); 活動與其他 last.
-    first_stage = {}
-    for r in out:
-        if r['c'] == '一般任務':
-            first_stage[r['g']] = min(first_stage.get(r['g'], 99999), r['m'] or 99999)
-    groups['一般任務'] = sorted(first_stage, key=lambda g: (g == '活動與其他', first_stage[g], g))
+    # 一般任務 / 職業任務: by map order (stage id); 活動與其他 last.
+    for c in ('一般任務', '職業任務'):
+        first_stage = {}
+        for r in out:
+            if r['c'] == c:
+                first_stage[r['g']] = min(first_stage.get(r['g'], 99999), r['m'] or 99999)
+        groups[c] = sorted(first_stage, key=lambda g: (g == '活動與其他', first_stage[g], g))
     for c in cats:  # any group a manual override introduced
         for g in sorted({r['g'] for r in out if r['c'] == c} - set(groups[c])):
             groups[c].append(g)
     gpos = {(c, g): i for c in cats for i, g in enumerate(groups[c])}
     tag_rank = {'主線任務': 0, '支線任務': 1}
     out.sort(key=lambda r: (cats.index(r['c']) if r['c'] in cats else 99, gpos.get((r['c'], r['g']), 999),
-                            tag_rank.get(r.get('tag'), 2), (r['m'] or 99999) if r['c'] == '聯動任務' else 0, r['i']))
+                            tag_rank.get(r.get('tag'), 2), (r['m'] or 99999) if r['c'] == '聯動任務' else 0,
+                            list(CLASS.values()).index(r['cl']) if r['c'] == '職業任務' and r.get('cl') in CLASS.values() else 0, r['i']))
     data = {'cats': cats, 'groups': groups, 'stages': {str(k): v for k, v in stage_name.items()}, 'quests': out}
     with open(os.path.join(ROOT, 'data/quests.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
