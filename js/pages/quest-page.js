@@ -82,6 +82,10 @@
       }else{
         // A place (no NPC): the game's own coordinates from the quest file, as shown in game.
         out += `<b class="questPlace">${esc(name)}</b>${Number(x) || Number(y) ? `<small class="questGameXY" title="遊戲內座標">(${esc(x)}, ${esc(y)})</small>` : ''}`;
+        if(stageName && (Number(x) || Number(y))){
+          out += `<button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(stageName)}</button>`;
+          return m;
+        }
       }
       if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}</button>`;
       return m;
@@ -215,7 +219,8 @@
     if(map){
       ev.preventDefault();
       if(typeof window.ensureMapPageLoaded === 'function') await window.ensureMapPageLoaded();
-      await window.openMapSearchLocation?.(map.dataset.questMap, map.dataset.questMapName, map.dataset.questMapNpc || undefined);
+      const point = map.dataset.questMapX ? { x: map.dataset.questMapX, y: map.dataset.questMapY } : undefined;
+      await window.openMapSearchLocation?.(map.dataset.questMap, map.dataset.questMapName, map.dataset.questMapNpc || undefined, point);
     }
   });
 })();

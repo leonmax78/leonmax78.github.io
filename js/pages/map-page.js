@@ -700,7 +700,17 @@
       return `<button type="button" class="mapDot ${cls}${src ? ' withImage' : ''}${marker.shop ? ' shopNpcDot' : ''}" style="left:${left}%;top:${top}%;" title="${htmlEscape(markerLabel(marker))}"${shopAttrs}${monsterAttrs}${npcAttrs}>
         ${inner}
       </button>`;
-    }).join('');
+    }).join('') + placePin(stage);
+  }
+  // A place named by a quest (e.g. 鬼城 城隍廟 (85, 125)): in-game tile coordinates →
+  // map pixels: x = gx·32, y = mapHeight − gy·32 (display coords are raw / 8).
+  function placePin(stage){
+    const t = state.pointTarget;
+    if(!t || String(t.stageId) !== String(stage.stageId)) return '';
+    const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
+    const left = Math.max(0, Math.min(100, t.gx * 4 / w * 100));
+    const top = Math.max(0, Math.min(100, (h - t.gy * 4) / h * 100));
+    return `<span class="mapPlacePin" style="left:${left}%;top:${top}%;" title="${htmlEscape(t.name)} (${t.gx}, ${t.gy})"><b>📍</b><span>${htmlEscape(t.name)}</span></span>`;
   }
 
   function updateMapSelectionDom(stage){
@@ -1575,7 +1585,7 @@
     await renderStageMapPage();
   };
 
-  window.openMapSearchLocation = async function(mapName, queryName, npcId){
+  window.openMapSearchLocation = async function(mapName, queryName, npcId, point){
     enterFloatingMap();
     const ticket=++floatingRequest;
     await ensureMapDataLoaded();
@@ -1583,6 +1593,7 @@
     const targetMap = String(mapName || '').trim();
     const targetQuery = String(queryName || '').trim();
     state.npcTarget=npcId?{id:String(npcId),name:targetQuery}:null;
+    state.pointTarget = null;
     state.monsters.clear();
     state.npcs.clear();
     const norm = value => String(value || '').replace(/\s+/g, '').trim();
@@ -1596,6 +1607,13 @@
       || stages.find(s => `${String(s.stageId).padStart(3, '0')} ${s.stageName || ''}`.includes(targetMap))
       || stageByQuery;
     if(stage) state.stageId = Number(stage.stageId);
+    if(point && stage && (Number(point.x) || Number(point.y))){
+      state.pointTarget = { stageId: stage.stageId, gx: Number(point.x), gy: Number(point.y), name: targetQuery };
+      state.query = targetMap;   // nothing on the map is named after the place; show the whole map
+      const current = stage;
+      await renderStageMapPage();
+      return;
+    }
     state.query = targetQuery || targetMap;
     const current = stage || currentStage();
     if(current) autoCheckMatches(current);
