@@ -4431,3 +4431,13 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .itemUsedIn>summary h2{display:inline}
 .itemUsedIn>summary::before{content:'▸ ';opacity:.6}
 .itemUsedIn[open]>summary::before{content:'▾ '}
+.questQty{margin:0 3px;font-size:12px;color:#facc15;font-weight:700;white-space:nowrap}
+.questSrv{font-style:normal;font-size:11px;padding:0 6px;margin:0 3px;border-radius:999px;border:1px solid currentColor;color:#7fe3d3}
+.questSrv[data-srv="免服"]{color:#f0a5c8}
+.questHandins{margin:0;padding-left:1.2em;display:grid;gap:3px}
+.questHandins span{color:#facc15;font-weight:700}
+.questHandins small{opacity:.7}
+.npcTalkServer{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-right:auto}
+.npcTalkServer button{all:unset;cursor:pointer;padding:5px 12px;font-size:13px;font-weight:700;opacity:.65}
+.npcTalkServer button.active{background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--accent);opacity:1}
+.npcTalkServer.differs{border-color:color-mix(in srgb,#facc15 60%,var(--line))}

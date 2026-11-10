@@ -1450,15 +1450,29 @@
     let id = path[path.length - 1];
     let m = data.msgs[String(id)];
     // a designer branch with one way forward is skipped
-    while(m && m.x && (m.n || []).length === 1 && !m.o){ id = m.n[0]; m = data.msgs[String(id)]; }
+    // 月服 / 免服 versions of a line: follow the branch for the chosen server.
+    const srv = shopServer() === 'free' ? '免服' : '月服';
+    let hasServerBranch = false;
+    for(let hop = 0; m && hop < 6; hop++){
+      while(m && m.x && (m.n || []).length === 1 && !m.o){ id = m.n[0]; m = data.msgs[String(id)]; }
+      const sb = (m?.tr || []).filter(t => t.j && t.c?.length === 1 && (t.c[0] === '免服' || t.c[0] === '月服'));
+      if(!sb.length) break;
+      hasServerBranch = true;
+      const hit = sb.find(t => t.c[0] === srv);
+      if(!hit) break;
+      id = hit.j; m = data.msgs[String(id)];
+    }
     if(!m) return '<p>這個 NPC 沒有對話資料。</p>';
-    const nav = `<div class="npcTalkNav">${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-back>← 上一句</button>' : ''}${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-restart>回到開頭</button>' : ''}</div>`;
+    const serverSwitch = `<span class="npcTalkServer${hasServerBranch ? ' differs' : ''}" title="${hasServerBranch ? '這段對話月服、免服內容不同' : '切換月服／免服版本'}"><button type="button" class="${srv === '月服' ? 'active' : ''}" data-npc-talk-server="month">月服</button><button type="button" class="${srv === '免服' ? 'active' : ''}" data-npc-talk-server="free">免服</button></span>`;
+    const nav = `<div class="npcTalkNav">${serverSwitch}${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-back>← 上一句</button>' : ''}${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-restart>回到開頭</button>' : ''}</div>`;
     const condChips = list => (list || []).map(c => `<span class="npcTalkCond">${htmlEscape(c)}</span>`).join('');
-    const effects = (m.tr || []).filter(t => t.a && !t.j);
+    const otherSrv = srv === '月服' ? '免服' : '月服';
+    const effects = (m.tr || []).filter(t => t.a && !t.j && !(t.c || []).includes(otherSrv));
     const effectBox = effects.length ? `<div class="npcTalkEffects"><b>這段對話會：</b>${effects.map(t => `<div>${condChips(t.c)}${t.a.map(a => `<span class="npcTalkAct${/^交出|^金錢 -/.test(a) ? ' lose' : ''}">${htmlEscape(a)}</span>`).join('')}</div>`).join('')}</div>` : '';
     const branchButtons = () => {
       const seen = new Set();
-      const rows = (m.tr || []).filter(t => t.j).map(t => { seen.add(t.j); return t; });
+      const rows = (m.tr || []).filter(t => t.j && !(t.c?.length === 1 && (t.c[0] === '免服' || t.c[0] === '月服'))).map(t => { seen.add(t.j); return t; });
+      for(const t of m.tr || []) if(t.j && t.c?.length === 1 && (t.c[0] === '免服' || t.c[0] === '月服')) seen.add(t.j);
       for(const n of m.n || []) if(!seen.has(n)){ seen.add(n); rows.push({ j: n, c: rows.length ? ['其他情況'] : [] }); }
       return `<div class="npcTalkChoices">${rows.map(t => `<button type="button" data-npc-talk-go="${t.j}">${t.c?.length ? `<span class="npcTalkConds">${condChips(t.c)}</span>` : ''}${(t.a || []).length ? `<span class="npcTalkConds">${t.a.map(a => `<span class="npcTalkAct">${htmlEscape(a)}</span>`).join('')}</span>` : ''}<span>${htmlEscape(talkLine(data, t.j).slice(0, 60) || '（無對話）')}</span></button>`).join('')}</div>`;
     };
@@ -1515,6 +1529,7 @@
     if(go){ ev.preventDefault(); npcTalkState.path.push(Number(go.dataset.npcTalkGo)); }
     else if(ev.target.closest('[data-npc-talk-back]')){ ev.preventDefault(); if(npcTalkState.path.length > 1) npcTalkState.path.pop(); }
     else if(ev.target.closest('[data-npc-talk-restart]')){ ev.preventDefault(); npcTalkState.path = npcTalkState.path.slice(0, 1); }
+    else if(ev.target.closest('[data-npc-talk-server]')){ ev.preventDefault(); try{ localStorage.setItem('szo-shop-server', ev.target.closest('[data-npc-talk-server]').dataset.npcTalkServer === 'free' ? 'free' : 'month'); }catch(e){} }
     else if(ev.target.closest('[data-npc-talk-end]')){ ev.preventDefault(); window.SZO_PREVIEW?.close(); return; }
     else return;
     box.innerHTML = npcTalkHTML();

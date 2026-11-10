@@ -19,23 +19,55 @@
 
   const plain = s => String(s || '').replace(LINK, (_, st, id, x, y, name) => name);
 
-  // Item names inside quest text become buttons that open the item preview.
-  function itemLinker(list){
+  // Item names inside quest text become buttons that open the item preview; hand-in amounts
+  // from the NPC dialogue (q.ho) are noted after the name, and a shared name ending such as
+  // 「真元碎片」 gets the whole set noted once (六種真元碎片 各 ×5（月服）／×20（免服）).
+  function qtyNotes(q){
+    const byName = new Map(), groups = [];
+    const ho = (q?.ho || []).filter(([, n, qty]) => n && qty);
+    for(const [, n, qty] of ho) if(!byName.has(n)) byName.set(n, qty);
+    const byQty = new Map();
+    for(const [n, qty] of byName) (byQty.get(qty) || byQty.set(qty, []).get(qty)).push(n);
+    for(const [qty, names] of byQty){
+      if(names.length < 2) continue;
+      let suf = names[0];
+      for(const n of names) while(suf && !n.endsWith(suf)) suf = suf.slice(1);
+      if(suf.length >= 3) groups.push({ suf, qty, names });
+    }
+    return { byName, groups };
+  }
+  function itemLinker(list, notes){
     const items = (list || []).filter(([id, n]) => id && n).sort((a,b) => b[1].length - a[1].length);
-    if(!items.length) return s => esc(s).replace(/\n/g, '<br>');
+    const qtyHTML = t => `<small class="questQty">${esc(t)}</small>`;
+    const groupNote = s => {
+      let html = esc(s).replace(/\n/g, '<br>');
+      for(const g of notes?.groups || []){
+        if(!s.includes(g.suf) || g.names.some(n => s.includes(n))) continue;
+        const i = html.indexOf(esc(g.suf));
+        if(i >= 0) html = html.slice(0, i + esc(g.suf).length) + qtyHTML(` ${g.names.length} 種各 ${g.qty}`) + html.slice(i + esc(g.suf).length);
+      }
+      return html;
+    };
+    if(!items.length) return groupNote;
     const ids = new Map(items.map(([id, n]) => [n, id]));
     const re = new RegExp(items.map(([, n]) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g');
     return s => {
       let out = '', last = 0;
-      String(s).replace(re, (m, at) => { out += esc(s.slice(last, at)).replace(/\n/g, '<br>') + `<button type="button" class="questItemLink" data-quest-item="${esc(ids.get(m))}">${esc(m)}</button>`; last = at + m.length; return m; });
-      return out + esc(s.slice(last)).replace(/\n/g, '<br>');
+      String(s).replace(re, (m, at) => {
+        out += groupNote(s.slice(last, at)) + `<button type="button" class="questItemLink" data-quest-item="${esc(ids.get(m))}">${esc(m)}</button>`;
+        const qty = notes?.byName.get(m);
+        // Only when the text does not already give the amount right after the name.
+        if(qty && (/（/.test(qty) || !/^\s*[\d０-９*×xX]/.test(s.slice(at + m.length)))) out += qtyHTML(qty);
+        last = at + m.length; return m;
+      });
+      return out + groupNote(s.slice(last));
     };
   }
 
   function richText(text, data, q){
     let out = '', last = 0;
     text = String(text || '');
-    const link = itemLinker([...(q?.it || []), ...(q?.ri || [])]);
+    const link = itemLinker([...(q?.it || []), ...(q?.ri || []), ...(q?.ho || []).map(([id, n]) => [id, n])], qtyNotes(q));
     text.replace(LINK, (m, st, id, x, y, name, at) => {
       out += link(text.slice(last, at));
       last = at + m.length;
@@ -74,8 +106,9 @@
     return `<div class="questBody">
       ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data, q)}</p>` : ''}
       ${q.s.length ? `<ol class="questSteps">${q.s.map(s => `<li>${richText(s, data, q)}</li>`).join('')}</ol>` : ''}
+      ${(q.ho || []).length ? `<div class="questMeta"><b>繳交道具與數量</b><ul class="questHandins">${q.ho.map(([id, n, qty, who]) => `<li>${id ? `<button type="button" class="questItemLink" data-quest-item="${esc(id)}">${esc(n)}</button>` : esc(n)} <span>${esc(qty).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</span>${who ? ` <small>${esc(who)}</small>` : ''}</li>`).join('')}</ul></div>` : ''}
       ${items ? `<div class="questMeta"><b>任務道具</b><div class="questItems">${items}</div></div>` : ''}
-      ${q.r ? `<div class="questMeta"><b>獎勵</b><ul class="questRewards">${q.r.map(r => `<li>${itemLinker(q.ri)(r)}</li>`).join('')}</ul></div>` : ''}
+      ${q.r ? `<div class="questMeta"><b>獎勵</b><ul class="questRewards">${q.r.map(r => `<li>${itemLinker(q.ri)(r).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</li>`).join('')}</ul></div>` : ''}
       ${q.pre ? `<div class="questMeta"><b>前置任務</b><div class="questItems">${q.pre.map(n => `<button type="button" class="questItem" data-quest-find="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>` : ''}
     </div>`;
   }

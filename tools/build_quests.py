@@ -102,25 +102,110 @@ def main(ini):
     def text(v):
         return LINK.sub(link, v or '').replace('\\n', '\n')
 
-    # Rewards / quest items from NPC dialogue.
-    end_of, items_of = {}, {}
+    # Rewards / hand-ins / quest items from NPC dialogue (data/npc-talk).
+    # 月服 / 免服: a node with a 「免服」 branch is the 月服 text and its target the 免服 one;
+    # the tag carries forward along the dialogue until another server branch.
     Q = re.compile(r'「(.+?)」')
+    QTY = re.compile(r'「(.+?)」×(\d+)')
+    rewards_of, handin_of, items_of = {}, {}, {}
+    REWARD = ('獲得「', '經驗 ', '金錢 ', '名聲 ')
     for path in glob.glob(os.path.join(ROOT, 'data/npc-talk/n*.json')):
         d = json.load(open(path, encoding='utf-8'))
-        for m in d.get('msgs', {}).values():
+        msgs = d.get('msgs', {})
+        server = {}
+        for mid_, m in msgs.items():
             for t in m.get('tr', []):
-                acts, conds = t.get('a') or [], t.get('c') or []
-                ended = [Q.search(a).group(1) for a in acts if a.startswith('任務「') and a.endswith('結束')]
-                for q in ended:
-                    rw = [a for a in acts if not a.startswith('任務「') and not a.startswith('接下任務')]
+                c = t.get('c') or []
+                if t.get('j') and c in (['免服'], ['月服']):
+                    server[str(t['j'])] = c[0]
+                    server.setdefault(mid_, '月服' if c[0] == '免服' else '免服')
+        todo = list(server)
+        while todo:
+            cur = todo.pop()
+            m = msgs.get(cur) or {}
+            nxt = [str(j) for _, j in m.get('o', []) if j] + [str(j) for j in m.get('n', [])] + [str(t['j']) for t in m.get('tr', []) if t.get('j') and (t.get('c') or []) not in (['免服'], ['月服'])]
+            for j in nxt:
+                if j in msgs and j not in server:
+                    server[j] = server[cur]; todo.append(j)
+        for mid_, m in msgs.items():
+            trs = m.get('tr', [])
+            refs, done = set(), set()
+            for t in trs:
+                for x in (t.get('c') or []):
+                    if x.startswith('任務進度「'): refs.add(Q.search(x).group(1))
+                for x in (t.get('a') or []):
+                    if x.startswith(('完成任務「', '接下任務「')) or (x.startswith('任務「') and x.endswith('結束')):
+                        q = Q.search(x).group(1); refs.add(q)
+                        if not x.startswith('接下任務'): done.add(q)
+            if not refs: continue
+            for t in trs:
+                conds = t.get('c') or []
+                srv = next((x for x in conds if x in ('免服', '月服')), None) or server.get(mid_)
+                who = ' '.join(x for x in conds if x.startswith('限'))
+                own = set()
+                for x in conds + (t.get('a') or []):
+                    mq = Q.search(x)
+                    if mq and (x.startswith(('任務進度「', '完成任務「', '接下任務「')) or (x.startswith('任務「') and x.endswith('結束'))): own.add(mq.group(1))
+                # A node about one quest owns all its triggers; a hub node only the ones naming the quest.
+                for q in (refs if len(refs) == 1 else own):
+                    for x in (t.get('a') or []):
+                        mm = QTY.search(x)
+                        if x.startswith('交出') and mm:
+                            handin_of.setdefault(q, {}).setdefault((mm[1], who), {})[srv or ''] = int(mm[2])
+                        if mm and (x.startswith('交出') or x.startswith('持有')):
+                            items_of.setdefault(q, set()).add(mm[1])
+                    for x in conds:
+                        if x.startswith('持有「'): items_of.setdefault(q, set()).add(Q.search(x).group(1))
+                for q in done:
+                    rw = [x for x in (t.get('a') or []) if x.startswith(REWARD)]
                     if rw:
-                        end_of.setdefault(q, set()).add(' '.join(cn for cn in conds if cn.startswith('限')) + '|' + '、'.join(rw))
-                quests = [Q.search(c).group(1) for c in conds if c.startswith('任務進度「')] + ended
-                for q in quests:
-                    for a in acts + conds:
-                        mm = Q.search(a)
-                        if mm and (a.startswith('交出') or a.startswith('持有')):
-                            items_of.setdefault(q, set()).add(mm.group(1))
+                        rewards_of.setdefault(q, {}).setdefault((mid_, srv or ''), []).append((who, rw))
+    def exp_of(parts):
+        tot = 0
+        for _, rw in parts:
+            for x in rw:
+                mm = re.match(r'(經驗|金錢) \+([\d,]+)', x)
+                if mm: tot += int(mm[2].replace(',', ''))
+        return tot
+    def format_rewards(q):
+        groups = rewards_of.get(q, {})
+        variants = []   # (server, [(who, [acts])])
+        for (mid_, srv), parts in groups.items():
+            merged = {}
+            for who, rw in parts:
+                lst = merged.setdefault(who, [])
+                for x in rw:
+                    if x not in lst: lst.append(x)
+            key = tuple(sorted((w, tuple(v)) for w, v in merged.items()))
+            if any(v[1] == key for v in variants): continue
+            variants.append([srv, key])
+        # Two untagged variants that differ: the larger one is 月服, the smaller 免服.
+        untagged = [v for v in variants if not v[0]]
+        if len(untagged) == 2 and not any(v[0] for v in variants):
+            untagged.sort(key=lambda v: -exp_of(v[1]))
+            untagged[0][0], untagged[1][0] = '月服', '免服'
+        out = []
+        order = {'月服': 0, '': 1, '免服': 2}
+        for srv, key in sorted(variants, key=lambda v: order.get(v[0], 1)):
+            for who, acts in key:
+                label = '、'.join(acts)
+                tag = '（' + srv + '）' if srv else ''
+                out.append(((who + '：') if who else '') + label + tag)
+        return out
+    def format_handins(q):
+        rows = []
+        for (name, who), by in handin_of.get(q, {}).items():
+            vals = {k: v for k, v in by.items()}
+            if set(vals) == {''}:
+                txt = f'×{vals[""]}'
+            else:
+                m_, f_ = vals.get('月服', vals.get('')), vals.get('免服')
+                if f_ is not None and m_ is not None and f_ != m_:
+                    txt = f'×{m_}（月服）／×{f_}（免服）'
+                else:
+                    txt = f'×{m_ if m_ is not None else f_}'
+            rows.append([name, txt, who])
+        return rows
     item_rows = json.load(open(os.path.join(ROOT, 'data/items.json'), encoding='utf-8'))
     item_names = {r.get('Name') for r in item_rows}
     item_id = {}
@@ -192,10 +277,8 @@ def main(ini):
                 found.add(nm)
                 plain = plain.replace(nm, '　')
         found |= {x for x in items_of.get(name, ()) if x in item_names}
-        rewards = []
-        for r in sorted(end_of.get(name, ())):
-            who, what = r.split('|', 1)
-            rewards.append((who + '：' if who else '') + what)
+        rewards = format_rewards(name)
+        handins = format_handins(name)
         row = {'i': mid, 'n': name, 'c': cat, 'g': sub, 'm': stage,
                'd': text(m.get('Describe')), 's': [text(s) for s in steps]}
         if m.get('MinLevel'): row['lv'] = int(m['MinLevel'])
@@ -204,9 +287,10 @@ def main(ini):
         if cls is not None: row['cl'] = CLASS[cls]
         if m.get('Sex'): row['sx'] = '男' if m['Sex'] == '0' else '女'
         if rewards:
-            row['r'] = rewards[:8]
+            row['r'] = rewards[:12]
             ri = sorted({x for r in row['r'] for x in re.findall(r'「(.+?)」', r) if item_id.get(x)})
             if ri: row['ri'] = [[item_id[x], x] for x in ri]
+        if handins: row['ho'] = [[item_id.get(n, ''), n, qty, who] for n, qty, who in handins][:30]
         if found: row['it'] = [[item_id.get(n, ''), n] for n in sorted(found)]
         if ov.get('note'): row['tag'] = ov['note']
         if section == 'repeat': row['rp'] = 1

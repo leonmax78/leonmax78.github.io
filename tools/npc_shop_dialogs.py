@@ -77,7 +77,8 @@ if __name__ == '__main__':
         out=[]
         for b in re.split(r'^\['+tag+r'\]\s*$',t,flags=re.M)[1:]:
             d=collections.defaultdict(list)
-            for k,v in re.findall(r'^\s*([A-Za-z_]+\d*)\s*=\s*(.*?)\s*$',b,re.M): d[k].append(v)
+            # [ \t]* (not \s*): an empty value ("OptJump2 = ") must not swallow the next line.
+            for k,v in re.findall(r'^[ \t]*([A-Za-z_]+\d*)[ \t]*=[ \t]*(.*?)[ \t\r]*$',b,re.M): d[k].append(v)
             out.append(d)
         return out
     npcs={int(d['ID'][0]):d for d in blocks(f'{CUR}/SETTING/NPC.INI','NPC') if d.get('ID') and d['ID'][0].isdigit()}
@@ -282,7 +283,8 @@ if __name__ == '__main__':
         v = [num(x) for x in ps]
         if code == 8 and v: return f'獲得「{item_name(v[0])}」×{max(1, v[1] if len(v) > 1 else 1)}'
         if code == 37 and v: return f'交出「{item_name(v[0])}」×{max(1, v[1] if len(v) > 1 else 1)}'
-        if code == 27 and v: return f'經驗 {v[0]:+,}'
+        if code == 27 and v: return f'經驗 {(v[-1] if len(v) > 1 and v[0] == 0 else v[0]):+,}'
+        if code == 13 and len(v) > 1 and v[1] == 15: return f'完成任務「{mis.get(v[0], v[0])}」'
         if code == 30 and v: return f'金錢 {v[0]:+,} 兩'
         if code in (29, 101) and v: return f'名聲 {v[0]:+,}'
         if code in (23, 24, 25, 26) and v: return {23: '力量', 24: '智慧', 25: '敏捷', 26: '體魄'}[code] + f' {v[0]:+}'
