@@ -4355,3 +4355,46 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .npcTalkFace{flex:0 0 auto;width:61px;height:73px;object-fit:cover;border-radius:8px;border:1px solid var(--line);image-rendering:auto;background:#111}
 .npcTalkText{min-width:0}
 @media (max-width:520px){.npcTalkFace{width:51px;height:61px}}
+
+/* V689: 任務查詢 */
+.questPage{display:grid;gap:14px;max-width:960px}
+.questHero h1{margin:0 0 4px}
+.questSearch{width:100%;margin-top:10px;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:inherit;font-size:15px}
+.questTabs,.questGroups{display:flex;flex-wrap:wrap;gap:8px}
+.questTabs button{padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:inherit;font-weight:700;cursor:pointer}
+.questTabs button.active{background:var(--accent);border-color:var(--accent);color:#06100c}
+.questGroups button{padding:6px 11px;border-radius:10px;border:1px solid var(--line);background:transparent;color:inherit;cursor:pointer;font-size:13.5px}
+.questGroups button b{margin-left:6px;font-size:11.5px;opacity:.6;font-weight:600}
+.questGroups button.active{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.questList{display:grid;gap:8px}
+.questCard{border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 88%,transparent)}
+.questCard>summary{cursor:pointer;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;list-style:none}
+.questCard>summary::-webkit-details-marker{display:none}
+.questCard>summary::before{content:'▸';opacity:.6;transition:transform .15s}
+.questCard[open]>summary::before{transform:rotate(90deg)}
+.questCard>summary small{flex-basis:100%;opacity:.6;padding-left:18px}
+.questName{font-weight:800;font-size:15.5px}
+.questTags{display:flex;flex-wrap:wrap;gap:5px}
+.questTags em{font-style:normal;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);opacity:.85}
+.questBody{padding:2px 16px 14px;display:grid;gap:12px;line-height:1.85}
+.questStart{margin:0}
+.questStart>span{display:inline-block;font-size:12px;padding:1px 8px;margin-right:8px;border-radius:6px;background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);font-weight:700}
+.questSteps{margin:0;padding-left:1.6em;display:grid;gap:6px}
+.questNpc{all:unset;cursor:pointer;color:var(--accent);font-weight:700;border-bottom:1px dashed currentColor}
+.questPlace{font-weight:700}
+.questCoord{all:unset;cursor:pointer;display:inline-block;margin:0 4px;padding:0 7px;font-size:12px;line-height:1.7;border-radius:6px;border:1px solid var(--line);opacity:.85;white-space:nowrap}
+.questCoord::before{content:'📍';margin-right:3px;font-size:11px}
+.questCoord:hover,.questNpc:hover{opacity:1;filter:brightness(1.2)}
+.questMeta{display:grid;gap:6px}
+.questMeta>b{font-size:13px;opacity:.75}
+.questItems{display:flex;flex-wrap:wrap;gap:6px}
+.questItem{padding:4px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:inherit;font-size:13px;cursor:pointer}
+.questRewards{margin:0;padding-left:1.2em}
+.questCount{margin:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.questPreview .questBody{padding:0}
+.questPreview>.questTags{margin:4px 0 14px}
+@media (max-width:600px){.questBody{padding:2px 12px 12px}.questTabs button{padding:8px 13px}}
+.questBody button.questNpc,.questBody button.questCoord{all:unset!important;cursor:pointer!important;display:inline!important}
+.questBody button.questNpc{color:var(--accent)!important;font-weight:700!important;border-bottom:1px dashed currentColor!important}
+.questBody button.questCoord{display:inline-block!important;margin:0 4px!important;padding:0 7px!important;font-size:12px!important;line-height:1.7!important;border-radius:6px!important;border:1px solid var(--line)!important;white-space:nowrap!important}
+.questBody button.questItem{min-height:0!important;width:auto!important;padding:4px 10px!important;font-size:13px!important}

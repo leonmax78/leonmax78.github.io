@@ -52,6 +52,7 @@
         <button class="navBtn sub" data-item-open="compound">常用配方合成模擬 <span>›</span></button>
         <button class="navBtn sub" data-view="collect">武冠收錄資料 <span>›</span></button>
       </div>
+      <button class="navBtn major" data-view="quest">任務查詢 <span>›</span></button>
       <button class="navBtn major" data-view="autodata">離線內掛物品編輯 <span>›</span></button>
       <button class="navBtn major" data-view="mapMenu">地圖、商店查詢 <span>›</span></button>
       <div class="formBox" id="mapForm">
@@ -336,7 +337,7 @@
 
 // V680: header search shows grouped suggestions (items / monsters / maps / NPCs) while typing.
 (function(){
-  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4, talk: 4 };
+  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4, quest: 4, talk: 4 };
   let talkIndex = null;
   let mapIndex = null, timer = 0, active = -1, rows = [], composing = false, seq = 0;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -412,10 +413,11 @@
       const more = npcCount.get(r.name) > 1 ? ` 等 ${npcCount.get(r.name)} 處` : '';
       out.push({ kind: 'npc', label: r.name, sub: r.row.stageName + more + (r.row.shop ? '・商店' : ''), id: r.row.npcId, stageId: r.row.stageId, stageName: r.row.stageName, shop: r.row.shop });
     }
+    try{ if(typeof window.ensureQuestPageLoaded === 'function') await window.ensureQuestPageLoaded(); out.push(...await window.szoQuestRows(raw, LIMIT.quest)); }catch(e){}
     try{ out.push(...await window.szoItemTalkRows(raw, LIMIT.talk)); }catch(e){}
     return out;
   }
-  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC', talk: '兌換・任務對話' };
+  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC', quest: '任務', talk: '兌換・任務對話' };
   function render(raw){
     const el = box(); if(!el) return;
     if(!rows.length){ el.hidden = true; el.innerHTML = ''; return; }
@@ -456,6 +458,7 @@
       if(r.kind === 'item'){ if(P) return P.open('item', r.id); if(window.ensureItemPageLoaded) await window.ensureItemPageLoaded(); if(window.showItem) window.showItem(r.id); }
       else if(r.kind === 'monster'){ if(P) return P.open('monster', r.id); if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
       else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, ''); }
+      else if(r.kind === 'quest'){ if(P) return P.open('quest', r.id); }
       else if(r.kind === 'talk'){ if(P) return P.open('npc', r.key); }
       else if(r.kind === 'npc'){
         if(P) return P.open(r.shop ? 'npcshop' : 'npc', r.stageId + ':' + r.id);

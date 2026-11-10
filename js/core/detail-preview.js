@@ -57,6 +57,7 @@
    if(e.target.closest('[data-preview-back]')&&trail.length>1){trail.pop();const prev=trail.pop();open(prev.kind,prev.id,false,prev.highlightItemId);}
    const action=e.target.closest('[data-preview-full]');if(action)full(action.dataset.previewFull,action.dataset.id);
    const sub=e.target.closest('[data-preview-open]');if(sub)open(sub.dataset.previewOpen,sub.dataset.id);
+   if(e.target.closest('[data-preview-quest-page]')){const q=dialog.querySelector('.questPreview h1')?.textContent||'';window.SZO_MAP_FLOAT?.close();close(()=>window.openQuestPage?.(q));}
    const npcMap=e.target.closest('[data-preview-npc-map]');if(npcMap)ensureMapPageLoaded().then(()=>window.openNpcMapFromKey(npcMap.dataset.previewNpcMap)).catch(console.error);
    const shopFull=e.target.closest('[data-preview-npcshop-full]');if(shopFull){const [sid,nid]=shopFull.dataset.previewNpcshopFull.split(':');window.SZO_MAP_FLOAT?.close();close(()=>ensureShopPageLoaded().then(()=>window.openShopNpc(sid,nid)).catch(console.error));}
   });
@@ -84,6 +85,9 @@
    }else if(kind==='npc'){
     await ensureMapPageLoaded();
     html=await window.renderNpcPreviewHTML(id);
+   }else if(kind==='quest'){
+    await ensureQuestPageLoaded();
+    html=await window.renderQuestPreviewHTML(id);
    }else if(kind==='npcshop'){
     await ensureShopPageLoaded();
     html=await window.renderShopNpcPreviewHTML(id);
@@ -113,6 +117,7 @@
    actions.innerHTML=`<button type="button" data-preview-full="${kind}" data-id="${esc(id)}">前往完整${kind==='item'?'道具':kind==='reverse'?'來源':'怪物'}頁</button>${kind==='item'?`<button type="button" data-rev="${esc(id)}">查詢取得來源</button>`:kind==='monster'?`<button type="button" data-preview-map="${esc(id)}" data-map-name="${esc(monsterName)}">查看地圖位置</button>`:''}`;
    if(kind==='npcshop'){const [sid,nid]=String(id).split(':');actions.innerHTML=`<button type="button" data-preview-open="npc" data-id="${esc(id)}">NPC 對話</button><button type="button" data-preview-npcshop-full="${esc(sid)}:${esc(nid)}">前往商店頁</button>`;}
    else if(kind==='npc'){actions.innerHTML=((await window.npcPreviewHasShop(id))?`<button type="button" data-preview-open="npcshop" data-id="${esc(id)}">看商店</button>`:'')+(String(id).startsWith(':')?'':`<button type="button" data-preview-npc-map="${esc(id)}">地圖位置</button>`);}
+   else if(kind==='quest')actions.innerHTML='<button type="button" data-preview-quest-page>前往任務查詢頁</button>';
    else if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }

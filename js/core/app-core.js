@@ -116,6 +116,12 @@ async function ensureMapPageLoaded(){
 }
 window.ensureMapPageLoaded = ensureMapPageLoaded;
 
+async function ensureQuestPageLoaded(){
+ if(typeof window.renderQuestPage==='function')return true;
+ return await loadScriptGroupOnce('page_quest');
+}
+window.ensureQuestPageLoaded = ensureQuestPageLoaded;
+
 async function ensureQaPageLoaded(){
  if(typeof window.renderQaPage==='function')return true;
  return await loadScriptGroupOnce('page_qa');
@@ -401,6 +407,7 @@ async function setView(view){
  else if(view==='collect'){showPageLoading(viewLoadingLabel(view)); await ensureCollectPageLoaded(); if(typeof renderCollectBookPage==='function')renderCollectBookPage('menu'); keepNavGroupOpen('collect');}
  else if(view==='shop'){showPageLoading(viewLoadingLabel(view)); await ensureShopPageLoaded(); if(typeof renderShopPage==='function')renderShopPage();}
  else if(view==='map'){showPageLoading(viewLoadingLabel(view),'地圖載入中，請稍候。'); await ensureMapPageLoaded(); if(typeof renderStageMapPage==='function')renderStageMapPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='quest'){showPageLoading('任務查詢'); await ensureQuestPageLoaded(); await renderQuestPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='gems'){showPageLoading('寶石試算'); await loadScriptGroupOnce('page_gems'); await ensureItemDataLoaded(); renderGemPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
