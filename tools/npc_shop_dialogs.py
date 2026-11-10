@@ -417,3 +417,40 @@ if __name__ == '__main__':
             completions[mis.get(q, str(q))].append({'m': mid, 'srv': server.get(mid, ''), 'tr': trs})
     (Path(SITE) / 'tools/data/quest_completions.json').write_text(json.dumps(completions, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(len(completions), 'quests with completion nodes -> tools/data/quest_completions.json')
+
+    # Quest trigger spots on the maps: MPC event tiles (object 10001) whose event checks a quest
+    # step (cond 27 = on step N). Neighbouring tiles of one event form one spot; the spot is
+    # given in in-game tile coordinates (x = raw/32, y = map rows − raw/32) with the line it shows.
+    triggers = collections.defaultdict(list)
+    for p in glob.glob(f'{CUR}/MAP/STAGE*.MPC'):
+        sid = int(re.search(r'STAGE(\d+)', p).group(1))
+        try:
+            objs, recs = parse_mpc(p)
+            rows = struct.unpack_from('<16I', open(p, 'rb').read())[2]
+        except Exception:
+            continue
+        tiles = collections.defaultdict(list)
+        for o in objs:
+            if o[0] == 10001 and o[7] == 10001 and o[8]:
+                tiles[o[8]].append((o[1] / 32, rows - o[2] / 32))
+        for eid, pts in tiles.items():
+            spots = []   # cluster tiles that touch (within 3 tiles)
+            for x, y in pts:
+                for sp in spots:
+                    if any(abs(x - a) <= 3 and abs(y - b) <= 3 for a, b in sp): sp.append((x, y)); break
+                else:
+                    spots.append([(x, y)])
+            for br in recs.get(eid, []):
+                steps = {(c[3], c[5]) for c in br['cond'] if c[0] == 27 and c[1] == 0}
+                msg = next((a[3] for a in br['act'] if a[0] in (42, 12) and a[3]), 0)
+                text = ''
+                if msg and (ALL.get(msg) or legacy.get(msg)):
+                    text = ((ALL.get(msg) or legacy.get(msg)).get('Msg') or [''])[0].replace('\\n', ' ')
+                for q, step in steps:
+                    if q not in mis: continue
+                    for sp in spots:
+                        gx = round(sum(a for a, _ in sp) / len(sp)); gy = round(sum(b for _, b in sp) / len(sp))
+                        row = {'step': step, 'stage': sid, 'x': gx, 'y': gy, 'msg': text[:80]}
+                        if row not in triggers[mis[q]]: triggers[mis[q]].append(row)
+    (Path(SITE) / 'tools/data/quest_triggers.json').write_text(json.dumps(triggers, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    print(len(triggers), 'quests with map trigger spots -> tools/data/quest_triggers.json')
