@@ -4451,11 +4451,14 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .questTargets{margin:4px 0 2px;font-size:13.5px;line-height:2}
 .questTargets>span{display:inline-block;font-size:11.5px;padding:0 7px;margin-right:6px;border-radius:6px;background:rgba(127,227,211,.14);color:#7fe3d3;font-weight:700}
 .questTargets i{font-style:normal;opacity:.5;margin:0 2px}
-.mapPlacePin{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:5;animation:mapPinDrop .5s ease-out}
-.mapPlacePin b{font-size:30px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
-.mapPlacePin span{margin-top:2px;padding:2px 8px;border-radius:6px;background:rgba(20,25,30,.92);border:1px solid #ffd166;color:#ffdf8d;font-weight:800;font-size:14px;white-space:nowrap}
-.mapImageStage .mapPlacePin{transform-origin:50% 100%;scale:min(1,calc(2 / var(--mz,1)))}
-@keyframes mapPinDrop{from{transform:translate(-50%,-160%);opacity:0}to{transform:translate(-50%,-100%);opacity:1}}
+/* The pin's needle tip sits exactly on the spot: a 0×0 anchor at the point (scaled about itself
+   when zoomed in), the 30px pin drawn above it and the label below. */
+.mapPlacePin{position:absolute;width:0;height:0;pointer-events:none;z-index:5;transform-origin:0 0}
+.mapPinBody{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;transform:translate(-50%,-30px);animation:mapPinDrop .5s ease-out}
+.mapPlacePin b{font-size:30px;height:30px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+.mapPinBody>span{margin-top:4px;padding:2px 8px;border-radius:6px;background:rgba(20,25,30,.92);border:1px solid #ffd166;color:#ffdf8d;font-weight:800;font-size:14px;white-space:nowrap}
+.mapImageStage .mapPlacePin{scale:min(1,calc(2 / var(--mz,1)))}
+@keyframes mapPinDrop{from{transform:translate(-50%,-90px);opacity:0}to{transform:translate(-50%,-30px);opacity:1}}
 .questSpots{margin:4px 0 2px;display:grid;gap:3px;font-size:13.5px}
 .questSpots>span{justify-self:start;font-size:11.5px;padding:0 7px;border-radius:6px;background:rgba(250,204,21,.16);color:#facc15;font-weight:700}
 .questSpot{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 6px}
