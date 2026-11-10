@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261110-53",
-  "published_at": "2026-11-10 00:34",
-  "file_name": "Wuguan_261110-53.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261110-53.zip",
+  "version": "261110-54",
+  "published_at": "2026-11-10 21:50",
+  "file_name": "Wuguan_261110-54.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261110-54.zip",
   "page_url": "downloads/",
-  "notes": "支援簡體中文 Windows：直接執行神州Online、視窗標題變成亂碼時，也能認出遊戲視窗（逛街模式、小視窗、F8 預設格線），不需改系統地區。遊戲內文字仍須正常顯示。沿用原本角色槽位與校正設定。",
-  "sha256": "2d089377b0116c4959fa500bc3dcc407d33e026c5311a7b5677be316bc508b97"
+  "notes": "新增「全自動」記錄：打開武冠鋒雲錄後按主畫面的「全自動」，程式會自己點分類、子分類與捲軸，逐頁記錄已收／未收，約 10 分鐘完成；動滑鼠或按 Esc 立即停止。需先校正綠框。遊戲延遲、收藏還沒顯示時請勿執行；結束時會顯示花費時間並對照收藏積分。修正主畫面第 7 排被截掉。這是自動操作遊戲，是否使用請自行判斷。沿用原本角色槽位與校正設定。",
+  "sha256": "bdb9b540b95b982df9c7a1f7a05c5ce4eb079dc8720083160224b012218963b8"
 }
