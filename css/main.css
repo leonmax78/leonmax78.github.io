@@ -4344,3 +4344,9 @@ body:has(.mapLayout.mapMaximized) .mapShopBackdrop{z-index:10060}
 .npcTalkHint{margin:0;color:var(--muted);font-size:13px}
 .mapShopActions{flex-wrap:wrap}
 .mapShopServer button.active{background:linear-gradient(135deg,#a78bfa,#38bdf8);color:#06111f}
+.npcTalkEffects{display:grid;gap:6px;padding:10px 12px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--accent) 55%,var(--line));background:color-mix(in srgb,var(--accent) 6%,transparent);font-size:13.5px}
+.npcTalkEffects>div,.npcTalkConds{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.npcTalkCond{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.npcTalkAct{font-size:12.5px;font-weight:700;padding:1px 8px;border-radius:999px;background:rgba(52,211,153,.16);color:#6ee7b7}
+.npcTalkAct.lose{background:rgba(248,113,113,.16);color:#fca5a5}
+.npcTalkChoices button{display:grid;gap:5px}

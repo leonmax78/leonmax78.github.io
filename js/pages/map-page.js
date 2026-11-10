@@ -1453,18 +1453,27 @@
     while(m && m.x && (m.n || []).length === 1 && !m.o){ id = m.n[0]; m = data.msgs[String(id)]; }
     if(!m) return '<p>這個 NPC 沒有對話資料。</p>';
     const nav = `<div class="npcTalkNav">${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-back>← 上一句</button>' : ''}${path.length > 1 ? '<button type="button" class="ghost" data-npc-talk-restart>回到開頭</button>' : ''}</div>`;
+    const condChips = list => (list || []).map(c => `<span class="npcTalkCond">${htmlEscape(c)}</span>`).join('');
+    const effects = (m.tr || []).filter(t => t.a && !t.j);
+    const effectBox = effects.length ? `<div class="npcTalkEffects"><b>這段對話會：</b>${effects.map(t => `<div>${condChips(t.c)}${t.a.map(a => `<span class="npcTalkAct${/^交出|^金錢 -/.test(a) ? ' lose' : ''}">${htmlEscape(a)}</span>`).join('')}</div>`).join('')}</div>` : '';
+    const branchButtons = () => {
+      const seen = new Set();
+      const rows = (m.tr || []).filter(t => t.j).map(t => { seen.add(t.j); return t; });
+      for(const n of m.n || []) if(!seen.has(n)){ seen.add(n); rows.push({ j: n, c: rows.length ? ['其他情況'] : [] }); }
+      return `<div class="npcTalkChoices">${rows.map(t => `<button type="button" data-npc-talk-go="${t.j}">${t.c?.length ? `<span class="npcTalkConds">${condChips(t.c)}</span>` : ''}${(t.a || []).length ? `<span class="npcTalkConds">${t.a.map(a => `<span class="npcTalkAct">${htmlEscape(a)}</span>`).join('')}</span>` : ''}<span>${htmlEscape(talkLine(data, t.j).slice(0, 60) || '（無對話）')}</span></button>`).join('')}</div>`;
+    };
     if(m.x){
-      return `${nav}<p class="npcTalkHint">這裡會依任務、名聲或身上物品等條件，接到下列其中一段：</p><div class="npcTalkChoices">${(m.n || []).map(n => `<button type="button" data-npc-talk-go="${n}">${htmlEscape(talkLine(data, n).slice(0, 48) || '（無對話）')}</button>`).join('')}</div>`;
+      return `${nav}<p class="npcTalkHint">這裡會依條件接到下列其中一段：</p>${effectBox}${branchButtons()}`;
     }
     const who = m.p ? '你' : data.n;
     const shop = (m.s || []).length ? `<p class="npcTalkHint">此時會打開商店。</p>` : '';
     let next = '';
     if(m.o?.length) next = `<div class="npcTalkChoices">${m.o.map(([label, j]) => `<button type="button" ${j ? `data-npc-talk-go="${j}"` : 'disabled'}>${htmlEscape(label)}</button>`).join('')}</div>`;
     else if((m.n || []).length === 1) next = `<div class="npcTalkChoices"><button type="button" data-npc-talk-go="${m.n[0]}">繼續 ▸</button></div>`;
-    else if((m.n || []).length > 1) next = `<p class="npcTalkHint">接下來依條件會是：</p><div class="npcTalkChoices">${m.n.map(n => `<button type="button" data-npc-talk-go="${n}">${htmlEscape(talkLine(data, n).slice(0, 48) || '（無對話）')}</button>`).join('')}</div>`;
+    else if((m.n || []).length > 1) next = `<p class="npcTalkHint">接下來依條件會是：</p>${branchButtons()}`;
     else if(!shop) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
     if(shop && !next) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
-    return `${nav}<div class="npcTalkBubble${m.p ? ' you' : ''}"><b>${htmlEscape(who)}</b><p>${htmlEscape(m.m || '').replace(/\n/g, '<br>')}</p></div>${shop}${next}`;
+    return `${nav}<div class="npcTalkBubble${m.p ? ' you' : ''}"><b>${htmlEscape(who)}</b><p>${htmlEscape(m.m || '').replace(/\n/g, '<br>')}</p></div>${effectBox}${shop}${next}`;
   }
   window.renderNpcPreviewHTML = async function(key){
     const [stageId, npcId] = String(key).split(':');

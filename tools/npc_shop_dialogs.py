@@ -267,6 +267,42 @@ if __name__ == '__main__':
     ids=sorted({n['id'] for s in site['stages'] for n in s.get('npcs',[]) if isinstance(n['id'],int)})
     INTERNAL=('檢查','接檢查','判斷','事件對話','事件買賣')
     msgs={};npcout={}
+    def cond_label(code, neg, ps):
+        if code == 11 and len(ps) >= 2:
+            op = OPS.get(ps[0], '?'); op = NEG.get(op, op) if neg else op
+            return f'名聲 {op} {ps[1]}'
+        if code == 85:
+            return '月服' if neg else '免服'
+        return label((code, neg, ps))
+    def num(v):
+        try: return int(v)
+        except Exception: return 0
+    def item_name(i): return items.get(str(i), f'#{i}')
+    def act_label(code, ps):
+        v = [num(x) for x in ps]
+        if code == 8 and v: return f'獲得「{item_name(v[0])}」×{max(1, v[1] if len(v) > 1 else 1)}'
+        if code == 37 and v: return f'交出「{item_name(v[0])}」×{max(1, v[1] if len(v) > 1 else 1)}'
+        if code == 27 and v: return f'經驗 {v[0]:+,}'
+        if code == 30 and v: return f'金錢 {v[0]:+,} 兩'
+        if code in (29, 101) and v: return f'名聲 {v[0]:+,}'
+        if code in (23, 24, 25, 26) and v: return {23: '力量', 24: '智慧', 25: '敏捷', 26: '體魄'}[code] + f' {v[0]:+}'
+        if code in (19, 20) and v: return ('生命' if code == 19 else '精力') + f' {v[0]:+,}'
+        if code in (21, 22) and v: return ('生命上限' if code == 21 else '精力上限') + f' {v[0]:+,}'
+        if code == 33 and v: return f'接下任務「{mis.get(v[0], v[0])}」'
+        if code == 38 and v: return f'任務「{mis.get(v[0], v[0])}」結束'
+        if code == 34 and v: return f'取消任務「{mis.get(v[0], v[0])}」'
+        if code == 28: return '學會技能'
+        if code == 45: return '學會配方'
+        if code in (3, 9, 69, 74): return '傳送'
+        if code == 41: return '開啟倉庫'
+        if code == 43: return '開啟合成'
+        if code == 49 and v: return f'等級設為 {v[0]}'
+        if code == 106: return '隨機獲得物品'
+        if code == 108: return '領取禮物'
+        if code == 94: return '兌換獎章'
+        if code == 93: return '延長期限'
+        if code == 95: return '擴充倉庫'
+        return None
     def walk(mid,depth):
         if mid in msgs or mid<=0 or depth>14: return
         d=ALL.get(mid) or legacy.get(mid)
@@ -291,6 +327,21 @@ if __name__ == '__main__':
                     for c,ps in p[1]:
                         if c==12 and ps and ps[0].isdigit(): nxt.append(int(ps[0]))
                         if c in (5,60): shops.append(int(ps[0]) if ps and ps[0].lstrip('-').isdigit() else 0)
+        tr=[]
+        for k in sorted((k for k in d if k.startswith('Trigger')), key=lambda k: int(k[7:] or 0)):
+            for v in d[k]:
+                p=parse_trigger(v)
+                if not p: continue
+                cs=[l for l in (cond_label(c, neg == 'True', ps) for c, neg, ps in p[0]) if l]
+                acts=[l for l in (act_label(c, ps) for c, ps in p[1]) if l]
+                j=next((int(ps[0]) for c, ps in p[1] if c == 12 and ps and ps[0].isdigit()), 0)
+                if acts or (j and cs):
+                    t={}
+                    if cs: t['c']=cs
+                    if acts: t['a']=acts
+                    if j: t['j']=j
+                    tr.append(t)
+        if tr: e['tr']=tr
         if opts: e['o']=opts
         if nxt: e['n']=list(dict.fromkeys(nxt))
         if shops: e['s']=sorted(set(shops))
