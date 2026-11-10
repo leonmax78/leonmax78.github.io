@@ -172,6 +172,21 @@ def main(ini):
         if n < 10_000: return f'{sign}{n:,}'
         yi, rest = divmod(n, 100_000_000); wan, one = divmod(rest, 10_000)
         return sign + (f'{yi:,}億' if yi else '') + (f'{wan}萬' if wan else '') + (str(one) if one else '')
+    # Quests whose finishing dialogue is not reachable from an NPC's Talk tree (map events,
+    # collaboration maps): use the completion nodes the dialogue tool found in the MSG files.
+    comp_path = os.path.join(ROOT, 'tools/data/quest_completions.json')
+    if os.path.exists(comp_path):
+        for q, nodes in json.load(open(comp_path, encoding='utf-8')).items():
+            if q in rewards_of:
+                continue
+            for node in nodes:
+                for t in node.get('tr', []):
+                    conds = t.get('c') or []
+                    srv = next((x for x in conds if x in ('免服', '月服')), None) or node.get('srv') or ''
+                    who = ' '.join(x for x in conds if x.startswith('限'))
+                    rw = [x for x in t.get('a', []) if x.startswith(REWARD)]
+                    if rw:
+                        rewards_of.setdefault(q, {}).setdefault((str(node['m']), srv), []).append((who, rw))
     ALTERNATIVES = set()
     def exp_of(parts):
         tot = 0
