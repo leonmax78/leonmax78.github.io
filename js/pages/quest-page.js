@@ -80,7 +80,8 @@
       if(Number(id)){
         out += `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(name)}</button>`;
       }else{
-        out += `<b class="questPlace">${esc(name)}</b>`;
+        // A place (no NPC): the game's own coordinates from the quest file, as shown in game.
+        out += `<b class="questPlace">${esc(name)}</b>${Number(x) || Number(y) ? `<small class="questGameXY" title="遊戲內座標">(${esc(x)}, ${esc(y)})</small>` : ''}`;
       }
       if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}</button>`;
       return m;
@@ -105,7 +106,7 @@
     const items = (q.it || []).map(([id, name]) => id ? `<button type="button" class="questItem" data-quest-item="${esc(id)}">${esc(name)}</button>` : `<span class="questItem">${esc(name)}</span>`).join('');
     return `<div class="questBody">
       ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data, q)}</p>` : ''}
-      ${q.s.length ? `<ol class="questSteps">${q.s.map(s => `<li>${richText(s, data, q)}</li>`).join('')}</ol>` : ''}
+      ${q.s.length ? `<ol class="questSteps">${q.s.map((s, i) => { const tg = (q.tg || []).find(t => t[0] === i); return `<li>${richText(s, data, q)}${tg ? `<div class="questTargets"><span>對象</span>${tg[1].map(([st, id, nm]) => `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(nm)}</button><button type="button" class="questCoord" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="${esc(nm)}" data-quest-map-npc="${esc(id)}">${esc(data.stages[st] || '')}</button>`).join('<i>、</i>')}</div>` : ''}</li>`; }).join('')}</ol>` : ''}
       ${(q.ho || []).length ? `<div class="questMeta"><b>繳交道具與數量</b><ul class="questHandins">${q.ho.map(([id, n, qty, who]) => `<li>${id ? `<button type="button" class="questItemLink" data-quest-item="${esc(id)}">${esc(n)}</button>` : esc(n)} <span>${esc(qty).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</span>${who ? ` <small>${esc(who)}</small>` : ''}</li>`).join('')}</ul></div>` : ''}
       ${items ? `<div class="questMeta"><b>任務道具</b><div class="questItems">${items}</div></div>` : ''}
       ${q.r ? `<div class="questMeta"><b>獎勵${q.rx ? '<small class="questRewardNote">依選擇或結果不同，以下擇一</small>' : ''}</b><ul class="questRewards">${q.r.map(r => `<li>${itemLinker(q.ri)(r).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</li>`).join('')}</ul></div>` : ''}
