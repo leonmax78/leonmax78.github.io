@@ -47,7 +47,7 @@
       ['消耗精力', s.mp || ''],
     ].filter(([, v]) => v !== '' && v != null);
     return `<article class="skillCard${s.aw ? ' skillAwake' : ''}">
-      <header><h3>${esc(s.n)}</h3><span class="skillTier">${esc(s.t)}</span>${showSheet ? `<small>${esc(s.k)}</small>` : ''}${s.aw ? '<span class="skillTag">限覺醒狀態</span>' : ''}</header>
+      <header>${s.ic ? `<img class="skillIcon" src="assets/test-media/skill-icons/${esc(s.ic)}.png" alt="" width="32" height="32" loading="lazy">` : ''}<h3>${esc(s.n)}</h3><span class="skillTier">${esc(s.t)}</span>${showSheet ? `<small>${esc(s.k)}</small>` : ''}${s.aw ? '<span class="skillTag">限覺醒狀態</span>' : ''}</header>
       <dl class="skillFacts">${facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${typeof v === 'string' && v.includes('<button') ? v : esc(v)}</dd></div>`).join('')}</dl>
       ${s.h ? `<p class="skillHelp">${esc(s.h)}</p>` : ''}
       <div class="skillLearn"><div><b>學習方式</b><ul>${howHTML(s)}</ul></div>
