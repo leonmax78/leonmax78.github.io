@@ -710,7 +710,7 @@
     const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
     const left = Math.max(0, Math.min(100, t.gx * 4 / w * 100));
     const top = Math.max(0, Math.min(100, (h - t.gy * 4) / h * 100));
-    return `<span class="mapPlacePin" style="left:${left}%;top:${top}%;" title="${htmlEscape(t.name)} (${t.gx}, ${t.gy})"><b>📍</b><span>${htmlEscape(t.name)}</span></span>`;
+    return `<span class="mapPlacePin" style="left:${left}%;top:${top}%;" title="${htmlEscape(t.name)} (${t.gx}, ${t.gy})"><span class="mapPinBody"><b>📍</b><span>${htmlEscape(t.name)}</span></span></span>`;
   }
 
   function updateMapSelectionDom(stage){
