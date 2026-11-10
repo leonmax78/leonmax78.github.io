@@ -4470,3 +4470,31 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .questBody button.questMapLink:hover,.questBody button.questNpc:hover,.questBody button.questMonLink:hover{filter:brightness(1.25)}
 .questClasses{margin-bottom:-4px}
 .questClasses button.active{background:#ffd166!important;color:#1b1b1b!important;border-color:#ffd166!important}
+
+/* 技能查詢 */
+.skillList{display:grid;gap:10px}
+.skillCard{border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 88%,transparent);padding:12px 14px;display:grid;gap:10px}
+.skillCard header{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.skillCard h3{margin:0;font-size:17px;color:#ffdf8d}
+.skillTier,.skillTag{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);opacity:.85}
+.skillTag{border-color:#c77dff;color:#d9a8ff}
+.skillCard header small{opacity:.6}
+.skillFacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 14px;margin:0}
+.skillFacts div{display:flex;gap:8px;align-items:baseline;min-width:0}
+.skillFacts dt{flex:0 0 auto;font-size:12.5px;opacity:.65}
+.skillFacts dd{margin:0;font-weight:600;min-width:0}
+.skillHelp{margin:0;line-height:1.6;opacity:.92}
+.skillLearn{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:8px 18px;padding-top:8px;border-top:1px dashed var(--line)}
+.skillLearn b{font-size:12.5px;opacity:.7;font-weight:600}
+.skillLearn ul{margin:4px 0 0;padding-left:18px;line-height:1.7}
+.skillWho{opacity:1!important;font-size:inherit!important;color:#8fd3ff}
+.skillPlaces{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.skillPlace{display:inline-flex;align-items:baseline;gap:5px;padding:4px 9px;border-radius:9px;border:1px solid var(--line);background:transparent;color:#7ee0b5;cursor:pointer;font-weight:700;font-size:13.5px}
+.skillPlace span{color:var(--muted,#aab);font-weight:500;font-size:12px}
+.skillPlace small{color:#ffd166;font-weight:600}
+.skillPlace:hover,.skillItem:hover,.skillQuest:hover{filter:brightness(1.25)}
+.skillItem,.skillQuest{all:unset;cursor:pointer;color:#f5c86b;font-weight:700;border-bottom:1px dashed currentColor}
+.skillQuest{color:#7ee0b5}
+.skillQty{margin-left:2px;color:#ffd166;font-weight:700}
+.skillNote{margin:0;font-size:12.5px;opacity:.7}
+@media (max-width:640px){.skillLearn{grid-template-columns:1fr}.skillFacts{grid-template-columns:repeat(2,minmax(0,1fr))}}

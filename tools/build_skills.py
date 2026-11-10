@@ -1,6 +1,6 @@
 """Collect the player skills (five classes + crossover) from the game files.
 
-Usage: python tools/build_skills.py <game install dir> <out.json>
+Usage: python tools/build_skills.py <game install dir> [raw rows .json]   (always writes data/skills.json)
 
 Sources
 - SETTING/LEARN.INI: per-class teacher lists (ID 26 勇士, 27 劍俠, 28 術者, 29 道人, 30 僧侶 hold every
@@ -222,7 +222,7 @@ def main(game, out):
     def row(mid):
         d = magic.get(mid, {})
         r = {'id': mid, 'name': g(d, 'Name'), 'classes': set(), 'level': None, 'how': [], 'npcs': set(),
-             'books': set(), 'tier': '', 'ip': '', 'awake': bool(d.get('AvailOnlyDeityAwake')), 'texts': [], 'req': [], 'rank': None, 'trainer': '', 'note': '', 'places': [], 'lvset': set()}
+             'books': set(), 'tier': '', 'ip': '', 'awake': bool(d.get('AvailOnlyDeityAwake')), 'texts': [], 'req': [], 'rank': None, 'trainer': '', 'note': '', 'places': [], 'lvset': set(), 'reqs': [], 'teach': []}
         return r
 
     # 1) LEARN tables: each class teacher opens one table (EVENT_ACT 5, 4th param = LEARN id)
@@ -239,6 +239,7 @@ def main(game, out):
                 if not r['tier'] or tier == '三轉': r['tier'] = tier
                 xy = npc_at.get((stage, npc_nm), [''])[0]
                 r['places'].append([f"{stage}「{npc_nm}」{xy}", lv])
+                r['teach'].append([stage, npc_nm, lv])
                 r['how'].append('職業導師')
     taught = {(m, c) for (m, c) in skills}
     # 2) dialogue teaching
@@ -292,7 +293,12 @@ def main(game, out):
                     qs = [missions.get(int(ps[0])) for c, ps in acts
                           if (c == 13 and len(ps) > 1 and ps[1] == '15') or c == 38 if ps and ps[0].isdigit()]
                     qs = [q for q in qs if q and not q.startswith('[')]
+                    qids = [int(ps[0]) for c, ps in acts if ((c == 13 and len(ps) > 1 and ps[1] == '15') or c == 38)
+                            and ps and ps[0].isdigit() and missions.get(int(ps[0])) and not missions[int(ps[0])].startswith('[')]
                     if qs: r['quest'] = qs[0]
+                    r['reqs'].append({'cls': [c for c in CLS_ORDER if c in classes], 'lv': level,
+                                      'took': [[i, g(items.get(i, {}), 'Name'), n] for i, n in took],
+                                      'q': [qids[0], qs[0]] if qids else None})
                     r['req'].append(f"{'/'.join(c for c in CLS_ORDER if c in classes) or '?'}"
                                     + (f" Lv{level}" if level else '') + (f" 交{took_txt}" if took_txt else '')
                                     + (f"（完成任務「{qs[0]}」）" if qs else ''))
@@ -356,16 +362,109 @@ def main(game, out):
             'awake': r['awake'], 'help': g(d, 'Help').replace('\\n', ' '),
             'how': sorted(set(r['how'])), 'text': r['texts'][0] if r['texts'] else '',
             'note': r['note'],
-            'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'], 'places': r['places'], 'quest': r.get('quest', ''), 'lvset': sorted(r['lvset']),
+            'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'], 'places': r['places'], 'quest': r.get('quest', ''), 'lvset': sorted(r['lvset']), 'reqs': r['reqs'], 'teach': r['teach'], 'npc_ids': sorted(r['npcs']),
+            'tool_id': int(item) if item.isdigit() else 0,
         })
     named = sorted((r['id'], r['ip']) for r in rows if r['ip'] and r['ip'] != '聯動')
     for r in rows:
         if r['ip'] == '聯動' and named:
             r['ip'] = min(named, key=lambda t: abs(t[0] - r['id']))[1]
-    Path(out).write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding='utf-8')
+    if out: Path(out).write_text(json.dumps(rows, ensure_ascii=False, indent=1), encoding='utf-8')
+    export_site(rows, stage_maps, npc_name)
     print(len(rows), 'skill rows ->', out)
     print(collections.Counter(r['tier'] for r in rows))
 
 
+SELFISH = ('TARGET_SELF', 'TARGET_NONE')     # NONE = centred on the caster (焚陽劍氣, 殘影劍)
+SHEETS = CLS_ORDER + ['聯動', '通用']
+IP_LABEL = {'侍魂': '真侍魂', '霹靂': '霹靂布袋戲'}
+
+
+def export_site(rows, stage_maps, npc_name):
+    """data/skills.json for the 技能查詢 page."""
+    where = collections.defaultdict(list)            # npc id -> [[stage id, stage name, x, y]]
+    by_name = collections.defaultdict(list)          # (stage name, npc name) -> same
+    for st in stage_maps['stages']:
+        for n in st.get('npcs') or []:
+            if not str(n.get('id')).isdigit(): continue
+            loc = [int(st['stageId']), st['stageName'], n.get('coordX'), n.get('coordY')]
+            where[int(n['id'])].append(loc + [int(n['id'])])
+            by_name[(st['stageName'], n['name'])].append(loc + [int(n['id'])])
+
+    def cast(r):
+        return '自身' if r['target'] in SELFISH else (f"{r['range']} 格" if r['range'] else '')
+
+    def hit(r):
+        h = r['hit']
+        if not h: return '自身' if r['target'] in SELFISH else '單體'
+        p = h.split(',')
+        if len(p) == 5 and p[0] == '0' and p[3] == p[4] and p[1] == p[2] == f'-{p[3]}':
+            return f"{'自身' if r['target'] in SELFISH else '目標'} {p[3]} 格"
+        return '特殊範圍'
+
+    out = []
+    for r in rows:
+        auto = r['note'].startswith('完成三轉任務')
+        awake = r['tier'] == '覺醒'
+        # how to learn: one line per way, class shown only where it differs from the skill's classes
+        how = []
+        if awake: how.append({'t': '四轉後自動習得'})
+        elif auto: how.append({'t': '完成三轉任務後，原技能自動進階'})
+        elif r['teach']: how.append({'t': '職業導師學習'})
+        else:
+            seen = set()
+            same = all(set(q['cls']) == set(r['classes']) for q in r['reqs'])
+            for q in r['reqs']:
+                line = {}
+                if q['q']: line = {'q': q['q']}
+                else:
+                    if q['took']: line['items'] = [[i, n, c] for i, n, c in q['took']]
+                    if q['lv'] and r['tier'] not in ('進階',): line['lv'] = q['lv']
+                    if not same and r['tier'] != '聯動':
+                        line['cls'] = '本職' if r['home'] and q['cls'] == [r['home']] else '、'.join(q['cls'])
+                key = json.dumps(line, ensure_ascii=False, sort_keys=True)
+                if line and key not in seen:
+                    seen.add(key); how.append(line)
+        places = []
+        if not awake and not auto:
+            if r['teach']:
+                lvs = {lv for *_, lv in r['teach']}
+                for stage, npc, lv in r['teach']:
+                    for loc in by_name.get((stage, npc), [])[:1]:
+                        places.append({'s': loc[0], 'm': loc[1], 'x': loc[2], 'y': loc[3], 'n': loc[4], 'nm': npc,
+                                       **({'lv': lv} if len(lvs) > 1 else {})})
+            else:
+                for nid in r['npc_ids']:
+                    for loc in where.get(nid, []):
+                        places.append({'s': loc[0], 'm': loc[1], 'x': loc[2], 'y': loc[3], 'n': nid, 'nm': npc_name.get(nid, '')})
+        if r['tier'] == '進階':
+            level = f"92～{102 if '僧侶' in r['classes'] else 100}"
+        else:
+            level = r['level'] or ''
+        power = []
+        if r['phys']: power.append(f"物理威力 {r['phys']}")
+        if r['dmg']: power.append(f"傷害 {r['dmg']}")
+        sheets = ['聯動'] if r['tier'] == '聯動' else ['通用'] if r['tier'] == '通用' else (
+            [r['home']] if r['home'] else list(r['classes']))
+        for sh in sheets:
+            out.append({k: v for k, v in {
+                'i': r['id'], 'n': r['name'], 'k': sh, 't': IP_LABEL.get(r['ip'], r['ip']) if sh == '聯動' else r['tier'],
+                'cl': r['classes'], 'lv': level, 'rk': (r['rank'] or 0) + 1 if r['rank'] else 0,
+                'tool': [r['tool_id'], r['tool']] if r['tool'] else None, 'w': r['weapon'], 'cd': r['stun'] or 0,
+                'ca': cast(r), 'hr': hit(r), 'mp': int(r['mana']) if str(r['mana']).isdigit() else 0,
+                'pw': '；'.join(power), 'h': r['help'], 'how': how, 'pl': places,
+                'aw': 1 if r['awake'] else 0,
+                'nt': '原技能多職業共用，職業待確認' if '職業待確認' in r['note'] else '',
+            }.items() if v not in (None, '', [], 0)})
+    tiers = ['基本', '三轉', '進階', '天照', '覺醒', '密傳', '奧義', '聖傳', '仙傳']
+    ips = [IP_LABEL.get(x, x) for x in IPS]
+    order = {t: i for i, t in enumerate(tiers + ips + ['通用'])}
+    out.sort(key=lambda x: (SHEETS.index(x['k']), order.get(x['t'], 99),
+                            int(str(x.get('lv', 0)).split('～')[0] or 0) if str(x.get('lv', '')).split('～')[0].isdigit() else 0, x['i']))
+    data = {'sheets': SHEETS, 'tiers': tiers, 'ips': ips, 'skills': out}
+    (ROOT / 'data/skills.json').write_text(json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf-8')
+    print(len(out), 'rows -> data/skills.json')
+
+
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else '')
