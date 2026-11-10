@@ -319,6 +319,8 @@ def main(ini):
                 plain = plain.replace(nm, '　')
         found |= {x for x in items_of.get(name, ()) if x in item_names}
         rewards = format_rewards(name)
+        if ov.get('reward_needs_exp'):   # owner: variants without exp are retired rewards
+            rewards = [r for r in rewards if '經驗' in r]
         handins = format_handins(name)
         row = {'i': mid, 'n': name, 'c': cat, 'g': sub, 'm': stage,
                'd': text(m.get('Describe')), 's': [text(s) for s in steps]}
