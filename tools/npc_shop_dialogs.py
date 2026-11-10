@@ -375,3 +375,45 @@ if __name__ == '__main__':
         part = dict(info); part['msgs'] = {m: msgs[m] for m in sorted(_reach(msgs, info['t']))}
         (talk_dir / f'n{i}.json').write_text(json.dumps(part, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(len(npcout), 'npc talk files ->', talk_dir)
+
+    # Quest completion nodes anywhere in the MSG files (some are reached only from map events,
+    # not from an NPC's Talk tree): quest name -> [{m: msg id, srv: 月服/免服/'', tr: [...]}].
+    edges, server = collections.defaultdict(list), {}
+    for mid, d in ALL.items():
+        for k in d:
+            if k == 'Jump' or k.startswith('OptJump'):
+                for v in d[k]:
+                    if v.strip().isdigit(): edges[mid].append(int(v))
+            if k.startswith('Trigger'):
+                for v in d[k]:
+                    p = parse_trigger(v)
+                    if not p: continue
+                    j = next((int(ps[0]) for c, ps in p[1] if c == 12 and ps and ps[0].isdigit()), 0)
+                    if not j: continue
+                    if len(p[0]) == 1 and p[0][0][0] == 85:
+                        free = p[0][0][1] != 'True'
+                        server[j] = '免服' if free else '月服'
+                        server.setdefault(mid, '月服' if free else '免服')
+                    else:
+                        edges[mid].append(j)
+    todo = list(server)
+    while todo:
+        cur = todo.pop()
+        for j in edges.get(cur, ()):
+            if j not in server: server[j] = server[cur]; todo.append(j)
+    completions = collections.defaultdict(list)
+    for mid, d in ALL.items():
+        trs, quests = [], set()
+        for k in sorted((k for k in d if k.startswith('Trigger')), key=lambda k: int(k[7:] or 0)):
+            for v in d[k]:
+                p = parse_trigger(v)
+                if not p: continue
+                for c, ps in p[1]:
+                    if c == 13 and len(ps) > 1 and ps[1].strip() == '15' and ps[0].strip().isdigit(): quests.add(int(ps[0]))
+                cs = [l for l in (cond_label(c, neg == 'True', ps) for c, neg, ps in p[0]) if l]
+                acts = [l for l in (act_label(c, ps) for c, ps in p[1]) if l]
+                if acts: trs.append({'c': cs, 'a': acts} if cs else {'a': acts})
+        for q in quests:
+            completions[mis.get(q, str(q))].append({'m': mid, 'srv': server.get(mid, ''), 'tr': trs})
+    (Path(SITE) / 'tools/data/quest_completions.json').write_text(json.dumps(completions, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    print(len(completions), 'quests with completion nodes -> tools/data/quest_completions.json')
