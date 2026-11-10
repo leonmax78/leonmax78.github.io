@@ -177,8 +177,7 @@ def main(ini):
     comp_path = os.path.join(ROOT, 'tools/data/quest_completions.json')
     if os.path.exists(comp_path):
         for q, nodes in json.load(open(comp_path, encoding='utf-8')).items():
-            if q in rewards_of:
-                continue
+            rewards_of.pop(q, None)   # the full MSG scan sees every finishing node and server branch
             for node in nodes:
                 for t in node.get('tr', []):
                     conds = t.get('c') or []
