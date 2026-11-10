@@ -164,8 +164,12 @@ def main(ini):
         tot = 0
         for _, rw in parts:
             for x in rw:
-                mm = re.match(r'(經驗|金錢) \+([\d,]+)', x)
-                if mm: tot += int(mm[2].replace(',', ''))
+                mm = re.match(r'(經驗|金錢) \+([\d,億萬]+)', x)
+                if mm:
+                    v = mm[2].replace(',', ''); n = 0
+                    for part, unit in re.findall(r'(\d+)(億|萬|)', v):
+                        n += int(part) * {'億': 100_000_000, '萬': 10_000, '': 1}[unit]
+                    tot += n
         return tot
     def format_rewards(q):
         groups = rewards_of.get(q, {})
@@ -188,6 +192,11 @@ def main(ini):
         order = {'月服': 0, '': 1, '免服': 2}
         for srv, key in sorted(variants, key=lambda v: order.get(v[0], 1)):
             for who, acts in key:
+                acts = list(acts)
+                # 名聲 +N and 名聲 -N together: good or evil fame grows by N (follows your current side).
+                for x in list(acts):
+                    if x.startswith('名聲 +') and ('名聲 -' + x[4:]) in acts:
+                        acts[acts.index(x)] = '名聲 ±' + x[4:] + '（依善惡）'; acts.remove('名聲 -' + x[4:])
                 label = '、'.join(acts)
                 tag = '（' + srv + '）' if srv else ''
                 out.append(((who + '：') if who else '') + label + tag)

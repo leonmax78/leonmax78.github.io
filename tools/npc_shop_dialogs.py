@@ -278,12 +278,19 @@ if __name__ == '__main__':
     def num(v):
         try: return int(v)
         except Exception: return 0
+    def zh_amount(n):
+        """+2300億 / +3000萬 / +2,500 (signed, Chinese units from 萬 up)."""
+        sign = '-' if n < 0 else '+'; n = abs(n)
+        if n < 10_000: return f'{sign}{n:,}'
+        yi, rest = divmod(n, 100_000_000); wan, one = divmod(rest, 10_000)
+        out = (f'{yi:,}億' if yi else '') + (f'{wan}萬' if wan else '') + (str(one) if one else '')
+        return sign + out
     def item_name(i): return items.get(str(i), f'#{i}')
     def act_label(code, ps):
         v = [num(x) for x in ps]
         if code == 8 and v: return f'獲得「{item_name(v[0])}」×{max(1, v[1] if len(v) > 1 else 1)}'
         if code == 37 and v: return f'交出「{item_name(v[0])}」×{max(1, v[1] if len(v) > 1 else 1)}'
-        if code == 27 and v: return f'經驗 {(v[-1] if len(v) > 1 and v[0] == 0 else v[0]):+,}'
+        if code == 27 and v: return '經驗 ' + zh_amount(v[0] + (v[1] * 100_000_000 if len(v) > 1 else 0))  # 2nd param is in 億
         if code == 13 and len(v) > 1 and v[1] == 15: return f'完成任務「{mis.get(v[0], v[0])}」'
         if code == 30 and v: return f'金錢 {v[0]:+,} 兩'
         if code in (29, 101) and v: return f'名聲 {v[0]:+,}'
