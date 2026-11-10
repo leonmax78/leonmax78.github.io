@@ -155,7 +155,7 @@
   // Recipes (data/recipe-flows.js) that use any of the given items as a material.
   async function recipesUsing(items, targets){
     if(!targets.length) return [];
-    if(!window.SZO_RECIPE_FLOWS && typeof loadScriptGroupOnce === 'function') await loadScriptGroupOnce('data_recipes').catch(() => null);
+    if((!window.SZO_RECIPE_FLOWS || !window.SZO_ABYSS_EXCHANGES) && typeof loadScriptGroupOnce === 'function') await loadScriptGroupOnce('data_recipes').catch(() => null);
     const flows = window.SZO_RECIPE_FLOWS || {};
     const byId = new Map(items.map(it => [itemId(it), it]));
     const want = new Map(targets.map(it => [itemId(it), itemName(it)]));
@@ -169,6 +169,15 @@
           out.push({ recipeId, recipeName: f.name || itemName(byId.get(recipeId)) || '配方', material: want.get(String(m.id)), qty: m.qty,
             outputId: f.output || '', outputName: f.output ? itemName(byId.get(String(f.output))) || ('ID ' + f.output) : '' });
         }
+      }
+    }
+    // 兌換與加工 (gem refining and other exchanges, data/abyss-exchanges.js)
+    for(const r of window.SZO_ABYSS_EXCHANGES?.rows || []){
+      for(const m of r.materials || []){
+        if(!want.has(String(m.id))) continue;
+        const reward = (r.rewards || [])[0];
+        out.push({ recipeId: '', recipeName: r.name || '兌換', material: want.get(String(m.id)), qty: m.count,
+          outputId: reward ? String(reward.id) : '', outputName: reward ? (itemName(byId.get(String(reward.id))) || ('ID ' + reward.id)) + (reward.count > 1 ? ' ×' + reward.count : '') : '' });
       }
     }
     return out;
@@ -415,13 +424,13 @@
     const recipeRows = await recipesUsing(items, itemMatches.slice(0, 4));
     // 取得途徑 / 用途: grouped by item, then by relation; long lists fold.
     const npcLine = r => `<div class="qaLine"><span class="qaLineMain"><strong>${html(r.label)}</strong>${r.stageName ? `<small>${html(r.stageName)}</small>` : ''}${r.count > 1 ? `<small>${r.count} 段對話</small>` : ''}</span>${r.gets?.length && r.rel !== 'g' ? `<span class="qaLineGet">換得 ${r.gets.slice(0, 4).map(g => html(g)).join('、')}${r.gets.length > 4 ? '…' : ''}</span>` : ''}<span class="qaLineActs"><button type="button" class="qaMini" data-qa-npc-talk="${html(r.key)}">對話</button>${r.stageName ? `<button type="button" class="qaMini" data-qa-map="${html(r.stageName)}" data-qa-map-query="${html(r.label)}">地圖</button>` : ''}</span></div>`;
-    const recipeLine = r => `<div class="qaLine"><span class="qaLineMain"><button type="button" class="qaLink" data-qa-preview-item="${html(r.recipeId)}">${html(r.recipeName)}</button><small>需要 ${html(r.material)} × ${html(r.qty)}</small></span>${r.outputId ? `<span class="qaLineGet">產物 <button type="button" class="qaLink" data-qa-preview-item="${html(r.outputId)}">${html(r.outputName)}</button></span>` : ''}</div>`;
+    const recipeLine = r => `<div class="qaLine"><span class="qaLineMain">${r.recipeId ? `<button type="button" class="qaLink" data-qa-preview-item="${html(r.recipeId)}">${html(r.recipeName)}</button>` : `<strong>${html(r.recipeName)}</strong>`}<small>需要 ${html(r.material)} × ${html(r.qty)}</small></span>${r.outputId ? `<span class="qaLineGet">產物 <button type="button" class="qaLink" data-qa-preview-item="${html(r.outputId)}">${html(r.outputName)}</button></span>` : ''}</div>`;
     const fold = (rows, line, show = 6) => rows.length <= show + 2 ? rows.map(line).join('') : rows.slice(0, show).map(line).join('') + `<details class="qaMore"><summary>顯示其餘 ${rows.length - show} 筆</summary>${rows.slice(show).map(line).join('')}</details>`;
     const itemOrder = [...new Set([...itemMatches.map(itemName), ...talkRows.map(r => r.item), ...recipeRows.map(r => r.material)])];
     const block = (title, rows, line) => rows.length ? `<div class="qaGroup"><h3>${html(title)}<b>${rows.length}</b></h3><div class="qaLines">${fold(rows, line)}</div></div>` : '';
     const perItem = (build) => itemOrder.map(name => { const body = build(name); return body ? `<div class="qaItemBlock">${itemOrder.length > 1 ? `<h4>${html(name)}</h4>` : ''}${body}</div>` : ''; }).join('');
     const getHtml = perItem(name => block('NPC 給予', talkRows.filter(r => r.item === name && r.rel === 'g'), npcLine));
-    const useHtml = perItem(name => block('可製作（配方材料）', recipeRows.filter(r => r.material === name), recipeLine)
+    const useHtml = perItem(name => block('可製作（配方・兌換加工）', recipeRows.filter(r => r.material === name), recipeLine)
       + block('交給 NPC 兌換', talkRows.filter(r => r.item === name && r.rel === 't'), npcLine)
       + block('對話需要持有', talkRows.filter(r => r.item === name && r.rel === 'h'), npcLine));
     const getCount = talkRows.filter(r => r.rel === 'g').length;
