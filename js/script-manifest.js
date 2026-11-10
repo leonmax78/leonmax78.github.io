@@ -119,7 +119,8 @@ window.SZO_SCRIPT_GROUPS = {
   ],
   "page_gems": ["data/jewels.js", "data/abyss-exchanges.js", "js/pages/gem-page.js"],
   "data_recipes": [
-    "data/recipe-flows.js"
+    "data/recipe-flows.js",
+    "data/abyss-exchanges.js"
   ],
   "page_quest": [
     "js/pages/quest-page.js"
