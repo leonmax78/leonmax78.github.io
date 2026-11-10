@@ -1,0 +1,168 @@
+// Quest guide built from the game's MISSION.INI (data/quests.json, tools/build_quests.py).
+(function(){
+  const state = { cat: '資料片任務', group: '', query: '', open: new Set() };
+  let dataPromise = null;
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
+  const LINK = /⟦(-?\d+),(\d+),(-?\d+),(-?\d+),([^⟧]*)⟧/g;
+
+  function loadQuests(){
+    if(!dataPromise){
+      const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+      dataPromise = fetch('data/quests.json?v=' + v, { cache: 'force-cache' }).then(r => { if(!r.ok) throw Error('任務資料載入失敗'); return r.json(); })
+        .then(d => { d.byId = new Map(d.quests.map(q => [q.i, q])); return d; })
+        .catch(e => { dataPromise = null; throw e; });
+    }
+    return dataPromise;
+  }
+  window.loadQuestData = loadQuests;
+
+  const plain = s => String(s || '').replace(LINK, (_, st, id, x, y, name) => name);
+
+  function richText(text, data){
+    let out = '', last = 0;
+    String(text || '').replace(LINK, (m, st, id, x, y, name, at) => {
+      out += esc(text.slice(last, at)).replace(/\n/g, '<br>');
+      last = at + m.length;
+      const stageName = data.stages[st] || '';
+      const hasXY = Number(x) || Number(y);
+      const coord = hasXY ? `(${x}, ${y})` : '';
+      if(Number(id)){
+        out += `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(name)}</button>`;
+      }else{
+        out += `<b class="questPlace">${esc(name)}</b>`;
+      }
+      if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}${coord ? ' ' + esc(coord) : ''}</button>`;
+      return m;
+    });
+    out += esc(String(text || '').slice(last)).replace(/\n/g, '<br>');
+    return out;
+  }
+
+  function limits(q){
+    const out = [];
+    if(q.lv || q.mx) out.push(q.mx ? `等級 ${q.lv || 1}～${q.mx}` : `等級 ${q.lv}+`);
+    if(q.cl) out.push('限' + q.cl);
+    if(q.sx) out.push('限' + q.sx + '性');
+    if(q.fm) out.push(q.fm);
+    if(q.rp) out.push('可重解');
+    if(q.tm) out.push('組隊任務');
+    return out;
+  }
+
+  function questBodyHTML(q, data){
+    const items = (q.it || []).map(([id, name]) => id ? `<button type="button" class="questItem" data-quest-item="${esc(id)}">${esc(name)}</button>` : `<span class="questItem">${esc(name)}</span>`).join('');
+    return `<div class="questBody">
+      ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data)}</p>` : ''}
+      ${q.s.length ? `<ol class="questSteps">${q.s.map(s => `<li>${richText(s, data)}</li>`).join('')}</ol>` : ''}
+      ${items ? `<div class="questMeta"><b>任務道具</b><div class="questItems">${items}</div></div>` : ''}
+      ${q.r ? `<div class="questMeta"><b>獎勵</b><ul class="questRewards">${q.r.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : ''}
+      ${q.pre ? `<div class="questMeta"><b>前置任務</b><div class="questItems">${q.pre.map(n => `<button type="button" class="questItem" data-quest-find="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>` : ''}
+    </div>`;
+  }
+
+  function questHeadHTML(q){
+    return `<span class="questName">${esc(q.n)}</span><span class="questTags">${limits(q).map(t => `<em>${esc(t)}</em>`).join('')}</span>`;
+  }
+
+  window.renderQuestPreviewHTML = async function(id){
+    const data = await loadQuests();
+    const q = data.byId.get(Number(id));
+    if(!q) throw Error('找不到這個任務');
+    return `<div class="itemGroupedDetail questPreview"><h1>${esc(q.n)}</h1><div class="questTags">${[q.c + '・' + q.g, ...limits(q)].map(t => `<em>${esc(t)}</em>`).join('')}</div>${questBodyHTML(q, data)}</div>`;
+  };
+
+  // Items → quests that use or mention them (search).
+  window.szoQuestRows = async function(raw, limit){
+    const q = norm(raw); if(q.length < 2) return [];
+    const data = await loadQuests();
+    const out = [], seen = new Set();
+    const push = (quest, why) => { if(seen.has(quest.i)) return; seen.add(quest.i); out.push({ kind: 'quest', id: quest.i, label: quest.n, sub: `${why}${quest.lv ? '・Lv.' + quest.lv : ''}・${quest.c === '資料片任務' ? quest.g : (data.stages[quest.m] || quest.g)}` }); };
+    for(const quest of data.quests) if(norm(quest.n) === q) push(quest, quest.c);
+    for(const quest of data.quests) if((quest.it || []).some(([, n]) => norm(n) === q)) push(quest, `需要／取得「${raw.trim()}」`);
+    for(const quest of data.quests) if(norm(quest.n).includes(q)) push(quest, quest.c);
+    for(const quest of data.quests) if((quest.it || []).some(([, n]) => norm(n).includes(q))) push(quest, '任務道具：' + quest.it.filter(([, n]) => norm(n).includes(q)).map(x => x[1]).slice(0, 2).join('、'));
+    return limit ? out.slice(0, limit) : out;
+  };
+
+  function filtered(data){
+    const q = norm(state.query);
+    if(q){
+      return data.quests.filter(x => norm(x.n).includes(q) || norm(plain(x.d) + plain(x.s.join(''))).includes(q) || (x.it || []).some(([, n]) => norm(n).includes(q)));
+    }
+    return data.quests.filter(x => x.c === state.cat && (!state.group || x.g === state.group));
+  }
+
+  async function renderQuestPage(){
+    const reader = document.getElementById('reader');
+    if(!reader) return;
+    let data;
+    try{ data = await loadQuests(); }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    const groups = (data.groups[state.cat] || []).filter(g => data.quests.some(x => x.c === state.cat && x.g === g));
+    if(state.group && !groups.includes(state.group)) state.group = '';
+    if(!state.group && !state.query) state.group = groups[0] || '';
+    const list = filtered(data);
+    reader.innerHTML = `<section class="questPage">
+      <div class="questHero"><h1>任務查詢</h1><p class="muted">資料取自遊戲任務檔，點 NPC 名稱看對話，點地圖名稱跳到地圖位置。</p>
+        <input id="questSearch" class="questSearch" type="search" placeholder="搜尋任務、NPC 或任務道具（例如：黑狗血）" value="${esc(state.query)}"></div>
+      ${state.query ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個任務 <button type="button" class="ghost" data-quest-clear>清除搜尋</button></p>` : `
+      <div class="questTabs" role="tablist">${data.cats.map(c => `<button type="button" role="tab" class="${c === state.cat ? 'active' : ''}" data-quest-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+      <div class="questGroups">${groups.map(g => `<button type="button" class="${g === state.group ? 'active' : ''}" data-quest-group="${esc(g)}">${esc(g)}<b>${data.quests.filter(x => x.c === state.cat && x.g === g).length}</b></button>`).join('')}</div>`}
+      <div class="questList">${list.slice(0, 200).map(q => `<details class="questCard" data-quest-id="${q.i}"${state.open.has(q.i) ? ' open' : ''}><summary>${questHeadHTML(q)}${state.query ? `<small>${esc(q.c)}・${esc(q.g)}</small>` : ''}</summary>${state.open.has(q.i) ? questBodyHTML(q, data) : ''}</details>`).join('') || '<div class="empty">沒有符合的任務。</div>'}</div>
+      ${list.length > 200 ? `<p class="muted">只顯示前 200 筆，請輸入更精確的關鍵字。</p>` : ''}
+    </section>`;
+  }
+  window.renderQuestPage = renderQuestPage;
+  window.openQuestPage = async function(query){
+    state.query = query || '';
+    if(typeof window.setView === 'function') await window.setView('quest');
+  };
+
+  let searchTimer = 0;
+  document.addEventListener('input', ev => {
+    if(ev.target?.id !== 'questSearch') return;
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(async () => {
+      state.query = ev.target.value.trim();
+      const pos = ev.target.selectionStart;
+      await renderQuestPage();
+      const input = document.getElementById('questSearch');
+      if(input){ input.focus(); try{ input.setSelectionRange(pos, pos); }catch(e){} }
+    }, 250);
+  });
+  document.addEventListener('toggle', async ev => {
+    const card = ev.target;
+    if(!card?.matches?.('.questCard')) return;
+    const id = Number(card.dataset.questId);
+    if(card.open){
+      state.open.add(id);
+      if(!card.querySelector('.questBody')){ const data = await loadQuests(); card.insertAdjacentHTML('beforeend', questBodyHTML(data.byId.get(id), data)); }
+    }else state.open.delete(id);
+  }, true);
+  document.addEventListener('click', async ev => {
+    const t = ev.target;
+    const cat = t.closest?.('[data-quest-cat]');
+    if(cat){ state.cat = cat.dataset.questCat; state.group = ''; renderQuestPage(); return; }
+    const group = t.closest?.('[data-quest-group]');
+    if(group){ state.group = group.dataset.questGroup; renderQuestPage(); return; }
+    if(t.closest?.('[data-quest-clear]')){ state.query = ''; renderQuestPage(); return; }
+    const find = t.closest?.('[data-quest-find]');
+    if(find){
+      ev.preventDefault();
+      const data = await loadQuests();
+      const q = data.quests.find(x => x.n === find.dataset.questFind);
+      if(q) window.SZO_PREVIEW?.open('quest', q.i);
+      return;
+    }
+    const item = t.closest?.('[data-quest-item]');
+    if(item){ ev.preventDefault(); window.SZO_PREVIEW?.open('item', item.dataset.questItem); return; }
+    const npc = t.closest?.('[data-quest-npc]');
+    if(npc){ ev.preventDefault(); window.SZO_PREVIEW?.open('npc', npc.dataset.questNpc); return; }
+    const map = t.closest?.('[data-quest-map]');
+    if(map){
+      ev.preventDefault();
+      if(typeof window.ensureMapPageLoaded === 'function') await window.ensureMapPageLoaded();
+      await window.openMapSearchLocation?.(map.dataset.questMap, map.dataset.questMapName, map.dataset.questMapNpc || undefined);
+    }
+  });
+})();
