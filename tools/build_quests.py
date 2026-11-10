@@ -192,6 +192,8 @@ def main(ini):
                     rw = [x for x in t.get('a', []) if x.startswith(REWARD)]
                     if rw:
                         rewards_of.setdefault(q, {}).setdefault((str(node['m']), srv), []).append((who, rw))
+    trig_path = os.path.join(ROOT, 'tools/data/quest_triggers.json')
+    trigger_spots = json.load(open(trig_path, encoding='utf-8')) if os.path.exists(trig_path) else {}
     ALTERNATIVES = set()
     def exp_of(parts):
         tot = 0
@@ -361,6 +363,14 @@ def main(ini):
                 targets.append([si, refs_])
             prev_refs = refs_ or prev_refs
         if targets: row['tg'] = targets
+        # Map trigger spots (search points, gates, flags…) per step, in-game coordinates.
+        spots, seen_spot = [], set()
+        for t in sorted(trigger_spots.get(name, []), key=lambda t: t['step']):
+            key = (t['stage'], t['x'], t['y'])
+            if key in seen_spot or t['step'] >= max(len(steps), 1): continue
+            seen_spot.add(key)
+            spots.append([t['step'], t['stage'], t['x'], t['y'], t['msg']])
+        if spots: row['pt'] = spots
         if handins: row['ho'] = [[item_id.get(n, ''), n, qty, who] for n, qty, who in handins][:30]
         if found: row['it'] = [[item_id.get(n, ''), n] for n in sorted(found)]
         if ov.get('note'): row['tag'] = ov['note']
