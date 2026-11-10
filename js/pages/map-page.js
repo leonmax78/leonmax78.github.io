@@ -1489,7 +1489,7 @@
     if(m.x){
       return `${nav}<p class="npcTalkHint">這裡會依條件接到下列其中一段：</p>${effectBox}${branchButtons()}`;
     }
-    const who = m.p ? '你' : data.n;
+    const who = m.p ? '你' : (m.w || data.n);   // m.w: another speaker in this NPC's dialogue (MSGNAME)
     const shop = (m.s || []).length ? `<p class="npcTalkHint">此時會打開商店。</p>` : '';
     let next = '';
     if(m.o?.length) next = `<div class="npcTalkChoices">${m.o.map(([label, j]) => `<button type="button" ${j ? `data-npc-talk-go="${j}"` : 'disabled'}>${htmlEscape(label)}</button>`).join('')}</div>`;
