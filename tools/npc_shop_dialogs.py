@@ -93,6 +93,12 @@ if __name__ == '__main__':
     stg={int(re.search(r'STGMSG(\d+)',p).group(1)):load_msgs([p]) for p in glob.glob(f'{CUR}/SETTING/STGMSG*.INI')}
     ALL=dict(base)
     for _k in sorted(stg): ALL.update(stg[_k])
+    # Speaker names: a MSG's "Name = N" points at MSGNAME.INI (String = N,name), e.g. 江小魚 talking
+    # inside 蘇櫻's dialogue. Shown above the line instead of the NPC's own name.
+    speaker={}
+    _mn=f'{CUR}/SETTING/MSGNAME.INI'
+    if os.path.exists(_mn):
+        for k,v in re.findall(r'^[ \t]*String[ \t]*=[ \t]*(\d+)[ \t]*,[ \t]*(.*?)[ \t\r]*$',open(_mn,'rb').read().decode('cp950','replace'),re.M): speaker[int(k)]=v
     def parse_trigger(s):
         t=[x.strip() for x in s.split(',')];i=0
         def nxt():
@@ -321,6 +327,8 @@ if __name__ == '__main__':
         elif not d.get('Face') and re.search(r'（\d+）.*接|接.*（\d+）|^(完成|檢查|判斷|事件|接)', e['m']): e['x']=1
         elif not d.get('Face'): e['p']=1
         if d.get('Face') and str(d['Face'][0]).strip().isdigit() and not e.get('x'): e['f']=int(d['Face'][0])
+        _nm=str((d.get('Name') or [''])[0]).strip()
+        if not e.get('p') and not e.get('x') and _nm.isdigit() and speaker.get(int(_nm)): e['w']=speaker[int(_nm)]
         opts=[]
         for i in range(1,10):
             lab=(d.get(f'OptStr{i}') or [''])[0]; j=(d.get(f'OptJump{i}') or [''])[0]
@@ -372,7 +380,7 @@ if __name__ == '__main__':
     for old in talk_dir.glob('n*.json'):
         old.unlink()
     for i, info in npcout.items():
-        part = dict(info); part['msgs'] = {m: msgs[m] for m in sorted(_reach(msgs, info['t']))}
+        part = dict(info); part['msgs'] = {m: {k: v for k, v in msgs[m].items() if not (k == 'w' and v == info.get('n'))} for m in sorted(_reach(msgs, info['t']))}
         (talk_dir / f'n{i}.json').write_text(json.dumps(part, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print(len(npcout), 'npc talk files ->', talk_dir)
 
