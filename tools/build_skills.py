@@ -222,7 +222,7 @@ def main(game, out):
     def row(mid):
         d = magic.get(mid, {})
         r = {'id': mid, 'name': g(d, 'Name'), 'classes': set(), 'level': None, 'how': [], 'npcs': set(),
-             'books': set(), 'tier': '', 'ip': '', 'awake': bool(d.get('AvailOnlyDeityAwake')), 'texts': [], 'req': [], 'rank': None, 'trainer': '', 'note': '', 'places': []}
+             'books': set(), 'tier': '', 'ip': '', 'awake': bool(d.get('AvailOnlyDeityAwake')), 'texts': [], 'req': [], 'rank': None, 'trainer': '', 'note': '', 'places': [], 'lvset': set()}
         return r
 
     # 1) LEARN tables: each class teacher opens one table (EVENT_ACT 5, 4th param = LEARN id)
@@ -238,7 +238,7 @@ def main(game, out):
                 r['classes'].add(cls); r['level'] = lv if r['level'] is None else min(r['level'], lv)
                 if not r['tier'] or tier == '三轉': r['tier'] = tier
                 xy = npc_at.get((stage, npc_nm), [''])[0]
-                r['places'].append(f"{stage}「{npc_nm}」{xy} Lv{lv}")
+                r['places'].append([f"{stage}「{npc_nm}」{xy}", lv])
                 r['how'].append('職業導師')
     taught = {(m, c) for (m, c) in skills}
     # 2) dialogue teaching
@@ -283,7 +283,9 @@ def main(game, out):
                     key = (m, tier)
                     r = skills.setdefault(key, row(m))
                     r['classes'] |= classes; r['ip'] = ip
-                    if level: r['level'] = level if r['level'] is None else min(r['level'], level)
+                    if level:
+                        r['level'] = level if r['level'] is None else min(r['level'], level)
+                        r['lvset'].add(level)
                     if rank: r['rank'] = rank
                     took_txt = '、'.join(f"{g(items.get(i, {}), 'Name') or i}×{n}" for i, n in took)
                     # a skill handed out when a quest is completed: name that quest
@@ -316,10 +318,10 @@ def main(game, out):
         r = skills.setdefault((i, '三轉'), row(i)); r['tier'] = '三轉'
         if i in guess:
             r['classes'] = guess[i]
-            r['note'] = '遊戲檔找不到學習對話（可能是祁州城傳功長老），職業依原技能推測'
+            r['note'] = '完成三轉任務後原技能自動進階'
         else:
             r['classes'] = set(base_classes.get(g(magic[i], 'Name')[2:], set()))
-            r['note'] = '遊戲檔找不到學習對話；原技能多職業共用，職業待確認（只留正確職業那頁）'
+            r['note'] = '完成三轉任務後原技能自動進階；原技能多職業共用，職業待確認'
     rows = []
     for (mid, _), r in list(skills.items()):
         d = magic[mid]
@@ -346,7 +348,7 @@ def main(game, out):
             'id': mid, 'name': name, 'tier': tier, 'ip': r['ip'],
             'classes': classes, 'home': home[0] if len(home) == 1 else '',
             'level': r['level'], 'books': sorted(r['books']),
-            'npcs': [f"{npc_name.get(n, n)}｜{'；'.join(npc_where.get(n, [])[:2])}" for n in sorted(r['npcs'])],
+            'npcs': [f"{npc_name.get(n, n)}｜{'；'.join(npc_where.get(n, []))}" for n in sorted(r['npcs'])],
             'tool': g(items.get(int(item), {}), 'Name') if item.isdigit() else '',
             'target': g(d, 'Target'), 'stun': int(g(d, 'Stun') or 0) / 10, 'range': g(d, 'Range'), 'hit': hr, 'mana': g(d, 'Mana'),
             'weapon': EQUIP.get(g(d, 'Equip'), g(d, 'Equip')),
@@ -354,7 +356,7 @@ def main(game, out):
             'awake': r['awake'], 'help': g(d, 'Help').replace('\\n', ' '),
             'how': sorted(set(r['how'])), 'text': r['texts'][0] if r['texts'] else '',
             'note': r['note'],
-            'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'], 'places': r['places'],
+            'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'], 'places': r['places'], 'quest': r.get('quest', ''), 'lvset': sorted(r['lvset']),
         })
     named = sorted((r['id'], r['ip']) for r in rows if r['ip'] and r['ip'] != '聯動')
     for r in rows:
