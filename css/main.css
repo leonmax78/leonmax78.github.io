@@ -4498,3 +4498,4 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .skillQty{margin-left:2px;color:#ffd166;font-weight:700}
 .skillNote{margin:0;font-size:12.5px;opacity:.7}
 @media (max-width:640px){.skillLearn{grid-template-columns:1fr}.skillFacts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.skillIcon{width:40px;height:40px;border-radius:6px;border:1px solid var(--line);background:#222;flex:0 0 auto}

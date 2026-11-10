@@ -94,6 +94,9 @@ def main(game, out):
     extract_install(game, cur)
     S = f'{cur}/SETTING'
     magic = {int(g(d, 'ID')): d for d in blocks(f'{S}/MAGIC.INI', 'MAGIC') if g(d, 'ID').isdigit()}
+    # MAGIC.Icon -> MAGICWND.INI [ICON] Normal = m0001 (SHAPE/MAGIC/ICON/M0001.SHP); images live in
+    # assets/test-media/skill-icons/<stem>.png (made by tools/build_skill_icons.py)
+    icon_file = {int(g(d, 'ID')): g(d, 'Normal').lower() for d in blocks(f'{S}/MAGICWND.INI', 'ICON') if g(d, 'ID').isdigit()}
     items = {int(g(d, 'ID')): d for d in blocks(f'{S}/ITEM.INI', 'ITEM') if g(d, 'ID').isdigit()}
     missions = {int(g(d, 'ID')): g(d, 'Name') for d in blocks(f'{S}/MISSION.INI', 'MISSION') if g(d, 'ID').isdigit()}
     msgs = {}
@@ -364,6 +367,7 @@ def main(game, out):
             'note': r['note'],
             'req': [q for q in sorted(set(r['req'])) if '交' in q] or sorted(set(r['req'])), 'rank': r['rank'], 'trainer': r['trainer'], 'places': r['places'], 'quest': r.get('quest', ''), 'lvset': sorted(r['lvset']), 'reqs': r['reqs'], 'teach': r['teach'], 'npc_ids': sorted(r['npcs']),
             'tool_id': int(item) if item.isdigit() else 0,
+            'icon': icon_file.get(int(g(d, 'Icon') or 0), ''),
         })
     named = sorted((r['id'], r['ip']) for r in rows if r['ip'] and r['ip'] != '聯動')
     for r in rows:
@@ -453,7 +457,7 @@ def export_site(rows, stage_maps, npc_name):
                 'tool': [r['tool_id'], r['tool']] if r['tool'] else None, 'w': r['weapon'], 'cd': r['stun'] or 0,
                 'ca': cast(r), 'hr': hit(r), 'mp': int(r['mana']) if str(r['mana']).isdigit() else 0,
                 'pw': '；'.join(power), 'h': r['help'], 'how': how, 'pl': places,
-                'aw': 1 if r['awake'] else 0,
+                'aw': 1 if r['awake'] else 0, 'ic': r['icon'] if (ROOT / f"assets/test-media/skill-icons/{r['icon']}.png").exists() else '',
                 'nt': '原技能多職業共用，職業待確認' if '職業待確認' in r['note'] else '',
             }.items() if v not in (None, '', [], 0)})
     tiers = ['基本', '三轉', '進階', '天照', '覺醒', '密傳', '奧義', '聖傳', '仙傳']
