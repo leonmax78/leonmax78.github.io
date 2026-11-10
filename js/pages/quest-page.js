@@ -19,12 +19,32 @@
 
   const plain = s => String(s || '').replace(LINK, (_, st, id, x, y, name) => name);
 
-  function richText(text, data){
+  // Item names inside quest text become buttons that open the item preview.
+  function itemLinker(list){
+    const items = (list || []).filter(([id, n]) => id && n).sort((a,b) => b[1].length - a[1].length);
+    if(!items.length) return s => esc(s).replace(/\n/g, '<br>');
+    const ids = new Map(items.map(([id, n]) => [n, id]));
+    const re = new RegExp(items.map(([, n]) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g');
+    return s => {
+      let out = '', last = 0;
+      String(s).replace(re, (m, at) => { out += esc(s.slice(last, at)).replace(/\n/g, '<br>') + `<button type="button" class="questItemLink" data-quest-item="${esc(ids.get(m))}">${esc(m)}</button>`; last = at + m.length; return m; });
+      return out + esc(s.slice(last)).replace(/\n/g, '<br>');
+    };
+  }
+
+  function richText(text, data, q){
     let out = '', last = 0;
-    String(text || '').replace(LINK, (m, st, id, x, y, name, at) => {
-      out += esc(text.slice(last, at)).replace(/\n/g, '<br>');
+    text = String(text || '');
+    const link = itemLinker([...(q?.it || []), ...(q?.ri || [])]);
+    text.replace(LINK, (m, st, id, x, y, name, at) => {
+      out += link(text.slice(last, at));
       last = at + m.length;
-      const stageName = data.stages[st] || '';
+      let stageName = data.stages[st] || '';
+      if(!Number(id) && Object.values(data.stages).includes(name)){
+        // The link names a map itself: one chip that opens that map.
+        out += `<button type="button" class="questCoord" title="開啟地圖" data-quest-map="${esc(name)}" data-quest-map-name="" data-quest-map-npc="">${esc(name)}</button>`;
+        return m;
+      }
       if(Number(id)){
         out += `<button type="button" class="questNpc" data-quest-npc="${esc(st)}:${esc(id)}">${esc(name)}</button>`;
       }else{
@@ -33,12 +53,13 @@
       if(stageName) out += `<button type="button" class="questCoord" title="在地圖上查看" data-quest-map="${esc(stageName)}" data-quest-map-name="${esc(name)}" data-quest-map-npc="${Number(id) ? esc(id) : ''}">${esc(stageName)}</button>`;
       return m;
     });
-    out += esc(String(text || '').slice(last)).replace(/\n/g, '<br>');
+    out += link(text.slice(last));
     return out;
   }
 
   function limits(q){
     const out = [];
+    if(q.tag) out.push(q.tag);
     if(q.lv || q.mx) out.push(q.mx ? `等級 ${q.lv || 1}～${q.mx}` : `等級 ${q.lv}+`);
     if(q.cl) out.push('限' + q.cl);
     if(q.sx) out.push('限' + q.sx + '性');
@@ -51,10 +72,10 @@
   function questBodyHTML(q, data){
     const items = (q.it || []).map(([id, name]) => id ? `<button type="button" class="questItem" data-quest-item="${esc(id)}">${esc(name)}</button>` : `<span class="questItem">${esc(name)}</span>`).join('');
     return `<div class="questBody">
-      ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data)}</p>` : ''}
-      ${q.s.length ? `<ol class="questSteps">${q.s.map(s => `<li>${richText(s, data)}</li>`).join('')}</ol>` : ''}
+      ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data, q)}</p>` : ''}
+      ${q.s.length ? `<ol class="questSteps">${q.s.map(s => `<li>${richText(s, data, q)}</li>`).join('')}</ol>` : ''}
       ${items ? `<div class="questMeta"><b>任務道具</b><div class="questItems">${items}</div></div>` : ''}
-      ${q.r ? `<div class="questMeta"><b>獎勵</b><ul class="questRewards">${q.r.map(r => `<li>${esc(r)}</li>`).join('')}</ul></div>` : ''}
+      ${q.r ? `<div class="questMeta"><b>獎勵</b><ul class="questRewards">${q.r.map(r => `<li>${itemLinker(q.ri)(r)}</li>`).join('')}</ul></div>` : ''}
       ${q.pre ? `<div class="questMeta"><b>前置任務</b><div class="questItems">${q.pre.map(n => `<button type="button" class="questItem" data-quest-find="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>` : ''}
     </div>`;
   }
