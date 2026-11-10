@@ -7,7 +7,7 @@ contains 寶箱 / 寶盒 / 寶匣 or its open sound is "openbox". Most sit hidde
 a dungeon's boss falls, so the earlier map build left them out. Several chests
 often share one spot (the variant you get depends on difficulty or clear time).
 Stages that already list chests (通寶花園, 虛空大秘境) are kept as they are.
-Positions follow the file's convention: x/y = raw / 8, coordX/coordY = raw / 16.
+Positions: x/y = raw / 8; run tools/apply_game_coords.py afterwards for in-game coordX/coordY.
 """
 import json
 import re
