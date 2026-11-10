@@ -338,7 +338,7 @@
 // V680: header search shows grouped suggestions (items / monsters / maps / NPCs) while typing.
 (function(){
   const LIMIT = { item: 5, monster: 5, map: 3, npc: 4, quest: 4, talk: 4 };
-  let talkIndex = null;
+  let talkIndex = null, dismissed = false;
   let mapIndex = null, timer = 0, active = -1, rows = [], composing = false, seq = 0;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
@@ -447,7 +447,7 @@
     const my = ++seq;
     if(!raw){ rows = []; hide(); return; }
     const next = await compute(raw);
-    if(my !== seq) return;
+    if(my !== seq || dismissed) return;
     rows = next; active = -1; render(raw);
   }
   async function openRow(r){
@@ -469,16 +469,23 @@
   function submitAll(){ hide(); document.getElementById('globalSearchForm')?.requestSubmit?.(); }
   document.addEventListener('input', ev => {
     if(ev.target?.id !== 'globalSearchInput' || composing) return;
+    dismissed = false;
     clearTimeout(timer); timer = setTimeout(update, 180);
   });
   document.addEventListener('compositionstart', ev => { if(ev.target?.id === 'globalSearchInput') composing = true; });
-  document.addEventListener('compositionend', ev => { if(ev.target?.id === 'globalSearchInput'){ composing = false; clearTimeout(timer); timer = setTimeout(update, 120); } });
-  document.addEventListener('focusin', ev => { if(ev.target?.id === 'globalSearchInput' && rows.length && ev.target.value.trim()) render(ev.target.value.trim()); });
+  document.addEventListener('compositionend', ev => { if(ev.target?.id === 'globalSearchInput'){ composing = false; dismissed = false; clearTimeout(timer); timer = setTimeout(update, 120); } });
+  document.addEventListener('focusin', ev => { if(ev.target?.id === 'globalSearchInput' && rows.length && ev.target.value.trim() && !dismissed) render(ev.target.value.trim()); });
+  // Searching (button or Enter) shows the full results page, so the dropdown closes and stays
+  // closed — including a suggestion lookup still in flight — until the user types again.
+  function dismiss(){ clearTimeout(timer); seq++; dismissed = true; hide(); input()?.blur(); }
+  window.szoDismissSuggest = dismiss;
+  document.addEventListener('submit', ev => { if(ev.target?.id === 'globalSearchForm') dismiss(); }, true);
+  document.addEventListener('click', ev => { if(ev.target?.closest?.('#globalSearchForm button')) dismiss(); }, true);
   document.addEventListener('keydown', ev => {
     if(ev.target?.id !== 'globalSearchInput' || ev.isComposing) return;
     const el = box(); const open = el && !el.hidden && rows.length;
     if(ev.key === 'Escape'){ hide(); return; }
-    if(!open) return;
+    if(!open){ if(ev.key === 'Enter') dismiss(); return; }
     if(ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){
       ev.preventDefault();
       const n = rows.length + 1;
@@ -491,7 +498,7 @@
       openRow(rows[active]);
       return;
     }
-    if(ev.key === 'Enter') hide();
+    if(ev.key === 'Enter') dismiss();
   }, true);
   document.addEventListener('click', ev => {
     const hit = ev.target?.closest?.('#globalSuggest [data-gs]');
