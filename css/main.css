@@ -4442,3 +4442,8 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .npcTalkServer button.active{background:color-mix(in srgb,var(--accent) 22%,transparent);color:var(--accent);opacity:1}
 .npcTalkServer.differs{border-color:color-mix(in srgb,#facc15 60%,var(--line))}
 .questRewardNote{margin-left:8px;font-weight:600;font-size:12px;color:#facc15;opacity:1}
+/* 主線任務 stand out */
+.questCard.questMain{border-color:rgba(250,204,21,.55);background:linear-gradient(90deg,rgba(250,204,21,.10),transparent 55%),color-mix(in srgb,var(--panel) 88%,transparent);box-shadow:inset 4px 0 0 #facc15}
+.questCard.questMain .questName{color:#fde68a}
+.questTags em.questMainTag{background:#facc15;color:#1a1300;border-color:#facc15;font-weight:800;opacity:1}
+.questTags em.questMainTag::before{content:'★ '}

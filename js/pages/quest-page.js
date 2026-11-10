@@ -114,14 +114,14 @@
   }
 
   function questHeadHTML(q){
-    return `<span class="questName">${esc(q.n)}</span><span class="questTags">${limits(q).map(t => `<em>${esc(t)}</em>`).join('')}</span>`;
+    return `<span class="questName">${esc(q.n)}</span><span class="questTags">${limits(q).map(t => `<em${t === '主線任務' ? ' class="questMainTag"' : ''}>${esc(t)}</em>`).join('')}</span>`;
   }
 
   window.renderQuestPreviewHTML = async function(id){
     const data = await loadQuests();
     const q = data.byId.get(Number(id));
     if(!q) throw Error('找不到這個任務');
-    return `<div class="itemGroupedDetail questPreview"><h1>${esc(q.n)}</h1><div class="questTags">${[q.c + '・' + q.g, ...limits(q)].map(t => `<em>${esc(t)}</em>`).join('')}</div>${questBodyHTML(q, data)}</div>`;
+    return `<div class="itemGroupedDetail questPreview"><h1>${esc(q.n)}</h1><div class="questTags">${[q.c + '・' + q.g, ...limits(q)].map(t => `<em${t === '主線任務' ? ' class="questMainTag"' : ''}>${esc(t)}</em>`).join('')}</div>${questBodyHTML(q, data)}</div>`;
   };
 
   // Items → quests that use or mention them (search).
@@ -160,7 +160,7 @@
       ${state.query ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個任務 <button type="button" class="ghost" data-quest-clear>清除搜尋</button></p>` : `
       <div class="questTabs" role="tablist">${data.cats.map(c => `<button type="button" role="tab" class="${c === state.cat ? 'active' : ''}" data-quest-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
       <div class="questGroups">${groups.map(g => `<button type="button" class="${g === state.group ? 'active' : ''}" data-quest-group="${esc(g)}">${esc(g)}<b>${data.quests.filter(x => x.c === state.cat && x.g === g).length}</b></button>`).join('')}</div>`}
-      <div class="questList">${list.slice(0, 200).map(q => `<details class="questCard" data-quest-id="${q.i}"${state.open.has(q.i) ? ' open' : ''}><summary>${questHeadHTML(q)}${state.query ? `<small>${esc(q.c)}・${esc(q.g)}</small>` : ''}</summary>${state.open.has(q.i) ? questBodyHTML(q, data) : ''}</details>`).join('') || '<div class="empty">沒有符合的任務。</div>'}</div>
+      <div class="questList">${list.slice(0, 200).map(q => `<details class="questCard${q.tag === '主線任務' ? ' questMain' : ''}" data-quest-id="${q.i}"${state.open.has(q.i) ? ' open' : ''}><summary>${questHeadHTML(q)}${state.query ? `<small>${esc(q.c)}・${esc(q.g)}</small>` : ''}</summary>${state.open.has(q.i) ? questBodyHTML(q, data) : ''}</details>`).join('') || '<div class="empty">沒有符合的任務。</div>'}</div>
       ${list.length > 200 ? `<p class="muted">只顯示前 200 筆，請輸入更精確的關鍵字。</p>` : ''}
     </section>`;
   }

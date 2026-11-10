@@ -337,6 +337,7 @@ def main(ini):
         if handins: row['ho'] = [[item_id.get(n, ''), n, qty, who] for n, qty, who in handins][:30]
         if found: row['it'] = [[item_id.get(n, ''), n] for n in sorted(found)]
         if ov.get('note'): row['tag'] = ov['note']
+        if 'order' in ov: row['_o'] = ov['order']
         if section == 'repeat': row['rp'] = 1
         if section == 'team': row['tm'] = 1
         pre = [by_id.get(x.strip()) for x in m.get('MustFinishMission', '').split(',') if x.strip()]
@@ -365,8 +366,9 @@ def main(ini):
     gpos = {(c, g): i for c in cats for i, g in enumerate(groups[c])}
     tag_rank = {'主線任務': 0, '支線任務': 1}
     out.sort(key=lambda r: (cats.index(r['c']) if r['c'] in cats else 99, gpos.get((r['c'], r['g']), 999),
-                            tag_rank.get(r.get('tag'), 2), (r['m'] or 99999) if r['c'] == '聯動任務' else 0,
+                            tag_rank.get(r.get('tag'), 2), r.get('_o', 0), (r['m'] or 99999) if r['c'] == '聯動任務' else 0,
                             list(CLASS.values()).index(r['cl']) if r['c'] == '職業任務' and r.get('cl') in CLASS.values() else 0, r['i']))
+    for r in out: r.pop('_o', None)
     data = {'cats': cats, 'groups': groups, 'stages': {str(k): v for k, v in stage_name.items()}, 'quests': out}
     with open(os.path.join(ROOT, 'data/quests.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
