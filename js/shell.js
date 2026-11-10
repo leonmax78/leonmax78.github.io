@@ -39,6 +39,7 @@
         <button class="navBtn sub" data-view="monsterQuery">查詢怪物 <span>›</span></button>
         <button class="navBtn sub" data-view="beastQuery">查詢封獸 <span>›</span></button>
       </div>
+      <button class="navBtn major" data-view="skill">技能查詢 <span>›</span></button>
       <button class="navBtn major" data-view="mapMenu">地圖、商店查詢 <span>›</span></button>
       <div class="formBox" id="mapForm">
         <div class="subMenuNote">地圖與商店相關功能</div>
