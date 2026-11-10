@@ -25,6 +25,27 @@
     <div class="navGroup" id="navGroup">
       <button class="navBtn major active" data-view="home">首頁 <span>›</span></button>
       <button class="navBtn major" data-view="quest">任務查詢 <span>›</span></button>
+      <button class="navBtn major" data-view="item">道具、掉落查詢、合成模擬、武冠收錄 <span>›</span></button>
+      <div class="formBox" id="itemForm">
+        <div class="subMenuNote">道具、武冠相關功能</div>
+        <button class="navBtn sub" data-item-open="item">道具查詢 <span>›</span></button>
+        <button class="navBtn sub" data-item-open="reverse">掉落反查 <span>›</span></button>
+        <button class="navBtn sub" data-item-open="compound">常用配方合成模擬 <span>›</span></button>
+        <button class="navBtn sub" data-view="collect">武冠收錄資料 <span>›</span></button>
+      </div>
+      <button class="navBtn major" data-view="monster">怪物、封獸查詢 <span>›</span></button>
+      <div class="formBox" id="monsterForm">
+        <div class="formTitle">怪物與封獸</div>
+        <button class="navBtn sub" data-view="monsterQuery">查詢怪物 <span>›</span></button>
+        <button class="navBtn sub" data-view="beastQuery">查詢封獸 <span>›</span></button>
+      </div>
+      <button class="navBtn major" data-view="mapMenu">地圖、商店查詢 <span>›</span></button>
+      <div class="formBox" id="mapForm">
+        <div class="subMenuNote">地圖與商店相關功能</div>
+        <button class="navBtn sub" data-view="map">地圖查詢 <span>›</span></button>
+        <button class="navBtn sub" data-view="shop">商店販賣資訊 <span>›</span></button>
+      </div>
+      <!-- The editor stays separate from item search and loads only when opened. -->
       <button class="navBtn major" data-view="jiang">降神、經驗、修練、寶石、武魂試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
         <div class="subMenuNote">降神、經驗、修練、寶石、武魂相關功能</div>
@@ -39,28 +60,7 @@
         <button class="navBtn sub" data-view="soul">武魂能力試算 <span>›</span></button>
         <div id="jiangFields"></div>
       </div>
-      <button class="navBtn major" data-view="monster">怪物、封獸查詢 <span>›</span></button>
-      <div class="formBox" id="monsterForm">
-        <div class="formTitle">怪物與封獸</div>
-        <button class="navBtn sub" data-view="monsterQuery">查詢怪物 <span>›</span></button>
-        <button class="navBtn sub" data-view="beastQuery">查詢封獸 <span>›</span></button>
-      </div>
-      <button class="navBtn major" data-view="item">道具、掉落查詢、合成模擬、武冠收錄 <span>›</span></button>
-      <div class="formBox" id="itemForm">
-        <div class="subMenuNote">道具、武冠相關功能</div>
-        <button class="navBtn sub" data-item-open="item">道具查詢 <span>›</span></button>
-        <button class="navBtn sub" data-item-open="reverse">掉落反查 <span>›</span></button>
-        <button class="navBtn sub" data-item-open="compound">常用配方合成模擬 <span>›</span></button>
-        <button class="navBtn sub" data-view="collect">武冠收錄資料 <span>›</span></button>
-      </div>
       <button class="navBtn major" data-view="autodata">離線內掛物品編輯 <span>›</span></button>
-      <button class="navBtn major" data-view="mapMenu">地圖、商店查詢 <span>›</span></button>
-      <div class="formBox" id="mapForm">
-        <div class="subMenuNote">地圖與商店相關功能</div>
-        <button class="navBtn sub" data-view="map">地圖查詢 <span>›</span></button>
-        <button class="navBtn sub" data-view="shop">商店販賣資訊 <span>›</span></button>
-      </div>
-      <!-- The editor stays separate from item search and loads only when opened. -->
       <button class="navBtn major" data-view="trade">玩家交易區 <span>›</span></button>
       <button class="navBtn major" data-view="downloads">工具下載區 <span>›</span></button>
     </div>
