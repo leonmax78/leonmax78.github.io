@@ -160,6 +160,18 @@ def main(ini):
                     rw = [x for x in (t.get('a') or []) if x.startswith(REWARD)]
                     if rw:
                         rewards_of.setdefault(q, {}).setdefault((mid_, srv or ''), []).append((who, rw))
+    def zh_value(t):
+        """'+2,300億' / '-9990萬' / '+1萬1500' → int"""
+        sign = -1 if t.strip().startswith('-') else 1
+        n = 0
+        for part, unit in re.findall(r'(\d+)(億|萬|)', t.replace(',', '')):
+            n += int(part) * {'億': 100_000_000, '萬': 10_000, '': 1}[unit]
+        return sign * n
+    def zh_amount(n):
+        sign = '-' if n < 0 else '+'; n = abs(n)
+        if n < 10_000: return f'{sign}{n:,}'
+        yi, rest = divmod(n, 100_000_000); wan, one = divmod(rest, 10_000)
+        return sign + (f'{yi:,}億' if yi else '') + (f'{wan}萬' if wan else '') + (str(one) if one else '')
     ALTERNATIVES = set()
     def exp_of(parts):
         tot = 0
@@ -193,6 +205,12 @@ def main(ini):
         for srv, key in sorted(variants, key=lambda v: order.get(v[0], 1)):
             for who, acts in key:
                 acts = list(acts)
+                # Several 經驗 lines in one reward add up (經驗 +20億、經驗 +10億 → 經驗 +30億).
+                exps = [x for x in acts if x.startswith('經驗 ')]
+                if len(exps) > 1:
+                    total = sum(zh_value(x[3:]) for x in exps)
+                    acts[acts.index(exps[0])] = '經驗 ' + zh_amount(total)
+                    for x in exps[1:]: acts.remove(x)
                 # 名聲 +N and 名聲 -N together: good or evil fame grows by N (follows your current side).
                 for x in list(acts):
                     if x.startswith('名聲 +') and ('名聲 -' + x[4:]) in acts:
