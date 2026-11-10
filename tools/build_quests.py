@@ -37,6 +37,7 @@ VER_TO_GROUP = {
     '決戰神州Ⅱ龍川事變': '龍川事變',
 }
 LINK = re.compile(r'<map=(\d+),x=(-?\d+),y=(-?\d+),NPCID=(\d+),([^>]*)>')
+HIDDEN_SKIP = re.compile(r'^20\d\d|活動|聖靈煉金|改版|咕嚕|暗記|重置|入場|價格|提昇|提升|修煉|速通|禮包|記錄|魂印|Deg|開局|齊備|速軸|兌換|改制|賜福|月費|福袋|倉庫|回籠|衝等|任務記錄|名人堂|付費|暢行')
 BRACKET = re.compile(r'【([^】]+)】')
 
 
@@ -77,6 +78,7 @@ def main(ini):
     tax_src = open(os.path.join(ROOT, 'data/map-taxonomy.js'), encoding='utf-8').read()
     tax = json.loads(tax_src[tax_src.index('{'):tax_src.rindex('}') + 1])
     stage_group = {int(k): v.get('group') for k, v in tax['stages'].items()}
+    stage_series = {int(k): v['series'] for k, v in tax['stages'].items() if v.get('group') == '聯動' and v.get('series')}
     order = tax['groups']['一般地圖']
 
     def link(m):
@@ -124,7 +126,9 @@ def main(ini):
         mid = int(m.get('ID', 0))
         steps = [m[k] for k in sorted((k for k in m if re.fullmatch(r'Step\d+', k)), key=lambda k: int(k[4:]))]
         if mid >= 20000:
-            break  # 以下隱藏
+            # 以下隱藏: mostly internal markers; keep the ones that read like real quests.
+            if HIDDEN_SKIP.search(m.get('Name', '')) or not steps:
+                continue
         if mid == 278:
             section = 'repeat'
         if mid == 15000:
@@ -142,7 +146,11 @@ def main(ini):
         if group not in order or group == '中原地圖':
             group = VER_TO_GROUP.get(ver) if ver else None
         sname = stage_name.get(stage, '')
-        if group and group in order and group != '中原地圖':
+        maps_used = ({stage} if stage else set()) | {int(x[1]) for x in LINK.finditer(m.get('Describe', '') + ''.join(steps))}
+        series = [stage_series[x] for x in maps_used if x in stage_series]
+        if series:
+            cat, sub = '聯動任務', max(set(series), key=series.count)
+        elif group and group in order and group != '中原地圖':
             cat, sub = '資料片任務', group
         elif sname in NEWBIE_MAPS:
             cat, sub = '新手任務', NEWBIE_MAPS[sname]
@@ -184,8 +192,9 @@ def main(ini):
         pre = [by_id.get(x.strip()) for x in m.get('MustFinishMission', '').split(',') if x.strip()]
         if any(pre): row['pre'] = [p for p in pre if p]
         out.append(row)
-    cats = ['資料片任務', '職業任務', '一般任務', '新手任務']
+    cats = ['資料片任務', '聯動任務', '職業任務', '一般任務', '新手任務']
     groups = {
+        '聯動任務': tax.get('series', []),
         '資料片任務': [g for g in order if g != '中原地圖'],
         '職業任務': list(CLASS.values()),
         '新手任務': ['義勇軍校場', '勇士', '劍俠', '術者', '道人', '僧侶'],
