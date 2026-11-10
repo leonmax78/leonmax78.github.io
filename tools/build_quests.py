@@ -77,9 +77,10 @@ def main(ini):
     smap = json.load(open(os.path.join(ROOT, 'data/stage_maps.json'), encoding='utf-8'))
     stage_name = {s['stageId']: s['stageName'] for s in smap['stages']}
     npc_pos = {}   # (stage, npc) -> (x, y); npc -> [(stage, x, y)]
-    npc_any = {}
+    npc_any, npc_name = {}, {}
     for s in smap['stages']:
         for n in s.get('npcs') or []:
+            npc_name.setdefault(n['id'], n.get('name', ''))
             xy = (n.get('coordX'), n.get('coordY'))
             npc_pos.setdefault((s['stageId'], n['id']), xy)
             npc_any.setdefault(n['id'], []).append((s['stageId'],) + xy)
@@ -109,8 +110,10 @@ def main(ini):
     QTY = re.compile(r'「(.+?)」×(\d+)')
     rewards_of, handin_of, items_of = {}, {}, {}
     REWARD = ('獲得「', '經驗 ', '金錢 ', '名聲 ')
+    takers_of = {}   # quest -> item -> [npc ids] that take / check the item in this quest's dialogue
     for path in glob.glob(os.path.join(ROOT, 'data/npc-talk/n*.json')):
         d = json.load(open(path, encoding='utf-8'))
+        npc_id = int(os.path.basename(path)[1:-5])
         msgs = d.get('msgs', {})
         server = {}
         for mid_, m in msgs.items():
@@ -152,6 +155,9 @@ def main(ini):
                         mm = QTY.search(x)
                         if x.startswith('交出') and mm:
                             handin_of.setdefault(q, {}).setdefault((mm[1], who), {})[srv or ''] = int(mm[2])
+                        if mm and (x.startswith('交出') or x.startswith('持有')):
+                            lst = takers_of.setdefault(q, {}).setdefault(mm[1], [])
+                            if npc_id not in lst: lst.append(npc_id)
                         if mm and (x.startswith('交出') or x.startswith('持有')):
                             items_of.setdefault(q, set()).add(mm[1])
                     for x in conds:
@@ -334,6 +340,27 @@ def main(ini):
             ri = sorted({x for r in row['r'] for x in re.findall(r'「(.+?)」', r) if item_id.get(x)})
             if ri: row['ri'] = [[item_id[x], x] for x in ri]
         if name in ALTERNATIVES: row['rx'] = 1
+        # Steps that name no NPC but an item someone in this quest's dialogue takes: list them.
+        targets, prev_refs = [], None
+        for si, raw_step in enumerate(steps):
+            if LINK.search(raw_step): continue
+            whom = []
+            for it_name, npcs_ in (takers_of.get(name) or {}).items():
+                if it_name in raw_step:
+                    for nid in npcs_:
+                        if nid not in whom: whom.append(nid)
+            refs_ = []
+            for nid in whom[:16]:
+                where = npc_any.get(nid)
+                if where:
+                    st_ = where[0][0]
+                    refs_.append([st_, nid, npc_name.get(nid, '')])
+            refs_.sort(key=lambda r: (r[0], r[1]))
+            # Repeated steps (sell to 6 rich men) list the same people: show them once.
+            if refs_ and refs_ != prev_refs:
+                targets.append([si, refs_])
+            prev_refs = refs_ or prev_refs
+        if targets: row['tg'] = targets
         if handins: row['ho'] = [[item_id.get(n, ''), n, qty, who] for n, qty, who in handins][:30]
         if found: row['it'] = [[item_id.get(n, ''), n] for n in sorted(found)]
         if ov.get('note'): row['tag'] = ov['note']
