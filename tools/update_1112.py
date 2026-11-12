@@ -181,6 +181,8 @@ def main():
     b.write_json(ROOT / 'reports/update_1112_data.json', report)
     print({k: {'added': len(v['added']), 'changed': len(v['changed']), 'keptLegacyDrops': v['keptLegacyDrops']} for k, v in report.items() if isinstance(v, dict)})
     subprocess.run([sys.executable, str(ROOT / 'tools/sync_collectbook_drops.py')], cwd=ROOT, check=True)
+    # box contents shown on item pages (錦囊/寶箱) come from the monsters' DropItem
+    subprocess.run(['node', str(ROOT / 'tools/build_item_contents.cjs')], cwd=ROOT, check=True)
 
 
 if __name__ == '__main__':
