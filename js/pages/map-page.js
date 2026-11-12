@@ -884,6 +884,8 @@
     if(pic === undefined || pic === null || pic === '') return '';
     const base = assetBase();
     if(marker.kind === 'monster') return withAssetVersion(`${base}/monster-portraits/m${pic}.png`);
+    if(Number(marker.id) === 6294 && Number(pic) === 6239) return withAssetVersion(`${base}/npc-portraits/n6039.png`);
+    if(Number(marker.id) === 8411 && Number(pic) === 6019) return withAssetVersion(`${base}/npc-portraits/n6023.png`);
     return withAssetVersion(`${base}/npc-portraits/n${pic}.png`);
   }
 
