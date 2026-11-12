@@ -1,10 +1,10 @@
 {
   "display_name": "神州Online角色外觀變更程式 By尼扣扣",
-  "version": "0.1.11",
-  "published_at": "2026-11-01 18:52",
-  "file_name": "SZOAppearance-v0.1.11.zip",
-  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.11.zip",
-  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.11.zip",
-  "sha256": "60363cb71e46bda8df812f3ced14a10bf103cc8f7ba2b88575925ab6ac37cbee",
-  "notes": "新增六組可命名自訂換裝方案，儲存目前修改或已選收藏後可一鍵完整切換；未包含的舊修改會還原，跨封包保留驗證與還原機制。停用 UPX 並加入產品版本資訊；若仍遇 Defender 隔離請回報，勿關閉防毒。"
+  "version": "0.1.12",
+  "published_at": "2026-11-12 21:45",
+  "file_name": "SZOAppearance-v0.1.12.zip",
+  "download_url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.12.zip",
+  "url": "https://leonmax78.github.io/downloads/appearance-changer/SZOAppearance-v0.1.12.zip",
+  "sha256": "d21feb8fd558dad51e458729d76b64d949e7aa34a1da1d91d90f084a653dc049",
+  "notes": "武魂可換成一～五轉各職業外觀（劍俠、術者、道人、勇士、僧侶，男女共 50 種）。技能篩選新增「魔王寵技能」分類：收錄十星甕魔王寵專用招式（含三首淵禍斗的詛咒冰嶽碎、碎骨火吐砲、驚淵雷殛滅），並依魔王寵新到舊排列。裝備、武魂、技能的清單加高，一次可顯示更多筆。"
 }
