@@ -684,6 +684,9 @@
     }).join('');
   }
 
+  // Ghost City MIXER/MIXER2 portraits that have no alpha attenuation in the PNG.
+  // 6066 already stores half alpha, so it must not be faded a second time.
+  const ghostCityOpaquePics = new Set([5037,5038,5172,5173,5178,5179,6061,6062,6063,6067]);
   function markerDots(stage){
     const w = Number(stage.width) || 1;
     const h = Number(stage.height) || 1;
@@ -693,7 +696,8 @@
       const cls = marker.role === 'trap' ? 'npc trapLight' : marker.kind === 'npc' ? 'npc' : 'monster';
       const src = markerImage(marker);
       const fallback = marker.kind === 'npc' ? 'N' : 'M';
-      const inner = marker.role === 'trap' ? '<span class="trapSpark" aria-hidden="true">✦</span>' : src ? `<img src="${htmlEscape(src)}" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.parentElement.classList.remove('withImage')"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
+      const fade = stage.stageName === '鬼城' && marker.kind === 'npc' && ghostCityOpaquePics.has(Number(marker.pic)) ? ' style="opacity:0.5"' : '';
+      const inner = marker.role === 'trap' ? '<span class="trapSpark" aria-hidden="true">✦</span>' : src ? `<img src="${htmlEscape(src)}" alt=""${fade} onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.parentElement.classList.remove('withImage')"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
       const shopAttrs = marker.kind === 'npc' && marker.shop ? ` data-map-shop="${htmlEscape(npcShopFor(marker))}"${(marker.shops || []).some(s => s.server === 'free') ? ' data-map-shop-variant="1"' : ''} data-map-shop-stage="${htmlEscape(stage.stageId)}" data-map-shop-stage-name="${htmlEscape(stage.stageName || '')}" data-map-shop-npc="${htmlEscape(marker.id || '')}" data-map-shop-name="${htmlEscape(marker.name || '')}" data-map-shop-x="${htmlEscape(marker.x ?? '')}" data-map-shop-y="${htmlEscape(marker.y ?? '')}" data-map-shop-coord-x="${htmlEscape(marker.coordX ?? marker.x ?? '')}" data-map-shop-coord-y="${htmlEscape(marker.coordY ?? marker.y ?? '')}"` : '';
       const monsterAttrs = marker.kind === 'monster' ? ` data-map-monster-dot="1" data-map-monster="${htmlEscape(marker.id || '')}" data-map-monster-stage="${htmlEscape(stage.stageId)}" data-map-monster-stage-name="${htmlEscape(stage.stageName || '')}" data-map-monster-name="${htmlEscape(marker.name || '')}" data-map-monster-level="${htmlEscape(marker.level || '')}" data-map-monster-pic="${htmlEscape(marker.pic || '')}" data-map-monster-area="${htmlEscape(markerAreaLabel(marker))}"` : '';
       const npcAttrs = marker.kind === 'npc' && marker.role !== 'trap' && !marker.shop && Number.isFinite(Number(marker.id)) ? ` data-map-npc-dot="${htmlEscape(stage.stageId)}:${htmlEscape(marker.id)}"` : '';
