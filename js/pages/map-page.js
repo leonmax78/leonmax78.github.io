@@ -1225,8 +1225,14 @@
       restoreMapSearchFocus(pos);
     }
     if(ev.target?.id === 'mapZoomInput'){
-      state.zoom = Number(ev.target.value) || 1;
-      applyZoomToDom();
+      const wrap = ev.target.closest('.mapCanvasWrap');
+      if(!wrap) return;
+      const bounds = wrap.getBoundingClientRect();
+      const top = bounds.top + wrap.clientTop;
+      const bottom = top + wrap.clientHeight;
+      const barBottom = wrap.querySelector('.mapZoomBar')?.getBoundingClientRect().bottom ?? top;
+      const y = (Math.max(top, Math.min(barBottom, bottom)) + bottom) / 2;
+      zoomAround(wrap, Number(ev.target.value) || 1, bounds.left + wrap.clientLeft + wrap.clientWidth / 2, y);
     }
     const monster = ev.target?.dataset?.mapMonster || ev.target?.dataset?.mapChest;
     if(monster){
