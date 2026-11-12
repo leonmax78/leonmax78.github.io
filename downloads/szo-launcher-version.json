@@ -1,9 +1,9 @@
 {
   "display_name": "神州ONLINE 帳號啟動器 By尼扣扣",
-  "version": "2.5.52",
-  "published_at": "2026-11-09 19:20",
-  "file_name": "SZOnline_Launcher_ByNikoko_2.5.52.7z",
-  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.52.7z",
+  "version": "2.5.53",
+  "published_at": "2026-11-12 22:40",
+  "file_name": "SZOnline_Launcher_ByNikoko_2.5.53.7z",
+  "download_url": "https://leonmax78.github.io/downloads/SZOnline_Launcher_ByNikoko_2.5.53.7z",
   "page_url": "downloads/",
-  "notes": "修正登入沒有成功時，啟動器仍以為進入角色選單並把保護密碼輸入到登入畫面的問題；送出登入後會確認已離開登入畫面，必要時自動補按 Enter，仍失敗則停止並提示。單開與多開皆適用。"
+  "notes": "修正部分電腦帳號密碼其實沒有填入、啟動器卻判定已填入，導致遊戲顯示「請輸入帳號」而無法自動登入的問題；改為比對輸入前後的欄位畫面，貼上沒有成功時會自動改用逐字輸入再試一次。"
 }
