@@ -5,7 +5,7 @@ Usage: python tools/build_skills.py <game install dir> [raw rows .json]   (alway
 Sources
 - SETTING/LEARN.INI: per-class teacher lists (ID 26 勇士, 27 劍俠, 28 術者, 29 道人, 30 僧侶 hold every
   skill of that class with its learn level; 152/163/172/182/192 are the 三轉 lists).
-- MSG / STGMSG: dialogue nodes that teach a skill (EVENT_ACT 28 or 97 = learn magic N). The node and
+- MSG / STGMSG: dialogue nodes that teach a skill (EVENT_ACT 28 = learn magic N; 97 removes a skill (the 2026-11 skill refund), so it is not a way to learn). The node and
   its parents carry the checks: cond 2 = class, cond 4 = level, cond 31 = holds item, cond 34 = knows
   magic; act 37 takes the book. The NPC comes from data/npc-talk (msg id -> NPC).
 - MAGIC.INI / ITEM.INI: skill stats and the 法器 (MAGIC.Item).
@@ -253,7 +253,7 @@ def main(game, out):
                 p = parse_trigger(v)
                 if not p: continue
                 conds, acts = p
-                learnt = [int(ps[0]) for c, ps in acts if c in (28, 97) and ps and ps[0].isdigit()]
+                learnt = [int(ps[0]) for c, ps in acts if c == 28 and ps and ps[0].isdigit()]
                 if not learnt: continue
                 took = [(int(ps[0]), int(ps[1]) if len(ps) > 1 else 1) for c, ps in acts if c == 37 and ps and ps[0].isdigit()]
                 idx = next(i for i, (cs, acts2) in enumerate(triggers(mid_node)) if (cs, acts2) == (conds, acts))
