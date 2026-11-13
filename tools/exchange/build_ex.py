@@ -45,21 +45,42 @@ def links(mid):
                 for code,ps in p[1]:
                     if code==12 and ps and ps[0].isdigit(): out.append((int(ps[0]),None,srv))
     return out
-owner=collections.defaultdict(dict)   # mid -> {nid: menu path}
-server={}                             # (mid, nid) -> 月服／免服 when the way there is server-only
+MSGNAME={a:b.strip() for a,b in re.findall(r'String\s*=\s*(\d+)\s*,\s*(.+)',open(G+'MSGNAME.INI',encoding='cp950',errors='ignore').read())}
+def speaker(mid):
+    d=M.get(mid) or {}
+    n=(d.get('Name') or [''])[0].strip()
+    return MSGNAME.get(n,'') if n else ''
+def same_speaker(sp,names):
+    k=lambda x: re.sub(r'[‧·．\s]','',x)
+    return sp=='你' or any(k(sp)==k(n) or k(sp) in k(n) or k(n) in k(sp) for n in names)
+def walk(block):
+    owner=collections.defaultdict(dict)   # mid -> {nid: menu path}
+    server={}                             # (mid, nid) -> 月服／免服 when the way there is server-only
+    for nid in where:
+        r=npcini.get(str(nid))
+        if not r or not r.get('Talk',[''])[0].isdigit(): continue
+        root=int(r['Talk'][0]); q=deque([(root,[],None)]); seen={root}
+        names={x for x in (speaker(root), r.get('Name',[''])[0]) if x}
+        while q:
+            cur,path,sv=q.popleft()
+            if nid not in owner[cur]:
+                owner[cur][nid]=path
+                if sv: server[(cur,nid)]=sv
+            for j,lab,s2 in links(cur):
+                if j>0 and j not in seen:
+                    if block and block(j,names): continue
+                    seen.add(j); q.append((j,path+([lab] if lab else []),s2 or sv))
+    return owner,server
 from collections import deque
-for nid in where:
-    r=npcini.get(str(nid))
-    if not r or not r.get('Talk',[''])[0].isdigit(): continue
-    root=int(r['Talk'][0]); q=deque([(root,[],None)]); seen={root}
-    while q:
-        cur,path,sv=q.popleft()
-        if nid not in owner[cur]:
-            owner[cur][nid]=path
-            if sv: server[(cur,nid)]=sv
-        for j,lab,s2 in links(cur):
-            if j>0 and j not in seen:
-                seen.add(j); q.append((j,path+([lab] if lab else []),s2 or sv))
+first,_=walk(None)
+NAME_OF={nid:npcini[str(nid)]['Name'][0] for nid in where if str(nid) in npcini}
+def other_npcs_line(j,names):
+    """A line spoken by another NPC that this NPC's own tree also reaches belongs to that NPC
+    (shared fall-through lines otherwise hand 侯利X's 禮券 lists to 神州小福星)."""
+    sp=speaker(j)
+    if not sp or same_speaker(sp,names): return False
+    return any(same_speaker(sp,{NAME_OF.get(n,'')}) for n in first.get(j,{}))
+owner,server=walk(other_npcs_line)
 def menu_path(nid,mid): return owner[mid].get(nid)
 def parts(r,kind):
     out=[]
