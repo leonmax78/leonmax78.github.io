@@ -226,6 +226,25 @@
   const headSrc = n => { const h = HERO_INFO[n]; if(!h) return ''; const p = String(location.pathname||''); return (p==='/test'||p.startsWith('/test/')?'/test/':'/') + 'assets/test-media/jiangshen-heads/h' + h[0] + '.webp?v=1'; };
   const headImg = (n, cls) => { const src = headSrc(n); return src ? `<img class="${cls}" src="${src}" alt="" loading="lazy" decoding="async">` : `<span class="${cls} none"></span>`; };
   const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
+  // V763: shared bits for the three 降神 tabs
+  const canon = n => { try{ return (typeof canonicalName === 'function' && canonicalName(n)) || n; }catch(e){ return n; } };
+  const comboList = () => Object.entries(D().comboMembers || {}).map(([c,m]) => [c, (m || []).map(canon)]);
+  const combosOf = list => (typeof activeCombos === 'function' ? activeCombos(list.filter(Boolean)) : []);
+  const JS_TABS = active => `<div class="jsTabs">${[['support','副降神試算'],['recommend','組合推薦方案'],['supportCompare','存檔比較']].map(([k,l]) => `<button type="button" ${k===active ? 'aria-selected="true"' : `onclick="setJiang('${k}')"`}>${l}</button>`).join('')}</div>`;
+  const miniHeads = set => `<span class="jsMini">${normalizeSet(set).map((p,i) => p.n ? `<span title="${E(p.n)} ${p.s}星">${headImg(p.n,'')}${i===0 ? `<em>${p.s}</em>` : ''}</span>` : '<span class="none"></span>').join('')}</span>`;
+  let cmpSlot = null;
+  if(!window.__jsStickyBound){
+    window.__jsStickyBound = true;
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('jsSticky'); if(!bar) return;
+      const cards = document.querySelector('.jsPage .jsCards');
+      if(!cards){ bar.remove(); return; }
+      const hdr = document.querySelector('header.topbar');
+      const top = hdr && /fixed|sticky/.test(getComputedStyle(hdr).position) ? Math.max(0, hdr.getBoundingClientRect().bottom) : 0;
+      bar.style.top = top + 'px';
+      bar.classList.toggle('show', !!cards && window.matchMedia('(max-width:820px)').matches && cards.getBoundingClientRect().bottom < top);
+    }, {passive:true});
+  }
   function renderSupport(){
     const reader = $('reader'); if(!reader) return;
     const plan = getCurrent();
@@ -238,8 +257,21 @@
     const heroes = names().filter(n => shown(n) && (!q || n.includes(q)) && (!heroSeries || (HERO_INFO[n] && HERO_INFO[n][1]===heroSeries))).sort((a,b)=>order(a)-order(b));
     const seriesCount = k => names().filter(n => shown(n) && HERO_INFO[n][1]===k).length;
     const slots = getSlots();
+    // which picks would complete a new 連結 in the slot being edited
+    const base = chosen.filter((n,i) => n && i !== activeSlot);
+    const baseCombos = new Set(combosOf(base));
+    const gainOf = n => combosOf(base.concat(n)).filter(c => !baseCombos.has(c));
+    // 連結 that are one 降神 short
+    const have = new Set(chosen.filter(Boolean).map(canon));
+    const near = comboList().filter(([c,m]) => m.length > 1 && !res.combos.includes(c) && m.filter(x => !have.has(x)).length === 1)
+      .map(([c,m]) => [c, m.find(x => !have.has(x))]).filter(([,miss]) => shown(miss)).slice(0, 8);
+    const freeSlot = plan.findIndex(p => !p.n);
+    const cardLinks = n => res.combos.filter(c => ((D().comboMembers || {})[c] || []).map(canon).includes(canon(n)));
+    const cmpOk = cmpSlot !== null && normalizeSet(slots[cmpSlot]).some(p=>p.n);
+    const cmpTotal = cmpOk ? calcPlan(slots[cmpSlot]).total : null;
     reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
-      <div class="jsTabs"><button type="button" aria-selected="true">副降神試算</button><button type="button" onclick="setJiang('recommend')">組合推薦方案</button><button type="button" onclick="setJiang('supportCompare')">存檔比較</button></div>
+      ${JS_TABS('support')}
+      <div class="jsSticky" id="jsSticky">${plan.map((p,i)=>`<button type="button" data-js-jump="${i}" class="${i===activeSlot?'active':''}">${p.n ? headImg(p.n,'') : '<span>＋</span>'}<small>${i===0?'主':'副'+i}</small></button>`).join('')}</div>
       <div class="jsLayout">
         <aside class="jsSide">
           <div class="jsSideHead">正在設定：<b>${E(RATE_LABEL(activeSlot).replace('・',' '))}</b></div>
@@ -247,25 +279,31 @@
           <div class="jsSeries">${['', ...SERIES].map(k => `<button type="button" class="${heroSeries===k?'active':''}" data-js-series="${E(k)}">${k ? E(k) + `<small>${seriesCount(k)}</small>` : '全部'}</button>`).join('')}</div>
           <div class="jsHeroList">${['', ...heroes].map(n => {
               const used = n && chosen.includes(n) && cur.n !== n;
-              return `<button type="button" class="${cur.n===n ? 'active' : ''} ${n ? '' : 'clear'}" data-js-hero="${E(n)}" ${used ? 'disabled title="已放在其他欄位"' : ''}>${n ? headImg(n,'jsHeroFace') + `<span>${E(n)}</span>` : '<span>清除此欄</span>'}</button>`;
+              const gain = n && !used && cur.n !== n ? gainOf(n) : [];
+              return `<button type="button" class="${cur.n===n ? 'active' : ''} ${n ? '' : 'clear'} ${gain.length ? 'link' : ''}" data-js-hero="${E(n)}" ${used ? 'disabled title="已放在其他欄位"' : gain.length ? `title="選了可成立：${E(gain.join('、'))}"` : ''}>${n ? headImg(n,'jsHeroFace') + `<span>${E(n)}</span>` + (gain.length ? `<em class="jsLinkHint">＋${E(gain[0])}${gain.length>1?' 等'+gain.length+'個':''}</em>` : '') : '<span>清除此欄</span>'}</button>`;
             }).join('')}${heroes.length ? '' : '<small class="muted">沒有符合的降神</small>'}</div>
           <div class="jsLabel">星等</div>
           <div class="jsStars">${Array.from({length:21},(_,i)=>`<button type="button" class="${cur.s===i ? 'active' : ''}" data-js-star="${i}">${i}</button>`).join('')}</div>
+          <button type="button" class="jsStarAll" id="jsStarAll" ${plan.slice(1).some(p=>p.n) ? '' : 'disabled'}>副降神全部設為 ${cur.s} 星</button>
         </aside>
         <div class="jsStat">
           <div class="jsLabel">總能力（含連結）</div>
           <div class="jsTotals">${stats().map(st=>`<div><span>${E(window.SZO_DISPLAY.label(st))}</span><b class="${Number(res.total[st])?'':'zero'}">+${fmt(res.total[st])}</b></div>`).join('')}</div>
           <div class="jsLabel">成立連結</div>
           <div class="jsCombos">${res.combos && res.combos.length ? res.combos.map(c=>`<div><b>${E(c)}</b><small>${E(typeof comboText === 'function' ? comboText(c) : '')}</small></div>`).join('') : '<small class="muted">沒有成立連結</small>'}</div>
+          ${near.length ? `<div class="jsLabel">差 1 隻就成立</div>
+          <div class="jsNear">${near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" title="${E(typeof comboText === 'function' ? comboText(c) : '')}">${headImg(miss,'jsHeroFace')}<span><b>${E(c)}</b><small>缺 ${E(miss)}・點一下放進${freeSlot>=0 ? (freeSlot===0?'主降神':'副降神 '+freeSlot) : '目前欄位'}</small></span></button>`).join('')}</div>` : ''}
         </div>
         <div class="jsMain">
           <div class="jsCards">${plan.map((p,i)=>{
             const a = res.picks.find(x=>x.i===i)?.a || {};
             const all = stats().map(st=>[st, Number(a[st]||0)]);
+            const links = p.n ? cardLinks(p.n) : [];
             return `<button type="button" class="jsCard ${i===activeSlot?'active':''} ${p.n?'':'empty'}" data-js-slot="${i}">
               <span class="jsCardRole">${E(RATE_LABEL(i))}</span>
               <span class="jsCardFace">${p.n ? headImg(p.n,'') : '<span class="jsCardPlus">＋</span>'}${p.n ? `<span class="jsCardStar">${p.s} 星</span>` : ''}</span>
               <span class="jsCardName">${p.n ? E(p.n) : '點這裡選降神'}</span>
+              ${links.length ? `<span class="jsCardLinks">${links.map(l=>`<i>${E(l)}</i>`).join('')}</span>` : ''}
               ${p.n ? `<span class="jsCardStats">${all.map(([st,v])=>`<span class="${v?'':'zero'}"><i>${E(window.SZO_DISPLAY.label(st))}</i><b>+${fmt(v)}</b></span>`).join('')}</span>` : ''}
             </button>`;
           }).join('')}</div>
@@ -275,27 +313,44 @@
           <div class="jsLabel">存檔</div>
           <div class="jsSlots">${SLOT_LETTERS.map((x,i)=>{
             const empty = !normalizeSet(slots[i]).some(p=>p.n);
-            return `<div class="jsSlot"><b>${x}</b><span>${E(slotSummary(slots[i]))}</span><button type="button" data-js-save="${i}">存入</button><button type="button" data-js-load="${i}" ${empty?'disabled':''}>讀取</button></div>`;
+            return `<div class="jsSlot ${cmpSlot===i && !empty ? 'cmp' : ''}"><b>${x}</b>${empty ? '<span class="muted">空白</span>' : miniHeads(slots[i])}<button type="button" data-js-save="${i}">存入</button><button type="button" data-js-load="${i}" ${empty?'disabled':''}>讀取</button><button type="button" data-js-cmp="${i}" ${empty?'disabled':''}>${cmpSlot===i && !empty ? '收起' : '和目前比較'}</button></div>`;
           }).join('')}</div>
+          ${cmpOk ? `<div class="jsDiff"><div class="jsLabel">目前組合 比 存檔 ${SLOT_LETTERS[cmpSlot]}</div><div class="jsTotals">${stats().map(st=>{ const d = Math.ceil(Number(res.total[st]||0)) - Math.ceil(Number(cmpTotal[st]||0)); return `<div><span>${E(window.SZO_DISPLAY.label(st))}</span><b class="${d>0?'up':d<0?'down':'zero'}">${d>0?'+':''}${fmt(d)}</b></div>`; }).join('')}</div></div>` : ''}
           <div class="jsActions"><button type="button" id="jsDetail">看各降神能力明細</button><button type="button" id="jsClearAll">全部清空</button></div>
       </div>
     </section>`;
+    // the card has a transform, so a fixed bar inside it would scroll away: host it on <body>
+    document.querySelectorAll('body > .jsSticky').forEach(x => x.remove());
+    const sticky = $('jsSticky'); if(sticky) document.body.appendChild(sticky);
     const rerender = () => { const y = window.scrollY; renderSupport(); window.scrollTo(0, y); };
-    reader.querySelectorAll('[data-js-slot]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsSlot); rerender(); if(window.matchMedia('(max-width:820px)').matches) document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); });
+    const toPicker = () => { if(window.matchMedia('(max-width:820px)').matches) document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); };
+    reader.querySelectorAll('[data-js-slot]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsSlot); rerender(); toPicker(); });
+    document.querySelectorAll('[data-js-jump]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsJump); rerender(); document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); });
+    const place = (slot, n) => {
+      const set = getCurrent(); const was = set[slot].n; set[slot].n = n;
+      if(n && !was) set[slot].s = slot===0 ? 20 : 1;
+      setCurrent(set); return set;
+    };
     reader.querySelectorAll('[data-js-hero]').forEach(b=>b.onclick=()=>{
-      const set = getCurrent(); set[activeSlot].n = b.dataset.jsHero;
-      if(set[activeSlot].n && !plan[activeSlot].n) set[activeSlot].s = activeSlot===0 ? 20 : 1;
-      setCurrent(set);
+      const set = place(activeSlot, b.dataset.jsHero);
       // move on to the next empty slot so five picks take five taps
       if(b.dataset.jsHero){ const next = set.findIndex((p,i)=>i>activeSlot && !p.n); if(next>=0) activeSlot = next; }
       rerender();
     });
+    reader.querySelectorAll('[data-js-fill]').forEach(b=>b.onclick=()=>{
+      const slot = freeSlot >= 0 ? freeSlot : activeSlot;
+      const set = place(slot, b.dataset.jsFill);
+      const next = set.findIndex(p=>!p.n); activeSlot = next >= 0 ? next : slot;
+      rerender();
+    });
     reader.querySelectorAll('[data-js-series]').forEach(b=>b.onclick=()=>{ heroSeries = b.dataset.jsSeries; rerender(); });
     reader.querySelectorAll('[data-js-star]').forEach(b=>b.onclick=()=>{ const set = getCurrent(); set[activeSlot].s = Number(b.dataset.jsStar); setCurrent(set); rerender(); });
+    $('jsStarAll').onclick = () => { const set = getCurrent(); set.forEach((p,i)=>{ if(i>0 && p.n) p.s = cur.s; }); setCurrent(set); rerender(); };
     const search = $('jsHeroSearch');
     search.oninput = () => { heroQuery = search.value; const pos = search.selectionStart; rerender(); const s2 = $('jsHeroSearch'); s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} };
     reader.querySelectorAll('[data-js-save]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsSave); const all = getSlots(); all[i] = getCurrent(); setSlots(all); rerender(); });
     reader.querySelectorAll('[data-js-load]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsLoad); setCurrent(getSlots()[i]); activeSlot = 0; rerender(); });
+    reader.querySelectorAll('[data-js-cmp]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsCmp); cmpSlot = cmpSlot===i ? null : i; rerender(); });
     $('jsClearAll').onclick = () => { setCurrent(defaultSet()); activeSlot = 0; rerender(); };
     $('jsDetail').onclick = () => { renderSupportLegacy(); calcSupportOnce(); };
   }
@@ -340,35 +395,35 @@
     </section>`;
     scrollTop();
   }
-  function compareSelectHtml(i){ return `<label>比較 ${i+1}<select id="cmpSlot${i}" class="supportCompareSelect"><option value="">不使用</option>${slotOptions()}</select></label>`; }
+  let cmpPick = null;
   function renderSupportCompare(){
     const slots = getSlots();
-    $('reader').innerHTML = `<section class="card">${supportBackBtn()}<h1>副降神存檔比較</h1>
-      <div class="notice">選擇 2 ~ 5 組存檔後比較總能力；每列最高值會用醒目顏色標示，同數值會一起標示。</div>
-      <div class="supportSaveBar">${Array.from({length:5},(_,i)=>compareSelectHtml(i)).join('')}<button id="runSupportCompare" type="button">計算比較</button></div>
-      <h3>存檔內容</h3><div class="kvGrid">${SLOT_LETTERS.map((x,i)=>`<div class="kv"><div class="k">存檔 ${x}</div><div class="v">${E(slotSummary(slots[i]))}</div></div>`).join('')}</div>
+    const filled = slots.map(s => normalizeSet(s).some(p=>p.n));
+    if(!cmpPick) cmpPick = filled.slice();
+    $('reader').innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+      ${JS_TABS('supportCompare')}
+      <div class="jsLabel">點選要比較的存檔（可多選，存檔在「副降神試算」下方存入）</div>
+      <div class="jsCmpPick">${SLOT_LETTERS.map((x,i)=>`<button type="button" data-cmp-pick="${i}" class="${cmpPick[i] && filled[i] ? 'active' : ''}" ${filled[i] ? '' : 'disabled'}><b>${x}</b>${filled[i] ? miniHeads(slots[i]) : '<span class="muted">空白</span>'}</button>`).join('')}</div>
       <div id="supportCompareResult"></div>
     </section>`;
-    for(let i=0;i<5;i++){ const s=$('cmpSlot'+i); if(s) s.value = i<2 ? String(i) : ''; }
-    $('runSupportCompare').onclick = runSupportCompare;
+    $('reader').querySelectorAll('[data-cmp-pick]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.cmpPick); cmpPick[i] = !cmpPick[i]; renderSupportCompare(); });
     runSupportCompare();
-    scrollTop();
   }
   function runSupportCompare(){
     const slots = getSlots();
-    const selected = [];
-    for(let i=0;i<5;i++){ const v=$('cmpSlot'+i)?.value; if(v !== '') selected.push(Number(v)); }
     const out = $('supportCompareResult'); if(!out) return;
-    if(!selected.length){ out.innerHTML='<div class="empty">請至少選擇一組存檔</div>'; return; }
-    const cols = selected.map(idx=>({idx,label:'存檔 '+SLOT_LETTERS[idx],set:slots[idx],res:calcPlan(slots[idx])})).filter(c=>c.res.picks.length);
-    if(!cols.length){ out.innerHTML='<div class="empty">選擇的存檔沒有降神資料</div>'; return; }
-    out.innerHTML = `<h3>總能力比較</h3><div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${cols.map(c=>`<th>${E(c.label)}<br><small>${E(slotSummary(c.set))}</small></th>`).join('')}</tr></thead><tbody>
+    const cols = SLOT_LETTERS.map((x,idx)=>({idx,label:'存檔 '+x,set:slots[idx],res:calcPlan(slots[idx])}))
+      .filter(c => cmpPick && cmpPick[c.idx] && c.res.picks.length);
+    if(!cols.length){ out.innerHTML='<div class="empty">還沒有可比較的存檔。先到「副降神試算」選好降神，按下方的「存入」。</div>'; return; }
+    out.innerHTML = `<div class="tableWrap"><table class="compareTable jsCmpTable"><thead><tr><th>能力</th>${cols.map(c=>`<th><b>${E(c.label)}</b>${miniHeads(c.set)}</th>`).join('')}</tr></thead><tbody>
       ${stats().map(st=>{
-        const vals = cols.map(c=>Number(c.res.total[st] || 0));
+        const vals = cols.map(c=>Math.ceil(Number(c.res.total[st] || 0)));
         const max = Math.max(...vals);
-        return `<tr><td>${E(window.SZO_DISPLAY.label(st))}</td>${cols.map((c,i)=>`<td class="${max>0 && vals[i]===max ? 'supportBest' : ''}">${fmt(vals[i])}</td>`).join('')}</tr>`;
+        return `<tr><td>${E(window.SZO_DISPLAY.label(st))}</td>${cols.map((c,i)=>`<td class="${cols.length>1 && max>0 && vals[i]===max ? 'supportBest' : ''}">${fmt(vals[i])}</td>`).join('')}</tr>`;
       }).join('')}
-    </tbody></table></div>${cols.map(c=>`<h3>${E(c.label)} 成立連結</h3>${comboTextBlock(c.res)}`).join('')}`;
+      <tr><td>成立連結</td>${cols.map(c=>`<td class="jsCmpLinks">${c.res.combos.length ? c.res.combos.map(x=>`<i title="${E(typeof comboText === 'function' ? comboText(x) : '')}">${E(x)}</i>`).join('') : '<span class="muted">無</span>'}</td>`).join('')}</tr>
+    </tbody></table></div>
+    <div class="muted" style="margin-top:8px">每列最高值以醒目顏色標示；滑鼠移到連結名稱可看加成。</div>`;
   }
 
   const REC_STAR_KEY = 'szo_jiang_recommend_stars_v1';
@@ -631,15 +686,12 @@
     }).join('');
     return `<h3>候補數值比較</h3><div class="tableWrap"><table class="compareTable"><thead><tr><th>能力</th>${plans.map((p,i)=>`<th>${E(planTitle(p,i))}</th>`).join('')}</tr></thead><tbody>${scoreRow}${statRows}</tbody></table></div>`;
   }
+  let lastRecPlans = [];
   function recommendCard(metric, plan, idx){
-    return `<article class="kv supportChoiceCard" style="margin-top:12px">
-      <h3>${idx + 1}. ${E(metric.title)}候補方案</h3>
-      <div class="muted">${E(metric.desc)}：${fmt(plan.score)}</div>
-      <div class="notice" style="margin-top:10px">${statLine(plan.total, metric.keys)}</div>
-      <div class="kvGrid" style="margin-top:10px">
-        ${plan.picks.map((p,i)=>`<div class="kv"><div class="k">${E(REC_SLOTS[i])}</div><div class="v"><b>${E(p.n)}</b><br><span class="muted">${p.s} 星${i===0?' / 100%':' / 10%'}</span></div></div>`).join('')}
-      </div>
-      <div class="muted" style="margin-top:10px">成立連結：${plan.combos?.length ? plan.combos.map(E).join('、') : '無'}</div>
+    return `<article class="jsRecCard">
+      <div class="jsRecHead"><b>${idx + 1}. ${E(metric.title)}</b><span class="muted">分數 ${fmt(plan.score)}</span><button type="button" data-rec-apply="${idx}">套用到副降神試算</button></div>
+      <div class="jsRecPicks">${plan.picks.map((p,i)=>`<div class="jsRecPick ${i===0?'main':''}"><span class="jsCardFace">${headImg(p.n,'')}<span class="jsCardStar">${p.s} 星</span></span><b>${E(p.n)}</b><small>${E(REC_SLOTS[i])}${i===0?'・100%':'・10%'}</small></div>`).join('')}</div>
+      <div class="jsRecFoot"><span>${statLine(plan.total, metric.keys)}</span><span>成立連結：${plan.combos?.length ? plan.combos.map(c=>`<i>${E(c)}</i>`).join('') : '無'}</span></div>
     </article>`;
   }
   function renderRecommendResults(){
@@ -653,30 +705,30 @@
     box.innerHTML = '<div class="notice">正在計算推薦組合...</div>';
     setTimeout(()=>{
       const plans = topRecommendPlans(metric.kind, stars, fixedMain);
-      const html = `<section class="card supportChoiceCard" style="box-shadow:none;margin-top:18px;border-color:rgba(54,211,207,.55)">
-        <h2>${E(metric.title)}</h2>
-        <div class="muted">${E(metric.desc)}，列出前 5 個候補。</div>
-        ${recommendCompareTable(plans)}
+      lastRecPlans = plans;
+      box.innerHTML = plans.length ? `<h2 class="jsRecTitle">${E(metric.title)}<small>${E(metric.desc)}，列出前 ${plans.length} 個候補</small></h2>
         ${plans.map((p,i)=>recommendCard(metric,p,i)).join('')}
-      </section>`;
-      box.innerHTML = html || '<div class="empty">沒有可用的降神資料。</div>';
+        <details class="jsRecTable"><summary>展開候補數值比較表</summary>${recommendCompareTable(plans)}</details>` : '<div class="empty">沒有可用的降神資料。</div>';
+      box.querySelectorAll('[data-rec-apply]').forEach(b=>b.onclick=()=>{
+        const plan = lastRecPlans[Number(b.dataset.recApply)]; if(!plan) return;
+        setCurrent(plan.picks.map(p=>({n:p.n, s:p.s})));
+        activeSlot = 0; window.setJiang('support');
+      });
     }, 20);
   }
   function renderRecommend(){
     const reader = $('reader'); if(!reader) return;
     const stars = recommendStars();
-    reader.innerHTML = `<section class="card">
-      <h1>副降神組合推薦方案</h1>
-      <div class="notice">手動設定主降神與 4 個副降神的星等後，系統會推薦物理、術法、防禦三種方向各 1 ~ 5 個候補組合。副降神能力依 10% 納入，若組合成立也會納入連結加成。</div>
-      <div class="kvGrid">
-        <div class="kv"><label class="k" for="recMain">主降神</label><div class="v"><select id="recMain" data-hero-search><option value="">預設（自動推薦主降神）</option>${names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('')}</select></div></div>
-        ${REC_SLOTS.map((label,i)=>`<div class="kv"><div class="k">${E(label)}星等</div><div class="v"><select id="recStar${i}">${recommendStarOptions(stars[i], i > 0)}</select></div></div>`).join('')}
-        <div class="kv"><div class="k">推薦方向</div><div class="v"><select id="recMetric">${REC_METRICS.map(m=>`<option value="${E(m.kind)}">${E(m.title)}</option>`).join('')}</select></div></div>
+    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+      ${JS_TABS('recommend')}
+      <div class="muted" style="margin-bottom:10px">設定主降神與 4 個副降神的星等，依物理、術法、防禦方向推薦前 5 個組合；副降神以 10% 計入，並含成立連結的加成。</div>
+      <div class="jsRecForm">
+        <label><span>主降神</span><select id="recMain" data-hero-search><option value="">自動推薦主降神</option>${names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('')}</select></label>
+        <label><span>推薦方向</span><select id="recMetric">${REC_METRICS.map(m=>`<option value="${E(m.kind)}">${E(m.title)}</option>`).join('')}</select></label>
+        ${REC_SLOTS.map((label,i)=>`<label><span>${E(label)}星等</span><select id="recStar${i}">${recommendStarOptions(stars[i], i > 0)}</select></label>`).join('')}
       </div>
-      <div class="supportSaveBar" style="margin-top:14px">
-        <button id="runJiangRecommend" type="button">產生推薦方案</button>
-      </div>
-      <div id="jiangRecommendResults"><div class="empty">請先設定星等與推薦方向，再按「產生推薦方案」。</div></div>
+      <div class="jsActions"><button id="runJiangRecommend" type="button" class="jsPrimary">產生推薦方案</button></div>
+      <div id="jiangRecommendResults"><div class="empty">設定好星等與推薦方向後，按「產生推薦方案」。</div></div>
     </section>`;
     $('runJiangRecommend').onclick = renderRecommendResults;
   }
