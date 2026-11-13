@@ -23,7 +23,7 @@
 
   const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${qty > 1 ? `<span class="exQty">×${Number(qty).toLocaleString()}</span>` : ''}`;
   const items = list => list.map(item).join('<span class="exPlus">＋</span>');
-  const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}</li>`;
+  const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${r.pick ? '<small class="exTag dim">任選一</small>' + r.r.map(item).join('<span class="exPlus">／</span>') : items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}</li>`;
   const placesHTML = npc => npc.p.map(([sid, nid, stage, x, y]) => `<button type="button" class="exPlace" data-ex-npc="${sid}:${nid}" title="看 NPC 對話與地圖位置">${esc(stage)} <small>(${x}, ${y})</small></button>`).join('');
 
   // Many equipment pieces that all give the same thing (拆解 a whole set) read as one line:
@@ -84,6 +84,24 @@
     return m ? ROMAN[m[0]] : 0;
   }
 
+  // Same materials, one of several rewards (西域裝甲禮券 → 劍／勇／術／道／僧裝錦囊) read as one line.
+  function choices(list){
+    const by = new Map(), out = [];
+    for(const r of list){
+      const key = r.r.length === 1 ? [sig(r.m), r.c || '', r.l || ''].join('#') : null;
+      if(key === null){ out.push(r); continue; }
+      if(!by.has(key)){ const box = { set: [] }; by.set(key, box); out.push(box); }
+      by.get(key).set.push(r);
+    }
+    return out.flatMap(x => {
+      if(!x.set) return [x];
+      const names = new Set(x.set.map(r => r.r[0][0]));
+      if(x.set.length < 2 || names.size < x.set.length) return x.set;
+      const gs = new Set(x.set.map(r => r.g || ''));
+      return [{ ...x.set[0], r: x.set.map(r => r.r[0]), pick: true, n: x.set.length, g: gs.size === 1 ? x.set[0].g : '' }];
+    });
+  }
+
   // rows → NPC blocks → sub-groups (選單／分類)
   function blocksHTML(data, rows, showVer, highFirst){
     if(highFirst){
@@ -98,9 +116,9 @@
       if(shown >= limit) break;
       const npc = data.npcs[p];
       const groups = new Map();
-      for(const r of list){ if(shown >= limit) break; const g = r.g || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown++; }
+      for(const r of choices(list)){ if(shown >= limit) break; const g = r.g || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown += r.n || 1; }
       out += `<section class="exNpc"><header><h3>${esc(npc.n)}</h3>${showVer ? `<span class="exVer">${esc(list[0].v)}</span>` : ''}<div class="exPlaces">${placesHTML(npc)}</div></header>
-        ${[...groups].map(([g, rs]) => { const list = collapse(rs, g); const head = g && !(list.length === 1 && list[0].many); return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
+        ${[...groups].map(([g, rs]) => { const list = collapse(rs, g); const head = g && list.length > 1; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
