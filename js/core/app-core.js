@@ -438,6 +438,8 @@ async function setView(view){
  else if(view==='reverse'){await ensureItemPageLoaded(); await renderItemPage('reverse'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
 }
 window.setView = setView;
+const CORE_SET_JIANG = setJiang;
+let jiangDelegatedKind=null;
 function setJiang(kind){
  openJiangMenuOnly();
  const loadingLabel=jiangLoadingLabel(kind);
@@ -449,10 +451,14 @@ function setJiang(kind){
    window.renderJiangRecommendPage();
    return;
   }
-  if(!jiangshenSetDelegating && window.setJiang && window.setJiang !== setJiang){
-   jiangshenSetDelegating=true;
-   try{return window.setJiang(kind);}
-   finally{jiangshenSetDelegating=false;}
+  // setJiang here is the global binding, which the 降神 modules replace; compare with the
+  // original so the first visit also goes through the newest page code (V766).
+  // A kind no module handles falls back here once; the marker stops it bouncing back.
+  if(jiangDelegatedKind===kind){jiangDelegatedKind=null;fillJiangFields(kind);return;}
+  if(window.setJiang && window.setJiang !== CORE_SET_JIANG){
+   jiangDelegatedKind=kind;
+   setTimeout(()=>{if(jiangDelegatedKind===kind)jiangDelegatedKind=null;},0);
+   return window.setJiang(kind);
   }
   fillJiangFields(kind);
  })();
