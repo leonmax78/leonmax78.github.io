@@ -247,11 +247,13 @@
             }).join('')}${heroes.length ? '' : '<small class="muted">沒有符合的降神</small>'}</div>
           <div class="jsLabel">星等</div>
           <div class="jsStars">${Array.from({length:21},(_,i)=>`<button type="button" class="${cur.s===i ? 'active' : ''}" data-js-star="${i}">${i}</button>`).join('')}</div>
+        </aside>
+        <div class="jsStat">
           <div class="jsLabel">總能力（含連結）</div>
           <div class="jsTotals">${stats().map(st=>`<div><span>${E(window.SZO_DISPLAY.label(st))}</span><b class="${Number(res.total[st])?'':'zero'}">+${fmt(res.total[st])}</b></div>`).join('')}</div>
           <div class="jsLabel">成立連結</div>
           <div class="jsCombos">${res.combos && res.combos.length ? res.combos.map(c=>`<div><b>${E(c)}</b><small>${E(typeof comboText === 'function' ? comboText(c) : '')}</small></div>`).join('') : '<small class="muted">沒有成立連結</small>'}</div>
-        </aside>
+        </div>
         <div class="jsMain">
           <div class="jsCards">${plan.map((p,i)=>{
             const a = res.picks.find(x=>x.i===i)?.a || {};
