@@ -70,7 +70,13 @@
       return [row];
     });
   }
-  const manyHTML = r => `<li class="exRow"><span class="exGive"><details class="exMany"><summary><span class="exItem plain">${esc(r.label)}</span>${r.many[0][1] > 1 ? `<span class="exQty">×${Number(r.many[0][1]).toLocaleString()}</span>` : ''}<small class="exTag dim">任一件・共 ${r.many.length} 件</small></summary><div class="exManyList">${r.many.map(x => item([x[0], 1, x[2]])).join('、')}</div></details>${r.rest.length ? '<span class="exPlus">＋</span>' + items(r.rest) : ''}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}</li>`;
+  // One line for the whole set, the pieces listed underneath as a note (first few, tap for all).
+  const manyHTML = r => {
+    const names = r.many.map(x => x[0]);
+    const short = names.slice(0, 6).join('、') + (names.length > 6 ? `…等 ${names.length} 件` : '');
+    return `<li class="exRow"><span class="exGive"><span class="exItem plain">${esc(r.label)}</span>${r.many[0][1] > 1 ? `<span class="exQty">×${Number(r.many[0][1]).toLocaleString()}</span>` : ''}<small class="exTag dim">任一件</small>${r.rest.length ? '<span class="exPlus">＋</span>' + items(r.rest) : ''}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}`
+      + `<details class="exSetNote"><summary>包含：${esc(short)}</summary><div>${r.many.map(x => item([x[0], 1, x[2]])).join('、')}</div></details></li>`;
+  };
 
   // 高階在前: 第四階 > 第一階, 3 星級 > 1 星級, Ⅵ > Ⅰ
   const ZH = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };

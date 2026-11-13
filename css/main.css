@@ -4535,3 +4535,9 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .exChips{display:grid;gap:8px}
 .exMaps button{border-style:dashed}
 .exMaps button.active{border-style:solid}
+.exSetNote{flex-basis:100%;font-size:12.5px;color:var(--muted)}
+.exSetNote>summary{cursor:pointer;list-style:none}
+.exSetNote>summary::-webkit-details-marker{display:none}
+.exSetNote[open]>summary{display:none}
+.exSetNote>div{line-height:1.7}
+.exSetNote .exItem{font-weight:500;color:var(--muted)}
