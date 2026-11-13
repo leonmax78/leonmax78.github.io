@@ -14,6 +14,11 @@ from audit_mpc_transfers import parse
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Dialog teleports are only shown when checked in game: many dialog chains are
+# boss-room exits, failure returns or quest-only teleports that a player can't use
+# freely. (stage, destination) pairs listed here are confirmed.
+PORTAL_KEEP = {(127, 132)}   # 亂石林 穹蒼結界 → 大汗陵墓
+
 
 def load_msgs(folder):
     msgs = {}
@@ -128,6 +133,8 @@ def main(mpc_dir, msg_dir=None):
                         if a[0] != 42:
                             continue
                         for dest, cond in dialog_teleports(msgs, a[3]).items():
+                            if (sid, dest) not in PORTAL_KEEP:
+                                continue
                             if dest == sid or dest not in names or (ev['id'], dest) in exits:
                                 continue
                             exits[(ev['id'], dest)] = dict(pts=[(o[1], o[2]) for o in src],
