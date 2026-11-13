@@ -23,7 +23,7 @@
 
   const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${qty > 1 ? `<span class="exQty">×${Number(qty).toLocaleString()}</span>` : ''}`;
   const items = list => list.map(item).join('<span class="exPlus">＋</span>');
-  const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${r.pick ? '<small class="exTag dim">任選一</small>' + r.r.map(item).join('<span class="exPlus">／</span>') : items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}</li>`;
+  const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${r.pick ? `<span class="exItem plain">下列其中一款</span>${r.r[0][1] > 1 ? `<span class="exQty">×${Number(r.r[0][1]).toLocaleString()}</span>` : ''}` : items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}${r.pick ? `<div class="exPickList">${r.r.map(x => item([String(x[0]).replace(/^降神魂魄/, ''), 1, x[2]])).join('、')}</div>` : ''}</li>`;
   const placesHTML = npc => npc.p.map(([sid, nid, stage, x, y]) => `<button type="button" class="exPlace" data-ex-npc="${sid}:${nid}" title="看 NPC 對話與地圖位置">${esc(stage)} <small>(${x}, ${y})</small></button>`).join('');
 
   // Many equipment pieces that all give the same thing (拆解 a whole set) read as one line:
@@ -117,7 +117,8 @@
   function choices(list){
     const by = new Map(), out = [];
     for(const r of list){
-      const key = r.r.length === 1 ? [sig(r.m), r.c || '', r.l || ''].join('#') : null;
+      // same materials, one of several rewards of the same amount (巨門: 「換取下列其中一款 4 個」)
+      const key = r.r.length === 1 ? [sig(r.m), r.r[0][1], r.c || '', r.l || ''].join('#') : null;
       if(key === null){ out.push(r); continue; }
       if(!by.has(key)){ const box = { set: [] }; by.set(key, box); out.push(box); }
       by.get(key).set.push(r);
