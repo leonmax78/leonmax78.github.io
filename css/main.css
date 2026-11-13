@@ -4760,3 +4760,9 @@ html body .choiceMenuItem:hover{transform:translateY(-2px)}
 .soulSeries button{font:inherit;font-size:13px;color:var(--text,#dce7f5);background:#1a2430;border:1px solid #4b5b6e;border-radius:999px;padding:5px 12px;cursor:pointer}
 .soulSeries button.active{background:#dda84d;border-color:#dda84d;color:#1b1406;font-weight:800}
 .soulSeries small{margin-left:4px;opacity:.7;font-size:11px}
+/* V770: 武冠收錄 entry like the other entry pages */
+html body .collectMenuPage .collectList{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:14px}
+html body .collectMenuPage .collectList .resultItem{min-height:88px;display:grid;align-content:center;gap:5px;padding:16px 18px;border-radius:14px;border-left:3px solid #dda84d!important;position:relative}
+html body .collectMenuPage .collectList .resultItem::after{content:"›";position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;color:var(--muted)}
+html body .collectMenuPage .collectList .rName{font-size:17px}
+@media (max-width:520px){html body .collectMenuPage .collectList{grid-template-columns:1fr}}

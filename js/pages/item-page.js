@@ -272,7 +272,7 @@ function filterItemIndexList(q,type,min,max,series,kind,ignoreUnit=false){
  return window.SZO_ITEM_TAXONOMY&&!ignoreUnit?window.SZO_ITEM_TAXONOMY.sort(rows):rows;
 }
 function itemIndexResultsHTML(arr){
- return arr.map(it=>`<button class="resultItem" data-item="${esc(it.id)}"><div class="rName">${esc(it.name)}</div><div class="rSub">Lv.${esc(it.level||'')} / ${esc(itemIndexTypeName(it))} / ID ${esc(it.id||'')}</div></button>`).join('')||'<div class="muted">找不到符合條件的道具。</div>';
+ return arr.map(it=>`<button class="resultItem" data-item="${esc(it.id)}"><div class="rName">${esc(it.name)}</div><div class="rSub">${Number(it.level)?'Lv.'+esc(it.level)+' / ':''}${esc(itemIndexTypeName(it))} / ID ${esc(it.id||'')}</div></button>`).join('')||'<div class="muted">找不到符合條件的道具。</div>';
 }
 
 function itemThumbHTML(it){const src=window.SZO_ASSET_MEDIA&&window.SZO_ASSET_MEDIA.itemIconSrc(it);return window.SZO_ASSET_MEDIA?window.SZO_ASSET_MEDIA.img(src,nameOf(it)||it.name,'assetThumb itemThumb'):''}
@@ -335,7 +335,7 @@ function ensureItemOptionalData(id){
 
 function latestItemsHTML(limit=320){
  if(!hasItemData())return '<div class="muted">資料載入中，請稍等。</div>';
- return (items||[]).slice().reverse().slice(0,limit).map(it=>`<button type="button" class="resultItem withAsset" data-item="${esc(it.ID)}">${itemThumbHTML(it)}<span class="resultText"><div class="rName">${esc(nameOf(it))}</div><div class="rSub">Lv.${esc(it.Level||'')} / ${esc(itemTypeName(it.Type)||it.Type||'')} / ID ${esc(it.ID||'')}</div></span></button>`).join('');
+ return (items||[]).slice().reverse().slice(0,limit).map(it=>`<button type="button" class="resultItem withAsset" data-item="${esc(it.ID)}">${itemThumbHTML(it)}<span class="resultText"><div class="rName">${esc(nameOf(it))}</div><div class="rSub">${Number(it.Level)?'Lv.'+esc(it.Level)+' / ':''}${esc(itemTypeName(it.Type)||it.Type||'')} / ID ${esc(it.ID||'')}</div></span></button>`).join('');
 }
 
 async function renderItemPage(tab='item'){
@@ -463,7 +463,7 @@ function renderItemSearchResults(rows,indexOnly,more=false){
  const visible=rows.slice(0,itemResultPage*180),box=byId('itemResults');
  const html=visible.map(raw=>{
   const it=indexOnly?{ID:raw.id,Name:raw.name,Level:raw.level,Type:raw.type}:raw;
-  const parts=[`Lv.${esc(it.Level||'')}`,esc(itemTypeName(it.Type)||it.Type||''),itemKind(it)?`專剋 ${esc(itemKind(it))}`:'',`ID ${esc(it.ID)}`].filter(Boolean);
+  const parts=[Number(it.Level)?`Lv.${esc(it.Level)}`:'',esc(itemTypeName(it.Type)||it.Type||''),itemKind(it)?`專剋 ${esc(itemKind(it))}`:'',`ID ${esc(it.ID)}`].filter(Boolean);
   const effect=window.SZO_ITEM_TAXONOMY?.summary(it);if(effect)parts.unshift(esc(effect));
   return `<button class="resultItem withAsset" data-item="${esc(it.ID)}">${itemThumbHTML(it)}<span class="resultText"><div class="rName">${esc(nameOf(it))}</div><div class="rSub">${parts.join(' / ')}</div></span></button>`;
  }).join('')||'<div class="muted">沒有符合的道具。</div>';
