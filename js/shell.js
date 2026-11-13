@@ -113,10 +113,31 @@
   updateEditorNav();
   editorMobileQuery.addEventListener('change', updateEditorNav);
 
-  window.SZO_SET_GLOBAL_TOP_VISIBLE = function(visible){
+  // V767: the top button shows once the page has scrolled a little (any page length),
+  // and on phones the header slides away while scrolling down and returns on the way up.
+  let topAllowed = false;
+  const syncTopBtn = () => {
     const btn = document.getElementById('collectFloatingTopBtn');
-    if(btn) btn.hidden = !visible;
+    if(btn) btn.hidden = !(topAllowed && window.scrollY > 320);
   };
+  window.SZO_SET_GLOBAL_TOP_VISIBLE = function(visible){ topAllowed = !!visible; syncTopBtn(); };
+  (function(){
+    let lastY = window.scrollY, ticking = false;
+    const phone = window.matchMedia('(max-width: 820px)');
+    window.addEventListener('scroll', () => {
+      if(ticking) return; ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const y = window.scrollY;
+        syncTopBtn();
+        const drawerOpen = document.body.classList.contains('drawerOpen') || document.getElementById('drawer')?.classList.contains('open');
+        if(!phone.matches || drawerOpen || y < 140) document.body.classList.remove('hdrHidden');
+        else if(y > lastY + 6 && !document.activeElement?.closest?.('.topbar')) document.body.classList.add('hdrHidden');
+        else if(y < lastY - 6) document.body.classList.remove('hdrHidden');
+        lastY = y;
+      });
+    }, {passive:true});
+  })();
 
   document.addEventListener('click', function(ev){
     const hit = ev.target && ev.target.closest ? ev.target.closest('[data-global-top]') : null;
