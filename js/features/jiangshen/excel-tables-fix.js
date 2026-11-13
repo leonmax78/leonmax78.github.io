@@ -88,7 +88,7 @@
         <div class="kv"><div class="k">目前星等</div><div class="v"><select id="needCur">${starOptions(0)}</select></div></div>
         <div class="kv"><div class="k">目標星等</div><div class="v"><select id="needTar">${starOptions(20)}</select></div></div>
         <div class="kv"><div class="k">已有降神數量</div><div class="v"><input id="needOwned" type="number" value="0"></div></div>
-        <div class="kv"><div class="k">倍率</div><div class="v"><input id="needRate" type="number" value="1" step="0.1"></div></div>
+        <div class="kv"><div class="k">倍率</div><div class="v"><select id="needRate">${[1,2,3,4,5,6,7,8].map(x=>`<option value="${x}">${x} 倍</option>`).join('')}</select></div></div>
       </div><div class="quick"><button id="calcNeeds" type="button">計算星等</button></div><div id="starNeedResult"></div></div>
       <div id="starTabAura" style="display:none"><h3>靈氣：所需靈氣</h3><div class="kvGrid">
         <div class="kv"><div class="k">目前等級</div><div class="v"><input id="auraCur" type="number" value="0"></div></div>
@@ -137,12 +137,12 @@
     const cur = clampInt(readNum('needCur', 0), 0, max);
     const tar = clampInt(readNum('needTar', max), 0, max);
     const owned = Math.max(0, Math.floor(readNum('needOwned', 0)));
-    const rate = Math.max(0.0001, readNum('needRate', 1));
+    const rate = clampInt(readNum('needRate', 1), 1, 8);
     const raw = starCost(cur, tar);
     const afterOwned = Math.max(0, raw - owned);
     const need = Math.ceil(afterOwned / rate);
     const box = $('starNeedResult');
-    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">星等區間</div><div class="v">${cur} 星 → ${tar} 星</div></div><div class="kv"><div class="k">累積需求</div><div class="v">${fmt(raw)} 顆降神</div></div><div class="kv"><div class="k">已有數量</div><div class="v">${fmt(owned)} 顆</div></div><div class="kv"><div class="k">扣除已有後</div><div class="v">${fmt(afterOwned)} 顆</div></div><div class="kv"><div class="k">倍率後還需</div><div class="v">${fmt(need)} 顆</div></div></div>`;
+    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">星等區間</div><div class="v">${cur} 星 → ${tar} 星</div></div><div class="kv"><div class="k">累積需求</div><div class="v">${fmt(raw)} 顆降神</div></div><div class="kv"><div class="k">已有數量</div><div class="v">${fmt(owned)} 顆</div></div><div class="kv"><div class="k">扣除已有後</div><div class="v">${fmt(afterOwned)} 顆</div></div><div class="kv hl"><div class="k">倍率後還需</div><div class="v">${fmt(need)} 顆</div></div></div>`;
   };
 
   window.calcStarAura = function(){
@@ -151,7 +151,7 @@
     const tar = Math.max(cur, clampInt(readNum('auraTar', 20), 0, max));
     const total = auraCost(cur, tar);
     const box = $('auraNeedResult');
-    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">等級區間</div><div class="v">${cur} → ${tar}</div></div><div class="kv"><div class="k">所需靈氣</div><div class="v">${fmt(total)}</div></div></div>`;
+    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">等級區間</div><div class="v">${cur} → ${tar}</div></div><div class="kv hl"><div class="k">所需靈氣</div><div class="v">${fmt(total)}</div></div></div>`;
   };
 
   window.calcExpNeed = function(){
@@ -164,7 +164,12 @@
     const diamond = ceilDiv(need, 3000n * 100000000n);
     const zhen = ceilDiv(need, 500n * 100000000n);
     const box = $('expNeedResult');
-    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">等級區間</div><div class="v">${cur} → ${tar}</div></div><div class="kv"><div class="k">需要經驗</div><div class="v">${fmtBig(need)}</div></div><div class="kv"><div class="k">約幾億</div><div class="v">${fmtBig(yi)} 億</div></div><div class="kv"><div class="k">乙太 8000億</div><div class="v">${fmtBig(ether)} 顆</div></div><div class="kv"><div class="k">聖鑽 3000億</div><div class="v">${fmtBig(diamond)} 顆</div></div><div class="kv"><div class="k">真元 500億</div><div class="v">${fmtBig(zhen)} 顆</div></div></div>`;
+    if (box) box.innerHTML = `<div class="kvGrid expGrid" style="margin-top:12px"><div class="kv"><div class="k">等級區間</div><div class="v">${cur} → ${tar}</div></div><div class="kv"><div class="k">需要經驗</div><div class="v">${fmtBig(need)}</div></div></div>
+      <div class="expPills"><div class="expPillsHead">換算成經驗丹（三種擇一使用）</div><div class="expPillsRow">
+        <div class="expPill"><span>乙太</span><b>${fmtBig(ether)}</b><small>顆・每顆 8000 億</small></div>
+        <div class="expPill"><span>聖鑽</span><b>${fmtBig(diamond)}</b><small>顆・每顆 3000 億</small></div>
+        <div class="expPill"><span>真元</span><b>${fmtBig(zhen)}</b><small>顆・每顆 500 億</small></div>
+      </div></div>`;
   };
 
   window.calcEatPill = function(){
@@ -177,7 +182,7 @@
     const lv = levelFromExp(total, start);
     const remain = lv < max ? expAt(lv + 1) - total : 0n;
     const box = $('eatPillResult');
-    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">吃丹經驗</div><div class="v">${fmtBig(gain)}</div></div><div class="kv"><div class="k">可到等級</div><div class="v">${lv}</div></div><div class="kv"><div class="k">下一級還差</div><div class="v">${fmtBig(remain)}</div></div></div>`;
+    if (box) box.innerHTML = `<div class="kvGrid" style="margin-top:12px"><div class="kv"><div class="k">吃丹經驗</div><div class="v">${fmtBig(gain)}</div></div><div class="kv hl"><div class="k">可到等級</div><div class="v">${lv}</div></div><div class="kv"><div class="k">下一級還差</div><div class="v">${fmtBig(remain)}</div></div></div>`;
   };
 
   document.addEventListener('click', function(e){
