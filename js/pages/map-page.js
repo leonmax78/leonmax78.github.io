@@ -896,14 +896,23 @@
     if(img.nextElementSibling) img.nextElementSibling.hidden = false;
     img.parentElement && img.parentElement.classList.remove('withImage');
   };
+  // NPCs whose in-game look differs from the client NPC.INI Pic (the server sends another
+  // model). Checked against in-game screenshots. id -> {pic, from: only when NPC.INI still says this}
+  const NPC_PIC_FIX = {
+    6294: {pic: 6039, from: 6239},
+    8411: {pic: 6023, from: 6019},
+    8319: {pic: 6009, from: 6087},   // 馴獸師（祁州城）
+    8320: {pic: 6009, from: 6087},   // 馴獸師（京城）— in game: blue jacket, white cap
+    8321: {pic: 6009, from: 6087}    // 馴獸師（玄州城）
+  };
   function markerImage(marker){
     if(marker.role === 'trap') return '';
     const pic = marker.pic;
     if(pic === undefined || pic === null || pic === '') return '';
     const base = assetBase();
     if(marker.kind === 'monster') return withAssetVersion(`${base}/monster-portraits/m${pic}.png`);
-    if(Number(marker.id) === 6294 && Number(pic) === 6239) return withAssetVersion(`${base}/npc-portraits/n6039.png`);
-    if(Number(marker.id) === 8411 && Number(pic) === 6019) return withAssetVersion(`${base}/npc-portraits/n6023.png`);
+    const fix = NPC_PIC_FIX[Number(marker.id)];
+    if(fix && (!fix.from || Number(fix.from) === Number(pic))) return withAssetVersion(`${base}/npc-portraits/n${fix.pic}.png`);
     return withAssetVersion(`${base}/npc-portraits/n${pic}.png`);
   }
 
