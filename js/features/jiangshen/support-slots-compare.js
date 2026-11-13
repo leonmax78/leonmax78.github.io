@@ -180,7 +180,7 @@
       : '<div class="empty">沒有成立連結</div>';
   }
 
-  function renderSupport(){
+  function renderSupportLegacy(){
     const reader = $('reader'); if(!reader) return;
     reader.innerHTML = `<section class="card"><h1>降神、經驗、修練試算</h1><h2>副降神試算</h2>
       <div class="notice">主降神以 100% 能力計算；副降神 1 ~ 4 各 10%。可直接試算，也可以存入 A ~ E 後做比較。</div>
@@ -212,6 +212,77 @@
     };
     $('loadSupportSlot').onclick = () => loadSupportSlot(Number($('supportSaveSlot').value || 0));
     $('openSupportCompare').onclick = renderSupportCompare;
+  }
+
+  // V755: card layout like the 神魂寶石 page — pick a slot card, choose 降神 and 星等 on the left,
+  // totals and 連結 update at once. Same storage (szo_support_current / slots) as before.
+  let activeSlot = 0, heroQuery = '';
+  const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
+  function renderSupport(){
+    const reader = $('reader'); if(!reader) return;
+    const plan = getCurrent();
+    const res = calcPlan(plan);
+    const chosen = plan.map(p=>p.n);
+    const cur = plan[activeSlot];
+    const q = heroQuery.trim();
+    const heroes = names().filter(n => !q || n.includes(q));
+    const slots = getSlots();
+    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+      <div class="jsTabs"><button type="button" aria-selected="true">副降神試算</button><button type="button" onclick="setJiang('recommend')">組合推薦方案</button><button type="button" onclick="setJiang('supportCompare')">存檔比較</button></div>
+      <div class="jsLayout">
+        <aside class="jsSide">
+          <div class="jsSideHead">正在設定：<b>${E(RATE_LABEL(activeSlot).replace('・',' '))}</b></div>
+          <input id="jsHeroSearch" type="search" placeholder="搜尋降神名稱" value="${E(heroQuery)}">
+          <div class="jsHeroList">${['', ...heroes].map(n => {
+              const used = n && chosen.includes(n) && cur.n !== n;
+              return `<button type="button" class="${cur.n===n ? 'active' : ''}" data-js-hero="${E(n)}" ${used ? 'disabled title="已放在其他欄位"' : ''}>${n ? E(n) : '清除'}</button>`;
+            }).join('')}</div>
+          <div class="jsLabel">星等</div>
+          <div class="jsStars">${Array.from({length:21},(_,i)=>`<button type="button" class="${cur.s===i ? 'active' : ''}" data-js-star="${i}">${i}</button>`).join('')}</div>
+          <div class="jsLabel">總能力（含連結）</div>
+          <div class="jsTotals">${stats().map(st=>`<div><span>${E(window.SZO_DISPLAY.label(st))}</span><b class="${Number(res.total[st])?'':'zero'}">+${fmt(res.total[st])}</b></div>`).join('')}</div>
+          <div class="jsLabel">成立連結</div>
+          <div class="jsCombos">${res.combos && res.combos.length ? res.combos.map(c=>`<div><b>${E(c)}</b><small>${E(typeof comboText === 'function' ? comboText(c) : '')}</small></div>`).join('') : '<small class="muted">沒有成立連結</small>'}</div>
+        </aside>
+        <div class="jsMain">
+          <div class="jsCards">${plan.map((p,i)=>{
+            const a = res.picks.find(x=>x.i===i)?.a || {};
+            const top = stats().map(st=>[st, Number(a[st]||0)]).filter(([,v])=>v).sort((x,y)=>y[1]-x[1]).slice(0,3);
+            return `<button type="button" class="jsCard ${i===activeSlot?'active':''} ${p.n?'':'empty'}" data-js-slot="${i}">
+              <span class="jsCardRole">${E(RATE_LABEL(i))}</span>
+              <span class="jsCardName">${p.n ? E(p.n) : '點這裡選降神'}</span>
+              ${p.n ? `<span class="jsCardStar">${p.s} 星</span>` : ''}
+              ${top.length ? `<span class="jsCardStats">${top.map(([st,v])=>`${E(window.SZO_DISPLAY.label(st))} +${fmt(v)}`).join('<br>')}</span>` : ''}
+            </button>`;
+          }).join('')}</div>
+        </div>
+      </div>
+      <div class="jsBelow">
+          <div class="jsLabel">存檔</div>
+          <div class="jsSlots">${SLOT_LETTERS.map((x,i)=>{
+            const empty = !normalizeSet(slots[i]).some(p=>p.n);
+            return `<div class="jsSlot"><b>${x}</b><span>${E(slotSummary(slots[i]))}</span><button type="button" data-js-save="${i}">存入</button><button type="button" data-js-load="${i}" ${empty?'disabled':''}>讀取</button></div>`;
+          }).join('')}</div>
+          <div class="jsActions"><button type="button" id="jsDetail">看各降神能力明細</button><button type="button" id="jsClearAll">全部清空</button></div>
+      </div>
+    </section>`;
+    const rerender = () => { const y = window.scrollY; renderSupport(); window.scrollTo(0, y); };
+    reader.querySelectorAll('[data-js-slot]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsSlot); rerender(); if(window.matchMedia('(max-width:820px)').matches) document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); });
+    reader.querySelectorAll('[data-js-hero]').forEach(b=>b.onclick=()=>{
+      const set = getCurrent(); set[activeSlot].n = b.dataset.jsHero;
+      if(set[activeSlot].n && !plan[activeSlot].n) set[activeSlot].s = activeSlot===0 ? 20 : 1;
+      setCurrent(set);
+      // move on to the next empty slot so five picks take five taps
+      if(b.dataset.jsHero){ const next = set.findIndex((p,i)=>i>activeSlot && !p.n); if(next>=0) activeSlot = next; }
+      rerender();
+    });
+    reader.querySelectorAll('[data-js-star]').forEach(b=>b.onclick=()=>{ const set = getCurrent(); set[activeSlot].s = Number(b.dataset.jsStar); setCurrent(set); rerender(); });
+    const search = $('jsHeroSearch');
+    search.oninput = () => { heroQuery = search.value; const pos = search.selectionStart; rerender(); const s2 = $('jsHeroSearch'); s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} };
+    reader.querySelectorAll('[data-js-save]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsSave); const all = getSlots(); all[i] = getCurrent(); setSlots(all); rerender(); });
+    reader.querySelectorAll('[data-js-load]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsLoad); setCurrent(getSlots()[i]); activeSlot = 0; rerender(); });
+    $('jsClearAll').onclick = () => { setCurrent(defaultSet()); activeSlot = 0; rerender(); };
+    $('jsDetail').onclick = () => { renderSupportLegacy(); calcSupportOnce(); };
   }
   function loadSupportSlot(idx){
     const slots = getSlots();
