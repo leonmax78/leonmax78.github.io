@@ -44,9 +44,22 @@ for e in recipes.values():
         nidx[key]=len(npcs); npcs.append({'n':e['npc'],'p':[list(p) for p in places]})
     g=(d.get('備註（請填）') or '').strip() or label(e['menu'])
     row={'v':d.get('資料片') or '不確定','k':d.get('類別') or '兌換','p':nidx[key],'g':g,'m':q(e['mat']),'r':q(e['rew'])}
-    c='；'.join(x for x in (e.get('cond') or '',) if x)
-    if c: row['c']=c
-    lim=limit(e)
+    # 名聲／金錢 paid for the exchange read as the first material, not as a note at the end
+    cost=[]
+    if e.get('fame'): cost.append(['名聲',int(e['fame']),0])
+    conds=[]
+    for x in (e.get('cond') or '').split('；'):
+        m=re.fullmatch(r'(名聲|金錢) -([\d,]+)( 兩)?',x)
+        if m: cost.append([m.group(1),int(m.group(2).replace(',','')),0])
+        elif x: conds.append(x)
+    row['m']=cost+row['m']
+    # 月服／免服 versions get their own heading
+    srv=[x for x in conds if x in ('月服','免服')]
+    if srv:
+        conds=[x for x in conds if x not in srv]
+        row['g']=(row['g']+'・' if row['g'] else '')+srv[0]
+    if conds: row['c']='；'.join(conds)
+    lim=limit({**e,'fame':''})
     if e['kind']=='對話兌換' and len(e['mult'])>1: lim='；'.join(x for x in (lim,'可一次換 '+'／'.join(f"{m//min(e['mult'])}" for m in sorted(e['mult']))+' 份') if x)
     if lim: row['l']=lim
     rows.append(row)
