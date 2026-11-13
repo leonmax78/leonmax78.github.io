@@ -220,7 +220,7 @@
       body = blocksHTML(data, rows.filter(r => String(r.p) === String(state.pick)), false);
     }
     reader.innerHTML = `<section class="questPage exPage">
-      <div class="questHero"><h1>兌換查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
+      <div class="questHero"><h1>兌換、拆解、升階查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
       ${q ? '' : `<div class="questTabs exTabs" role="tablist">${tabs.map(t => `<button type="button" role="tab" class="${t === state.tab ? 'active' : ''}" data-ex-tab="${esc(t)}">${esc(t)}</button>`).join('')}</div>
       <div class="exChips">${mapChips}<div class="questGroups">${chips}</div></div>`}
