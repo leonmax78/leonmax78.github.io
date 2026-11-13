@@ -4795,3 +4795,10 @@ html body .latestQueryLayout:has(.latestMainPane .results .resultItem) .latestSi
 @keyframes mapPortalSpin{to{rotate:360deg}}
 .mapExit.portal .mapExitName{border-color:#b48cff;color:#eadcff;background:linear-gradient(180deg,rgba(32,18,52,.93),rgba(16,10,28,.93))}
 @media (prefers-reduced-motion:reduce){.mapExit.portal .mapExitArrow svg{animation:none}}
+/* V776: exits anchored at a zero-size point and scaled from that point, so they stay put at any zoom (incl. 1:1) */
+html body .mapTransferOverlay .mapExit{width:0;height:0;display:block;transform:none!important;transform-origin:0 0!important}
+html body .mapImageStage .mapExit{scale:min(1.15,calc(2.2 / var(--mz,1)))}
+html body .mapExit .mapExitArrow{position:absolute;left:-20px;top:-20px}
+html body .mapExit .mapExitName{position:absolute;top:0;transform:translateY(-50%)}
+html body .mapExit.toRight .mapExitName{left:22px}
+html body .mapExit.toLeft .mapExitName{right:22px}
