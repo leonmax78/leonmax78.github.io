@@ -4598,5 +4598,6 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .jsCardPlus{font-size:30px;color:var(--muted)}
 .jsCardFace .jsCardStar{position:absolute;right:6px;bottom:6px}
 .jsCard.active .jsCardFace{border-color:#53ded3}
-.jsLayout{grid-template-areas:"pick main" "stat main"}.jsSide{grid-area:pick}.jsMain{grid-area:main}.jsStat{grid-area:stat;display:grid;gap:8px;align-content:start}
+.jsLayout{grid-template-areas:"pick main" "pick stat";grid-template-rows:auto 1fr}.jsSide{grid-area:pick}.jsMain{grid-area:main}.jsStat{grid-area:stat;display:grid;gap:8px;align-content:start}
 @media (max-width:820px){.jsLayout{grid-template-areas:"pick" "main" "stat"}.jsCards{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.jsCard{min-height:0;padding:6px}.jsCardName{font-size:14px}.jsCardRole{font-size:10.5px}.jsCardStats{font-size:11px}.jsHeroList{max-height:260px}}
+@media (min-width:821px){.jsStat .jsTotals{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}.jsStat .jsCombos{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}}
