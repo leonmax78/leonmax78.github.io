@@ -55,6 +55,10 @@ for e in recipes.values():
         if m: cost.append([m.group(1),int(m.group(2).replace(',','')),0])
         elif x: conds.append(x)
     row['m']=cost+row['m']
+    # 賞金獵人: grouped by his own top menu (特殊交易、霹靂聯動…)
+    if not note and e['npc']=='賞金獵人':
+        top=[x for x in (p.strip('【】 ').strip() for p in (e['menu'] or '').split(' › ')) if x and not SKIP.search(x)]
+        if top: note=top[0]
     # 月服／免服 versions get their own heading
     srv=[x for x in conds if x in ('月服','免服')]
     if srv:
