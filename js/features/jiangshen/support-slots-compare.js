@@ -261,12 +261,12 @@
         <div class="jsMain">
           <div class="jsCards">${plan.map((p,i)=>{
             const a = res.picks.find(x=>x.i===i)?.a || {};
-            const top = stats().map(st=>[st, Number(a[st]||0)]).filter(([,v])=>v).sort((x,y)=>y[1]-x[1]).slice(0,3);
+            const all = stats().map(st=>[st, Number(a[st]||0)]);
             return `<button type="button" class="jsCard ${i===activeSlot?'active':''} ${p.n?'':'empty'}" data-js-slot="${i}">
               <span class="jsCardRole">${E(RATE_LABEL(i))}</span>
               <span class="jsCardFace">${p.n ? headImg(p.n,'') : '<span class="jsCardPlus">＋</span>'}${p.n ? `<span class="jsCardStar">${p.s} 星</span>` : ''}</span>
               <span class="jsCardName">${p.n ? E(p.n) : '點這裡選降神'}</span>
-              ${top.length ? `<span class="jsCardStats">${top.map(([st,v])=>`${E(window.SZO_DISPLAY.label(st))} +${fmt(v)}`).join('<br>')}</span>` : ''}
+              ${p.n ? `<span class="jsCardStats">${all.map(([st,v])=>`<span class="${v?'':'zero'}"><i>${E(window.SZO_DISPLAY.label(st))}</i><b>+${fmt(v)}</b></span>`).join('')}</span>` : ''}
             </button>`;
           }).join('')}</div>
         </div>

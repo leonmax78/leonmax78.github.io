@@ -4622,3 +4622,9 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .jsSide>.jsLabel{grid-column:2;grid-row:3;margin-top:4px}
 .jsSide>.jsStars{grid-column:2;grid-row:4/span 2}
 }
+/* V762: every stat on each 降神 card */
+.jsCardStats{display:grid;gap:1px;line-height:1.45}
+.jsCardStats>span{display:flex;justify-content:space-between;gap:6px;border-bottom:1px dotted rgba(255,255,255,.08)}
+.jsCardStats i{font-style:normal;color:#9fc9c0}
+.jsCardStats b{font-weight:600;color:#eaf6f2}
+.jsCardStats>span.zero b,.jsCardStats>span.zero i{color:var(--muted);font-weight:400;opacity:.6}
