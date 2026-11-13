@@ -20,20 +20,23 @@ it=json.load(open(os.path.join(os.path.dirname(os.path.dirname(here)),'data/item
 it=it if isinstance(it,list) else list(it.values())
 iid={}
 for x in it: iid.setdefault(x['Name'],int(x['ID']))
-SKIP=re.compile(r'看下一頁|下一頁|換下一頁|上一頁|回上頁|重新選擇')
+SKIP=re.compile(r'看下一頁|下一頁|換下一頁|上一頁|回上頁|重新選擇|^(同意|我同意|換吧|看看無妨|確定交換|當然要換|是的|好的?|換一張。?|換十張。?)[！!。]?$')
 def label(menu):
-    parts=[p.strip('【】 ').strip() for p in (menu or '').split(' › ') if p and not SKIP.search(p)]
-    return parts[-1] if parts else ''
+    parts=[x for x in (p.strip('【】 ').strip() for p in (menu or '').split(' › ')) if x and not SKIP.search(x)]
+    last=parts[-1] if parts else ''
+    return re.sub(r'^以(.+?)進行(交換|交易)$',r'\1',last)
 def q(lst):
     acc=collections.OrderedDict()
     for n,c in lst: acc[n]=acc.get(n,0)+c
     return [[n,c,iid.get(n,0)] for n,c in acc.items()]
+# rows the owner asked to hide after the review (2026-11-13)
+HIDE={('伙計','對話 7539')}
 npcs=[]; nidx={}
 rows=[]
 for e in recipes.values():
     src_id=(f"兌換 {e['id']}（組 {e['group']}）" if e['kind']=='兌換視窗' else f"對話 {e['id']}")
     d=dec.get((e['npc'],src_id,fmt(e['rew'])))
-    if not d or d['保留']!='✓': continue
+    if not d or d['保留']!='✓' or (e['npc'],src_id) in HIDE: continue
     places=tuple(tuple(p) for p in e['pls'])
     key=(e['npc'],places)
     if key not in nidx:

@@ -4527,3 +4527,11 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .exMore{justify-self:center}
 .exTabs{flex-wrap:wrap}
 .exTabs button{padding:6px 12px;font-size:13.5px}
+.exMany>summary{cursor:pointer;list-style:none;display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px}
+.exMany>summary::-webkit-details-marker{display:none}
+.exMany>summary .exItem.plain{color:#f5c86b;font-weight:700}
+.exMany[open]>summary .exTag{border-color:var(--accent)}
+.exManyList{margin-top:4px;font-size:13px;line-height:1.7;opacity:.9}
+.exChips{display:grid;gap:8px}
+.exMaps button{border-style:dashed}
+.exMaps button.active{border-style:solid}

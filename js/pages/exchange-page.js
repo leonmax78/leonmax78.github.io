@@ -2,8 +2,11 @@
 (function(){
   'use strict';
   const MATS_TAB = '常用拆解';
-  const state = { tab: MATS_TAB, pick: '', query: '', more: 0 };
-  const PAGE = 300;
+  const state = { tab: MATS_TAB, map: '', pick: '', query: '', more: 0 };
+  const CITIES = ['京城', '祁州城', '玄州城', '鬼城'];
+  // An NPC standing in two or more main cities is listed once under 三城共通.
+  const mapOf = npc => { const st = [...new Set(npc.p.map(p => p[2]))]; return st.filter(s => CITIES.includes(s)).length >= 2 ? '三城共通' : (st.find(s => CITIES.includes(s)) || st[0] || ''); };
+  const PAGE = 600;
   let dataPromise = null;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
@@ -23,8 +26,71 @@
   const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}</li>`;
   const placesHTML = npc => npc.p.map(([sid, nid, stage, x, y]) => `<button type="button" class="exPlace" data-ex-npc="${sid}:${nid}" title="看 NPC 對話與地圖位置">${esc(stage)} <small>(${x}, ${y})</small></button>`).join('');
 
+  // Many equipment pieces that all give the same thing (拆解 a whole set) read as one line:
+  // 「玄宙武觀特仕神裝 第一階（任一件，共 12 件）→ 皇龍虹鉻 ×8」.
+  const sig = list => list.map(x => x[0] + '×' + x[1]).join('|');
+  // 「玉旭戰鑑神兵，最終第 5 階拆解」→「玉旭神兵第五階」、「帝星流特仕神裝， 2 星級」→「帝星流特仕 2 星」
+  const ZHN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+  function shortName(g){
+    const s = String(g || '').replace(/\s+/g, '').replace(/^(拆解|升級|進化|晉升)/, '');
+    const [head, rest = ''] = s.split(/[，,]/);
+    if(!head) return '以下任一件';
+    const star = head.match(/^.{1,2}星流/); const series = star ? star[0] : head.slice(0, 2);
+    const kind = ['特仕', '神兵', '防具飾品', '防具', '飾品'].find(k => head.includes(k)) || head.slice(series.length).replace(/裝備$/, '');
+    let m = (rest + head).match(/第([一二三四五六七八九十\d]+)階/);
+    const lv = m ? `第${ZHN[Number(m[1])] || m[1]}階` : ((m = (rest + head).match(/(\d+)星級/)) ? `${m[1]}星` : '');
+    return lv ? series + kind + lv : head.replace(/(拆解|升級|升階|兌換|晉升)$/, '');
+  }
+  // common tail of the item names, e.g. 圓弧霜白寶石Ⅰ / 三角橄欖寶石Ⅰ → 寶石Ⅰ
+  const tail = names => { let t = names[0] || ''; for(const n of names) while(t && !n.endsWith(t)) t = t.slice(1); return t; };
+  function collapse(rs, g){
+    const out = [], byKey = new Map();
+    for(const r of rs){
+      // same rewards and same other materials, only the first material differs
+      // …or an upgrade of the same piece (騰陽威冕Ⅰ → 騰陽威冕Ⅱ, 圓弧霜白寶石Ⅰ → 圓弧霜白寶石Ⅱ)
+      const up = r.m.length && r.r.length === 1 && r.m[0][0].length > 1 && r.m[0][0].slice(0, -1) === r.r[0][0].slice(0, -1);
+      const key = !r.m.length ? null : up
+        ? ['UP', r.m[0][1], sig(r.m.slice(1)), r.r[0][1], r.m[0][0].slice(-1), r.r[0][0].slice(-1), r.c || '', r.l || ''].join('#')
+        : [r.m[0][1], sig(r.m.slice(1)), sig(r.r), r.c || '', r.l || ''].join('#');
+      if(key === null){ out.push(r); continue; }
+      if(!byKey.has(key)){ const box = { set: [] }; byKey.set(key, box); out.push(box); }
+      byKey.get(key).set.push(r);
+    }
+    return out.flatMap(x => {
+      if(!x.set) return [x];
+      if(x.set.length < 3) return x.set;
+      const many = x.set.map(r => r.m[0]);
+      const t = tail(many.map(m => m[0]));
+      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: t.length >= 3 ? t : shortName(g) };
+      const r0 = x.set[0];
+      if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
+        const rt = tail(x.set.map(r => r.r[0][0]));
+        row.r = [[rt.length >= 3 ? '同款' + rt : '同款下一階', r0.r[0][1], 0]];
+      }
+      return [row];
+    });
+  }
+  const manyHTML = r => `<li class="exRow"><span class="exGive"><details class="exMany"><summary><span class="exItem plain">${esc(r.label)}</span>${r.many[0][1] > 1 ? `<span class="exQty">×${Number(r.many[0][1]).toLocaleString()}</span>` : ''}<small class="exTag dim">任一件・共 ${r.many.length} 件</small></summary><div class="exManyList">${r.many.map(x => item([x[0], 1, x[2]])).join('、')}</div></details>${r.rest.length ? '<span class="exPlus">＋</span>' + items(r.rest) : ''}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}</li>`;
+
+  // 高階在前: 第四階 > 第一階, 3 星級 > 1 星級, Ⅵ > Ⅰ
+  const ZH = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10 };
+  const ROMAN = { Ⅰ: 1, Ⅱ: 2, Ⅲ: 3, Ⅳ: 4, Ⅴ: 5, Ⅵ: 6, Ⅶ: 7, Ⅷ: 8, Ⅸ: 9, Ⅹ: 10 };
+  const zhNum = t => { if(/^\d+$/.test(t)) return Number(t); let n = 0, cur = 0; for(const ch of t){ if(ch === '十'){ n += (cur || 1) * 10; cur = 0; } else cur = ZH[ch] || 0; } return n + cur; };
+  function tier(text){
+    const s = String(text || '').replace(/\s+/g, '');
+    let m = s.match(/第([一二三四五六七八九十\d]+)[階重]/) || s.match(/([一二三四五六七八九十\d]+)星級/) || s.match(/品級(\d+)/) || s.match(/(\d+)級/);
+    if(m) return zhNum(m[1]);
+    m = s.match(/[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ]/);
+    return m ? ROMAN[m[0]] : 0;
+  }
+
   // rows → NPC blocks → sub-groups (選單／分類)
-  function blocksHTML(data, rows, showVer){
+  function blocksHTML(data, rows, showVer, highFirst){
+    if(highFirst){
+      // newest expansion first (中原 last), then the higher tier first inside each NPC
+      const rank = v => v === '中原（常駐）' ? 999 : Math.max(0, data.vers.indexOf(v));
+      rows = rows.slice().sort((a, b) => rank(a.v) - rank(b.v) || a.p - b.p || tier(b.g) - tier(a.g) || tier(b.m[0]?.[0]) - tier(a.m[0]?.[0]));
+    }
     const byNpc = new Map();
     for(const r of rows){ if(!byNpc.has(r.p)) byNpc.set(r.p, []); byNpc.get(r.p).push(r); }
     let shown = 0; const limit = PAGE * (state.more + 1); let out = '';
@@ -34,7 +100,7 @@
       const groups = new Map();
       for(const r of list){ if(shown >= limit) break; const g = r.g || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown++; }
       out += `<section class="exNpc"><header><h3>${esc(npc.n)}</h3>${showVer ? `<span class="exVer">${esc(list[0].v)}</span>` : ''}<div class="exPlaces">${placesHTML(npc)}</div></header>
-        ${[...groups].map(([g, rs]) => `${g ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${rs.map(rowHTML).join('')}</ul>`).join('')}</section>`;
+        ${[...groups].map(([g, rs]) => { const list = collapse(rs, g); const head = g && !(list.length === 1 && list[0].many); return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
@@ -48,7 +114,7 @@
     const tabs = [MATS_TAB, ...data.vers];
     if(!tabs.includes(state.tab)) state.tab = MATS_TAB;
     const q = norm(state.query);
-    let chips = '', body = '';
+    let chips = '', mapChips = '', body = '';
     if(q){
       const hit = data.rows.filter(r => r.m.some(x => norm(x[0]).includes(q)) || r.r.some(x => norm(x[0]).includes(q)) || norm(data.npcs[r.p].n).includes(q));
       body = `<p class="questCount">「${esc(state.query)}」找到 ${hit.length} 筆 <button type="button" class="ghost" data-ex-clear>清除搜尋</button></p>${blocksHTML(data, hit, true)}`;
@@ -57,11 +123,16 @@
       if(!counts.some(([m]) => m === state.pick)) state.pick = counts[0]?.[0] || '';
       chips = counts.map(([m, n]) => `<button type="button" class="${m === state.pick ? 'active' : ''}" data-ex-pick="${esc(m)}">${esc(m)}<b>${n}</b></button>`).join('');
       const rows = data.rows.filter(r => r.r.some(x => x[0] === state.pick));
-      body = `<p class="muted exHint">想要「${esc(state.pick)}」：拿左邊的東西去找 NPC 換。</p>${blocksHTML(data, rows, true)}`;
+      body = `<p class="muted exHint">想要「${esc(state.pick)}」：拿左邊的東西去找 NPC 換。</p>${blocksHTML(data, rows, true, true)}`;
     }else{
       const rows = data.rows.filter(r => r.v === state.tab);
+      const mapCount = new Map();
+      for(const r of rows){ const m = mapOf(data.npcs[r.p]); mapCount.set(m, (mapCount.get(m) || 0) + 1); }
+      const maps = [...mapCount].sort((a, b) => { const ia = CITIES.concat('三城共通').indexOf(a[0]), ib = CITIES.concat('三城共通').indexOf(b[0]); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || b[1] - a[1]; });
+      if(!mapCount.has(state.map)) state.map = maps[0]?.[0] || '';
+      mapChips = maps.length > 1 ? `<div class="questGroups exMaps">${maps.map(([m, n]) => `<button type="button" class="${m === state.map ? 'active' : ''}" data-ex-map="${esc(m)}">${esc(m)}<b>${n}</b></button>`).join('')}</div>` : '';
       const npcCount = new Map();
-      for(const r of rows) npcCount.set(r.p, (npcCount.get(r.p) || 0) + 1);
+      for(const r of rows) if(mapOf(data.npcs[r.p]) === state.map) npcCount.set(r.p, (npcCount.get(r.p) || 0) + 1);
       if(!npcCount.has(Number(state.pick))) state.pick = String([...npcCount.keys()][0] ?? '');
       chips = [...npcCount].map(([p, n]) => `<button type="button" class="${String(p) === String(state.pick) ? 'active' : ''}" data-ex-pick="${p}">${esc(data.npcs[p].n)}<b>${n}</b></button>`).join('');
       body = blocksHTML(data, rows.filter(r => String(r.p) === String(state.pick)), false);
@@ -70,7 +141,7 @@
       <div class="questHero"><h1>兌換查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
       ${q ? '' : `<div class="questTabs exTabs" role="tablist">${tabs.map(t => `<button type="button" role="tab" class="${t === state.tab ? 'active' : ''}" data-ex-tab="${esc(t)}">${esc(t)}</button>`).join('')}</div>
-      <div class="questGroups">${chips}</div>`}
+      <div class="exChips">${mapChips}<div class="questGroups">${chips}</div></div>`}
       <div class="exList">${body}</div>
     </section>`;
   }
@@ -92,7 +163,9 @@
     const t = ev.target;
     if(!t.closest?.('.exPage')) return;
     const tab = t.closest('[data-ex-tab]');
-    if(tab){ state.tab = tab.dataset.exTab; state.pick = ''; state.more = 0; renderExchangePage(); return; }
+    if(tab){ state.tab = tab.dataset.exTab; state.map = ''; state.pick = ''; state.more = 0; renderExchangePage(); return; }
+    const map = t.closest('[data-ex-map]');
+    if(map){ state.map = map.dataset.exMap; state.pick = ''; state.more = 0; renderExchangePage(); return; }
     const pick = t.closest('[data-ex-pick]');
     if(pick){ state.pick = pick.dataset.exPick; state.more = 0; renderExchangePage(); return; }
     if(t.closest('[data-ex-more]')){ state.more++; renderExchangePage(); return; }
