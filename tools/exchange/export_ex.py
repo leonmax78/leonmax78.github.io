@@ -75,6 +75,13 @@ for e in recipes.values():
     # 摩羅黑市高幹: 天鋼之心 and 鋼粹之心 apart (owner request)
     if not note and e['npc']=='摩羅黑市高幹' and e['rew'] and e['rew'][0][0] in ('天鋼之心','鋼粹之心','四聖諦碎片'):
         note='換'+e['rew'][0][0]
+    # 無式仙者: glow on/off of the same weapon (owner: 發光消光變換)
+    if not note and e['npc']=='無式仙者' and e['mat'] and e['rew'] and e['mat'][0][0]==e['rew'][0][0]:
+        note='發光消光變換'
+    # 天工神匠: 新星 and 無限流 apart (owner request)
+    if not note and e['npc']=='天工神匠':
+        mn=e['menu'] or ''
+        note='無限流' if '無限流' in mn else '新星' if '新星' in mn else ''
     # 月服／免服 versions get their own heading
     srv=[x for x in conds if x in ('月服','免服')]
     if srv:
@@ -127,6 +134,28 @@ mi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='摩羅黑市高幹']
 if mi:
     srt=sorted((rows[i] for i in mi),key=lambda r:({'換天鋼之心':0,'換鋼粹之心':1,'換四聖諦碎片':2}.get(r.get('h'),3),r['r'][0][1] if r['r'] else 0))
     for i,r in zip(mi,srt): rows[i]=r
+# 無式仙者 發光消光變換: by weapon level, lowest first
+_lv=lambda r:int((byid_all.get(r['m'][0][2]) or {}).get('Level') or 0) if r['m'] else 0
+byid_all={int(x['ID']):x for x in it}
+gi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='無式仙者' and r.get('h')=='發光消光變換']
+if gi:
+    srt=sorted((rows[i] for i in gi),key=_lv)
+    for i,r in zip(gi,srt): rows[i]=r
+# 天工神匠: 新星 first, then 無限流 by tier (第一階…第八階), 神兵 before 防具
+ZHD={c:i for i,c in enumerate('一二三四五六七八九十',1)}
+def _tg(r):
+    m=re.search(r'第([一二三四五六七八九十])階',r.get('g') or '')
+    return ZHD.get(m.group(1),0) if m else 0
+ti=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='天工神匠']
+if ti:
+    srt=sorted((rows[i] for i in ti),key=lambda r:({'新星':0,'無限流':1}.get(r.get('h'),2),_tg(r),0 if '神兵' in (r.get('g') or '') else 1 if '稀有' not in (r.get('g') or '') else 2))
+    for i,r in zip(ti,srt): rows[i]=r
+# 無忌大仙: 無限元石 → 無限天印 → 大無限天印, smaller amounts first
+_wj=lambda r:({'無限元石':0,'無限天印':1,'大無限天印':2}.get(r['m'][0][0],3) if r['m'] else 3, r['m'][0][1] if r['m'] else 0)
+wi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='無忌大仙']
+if wi:
+    srt=sorted((rows[i] for i in wi),key=_wj)
+    for i,r in zip(wi,srt): rows[i]=r
 DF=['真元','聖鑽','以太']
 di=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='頂峰軍需官']
 if di:
@@ -166,7 +195,7 @@ for r in rows:
         t=byid.get(x[2])
         if t and t.get('Type') in EQUIP: iv[x[2]]=[int(t.get('Level') or 0),2 if t['Type'] in ('MAGIC_FIGURE','UNDER_BOOT') else 1 if t['Type'] in WEAPON else 0]   # 2 = 仙器
 # NPCs whose order is set here; the page keeps it instead of re-sorting by amount
-KEEP=['侏人巧匠','無式仙者','摩羅黑市高幹','頂峰軍需官','欽差大臣','上師石章嘉']
+KEEP=['無忌大仙','天工神匠','侏人巧匠','無式仙者','摩羅黑市高幹','頂峰軍需官','欽差大臣','上師石章嘉']
 data={'version':'exchange-1112','keep':[i for i,n in enumerate(npcs) if n['n'] in KEEP],'iv':iv,'vers':vers,'mats':[[m,iid.get(m,0)] for m in MATS],'npcs':npcs,'rows':rows}
 json.dump(data,open(OUT,"w",encoding="utf-8"),ensure_ascii=False,separators=(',',':'))
 print(len(rows),'rows',len(npcs),'npcs',collections.Counter(r['v'] for r in rows).most_common(), 'mats rows',sum(any(x[0] in MATS for x in r['r']) for r in rows))

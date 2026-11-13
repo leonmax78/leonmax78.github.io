@@ -48,7 +48,7 @@
   let IV = {}, KEEP = new Set();
   // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
   // 冠聖鑽 under the heading 聖鑽 → 聖鑽 (宇以太核 → 以太)
-  const shortHead = (label, h) => h && !/[・]|月服|免服/.test(h) && label.includes(h) ? h : label;
+  const shortHead = (label, h) => h && !/[・]|月服|免服/.test(h) && label.includes(h) && !/第.+階|星|級/.test(label) ? h : label;
   function setName(many, g, headed){
     const names = many.map(m => m[0]), info = many.map(m => IV[m[2]]);
     const kind = info.every(x => x) ? (info.every(x => x[1] === 1) ? '武器' : '裝備') : '';
@@ -57,7 +57,7 @@
     if(kind && pre.length >= 2) return pre + kind;
     // 四轉 weapons carry their 重 (7–20) as the level: 4-14武器
     const lv = n => n < 30 ? `4-${n}` : `${n}級`;
-    if(kind && info.every(x => x[0])) return [...new Set(info.map(x => x[0]))].sort((a, b) => b - a).map(lv).join('、') + kind;
+    if(kind && info.every(x => x[0])) return [...new Set(info.map(x => x[0]))].sort((a, b) => a - b).map(lv).join('、') + kind;
     const t = tail(names);
     return t.length >= (headed ? 2 : 3) ? t : shortName(g);
   }
@@ -93,7 +93,7 @@
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
         row.same = true;   // the piece itself is upgraded: N of the same piece, not any piece
-        row.r = [[r0.m[0][0] === r0.r[0][0] ? (/光效/.test(r0.g) ? '原裝備（換光效）' : '原裝備') : rt.length >= 3 ? '同款' + rt : '同款下一階', r0.r[0][1], 0]];
+        row.r = [[r0.m[0][0] === r0.r[0][0] ? (/光效/.test(r0.g) ? '原裝備（發光／消光）' : '原裝備') : rt.length >= 3 ? '同款' + rt : '同款下一階', r0.r[0][1], 0]];
       }
       return [row];
     });
