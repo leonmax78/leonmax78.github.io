@@ -32,7 +32,7 @@ def q(lst):
 # rows the owner asked to hide after the review (2026-11-13)
 HIDE={('伙計','對話 7539')}
 HIDE_NPC={'夸父幼童','巫醫','老祭司'}
-npcs=[]; nidx={}
+npcs=[]; nidx={}; seen_rows=set()
 rows=[]
 for e in recipes.values():
     src_id=(f"兌換 {e['id']}（組 {e['group']}）" if e['kind']=='兌換視窗' else f"對話 {e['id']}")
@@ -48,6 +48,7 @@ for e in recipes.values():
     # 名聲／金錢 paid for the exchange read as the first material, not as a note at the end
     cost=[]
     if e.get('fame'): cost.append(['名聲',int(e['fame']),0])
+    if e.get('bright'): cost.append(['靈氣',int(e['bright']),0])
     conds=[]
     for x in (e.get('cond') or '').split('；'):
         m=re.fullmatch(r'(名聲|金錢) -([\d,]+)( 兩)?',x)
@@ -69,6 +70,9 @@ for e in recipes.values():
     lim=limit({**e,'fame':''})
     if e['kind']=='對話兌換' and len(e['mult'])>1: lim='；'.join(x for x in (lim,'可一次換 '+'／'.join(f"{m//min(e['mult'])}" for m in sorted(e['mult']))+' 份') if x)
     if lim: row['l']=lim
+    dk=json.dumps(row,ensure_ascii=False,sort_keys=True)
+    if dk in seen_rows: continue      # the same exchange reached by two menu routes
+    seen_rows.add(dk)
     rows.append(row)
 # 上師石章嘉: cheapest first inside each heading (owner request)
 order={n:i for i,n in enumerate(['用天藥之菁','用藥煉之菁'])}
@@ -79,6 +83,15 @@ if shi:
 MATS=['皇龍虹鉻','皇龍純金','皇龍星銀','皇龍至鋼','鋼粹之心','天鋼之心','藥煉之菁','天藥之菁','寂滅淨元','同花大聖鑽']
 vers=[v for v in ORDER+['中原（常駐）','節慶活動','不確定'] if any(r['v']==v for r in rows)]
 vers=[v for v in ['中原（常駐）'] if v in vers]+[v for v in vers if v!='中原（常駐）']
-data={'version':'exchange-1112','vers':vers,'mats':[[m,iid.get(m,0)] for m in MATS],'npcs':npcs,'rows':rows}
+WEAPON={'SWORD','BLADE','HIDDEN_WEAPON','WHISK','STAFF','ROD','SPEAR','HAMMER','AXE','SHIELD'}
+EQUIP=WEAPON|{'ARMOR','HELMET','BOOT','BRACER','ORNAMENT','UNDER_BOOT','MAGIC_FIGURE'}
+byid={int(x['ID']):x for x in it}
+# level / kind of the first material, so a set reads as 「新星裝備」「222級武器」 on the page
+iv={}
+for r in rows:
+    for x in r['m'][:1]:
+        t=byid.get(x[2])
+        if t and t.get('Type') in EQUIP: iv[x[2]]=[int(t.get('Level') or 0),1 if t['Type'] in WEAPON else 0]
+data={'version':'exchange-1112','iv':iv,'vers':vers,'mats':[[m,iid.get(m,0)] for m in MATS],'npcs':npcs,'rows':rows}
 json.dump(data,open(OUT,"w",encoding="utf-8"),ensure_ascii=False,separators=(',',':'))
 print(len(rows),'rows',len(npcs),'npcs',collections.Counter(r['v'] for r in rows).most_common(), 'mats rows',sum(any(x[0] in MATS for x in r['r']) for r in rows))

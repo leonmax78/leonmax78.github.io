@@ -35,13 +35,26 @@
     const s = String(g || '').replace(/\s+/g, '').replace(/^(拆解|升級|進化|晉升)/, '');
     const [head, rest = ''] = s.split(/[，,]/);
     if(!head) return '以下任一件';
-    const star = head.match(/^.{1,2}星流/); const series = star ? star[0] : head.slice(0, 2);
-    const kind = ['特仕', '神兵', '防具飾品', '防具', '飾品'].find(k => head.includes(k)) || head.slice(series.length).replace(/裝備$/, '');
+    const star = head.match(/^.{1,2}流/); const series = star ? star[0] : head.slice(0, 2);
+    const kind = ['特仕', '神兵', '稀有防具', '防具飾品', '防具、飾品', '防具', '飾品'].find(k => head.includes(k)) || head.slice(series.length).replace(/裝備$/, '');
     let m = (rest + head).match(/第([一二三四五六七八九十\d]+)階/);
     const lv = m ? `第${ZHN[Number(m[1])] || m[1]}階` : ((m = (rest + head).match(/(\d+)星級/)) ? `${m[1]}星` : '');
     return lv ? series + kind + lv : head.replace(/(拆解|升級|升階|兌換|晉升)$/, '');
   }
   // common tail of the item names, e.g. 圓弧霜白寶石Ⅰ / 三角橄欖寶石Ⅰ → 寶石Ⅰ
+  const head = names => { let t = names[0] || ''; for(const n of names) while(t && !n.startsWith(t)) t = t.slice(0, -1); return t; };
+  let IV = {};
+  // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
+  function setName(many, g){
+    const names = many.map(m => m[0]), info = many.map(m => IV[m[2]]);
+    const kind = info.every(x => x) ? (info.every(x => x[1]) ? '武器' : '裝備') : '';
+    if(/第[一二三四五六七八九十\d]+階|\d+星級/.test(String(g || '').replace(/\s+/g, ''))) return shortName(g);
+    const pre = head(names).replace(/[之‧·]+$/, '');
+    if(kind && pre.length >= 2) return pre + kind;
+    if(kind && info.every(x => x[0] && x[0] === info[0][0])) return info[0][0] + '級' + kind;
+    const t = tail(names);
+    return t.length >= 3 ? t : shortName(g);
+  }
   const tail = names => { let t = names[0] || ''; for(const n of names) while(t && !n.endsWith(t)) t = t.slice(1); return t; };
   function collapse(rs){
     const out = [], byKey = new Map();
@@ -49,8 +62,15 @@
       // same rewards and same other materials, only the first material differs
       // …or an upgrade of the same piece (騰陽威冕Ⅰ → 騰陽威冕Ⅱ, 圓弧霜白寶石Ⅰ → 圓弧霜白寶石Ⅱ)
       const up = r.m.length && r.r.length === 1 && r.m[0][0].length > 1 && r.m[0][0].slice(0, -1) === r.r[0][0].slice(0, -1);
+      // 「將劍聖冑第四階升級至第五階」: every piece of one tier step is one line
+      const tt = String(r.g || '').replace(/\s+/g, '').match(/第([一二三四五六七八九十\d]+)階升級至(?:終極|最終)?第([一二三四五六七八九十\d]+)階/);
+      if(tt && r.m.length && r.r.length === 1){
+        const k = ['T', tt[1], tt[2], r.m[0][1], sig(r.m.slice(1)), r.r[0][1], r.c || '', r.l || ''].join('#');
+        if(!byKey.has(k)){ const box = { set: [], step: tt }; byKey.set(k, box); out.push(box); }
+        byKey.get(k).set.push(r); continue;
+      }
       const key = !r.m.length ? null : r.g + '#' + (up
-        ? ['UP', r.m[0][1], sig(r.m.slice(1)), r.r[0][1], r.m[0][0].slice(-1), r.r[0][0].slice(-1), r.c || '', r.l || ''].join('#')
+        ? ['UP', r.m[0][1], sig(r.m.slice(1)), r.r[0][1], r.m[0][0] === r.r[0][0] ? '=' : r.m[0][0].slice(-1) + r.r[0][0].slice(-1), r.c || '', r.l || ''].join('#')
         : [r.m[0][1], sig(r.m.slice(1)), sig(r.r), r.c || '', r.l || ''].join('#'));
       if(key === null){ out.push(r); continue; }
       if(!byKey.has(key)){ const box = { set: [] }; byKey.set(key, box); out.push(box); }
@@ -58,14 +78,15 @@
     }
     return out.flatMap(x => {
       if(!x.set) return [x];
-      if(x.set.length < 3) return x.set;
+      if(x.set.length < (x.step ? 2 : 3)) return x.set;
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
-      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: t.length >= 3 ? t : shortName(x.set[0].g) };
+      if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];
+      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: setName(many, x.set[0].g) };
       const r0 = x.set[0];
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
-        row.r = [[rt.length >= 3 ? '同款' + rt : '同款下一階', r0.r[0][1], 0]];
+        row.r = [[r0.m[0][0] === r0.r[0][0] ? (/光效/.test(r0.g) ? '原裝備（換光效）' : '原裝備') : rt.length >= 3 ? '同款' + rt : '同款下一階', r0.r[0][1], 0]];
       }
       return [row];
     });
@@ -111,9 +132,10 @@
   // 由少到多: same first material kept together (in first-seen order), smaller amounts first
   function fewFirst(list){
     const seen = new Map();
-    list.forEach(r => { const k = r.many ? '#' + r.label : (r.m[0]?.[0] || ''); if(!seen.has(k)) seen.set(k, seen.size); });
-    const key = r => seen.get(r.many ? '#' + r.label : (r.m[0]?.[0] || ''));
-    return list.map((r, i) => [r, i]).sort((a, b) => key(a[0]) - key(b[0]) || (a[0].m[0]?.[1] || 0) - (b[0].m[0]?.[1] || 0) || (a[0].r[0]?.[1] || 0) - (b[0].r[0]?.[1] || 0) || a[1] - b[1]).map(x => x[0]);
+    const k0 = r => r.stepN ? '#STEP' : r.many ? '#' + r.label : (r.m[0]?.[0] || '');
+    list.forEach(r => { const k = k0(r); if(!seen.has(k)) seen.set(k, seen.size); });
+    const key = r => seen.get(k0(r));
+    return list.map((r, i) => [r, i]).sort((a, b) => key(a[0]) - key(b[0]) || (a[0].stepN || 0) - (b[0].stepN || 0) || (a[0].m[0]?.[1] || 0) - (b[0].m[0]?.[1] || 0) || (a[0].r[0]?.[1] || 0) - (b[0].r[0]?.[1] || 0) || a[1] - b[1]).map(x => x[0]);
   }
 
   // rows → NPC blocks → sub-groups (選單／分類)
@@ -142,7 +164,7 @@
     const reader = document.getElementById('reader');
     if(!reader) return;
     let data;
-    try{ data = await load(); }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    try{ data = await load(); IV = data.iv || {}; }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     const tabs = [MATS_TAB, ...data.vers];
     if(!tabs.includes(state.tab)) state.tab = MATS_TAB;
     const q = norm(state.query);
