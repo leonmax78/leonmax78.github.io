@@ -216,7 +216,12 @@
 
   // V755: card layout like the 神魂寶石 page — pick a slot card, choose 降神 and 星等 on the left,
   // totals and 連結 update at once. Same storage (szo_support_current / slots) as before.
-  let activeSlot = 0, heroQuery = '';
+  let activeSlot = 0, heroQuery = '', heroSeries = '';
+  // V756: portrait (BODYWND body{Head}) and 聯動 series for each 降神: name -> [head, series, game order]
+  const HERO_INFO = {"蝦兵":[6001,"神州原創",1],"蟹將":[6002,"神州原創",2],"河童":[6006,"神州原創",6],"猴精":[6007,"神州原創",7],"火元素":[6008,"神州原創",8],"土元素":[6011,"神州原創",11],"侏人戰將":[6015,"神州原創",15],"金翅鳥":[6016,"神州原創",16],"牛頭":[6017,"神州原創",17],"馬面":[6018,"神州原創",18],"火麒麟":[6022,"神州原創",22],"哲別":[6026,"神州原創",26],"衝石徹":[6027,"神州原創",27],"東瀛劍聖":[6028,"神州原創",28],"象神格涅沙":[6030,"神州原創",30],"蒼狼大汗":[6032,"神州原創",32],"非我":[6033,"神州原創",33],"鬼嶽將軍":[6036,"神州原創",36],"白骨妖":[6004,"神州原創",4],"傘鬼":[6005,"神州原創",5],"風元素":[6009,"神州原創",9],"水元素":[6010,"神州原創",10],"兔精":[6012,"神州原創",12],"狐精":[6013,"神州原創",13],"狸妖":[6014,"神州原創",14],"喇嘛":[6019,"神州原創",19],"魔女":[6020,"神州原創",20],"毒麒麟":[6024,"神州原創",24],"樓蘭公主":[6034,"神州原創",34],"西域邪神":[6035,"神州原創",35],"鬼卒":[6003,"神州原創",3],"天將":[6021,"神州原創",21],"冰麒麟":[6023,"神州原創",23],"合薩兒":[6025,"神州原創",25],"東瀛忍尊":[6029,"神州原創",29],"東海龍王":[6031,"神州原創",31],"濕婆":[6037,"神州原創",37],"波斯武帝":[6038,"神州原創",38],"修羅魔君":[6039,"神州原創",39],"無界閻羅":[6040,"神州原創",40],"魔獄邪帝":[6041,"神州原創",41],"天鬼神":[6042,"神州原創",42],"九華神曜":[6043,"神州原創",43],"四聖太宰":[6044,"神州原創",44],"呂布":[6045,"神州原創",45],"應龍":[6046,"神州原創",46],"雅典娜":[6047,"神州原創",47],"毛古":[6048,"神州原創",48],"劉備":[6049,"神州原創",49],"關羽":[6050,"神州原創",50],"張飛":[6051,"神州原創",51],"趙雲":[6052,"神州原創",52],"計蒙":[6053,"神州原創",53],"玄京":[6054,"神州原創",54],"殊臣":[6055,"神州原創",55],"玄冥":[6056,"神州原創",56],"鐵馥雪":[6057,"神州原創",57],"慕容妍":[6058,"神州原創",58],"嚴朔":[6059,"神州原創",59],"勾芒":[6060,"神州原創",60],"雷歐納德":[6061,"雷歐納德",61],"克羅蒂":[6066,"雷歐納德",62],"緹娜":[6062,"雷歐納德",63],"琥":[6063,"雷歐納德",64],"雷特":[6064,"雷歐納德",65],"雪拉":[6065,"雷歐納德",66],"精靈王克里歐司":[6069,"雷歐納德",67],"劍豪雷歐納德":[6071,"雷歐納德",68],"神官緹娜":[6072,"雷歐納德",69],"魍魎劍士克羅蒂":[6082,"雷歐納德",70],"神射手琥":[6081,"雷歐納德",71],"天行者雷特":[6083,"雷歐納德",72],"精靈使雪拉":[6084,"雷歐納德",73],"漢克斯":[6067,"雷歐納德",74],"暗殺者漢克斯":[6085,"雷歐納德",75],"嚎":[6068,"雷歐納德",76],"狂戰士嚎":[6086,"雷歐納德",77],"咕嚕":[6070,"雷歐納德",78],"魔物咕嚕":[6080,"雷歐納德",79],"魔神":[6089,"雷歐納德",80],"素還真":[6077,"霹靂布袋戲",81],"一頁書":[6078,"霹靂布袋戲",82],"葉小釵":[6079,"霹靂布袋戲",83],"終焉劍使雷歐納德":[6087,"雷歐納德",84],"公主緹娜":[6088,"雷歐納德",85],"魔將克羅蒂":[6099,"雷歐納德",86],"魔將塔克斯":[6102,"雷歐納德",87],"魔將傲":[6101,"雷歐納德",88],"魔將席德爾":[6100,"雷歐納德",89],"妖精王克里歐司":[6098,"雷歐納德",90],"霸王丸":[6113,"侍魂",91],"娜可露露":[6114,"侍魂",92],"橘右京":[6115,"侍魂",93],"加爾福特":[6116,"侍魂",94],"千兩狂死郎":[6117,"侍魂",95],"姬軒":[6130,"姬軒・黃帝",96],"姬霜":[6131,"姬軒・黃帝",97],"百玥":[6132,"姬軒・黃帝",98],"貂芷":[6133,"姬軒・黃帝",99],"糜香":[6134,"姬軒・黃帝",100],"虞冰":[6135,"姬軒・黃帝",101],"黃帝":[6136,"姬軒・黃帝",102],"孟祈":[6140,"姬軒・黃帝",103],"凜雪鴉":[6142,"東離劍遊紀",104],"殤不患":[6143,"東離劍遊紀",105],"浪巫謠":[6144,"東離劍遊紀",106],"阿爾貝盧法":[6145,"東離劍遊紀",107],"禍世螟蝗":[6146,"東離劍遊紀",108],"紅夜":[6163,"紅夜・白樺",109],"白樺":[6164,"紅夜・白樺",110],"魔化黃帝":[6139,"姬軒・黃帝",111],"趙活":[6165,"活俠傳",112],"唐布衣":[6166,"活俠傳",113],"唐默鈴":[6167,"活俠傳",114],"龍湘":[6168,"活俠傳",115],"虞小梅":[6169,"活俠傳",116],"夏侯蘭":[6170,"活俠傳",117],"楊鐵":[6179,"楊鐵・雪兒",118],"雪兒":[6180,"楊鐵・雪兒",119],"無雙":[6181,"楊鐵・雪兒",120],"韓凱蒂":[6182,"楊鐵・雪兒",121],"江小魚":[6196,"絕代雙驕",122],"花無缺":[6197,"絕代雙驕",123],"鐵心蘭":[6198,"絕代雙驕",124],"張菁":[6199,"絕代雙驕",125],"蘇櫻":[6200,"絕代雙驕",126],"憐星":[6201,"絕代雙驕",127],"燕南天":[6202,"絕代雙驕",128],"魔黃":[6139,"姬軒・黃帝",111],"咕嚕(一轉)":[6070,"雷歐納德",78]};
+  const SERIES = ['神州原創','雷歐納德','霹靂布袋戲','侍魂','姬軒・黃帝','東離劍遊紀','紅夜・白樺','活俠傳','楊鐵・雪兒','絕代雙驕'];
+  const headSrc = n => { const h = HERO_INFO[n]; if(!h) return ''; const p = String(location.pathname||''); return (p==='/test'||p.startsWith('/test/')?'/test/':'/') + 'assets/test-media/jiangshen-heads/h' + h[0] + '.webp?v=1'; };
+  const headImg = (n, cls) => { const src = headSrc(n); return src ? `<img class="${cls}" src="${src}" alt="" loading="lazy" decoding="async">` : `<span class="${cls} none"></span>`; };
   const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
   function renderSupport(){
     const reader = $('reader'); if(!reader) return;
@@ -225,7 +230,9 @@
     const chosen = plan.map(p=>p.n);
     const cur = plan[activeSlot];
     const q = heroQuery.trim();
-    const heroes = names().filter(n => !q || n.includes(q));
+    const order = n => (HERO_INFO[n] ? HERO_INFO[n][2] : 999);
+    const heroes = names().filter(n => (!q || n.includes(q)) && (!heroSeries || (HERO_INFO[n] && HERO_INFO[n][1]===heroSeries))).sort((a,b)=>order(a)-order(b));
+    const seriesCount = k => names().filter(n => HERO_INFO[n] && HERO_INFO[n][1]===k).length;
     const slots = getSlots();
     reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
       <div class="jsTabs"><button type="button" aria-selected="true">副降神試算</button><button type="button" onclick="setJiang('recommend')">組合推薦方案</button><button type="button" onclick="setJiang('supportCompare')">存檔比較</button></div>
@@ -233,10 +240,11 @@
         <aside class="jsSide">
           <div class="jsSideHead">正在設定：<b>${E(RATE_LABEL(activeSlot).replace('・',' '))}</b></div>
           <input id="jsHeroSearch" type="search" placeholder="搜尋降神名稱" value="${E(heroQuery)}">
+          <div class="jsSeries">${['', ...SERIES].map(k => `<button type="button" class="${heroSeries===k?'active':''}" data-js-series="${E(k)}">${k ? E(k) + `<small>${seriesCount(k)}</small>` : '全部'}</button>`).join('')}</div>
           <div class="jsHeroList">${['', ...heroes].map(n => {
               const used = n && chosen.includes(n) && cur.n !== n;
-              return `<button type="button" class="${cur.n===n ? 'active' : ''}" data-js-hero="${E(n)}" ${used ? 'disabled title="已放在其他欄位"' : ''}>${n ? E(n) : '清除'}</button>`;
-            }).join('')}</div>
+              return `<button type="button" class="${cur.n===n ? 'active' : ''} ${n ? '' : 'clear'}" data-js-hero="${E(n)}" ${used ? 'disabled title="已放在其他欄位"' : ''}>${n ? headImg(n,'jsHeroFace') + `<span>${E(n)}</span>` : '<span>清除此欄</span>'}</button>`;
+            }).join('')}${heroes.length ? '' : '<small class="muted">沒有符合的降神</small>'}</div>
           <div class="jsLabel">星等</div>
           <div class="jsStars">${Array.from({length:21},(_,i)=>`<button type="button" class="${cur.s===i ? 'active' : ''}" data-js-star="${i}">${i}</button>`).join('')}</div>
           <div class="jsLabel">總能力（含連結）</div>
@@ -250,8 +258,8 @@
             const top = stats().map(st=>[st, Number(a[st]||0)]).filter(([,v])=>v).sort((x,y)=>y[1]-x[1]).slice(0,3);
             return `<button type="button" class="jsCard ${i===activeSlot?'active':''} ${p.n?'':'empty'}" data-js-slot="${i}">
               <span class="jsCardRole">${E(RATE_LABEL(i))}</span>
+              <span class="jsCardFace">${p.n ? headImg(p.n,'') : '<span class="jsCardPlus">＋</span>'}${p.n ? `<span class="jsCardStar">${p.s} 星</span>` : ''}</span>
               <span class="jsCardName">${p.n ? E(p.n) : '點這裡選降神'}</span>
-              ${p.n ? `<span class="jsCardStar">${p.s} 星</span>` : ''}
               ${top.length ? `<span class="jsCardStats">${top.map(([st,v])=>`${E(window.SZO_DISPLAY.label(st))} +${fmt(v)}`).join('<br>')}</span>` : ''}
             </button>`;
           }).join('')}</div>
@@ -276,6 +284,7 @@
       if(b.dataset.jsHero){ const next = set.findIndex((p,i)=>i>activeSlot && !p.n); if(next>=0) activeSlot = next; }
       rerender();
     });
+    reader.querySelectorAll('[data-js-series]').forEach(b=>b.onclick=()=>{ heroSeries = b.dataset.jsSeries; rerender(); });
     reader.querySelectorAll('[data-js-star]').forEach(b=>b.onclick=()=>{ const set = getCurrent(); set[activeSlot].s = Number(b.dataset.jsStar); setCurrent(set); rerender(); });
     const search = $('jsHeroSearch');
     search.oninput = () => { heroQuery = search.value; const pos = search.selectionStart; rerender(); const s2 = $('jsHeroSearch'); s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} };

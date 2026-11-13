@@ -4581,3 +4581,20 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .jsSlot button{padding:4px 10px}
 .jsActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .jsBelow{margin-top:16px;display:grid;gap:8px}
+/* 副降神試算 portraits + 聯動 filter (V756) */
+.jsSeries{display:flex;flex-wrap:wrap;gap:5px}
+.jsPage .jsSeries button{font:inherit;font-size:12.5px;color:var(--text,#dce7f5);background:#1a2430;border:1px solid #4b5b6e;border-radius:999px;padding:4px 10px;cursor:pointer}
+.jsPage .jsSeries button.active{background:#dda84d;border-color:#dda84d;color:#1b1406;font-weight:800}
+.jsSeries small{margin-left:4px;opacity:.7;font-size:11px}
+.jsHeroList{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px;max-height:340px}
+.jsPage .jsHeroList button{display:grid;justify-items:center;align-content:start;gap:3px;padding:4px 3px 5px;font-size:12.5px;line-height:1.2}
+.jsPage .jsHeroList button.clear{align-content:center;min-height:60px;color:var(--muted);background:transparent;border-style:dashed}
+.jsHeroFace{width:46px;height:46px;border-radius:6px;object-fit:cover;object-position:50% 18%;background:#000;border:1px solid #2b4250}
+.jsHeroFace.none{display:block}
+.jsHeroList button span{overflow-wrap:anywhere;text-align:center}
+.jsCardFace{position:relative;display:block;aspect-ratio:182/170;border-radius:8px;overflow:hidden;background:#05100c;border:2px solid #c9a24a;box-shadow:0 0 0 2px #3a2a10 inset}
+.jsCardFace img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.jsCard.empty .jsCardFace{border:2px dashed var(--line);box-shadow:none;background:transparent;display:grid;place-items:center}
+.jsCardPlus{font-size:30px;color:var(--muted)}
+.jsCardFace .jsCardStar{position:absolute;right:6px;bottom:6px}
+.jsCard.active .jsCardFace{border-color:#53ded3}
