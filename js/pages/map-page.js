@@ -1466,6 +1466,27 @@
     if(m.x && m.n?.length) return talkLine(data, m.n[0], depth + 1);
     return m.m || '';
   }
+  // Conditional jumps of a line that also has options. A jump to a node with the same text is the
+  // designer chaining more checks (小福星 21006 → 21131), so its own jumps are listed in its place.
+  function conditionalBranches(data, m, seen = new Set(), depth = 0){
+    const out = [];
+    if(depth > 4) return out;
+    for(const t of m.tr || []){
+      if(!t.j || seen.has(t.j)) continue;
+      const c = t.c || [];
+      if(c.length === 1 && (c[0] === '免服' || c[0] === '月服')) continue;
+      seen.add(t.j);
+      out.push(t);
+    }
+    for(const n of m.n || []){
+      if(seen.has(n)) continue;
+      seen.add(n);
+      const to = data.msgs[String(n)];
+      if(to && to.m === m.m) out.push(...conditionalBranches(data, to, seen, depth + 1));
+      else out.push({ j: n, c: ['其他情況'] });
+    }
+    return out;
+  }
   function npcTalkHTML(){
     const { data, path } = npcTalkState;
     if(!data) return '<p>這個 NPC 沒有對話資料。</p>';
@@ -1504,7 +1525,12 @@
     const who = m.p ? '你' : (m.w || data.n);   // m.w: another speaker in this NPC's dialogue (MSGNAME)
     const shop = (m.s || []).length ? `<p class="npcTalkHint">此時會打開商店。</p>` : '';
     let next = '';
-    if(m.o?.length) next = `<div class="npcTalkChoices">${m.o.map(([label, j]) => `<button type="button" ${j ? `data-npc-talk-go="${j}"` : 'disabled'}>${htmlEscape(label)}</button>`).join('')}</div>`;
+    if(m.o?.length){
+      next = `<div class="npcTalkChoices">${m.o.map(([label, j]) => `<button type="button" ${j ? `data-npc-talk-go="${j}"` : 'disabled'}>${htmlEscape(label)}</button>`).join('')}</div>`;
+      // In game the conditional jumps run before this line is shown (e.g. 持有某禮券 → 兌領提示).
+      const alt = conditionalBranches(data, m);
+      if(alt.length) next += `<details class="npcTalkAlt"><summary>身上帶著特定道具或符合條件時，開頭會改成這些（${alt.length} 種）</summary><div class="npcTalkChoices">${alt.map(t => `<button type="button" data-npc-talk-go="${t.j}"><span class="npcTalkConds">${condChips(t.c)}</span><span>${htmlEscape(talkLine(data, t.j).slice(0, 60) || '（無對話）')}</span></button>`).join('')}</div></details>`;
+    }
     else if((m.n || []).length === 1) next = `<div class="npcTalkChoices"><button type="button" data-npc-talk-go="${m.n[0]}">繼續 ▸</button></div>`;
     else if((m.n || []).length > 1) next = `<p class="npcTalkHint">接下來依條件會是：</p>${branchButtons()}`;
     else if(!shop) next = '<div class="npcTalkChoices"><button type="button" data-npc-talk-end>（對話結束）關閉視窗</button></div>';
