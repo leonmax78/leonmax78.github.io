@@ -43,15 +43,15 @@
   }
   // common tail of the item names, e.g. 圓弧霜白寶石Ⅰ / 三角橄欖寶石Ⅰ → 寶石Ⅰ
   const tail = names => { let t = names[0] || ''; for(const n of names) while(t && !n.endsWith(t)) t = t.slice(1); return t; };
-  function collapse(rs, g){
+  function collapse(rs){
     const out = [], byKey = new Map();
     for(const r of rs){
       // same rewards and same other materials, only the first material differs
       // …or an upgrade of the same piece (騰陽威冕Ⅰ → 騰陽威冕Ⅱ, 圓弧霜白寶石Ⅰ → 圓弧霜白寶石Ⅱ)
       const up = r.m.length && r.r.length === 1 && r.m[0][0].length > 1 && r.m[0][0].slice(0, -1) === r.r[0][0].slice(0, -1);
-      const key = !r.m.length ? null : up
+      const key = !r.m.length ? null : r.g + '#' + (up
         ? ['UP', r.m[0][1], sig(r.m.slice(1)), r.r[0][1], r.m[0][0].slice(-1), r.r[0][0].slice(-1), r.c || '', r.l || ''].join('#')
-        : [r.m[0][1], sig(r.m.slice(1)), sig(r.r), r.c || '', r.l || ''].join('#');
+        : [r.m[0][1], sig(r.m.slice(1)), sig(r.r), r.c || '', r.l || ''].join('#'));
       if(key === null){ out.push(r); continue; }
       if(!byKey.has(key)){ const box = { set: [] }; byKey.set(key, box); out.push(box); }
       byKey.get(key).set.push(r);
@@ -61,7 +61,7 @@
       if(x.set.length < 3) return x.set;
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
-      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: t.length >= 3 ? t : shortName(g) };
+      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: t.length >= 3 ? t : shortName(x.set[0].g) };
       const r0 = x.set[0];
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
@@ -103,8 +103,8 @@
       if(!x.set) return [x];
       const names = new Set(x.set.map(r => r.r[0][0]));
       if(x.set.length < 2 || names.size < x.set.length) return x.set;
-      const gs = new Set(x.set.map(r => r.g || ''));
-      return [{ ...x.set[0], r: x.set.map(r => r.r[0]), pick: true, n: x.set.length, g: gs.size === 1 ? x.set[0].g : '' }];
+      const hs = new Set(x.set.map(r => r.h || ''));
+      return [{ ...x.set[0], r: x.set.map(r => r.r[0]), pick: true, n: x.set.length, h: hs.size === 1 ? x.set[0].h : '' }];
     });
   }
 
@@ -122,9 +122,9 @@
       if(shown >= limit) break;
       const npc = data.npcs[p];
       const groups = new Map();
-      for(const r of choices(list)){ if(shown >= limit) break; const g = r.g || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown += r.n || 1; }
+      for(const r of choices(list)){ if(shown >= limit) break; const g = r.h || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown += r.n || 1; }
       out += `<section class="exNpc"><header><h3>${esc(npc.n)}</h3>${showVer ? `<span class="exVer">${esc(list[0].v)}</span>` : ''}<div class="exPlaces">${placesHTML(npc)}</div></header>
-        ${[...groups].map(([g, rs]) => { const list = collapse(rs, g); const head = g && list.length > 1; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
+        ${[...groups].map(([g, rs]) => { const list = collapse(rs); const head = !!g; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
