@@ -51,7 +51,7 @@
     if(/第[一二三四五六七八九十\d]+階|\d+星級/.test(String(g || '').replace(/\s+/g, ''))) return shortName(g);
     const pre = head(names).replace(/[之‧·]+$/, '');
     if(kind && pre.length >= 2) return pre + kind;
-    if(kind && info.every(x => x[0] && x[0] === info[0][0])) return info[0][0] + '級' + kind;
+    if(kind && info.every(x => x[0])) return [...new Set(info.map(x => x[0]))].sort((a, b) => b - a).join('、') + '級' + kind;
     const t = tail(names);
     return t.length >= 3 ? t : shortName(g);
   }
