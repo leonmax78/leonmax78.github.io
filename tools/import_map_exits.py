@@ -74,6 +74,18 @@ def dialog_teleports(msgs, start):
     return found
 
 
+def clusters(pts, gap=48 * 8):
+    """Split raw event points into groups whose members are within `gap` (raw units) of each other."""
+    groups = []
+    for p in pts:
+        near = [g for g in groups if any(abs(p[0] - q[0]) <= gap and abs(p[1] - q[1]) <= gap for q in g)]
+        merged = [p]
+        for g in near:
+            merged += g; groups.remove(g)
+        groups.append(merged)
+    return groups
+
+
 def main(mpc_dir, msg_dir=None):
     msgs = load_msgs(msg_dir) if msg_dir else {}
     path = ROOT / 'data/stage_maps.json'
@@ -122,12 +134,14 @@ def main(mpc_dir, msg_dir=None):
                                 cond=cond or bool(br['conditions']), portal=True)
         rows = []
         for (_, dest), e in sorted(exits.items()):
-            xs = [p[0] for p in e['pts']]; ys = [p[1] for p in e['pts']]
-            rows.append(dict(destination=dest, label=names[dest],
-                             x=round(sum(xs) / len(xs) / 8, 1), y=round(sum(ys) / len(ys) / 8, 1),
-                             conditional=e['cond']))
-            if e.get('portal'):
-                rows[-1]['portal'] = True
+            # one event can cover several far-apart spots (e.g. 比武校場: all four corners)
+            for pts in clusters(e['pts']):
+                xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+                rows.append(dict(destination=dest, label=names[dest],
+                                 x=round(sum(xs) / len(xs) / 8, 1), y=round(sum(ys) / len(ys) / 8, 1),
+                                 conditional=e['cond']))
+                if e.get('portal'):
+                    rows[-1]['portal'] = True
         if rows:
             stage['exits'] = rows
             total += len(rows)
