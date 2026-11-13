@@ -63,6 +63,10 @@ for e in recipes.values():
     if not note and e['npc']=='欽差大臣':
         mn=e['menu'] or ''
         note='龍川至寶金選禮券' if '龍川' in mn else '銀票兌換' if '銀票' in mn else '快速兌換印信' if '快速' in mn else '兌換印信'
+    # 侯利蒙: 奇蹟 and 聖恩 lottery under their own headings (owner request)
+    if not note and e['npc']=='侯利蒙':
+        names=' '.join(n for n,_ in e['mat']+e['rew'])
+        note='奇蹟' if '奇蹟' in names else '聖恩' if '聖恩' in names else ''
     # 月服／免服 versions get their own heading
     srv=[x for x in conds if x in ('月服','免服')]
     if srv:
@@ -93,6 +97,22 @@ qi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='欽差大臣']
 if qi:
     srt=sorted((rows[i] for i in qi),key=lambda r:QC.index(r['h']) if r.get('h') in QC else 9)
     for i,r in zip(qi,srt): rows[i]=r
+# an NPC's rows with no heading take the owner's heading when all its other rows share one
+byp=collections.defaultdict(list)
+for r in rows: byp[r['p']].append(r)
+for lst in byp.values():
+    hs={r.get('h') for r in lst if r.get('h')}
+    miss=[r for r in lst if not r.get('h')]
+    if len(hs)==1 and miss and len(miss)<=len(lst)//4:
+        for r in miss: r['h']=next(iter(hs))
+# 義軍資深專員 sits next to 義軍補給員 (both hand out 老手禮)
+def _move_after(a,b):
+    ia=[i for i,r in enumerate(rows) if npcs[r['p']]['n']==a]; ib=[i for i,r in enumerate(rows) if npcs[r['p']]['n']==b]
+    if not ia or not ib: return
+    moving=[rows[i] for i in ia]; rest=[r for i,r in enumerate(rows) if i not in set(ia)]
+    last=max(i for i,r in enumerate(rest) if npcs[r['p']]['n']==b)
+    rows[:]=rest[:last+1]+moving+rest[last+1:]
+_move_after('義軍資深專員','義軍補給員')
 MATS=['皇龍虹鉻','皇龍純金','皇龍星銀','皇龍至鋼','鋼粹之心','天鋼之心','藥煉之菁','天藥之菁','寂滅淨元','同花大聖鑽']
 vers=[v for v in ORDER+['中原（常駐）','節慶活動','不確定'] if any(r['v']==v for r in rows)]
 vers=[v for v in ['中原（常駐）'] if v in vers]+[v for v in vers if v!='中原（常駐）']
