@@ -47,11 +47,13 @@
   // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
   function setName(many, g){
     const names = many.map(m => m[0]), info = many.map(m => IV[m[2]]);
-    const kind = info.every(x => x) ? (info.every(x => x[1]) ? '武器' : '裝備') : '';
+    const kind = info.every(x => x) ? (info.every(x => x[1] === 1) ? '武器' : '裝備') : '';
     if(/第[一二三四五六七八九十\d]+階|\d+星級/.test(String(g || '').replace(/\s+/g, ''))) return shortName(g);
     const pre = head(names).replace(/[之‧·]+$/, '');
     if(kind && pre.length >= 2) return pre + kind;
-    if(kind && info.every(x => x[0])) return [...new Set(info.map(x => x[0]))].sort((a, b) => b - a).join('、') + '級' + kind;
+    // 四轉 weapons carry their 重 (7–20) as the level: 4-14武器
+    const lv = n => n < 30 ? `4-${n}` : `${n}級`;
+    if(kind && info.every(x => x[0])) return [...new Set(info.map(x => x[0]))].sort((a, b) => b - a).map(lv).join('、') + kind;
     const t = tail(names);
     return t.length >= 3 ? t : shortName(g);
   }
@@ -78,7 +80,7 @@
     }
     return out.flatMap(x => {
       if(!x.set) return [x];
-      if(x.set.length < (x.step ? 2 : 3)) return x.set;
+      if(x.set.length < (x.step ? 2 : 3) || x.set.some(r => IV[r.m[0][2]]?.[1] === 2)) return x.set;   // 仙器: list each
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
       if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];

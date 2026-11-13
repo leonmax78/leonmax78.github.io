@@ -91,7 +91,7 @@ iv={}
 for r in rows:
     for x in r['m'][:1]:
         t=byid.get(x[2])
-        if t and t.get('Type') in EQUIP: iv[x[2]]=[int(t.get('Level') or 0),1 if t['Type'] in WEAPON else 0]
+        if t and t.get('Type') in EQUIP: iv[x[2]]=[int(t.get('Level') or 0),2 if t['Type'] in ('MAGIC_FIGURE','UNDER_BOOT') else 1 if t['Type'] in WEAPON else 0]   # 2 = 仙器
 data={'version':'exchange-1112','iv':iv,'vers':vers,'mats':[[m,iid.get(m,0)] for m in MATS],'npcs':npcs,'rows':rows}
 json.dump(data,open(OUT,"w",encoding="utf-8"),ensure_ascii=False,separators=(',',':'))
 print(len(rows),'rows',len(npcs),'npcs',collections.Counter(r['v'] for r in rows).most_common(), 'mats rows',sum(any(x[0] in MATS for x in r['r']) for r in rows))
