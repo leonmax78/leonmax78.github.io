@@ -171,7 +171,8 @@ window.SZO_SCRIPT_GROUPS = {
   "enhancements_jiangshen": [
     "js/features/jiangshen/jiangshen-nav-final-guard.js",
     "js/features/jiangshen/excel-tables-fix.js",
-    "js/features/jiangshen/main-compare-five.js"
+    "js/features/jiangshen/main-compare-five.js",
+    "js/features/jiangshen/jiang-unify.js"
   ],
   "not_loaded_legacy": [
     "js/legacy/not-loaded/app-esmodule-unused.js",

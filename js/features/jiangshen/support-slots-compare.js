@@ -225,12 +225,13 @@
   const SERIES = ['新絕代雙驕','超時空英雄傳說','活俠傳','東離劍遊紀','幻想三國誌','幻想三國誌5','幻想三國誌鳳凰誓','真侍魂','幻世錄三轉','幻世錄二轉','幻世錄一轉','傳說降神','霹靂布袋戲'];
   const headSrc = n => { const h = HERO_INFO[n]; if(!h) return ''; const p = String(location.pathname||''); return (p==='/test'||p.startsWith('/test/')?'/test/':'/') + 'assets/test-media/jiangshen-heads/h' + h[0] + '.webp?v=1'; };
   const headImg = (n, cls) => { const src = headSrc(n); return src ? `<img class="${cls}" src="${src}" alt="" loading="lazy" decoding="async">` : `<span class="${cls} none"></span>`; };
+  window.SZO_JIANG_HEADS = {info:HERO_INFO, series:SERIES, img:headImg};
   const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
   // V763: shared bits for the three 降神 tabs
   const canon = n => { try{ return (typeof canonicalName === 'function' && canonicalName(n)) || n; }catch(e){ return n; } };
   const comboList = () => Object.entries(D().comboMembers || {}).map(([c,m]) => [c, (m || []).map(canon)]);
   const combosOf = list => (typeof activeCombos === 'function' ? activeCombos(list.filter(Boolean)) : []);
-  const JS_TABS = active => `<div class="jsTabs">${[['support','副降神試算'],['recommend','組合推薦方案'],['supportCompare','存檔比較']].map(([k,l]) => `<button type="button" ${k===active ? 'aria-selected="true"' : `onclick="setJiang('${k}')"`}>${l}</button>`).join('')}</div>`;
+  const JS_TABS = active => (window.SZO_JIANG_NAV ? window.SZO_JIANG_NAV('support') : '') + `<div class="jsTabs jsSubTabs">${[['support','副降神試算'],['recommend','組合推薦方案'],['supportCompare','存檔比較']].map(([k,l]) => `<button type="button" ${k===active ? 'aria-selected="true"' : `onclick="setJiang('${k}')"`}>${l}</button>`).join('')}</div>`;
   const miniHeads = set => `<span class="jsMini">${normalizeSet(set).map((p,i) => p.n ? `<span title="${E(p.n)} ${p.s}星">${headImg(p.n,'')}${i===0 ? `<em>${p.s}</em>` : ''}</span>` : '<span class="none"></span>').join('')}</span>`;
   let cmpSlot = null;
   if(!window.__jsStickyBound){
