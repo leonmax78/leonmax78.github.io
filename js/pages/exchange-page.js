@@ -151,7 +151,7 @@
       mapChips = maps.length > 1 ? `<div class="questGroups exMaps">${maps.map(([m, n]) => `<button type="button" class="${m === state.map ? 'active' : ''}" data-ex-map="${esc(m)}">${esc(m)}<b>${n}</b></button>`).join('')}</div>` : '';
       const npcCount = new Map();
       for(const r of rows) if(mapOf(data.npcs[r.p]) === state.map) npcCount.set(r.p, (npcCount.get(r.p) || 0) + 1);
-      if(!npcCount.has(Number(state.pick))) state.pick = String([...npcCount.keys()][0] ?? '');
+      if(state.pick === '' || !npcCount.has(Number(state.pick))) state.pick = String([...npcCount.keys()][0] ?? '');
       chips = [...npcCount].map(([p, n]) => `<button type="button" class="${String(p) === String(state.pick) ? 'active' : ''}" data-ex-pick="${p}">${esc(data.npcs[p].n)}<b>${n}</b></button>`).join('');
       body = blocksHTML(data, rows.filter(r => String(r.p) === String(state.pick)), false);
     }
