@@ -9,7 +9,8 @@
   const fmtBig = (n)=>{ try{return BigInt(n||0).toLocaleString('zh-Hant');}catch(e){return String(n??'0');} };
   const title = '降神、經驗、修練試算';
   const stats = ()=> (D().stats && D().stats.length ? D().stats : ['血量','精力','體魄','力量','智慧','靈敏','術攻','防禦','術防']);
-  const names = ()=> (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats||{}));
+  const allNames = ()=> (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats||{}));
+  const names = () => allNames().filter(n => (window.SZO_JIANG_SHOWN||(()=>true))(n));
   const optionsNames = (blank=true)=> (blank?'<option value="">空白</option>':'') + names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('');
   const starOptions = (sel=20)=>Array.from({length:21},(_,i)=>`<option value="${i}" ${i===sel?'selected':''}>${i} 星</option>`).join('');
   const backBtn = ()=> (typeof backButtonHTML==='function') ? backButtonHTML('jiang') : '<button class="backBtn" type="button" data-view="jiang">← 返回</button>';

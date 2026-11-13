@@ -21,9 +21,9 @@
   };
   const heroNames = () => {
     const data = getData();
-    return data.displayNames && data.displayNames.length
+    return (data.displayNames && data.displayNames.length
       ? data.displayNames
-      : Object.keys(data.baseStats || {});
+      : Object.keys(data.baseStats || {})).filter(n => (window.SZO_JIANG_SHOWN||(()=>true))(n));
   };
   const fmt = value => {
     const n = Math.ceil(Number(value || 0));
