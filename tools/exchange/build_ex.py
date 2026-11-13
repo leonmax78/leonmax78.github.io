@@ -79,6 +79,7 @@ def other_npcs_line(j,names):
     (shared fall-through lines otherwise hand 侯利X's 禮券 lists to 神州小福星)."""
     sp=speaker(j)
     if not sp or same_speaker(sp,names): return False
+    if names & {'欽差大臣'}: return False   # his 印信 menu is voiced by 錢莊理事 but is his (owner)
     return any(same_speaker(sp,{NAME_OF.get(n,'')}) for n in first.get(j,{}))
 owner,server=walk(other_npcs_line)
 def menu_path(nid,mid): return owner[mid].get(nid)
