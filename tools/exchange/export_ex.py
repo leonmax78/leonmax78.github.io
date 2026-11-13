@@ -31,7 +31,7 @@ def q(lst):
     return [[n,c,iid.get(n,0)] for n,c in acc.items()]
 # rows the owner asked to hide after the review (2026-11-13)
 HIDE={('伙計','對話 7539')}
-HIDE_NPC={'夸父幼童','巫醫','老祭司'}
+HIDE_NPC={'夸父幼童','巫醫','老祭司','包月長'}
 npcs=[]; nidx={}; seen_rows=set()
 rows=[]
 for e in recipes.values():
