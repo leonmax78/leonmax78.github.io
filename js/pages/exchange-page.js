@@ -87,11 +87,12 @@
       if(x.set.length < (x.step ? 2 : 3) || x.set.some(r => IV[r.m[0][2]]?.[1] === 2)) return x.set;   // 仙器: list each
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
-      if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];
+      if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, same: true, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];
       const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: shortHead(setName(many, x.set[0].g, !!x.set[0].h), x.set[0].h) };
       const r0 = x.set[0];
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
+        row.same = true;   // the piece itself is upgraded: N of the same piece, not any piece
         row.r = [[r0.m[0][0] === r0.r[0][0] ? (/光效/.test(r0.g) ? '原裝備（換光效）' : '原裝備') : rt.length >= 3 ? '同款' + rt : '同款下一階', r0.r[0][1], 0]];
       }
       return [row];
@@ -101,7 +102,7 @@
   const manyHTML = r => {
     const names = r.many.map(x => x[0]);
     const short = names.slice(0, 6).join('、') + (names.length > 6 ? `…等 ${names.length} 件` : '');
-    return `<li class="exRow"><span class="exGive"><span class="exItem plain">${esc(r.label)}</span>${r.many[0][1] > 1 ? `<span class="exQty">×${Number(r.many[0][1]).toLocaleString()}</span>` : ''}<small class="exTag dim">任一件</small>${r.rest.length ? '<span class="exPlus">＋</span>' + items(r.rest) : ''}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}`
+    return `<li class="exRow"><span class="exGive"><span class="exItem plain">${esc(r.label)}</span>${r.many[0][1] > 1 ? `<span class="exQty">×${Number(r.many[0][1]).toLocaleString()}</span>` : ''}<small class="exTag dim">${r.same ? '同一件' : '任一件'}</small>${r.rest.length ? '<span class="exPlus">＋</span>' + items(r.rest) : ''}</span><b class="exArrow">→</b><span class="exGet">${items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}`
       + `<details class="exSetNote"><summary>包含：${esc(short)}</summary><div>${r.many.map(x => item([x[0], 1, x[2]])).join('、')}</div></details></li>`;
   };
 
