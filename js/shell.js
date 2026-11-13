@@ -51,8 +51,7 @@
       <button class="navBtn major" data-view="jiang">降神、經驗、修練、寶石、武魂試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
         <div class="subMenuNote">降神、經驗、修練、寶石、武魂相關功能</div>
-        <button class="navBtn sub" data-jiang="support">副降神模擬 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="recommend">副降神組合推薦方案 <span>›</span></button>
+        <button class="navBtn sub" data-jiang="support">副降神試算、推薦、存檔比較 <span>›</span></button>
         <button class="navBtn sub" data-jiang="compare">主降神比較 <span>›</span></button>
         <button class="navBtn sub" data-jiang="stars">降神20星能力總表 <span>›</span></button>
         <button class="navBtn sub" data-jiang="starAura">星等/靈氣試算 <span>›</span></button>
