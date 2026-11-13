@@ -60,6 +60,8 @@ for e in recipes.values():
         conds=[x for x in conds if x not in srv]
         note=(note+'・' if note else '')+srv[0]
     # only the owner's own headings (神魂寶石、老手禮…) and 月服／免服 are shown; menu text is not
+    # 上師藥班禪: 天藥之菁 and 藥煉之菁 are listed under their own headings (owner request)
+    if not note and e['npc']=='上師藥班禪' and len(e['rew'])==1 and e['rew'][0][0] in ('天藥之菁','藥煉之菁'): note='換'+e['rew'][0][0]
     if note: row['h']=note
     if conds: row['c']='；'.join(conds)
     lim=limit({**e,'fame':''})
