@@ -67,6 +67,10 @@ for e in recipes.values():
     if not note and e['npc']=='侯利蒙':
         names=' '.join(n for n,_ in e['mat']+e['rew'])
         note='奇蹟' if '奇蹟' in names else '聖恩' if '聖恩' in names else ''
+    # 頂峰軍需官: 真元／聖鑽／以太 (owner request)
+    if not note and e['npc']=='頂峰軍需官' and e['mat']:
+        n0=e['mat'][0][0]
+        note='真元' if '真元' in n0 else '聖鑽' if '聖鑽' in n0 else '以太' if '以太' in n0 else ''
     # 月服／免服 versions get their own heading
     srv=[x for x in conds if x in ('月服','免服')]
     if srv:
@@ -77,6 +81,9 @@ for e in recipes.values():
     if not note and e['npc']=='上師藥班禪' and len(e['rew'])==1 and e['rew'][0][0] in ('天藥之菁','藥煉之菁'): note='換'+e['rew'][0][0]
     # 上師石章嘉: what 天藥之菁 / 藥煉之菁 buy, each under its own heading
     if not note and e['npc']=='上師石章嘉' and len(e['mat'])==1 and e['mat'][0][0] in ('天藥之菁','藥煉之菁'): note='用'+e['mat'][0][0]
+    # 侯利祖: 麻辣月卡 is the 月服 version, the 租券 ones are 免服 (owner)
+    if e['npc']=='侯利祖' and e['mat']:
+        note='月服' if e['mat'][0][0]=='麻辣月卡' else '免服'
     if note: row['h']=note
     if conds: row['c']='；'.join(conds)
     lim=limit({**e,'fame':''})
@@ -92,6 +99,18 @@ shi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='上師石章嘉']
 if shi:
     srt=sorted((rows[i] for i in shi),key=lambda r:(order.get(r.get('h'),9),r['m'][0][1] if r['m'] else 0))
     for i,r in zip(shi,srt): rows[i]=r
+# 義軍資深專員: the 七年禮 swap (one 七年禮 piece + 兩百萬兩銀票 → another) is a note on the 七年禮 line
+swap=[r for r in rows if npcs[r['p']]['n']=='義軍資深專員' and any(x[0]=='兩百萬兩銀票' for x in r['m'])]
+if swap:
+    rows[:]=[r for r in rows if r not in swap]
+    for r in rows:
+        if npcs[r['p']]['n']=='義軍資深專員' and r['m'] and r['m'][0][0]=='七年禮兌換券':
+            r['l']='；'.join(x for x in (r.get('l'),'可用兩百萬兩銀票交換其他七年禮') if x)
+DF=['真元','聖鑽','以太']
+di=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='頂峰軍需官']
+if di:
+    srt=sorted((rows[i] for i in di),key=lambda r:DF.index(r['h']) if r.get('h') in DF else 9)
+    for i,r in zip(di,srt): rows[i]=r
 QC=['兌換印信','快速兌換印信','龍川至寶金選禮券','銀票兌換']
 qi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='欽差大臣']
 if qi:

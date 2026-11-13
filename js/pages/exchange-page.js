@@ -21,7 +21,9 @@
     return dataPromise;
   }
 
-  const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${typeof qty === 'string' ? `<span class="exQty">×${esc(qty)}</span>` : qty > 1 ? `<span class="exQty">×${Number(qty).toLocaleString()}</span>` : ''}`;
+  // 300,000,000,000 經驗 → 3000億
+  const bigNum = n => n >= 1e8 && n % 1e6 === 0 ? `${(n / 1e8).toLocaleString()}億` : Number(n).toLocaleString();
+  const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${typeof qty === 'string' ? `<span class="exQty">×${esc(qty)}</span>` : qty > 1 ? `<span class="exQty">×${bigNum(qty)}</span>` : ''}`;
   const items = list => list.map(item).join('<span class="exPlus">＋</span>');
   const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${r.pick ? `<span class="exItem plain">下列其中一款</span>${r.r[0][1] > 1 ? `<span class="exQty">×${Number(r.r[0][1]).toLocaleString()}</span>` : ''}` : items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}${r.pick ? `<div class="exPickList">${r.r.map(x => item([String(x[0]).replace(/^降神魂魄/, ''), 1, x[2]])).join('、')}</div>` : ''}</li>`;
   const placesHTML = npc => npc.p.map(([sid, nid, stage, x, y]) => `<button type="button" class="exPlace" data-ex-npc="${sid}:${nid}" title="看 NPC 對話與地圖位置">${esc(stage)} <small>(${x}, ${y})</small></button>`).join('');
@@ -45,7 +47,7 @@
   const head = names => { let t = names[0] || ''; for(const n of names) while(t && !n.startsWith(t)) t = t.slice(0, -1); return t; };
   let IV = {};
   // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
-  function setName(many, g){
+  function setName(many, g, headed){
     const names = many.map(m => m[0]), info = many.map(m => IV[m[2]]);
     const kind = info.every(x => x) ? (info.every(x => x[1] === 1) ? '武器' : '裝備') : '';
     if(/第[一二三四五六七八九十\d]+階|\d+星級/.test(String(g || '').replace(/\s+/g, ''))) return shortName(g);
@@ -55,7 +57,7 @@
     const lv = n => n < 30 ? `4-${n}` : `${n}級`;
     if(kind && info.every(x => x[0])) return [...new Set(info.map(x => x[0]))].sort((a, b) => b - a).map(lv).join('、') + kind;
     const t = tail(names);
-    return t.length >= 3 ? t : shortName(g);
+    return t.length >= (headed ? 2 : 3) ? t : shortName(g);
   }
   const tail = names => { let t = names[0] || ''; for(const n of names) while(t && !n.endsWith(t)) t = t.slice(1); return t; };
   function collapse(rs){
@@ -71,7 +73,7 @@
         if(!byKey.has(k)){ const box = { set: [], step: tt }; byKey.set(k, box); out.push(box); }
         byKey.get(k).set.push(r); continue;
       }
-      const key = !r.m.length ? null : r.g + '#' + (up
+      const key = !r.m.length ? null : (r.h ? '' : r.g) + '#' + (up
         ? ['UP', r.m[0][1], sig(r.m.slice(1)), r.r[0][1], r.m[0][0] === r.r[0][0] ? '=' : r.m[0][0].slice(-1) + r.r[0][0].slice(-1), r.c || '', r.l || ''].join('#')
         : [r.m[0][1], sig(r.m.slice(1)), sig(r.r), r.c || '', r.l || ''].join('#'));
       if(key === null){ out.push(r); continue; }
@@ -84,7 +86,7 @@
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
       if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];
-      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: setName(many, x.set[0].g) };
+      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: setName(many, x.set[0].g, !!x.set[0].h) };
       const r0 = x.set[0];
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
