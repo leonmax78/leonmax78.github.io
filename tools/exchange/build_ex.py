@@ -21,31 +21,45 @@ where=collections.defaultdict(list)
 for s_ in sm['stages']:
     for n in s_.get('npcs',[]):
         if isinstance(n['id'],int): where[n['id']].append((s_['stageId'],s_['stageName'],n.get('coordX'),n.get('coordY'),n['name']))
+def srv_jump(d):
+    """A line that sends one server elsewhere (cond 85 + jump): (server sent away, target)."""
+    for k,v in d.items():
+        if k.startswith('Trigger'):
+            p=parse_trigger(v[0])
+            if p and len(p[0])==1 and p[0][0][0]==85 and any(c==12 for c,_ in p[1]):
+                return ('月服' if p[0][0][1] else '免服')
+    return None
 def links(mid):
     d=M.get(mid)
     if not d: return []
+    away=srv_jump(d); stay={'月服':'免服','免服':'月服'}.get(away)
     out=[]
     for k,v in d.items():
         m=re.fullmatch(r'OptJump(\d+)',k)
-        if m and v[0].strip().isdigit(): out.append((int(v[0]),d.get('OptStr'+m.group(1),[''])[0]))
-        elif re.fullmatch(r'Jump\d*',k) and v[0].strip().isdigit(): out.append((int(v[0]),None))
+        if m and v[0].strip().isdigit(): out.append((int(v[0]),d.get('OptStr'+m.group(1),[''])[0],stay))
+        elif re.fullmatch(r'Jump\d*',k) and v[0].strip().isdigit(): out.append((int(v[0]),None,stay))
         elif k.startswith('Trigger'):
             p=parse_trigger(v[0])
             if p:
+                srv=('月服' if p[0][0][1] else '免服') if len(p[0])==1 and p[0][0][0]==85 else None
                 for code,ps in p[1]:
-                    if code==12 and ps and ps[0].isdigit(): out.append((int(ps[0]),None))
+                    if code==12 and ps and ps[0].isdigit(): out.append((int(ps[0]),None,srv))
     return out
 owner=collections.defaultdict(dict)   # mid -> {nid: menu path}
+server={}                             # (mid, nid) -> 月服／免服 when the way there is server-only
 from collections import deque
 for nid in where:
     r=npcini.get(str(nid))
     if not r or not r.get('Talk',[''])[0].isdigit(): continue
-    root=int(r['Talk'][0]); q=deque([(root,[])]); seen={root}
+    root=int(r['Talk'][0]); q=deque([(root,[],None)]); seen={root}
     while q:
-        cur,path=q.popleft(); owner[cur].setdefault(nid,path)
-        for j,lab in links(cur):
+        cur,path,sv=q.popleft()
+        if nid not in owner[cur]:
+            owner[cur][nid]=path
+            if sv: server[(cur,nid)]=sv
+        for j,lab,s2 in links(cur):
             if j>0 and j not in seen:
-                seen.add(j); q.append((j,path+([lab] if lab else [])))
+                seen.add(j); q.append((j,path+([lab] if lab else []),s2 or sv))
 def menu_path(nid,mid): return owner[mid].get(nid)
 def parts(r,kind):
     out=[]
@@ -62,14 +76,14 @@ rows=[]; orphan=[]
 for r in ex:
     g=r['Group'][0]
     base={'id':int(r['ID'][0]),'group':int(g),'name':r['Name'][0],'mat':parts(r,'Material'),'rew':parts(r,'Reward'),
-          'fame':r.get('Fame',[''])[0],'limit':r.get('Limit',[''])[0],'end':r.get('EndTime',[''])[0]}
+          'fame':r.get('Fame',[''])[0],'bright':r.get('Bright',[''])[0],'limit':r.get('Limit',[''])[0],'end':r.get('EndTime',[''])[0]}
     npcs={}
     for mid in open_at.get(g,()):
         for nid in owner.get(mid,()):
             for st in where.get(nid,[]):
                 key=(st[4],st[1])
                 if key not in npcs:
-                    npcs[key]=dict(sid=st[0],nid=nid,npc=st[4],stage=st[1],x=st[2],y=st[3],menu=' › '.join(menu_path(nid,mid) or []),msg=M[mid].get('Msg',[''])[0])
+                    npcs[key]=dict(sid=st[0],nid=nid,npc=st[4],stage=st[1],x=st[2],y=st[3],menu=' › '.join(menu_path(nid,mid) or []),msg=M[mid].get('Msg',[''])[0],cond=server.get((mid,nid),''))
     if g in FORCED:
         nid,srv=FORCED[g]
         for st in where.get(nid,[]):
@@ -151,7 +165,7 @@ for nid,mids in reach.items():
                 if key in seen: continue
                 seen.add(key)
                 dial.append(dict(kind='對話兌換',sid=st[0],nid=nid,id=mid,group='',name='',mat=mat,rew=rew,fame='',limit='',end='',npc=st[4],stage=st[1],x=st[2],y=st[3],
-                                 menu=' › '.join(owner[mid][nid]),msg=d.get('Msg',[''])[0],cond='；'.join(cs+costs_of(all_))))
+                                 menu=' › '.join(owner[mid][nid]),msg=d.get('Msg',[''])[0],cond='；'.join(cs+([server[(mid,nid)]] if (mid,nid) in server and not any(x in ('月服','免服') for x in cs) else [])+costs_of(all_))))
 for r in rows: r['kind']='兌換視窗'
 out=json.load(open(sys.argv[1],encoding='utf-8')); out['dialog']=dial
 json.dump(out,open(sys.argv[1],'w',encoding='utf-8'),ensure_ascii=False)
