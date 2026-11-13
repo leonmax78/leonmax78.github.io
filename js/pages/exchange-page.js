@@ -108,6 +108,14 @@
     });
   }
 
+  // 由少到多: same first material kept together (in first-seen order), smaller amounts first
+  function fewFirst(list){
+    const seen = new Map();
+    list.forEach(r => { const k = r.many ? '#' + r.label : (r.m[0]?.[0] || ''); if(!seen.has(k)) seen.set(k, seen.size); });
+    const key = r => seen.get(r.many ? '#' + r.label : (r.m[0]?.[0] || ''));
+    return list.map((r, i) => [r, i]).sort((a, b) => key(a[0]) - key(b[0]) || (a[0].m[0]?.[1] || 0) - (b[0].m[0]?.[1] || 0) || (a[0].r[0]?.[1] || 0) - (b[0].r[0]?.[1] || 0) || a[1] - b[1]).map(x => x[0]);
+  }
+
   // rows → NPC blocks → sub-groups (選單／分類)
   function blocksHTML(data, rows, showVer, highFirst){
     if(highFirst){
@@ -124,7 +132,7 @@
       const groups = new Map();
       for(const r of choices(list)){ if(shown >= limit) break; const g = r.h || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown += r.n || 1; }
       out += `<section class="exNpc"><header><h3>${esc(npc.n)}</h3>${showVer ? `<span class="exVer">${esc(list[0].v)}</span>` : ''}<div class="exPlaces">${placesHTML(npc)}</div></header>
-        ${[...groups].map(([g, rs]) => { const list = collapse(rs); const head = !!g; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
+        ${[...groups].map(([g, rs]) => { const list = highFirst ? collapse(rs) : fewFirst(collapse(rs)); const head = !!g; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
