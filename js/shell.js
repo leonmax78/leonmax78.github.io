@@ -377,7 +377,12 @@
     for(const name of names.slice(0, 6)){
       const list = items[name].slice().sort((a,b) => ORDER[a[3]] - ORDER[b[3]]);
       for(const [npcId, stageId, msgId, kind, other] of list){
-        if(kind === 'h' && byKey.has(`${name}|t|${npcId}`)) continue;  // already listed as hand-in
+        if(kind === 'h' && byKey.has(`${name}|t|${npcId}`)){
+          // Already listed as hand-in: open at the 「持有」 prompt that leads there (e.g. 兌領禮券).
+          const r = byKey.get(`${name}|t|${npcId}`);
+          if(!r.held){ r.held = true; r.key = `${stageId}:${npcId}:${msgId}`; }
+          continue;
+        }
         const k = `${name}|${kind}|${npcId}`;
         const gets = String(other || '').replace(/…$/, '').split('、').filter(Boolean);
         if(byKey.has(k)){ const r = byKey.get(k); r.count++; for(const g of gets) if(!r.gets.includes(g)) r.gets.push(g); continue; }
