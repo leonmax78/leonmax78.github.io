@@ -128,6 +128,9 @@ window.SZO_SCRIPT_GROUPS = {
   "page_skill": [
     "js/pages/skill-page.js"
   ],
+  "page_exchange": [
+    "js/pages/exchange-page.js"
+  ],
   "page_qa": [
     "js/pages/qa-page.js"
   ],

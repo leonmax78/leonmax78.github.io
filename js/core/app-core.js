@@ -128,6 +128,12 @@ async function ensureSkillPageLoaded(){
 }
 window.ensureSkillPageLoaded = ensureSkillPageLoaded;
 
+async function ensureExchangePageLoaded(){
+ if(typeof window.renderExchangePage==='function')return true;
+ return await loadScriptGroupOnce('page_exchange');
+}
+window.ensureExchangePageLoaded = ensureExchangePageLoaded;
+
 async function ensureQaPageLoaded(){
  if(typeof window.renderQaPage==='function')return true;
  return await loadScriptGroupOnce('page_qa');
@@ -415,6 +421,7 @@ async function setView(view){
  else if(view==='map'){showPageLoading(viewLoadingLabel(view),'地圖載入中，請稍候。'); await ensureMapPageLoaded(); if(typeof renderStageMapPage==='function')renderStageMapPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='quest'){showPageLoading('任務查詢'); await ensureQuestPageLoaded(); await renderQuestPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='skill'){showPageLoading('技能查詢'); await ensureSkillPageLoaded(); await renderSkillPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='exchange'){showPageLoading('兌換查詢'); await ensureExchangePageLoaded(); await renderExchangePage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='gems'){showPageLoading('寶石試算'); await loadScriptGroupOnce('page_gems'); await ensureItemDataLoaded(); renderGemPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}

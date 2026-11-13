@@ -4502,3 +4502,28 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .npcTalkAlt{margin-top:8px;border:1px dashed var(--line);border-radius:10px;padding:6px 10px}
 .npcTalkAlt>summary{cursor:pointer;color:var(--muted);font-size:13px;padding:4px 0}
 .npcTalkAlt[open]>summary{margin-bottom:6px}
+.exList{display:grid;gap:12px}
+.exNpc{border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 88%,transparent);padding:10px 14px;display:grid;gap:6px}
+.exNpc>header{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.exNpc h3{margin:0;font-size:17px}
+.exNpc h4{margin:6px 0 0;font-size:13.5px;color:var(--muted);font-weight:700}
+.exVer{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);opacity:.85}
+.exPlaces{display:flex;flex-wrap:wrap;gap:5px}
+.exPlace{padding:3px 8px;border-radius:8px;border:1px solid var(--line);background:transparent;color:#7ee0b5;cursor:pointer;font-weight:700;font-size:13px}
+.exPlace small{opacity:.7;font-weight:400}
+.exRows{list-style:none;margin:0;padding:0;display:grid}
+.exRow{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px;padding:6px 0;border-bottom:1px dashed color-mix(in srgb,var(--line) 70%,transparent);line-height:1.5}
+.exRow:last-child{border-bottom:0}
+.exGive,.exGet{display:inline-flex;flex-wrap:wrap;align-items:baseline;gap:2px 4px}
+.exArrow{color:var(--accent);padding:0 2px}
+.exItem{all:unset;cursor:pointer;color:#f5c86b;font-weight:700}
+.exItem.plain{cursor:default;color:inherit}
+.exGet .exItem{color:#7ee0b5}
+.exQty{color:#ffd166;font-weight:700;font-size:13px}
+.exPlus{opacity:.55;font-size:12px}
+.exTag{font-size:12px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:#8fd3ff}
+.exTag.dim{color:var(--muted)}
+.exHint{margin:0}
+.exMore{justify-self:center}
+.exTabs{flex-wrap:wrap}
+.exTabs button{padding:6px 12px;font-size:13.5px}
