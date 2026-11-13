@@ -697,7 +697,7 @@
       const src = markerImage(marker);
       const fallback = marker.kind === 'npc' ? 'N' : 'M';
       const fade = stage.stageName === '鬼城' && marker.kind === 'npc' && ghostCityOpaquePics.has(Number(marker.pic)) ? ' style="opacity:0.5"' : '';
-      const inner = marker.role === 'trap' ? '<span class="trapSpark" aria-hidden="true">✦</span>' : src ? `<img src="${htmlEscape(src)}" alt=""${fade} onerror="this.hidden=true;this.nextElementSibling.hidden=false;this.parentElement.classList.remove('withImage')"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
+      const inner = marker.role === 'trap' ? '<span class="trapSpark" aria-hidden="true">✦</span>' : src ? `<img src="${htmlEscape(src)}" alt=""${fade} onerror="szoMapImgRetry(this)"><span hidden>${fallback}</span>` : `<span>${fallback}</span>`;
       const shopAttrs = marker.kind === 'npc' && marker.shop ? ` data-map-shop="${htmlEscape(npcShopFor(marker))}"${(marker.shops || []).some(s => s.server === 'free') ? ' data-map-shop-variant="1"' : ''} data-map-shop-stage="${htmlEscape(stage.stageId)}" data-map-shop-stage-name="${htmlEscape(stage.stageName || '')}" data-map-shop-npc="${htmlEscape(marker.id || '')}" data-map-shop-name="${htmlEscape(marker.name || '')}" data-map-shop-x="${htmlEscape(marker.x ?? '')}" data-map-shop-y="${htmlEscape(marker.y ?? '')}" data-map-shop-coord-x="${htmlEscape(marker.coordX ?? marker.x ?? '')}" data-map-shop-coord-y="${htmlEscape(marker.coordY ?? marker.y ?? '')}"` : '';
       const monsterAttrs = marker.kind === 'monster' ? ` data-map-monster-dot="1" data-map-monster="${htmlEscape(marker.id || '')}" data-map-monster-stage="${htmlEscape(stage.stageId)}" data-map-monster-stage-name="${htmlEscape(stage.stageName || '')}" data-map-monster-name="${htmlEscape(marker.name || '')}" data-map-monster-level="${htmlEscape(marker.level || '')}" data-map-monster-pic="${htmlEscape(marker.pic || '')}" data-map-monster-area="${htmlEscape(markerAreaLabel(marker))}"` : '';
       const npcAttrs = marker.kind === 'npc' && marker.role !== 'trap' && !marker.shop && Number.isFinite(Number(marker.id)) ? ` data-map-npc-dot="${htmlEscape(stage.stageId)}:${htmlEscape(marker.id)}"` : '';
@@ -882,6 +882,20 @@
     return String(v || '').padStart(4, '0');
   }
 
+  // V772: a busy map asks for hundreds of portraits at once and one can fail on a flaky
+  // connection; retry twice before falling back to the N / M letter.
+  window.szoMapImgRetry = function(img){
+    const n = Number(img.dataset.retry || 0);
+    if(n < 2){
+      img.dataset.retry = String(n + 1);
+      const base = img.getAttribute('src').replace(/[&?]r=\d+$/, '');
+      setTimeout(() => { img.src = base + (base.includes('?') ? '&' : '?') + 'r=' + Date.now(); }, 600 * (n + 1));
+      return;
+    }
+    img.hidden = true;
+    if(img.nextElementSibling) img.nextElementSibling.hidden = false;
+    img.parentElement && img.parentElement.classList.remove('withImage');
+  };
   function markerImage(marker){
     if(marker.role === 'trap') return '';
     const pic = marker.pic;
