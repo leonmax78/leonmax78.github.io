@@ -212,7 +212,7 @@
       for(const r of rows){ const m = mapOf(data.npcs[r.p]); mapCount.set(m, (mapCount.get(m) || 0) + 1); }
       const maps = [...mapCount].sort((a, b) => { const ia = CITIES.concat('三城共通').indexOf(a[0]), ib = CITIES.concat('三城共通').indexOf(b[0]); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || b[1] - a[1]; });
       if(!mapCount.has(state.map)) state.map = maps[0]?.[0] || '';
-      mapChips = maps.length > 1 ? `<div class="questGroups exMaps">${maps.map(([m, n]) => `<button type="button" class="${m === state.map ? 'active' : ''}" data-ex-map="${esc(m)}">${esc(m)}<b>${n}</b></button>`).join('')}</div>` : '';
+      mapChips = maps.length > 1 ? `<div class="exChipRow"><span class="exChipLabel">地圖</span><div class="questGroups exMaps">${maps.map(([m, n]) => `<button type="button" class="${m === state.map ? 'active' : ''}" data-ex-map="${esc(m)}">${esc(m)}<b>${n}</b></button>`).join('')}</div></div>` : '';
       const npcCount = new Map();
       for(const r of rows) if(mapOf(data.npcs[r.p]) === state.map) npcCount.set(r.p, (npcCount.get(r.p) || 0) + 1);
       if(state.pick === '' || !npcCount.has(Number(state.pick))) state.pick = String([...npcCount.keys()][0] ?? '');
@@ -223,7 +223,7 @@
       <div class="questHero"><h1>兌換、拆解、升階查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
       ${q ? '' : `<div class="questTabs exTabs" role="tablist">${tabs.map(t => `<button type="button" role="tab" class="${t === state.tab ? 'active' : ''}" data-ex-tab="${esc(t)}">${esc(t)}</button>`).join('')}</div>
-      <div class="exChips">${mapChips}<div class="questGroups">${chips}</div></div>`}
+      <div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">${state.tab === MATS_TAB ? '材料' : 'NPC'}</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}
       <div class="exList">${body}</div>
     </section>`;
   }

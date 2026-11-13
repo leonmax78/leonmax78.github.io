@@ -4505,7 +4505,7 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .exList{display:grid;gap:12px}
 .exNpc{border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 88%,transparent);padding:10px 14px;display:grid;gap:6px}
 .exNpc>header{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
-.exNpc h3{margin:0;font-size:17px}
+.exNpc h3{margin:0;font-size:21px;font-weight:800;color:#f2f7ff;padding-left:10px;border-left:4px solid var(--accent);line-height:1.2}
 .exNpc h4{margin:6px 0 0;font-size:13.5px;color:var(--muted);font-weight:700}
 .exVer{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);opacity:.85}
 .exPlaces{display:flex;flex-wrap:wrap;gap:5px}
@@ -4543,3 +4543,9 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .exSetNote .exItem{font-weight:500;color:var(--muted)}
 .exPickList{flex-basis:100%;font-size:13px;line-height:1.75}
 .exPickList .exItem{color:#7ee0b5;font-weight:600}
+.exChipRow{display:grid;grid-template-columns:auto 1fr;gap:8px;align-items:start}
+.exChipLabel{font-size:12px;font-weight:700;color:var(--muted);padding:8px 8px 0 0;min-width:2.6em;border-right:1px solid var(--line)}
+.exChipRow+.exChipRow{padding-top:8px;border-top:1px dashed var(--line)}
+.exMaps button{border-style:dashed;color:#9fd0ff}
+.exMaps button::before{content:"📍";margin-right:3px;font-size:.85em}
+.exNpcChips button{font-weight:700}
