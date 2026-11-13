@@ -4790,3 +4790,8 @@ html body .latestQueryLayout:has(.latestMainPane .results .resultItem) .latestSi
 .mapExit:hover .mapExitName,.mapExit:focus-visible .mapExitName{background:linear-gradient(180deg,#3a2c0e,#21180a);color:#fff3cf}
 .mapExit:focus-visible{outline:none}
 @media (prefers-reduced-motion:reduce){.mapExitArrow svg{animation:none}}
+/* V775: in-map portals (dialog teleports) */
+.mapExit.portal .mapExitArrow svg{transform:none;animation:mapPortalSpin 4s linear infinite}
+@keyframes mapPortalSpin{to{rotate:360deg}}
+.mapExit.portal .mapExitName{border-color:#b48cff;color:#eadcff;background:linear-gradient(180deg,rgba(32,18,52,.93),rgba(16,10,28,.93))}
+@media (prefers-reduced-motion:reduce){.mapExit.portal .mapExitArrow svg{animation:none}}

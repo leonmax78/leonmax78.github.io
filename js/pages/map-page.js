@@ -665,15 +665,37 @@
   // V774: exits to other maps (from MPC events, tools/import_map_exits.py) — an arrow that
   // points off the map plus the destination's name; tapping it opens that map.
   const EXIT_ARROW = '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="exitGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a3"/><stop offset=".55" stop-color="#f2b33d"/><stop offset="1" stop-color="#c47a12"/></linearGradient></defs><path d="M4 15h17V6l15 14-15 14v-9H4z" fill="url(#exitGold)" stroke="#2a1a05" stroke-width="2.4" stroke-linejoin="round"/></svg>';
+  const PORTAL_ICON = '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><radialGradient id="portalGlow"><stop offset="0" stop-color="#fff6c8"/><stop offset=".45" stop-color="#c9a3ff"/><stop offset="1" stop-color="#5b2ea6"/></radialGradient></defs><circle cx="20" cy="20" r="15" fill="url(#portalGlow)" stroke="#2a1440" stroke-width="2.4"/><path d="M20 9a11 11 0 0 1 11 11M20 31A11 11 0 0 1 9 20" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".85"/></svg>';
+  // exits sharing one spot (e.g. one gate leading to several 七寶仙境) become one sign
+  function groupedExits(stage){
+    const groups = [];
+    for(const e of stage.exits || []){
+      const g = groups.find(x => Math.abs(x.x - e.x) < 14 && Math.abs(x.y - e.y) < 14 && !!x.portal === !!e.portal);
+      if(g){ if(!g.items.some(i => i.label === e.label)) g.items.push(e); }
+      else groups.push({x:e.x, y:e.y, portal:!!e.portal, items:[e]});
+    }
+    return groups;
+  }
   function exitLabels(stage){
     const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
-    return (stage.exits || []).map(e => {
+    return groupedExits(stage).map(g => {
+      const e = Object.assign({}, g.items[0], {x:g.x, y:g.y, conditional:g.items.some(i => i.conditional)});
       const angle = Math.atan2(e.y - h / 2, e.x - w / 2) * 180 / Math.PI;
       const right = e.x > w / 2;
       const y = Math.max(22, Math.min(h - 22, e.y));
       const x = Math.max(22, Math.min(w - 22, e.x));
-      const name = `往${e.label}${e.conditional ? '（有條件）' : ''}`;
-      return `<button type="button" class="mapExit ${right ? 'toLeft' : 'toRight'}" data-exit-to="${htmlEscape(e.destination)}" style="left:${x / w * 100}%;top:${y / h * 100}%;--a:${angle.toFixed(1)}deg" title="${htmlEscape(name)}（點一下開啟這張地圖）"><span class="mapExitArrow">${EXIT_ARROW}</span><span class="mapExitName">${htmlEscape(name)}</span></button>`;
+      let label = e.label;
+      if(g.items.length > 1){
+        // several destinations at one spot: show what their names share (e.g. 七寶仙境 壹)
+        const ls = g.items.map(i => i.label);
+        let k = 0; while(ls.every(l => l.length > k && l[l.length - 1 - k] === ls[0][ls[0].length - 1 - k])) k++;
+        const common = ls[0].slice(ls[0].length - k).trim();
+        label = (common.length >= 2 ? common : ls[0]) + `（${g.items.length} 處）`;
+      }
+      label = label.replace(/\u3000/g, ' ');
+      const name = `${g.portal ? '傳送：' : '往'}${label}${e.conditional ? '（有條件）' : ''}`;
+      const tip = g.items.map(i => (g.portal ? '傳送至 ' : '往 ') + i.label).join('、') + (e.conditional ? '（需符合條件或對話選擇）' : '') + '　點一下開啟地圖';
+      return `<button type="button" class="mapExit ${right ? 'toLeft' : 'toRight'}${g.portal ? ' portal' : ''}" data-exit-to="${htmlEscape(e.destination)}" style="left:${x / w * 100}%;top:${y / h * 100}%;--a:${angle.toFixed(1)}deg" title="${htmlEscape(tip)}"><span class="mapExitArrow">${g.portal ? PORTAL_ICON : EXIT_ARROW}</span><span class="mapExitName">${htmlEscape(name)}</span></button>`;
     }).join('');
   }
   document.addEventListener('click', ev => {
