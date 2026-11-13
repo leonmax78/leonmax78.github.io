@@ -45,7 +45,6 @@ window.SZO_SCRIPT_GROUPS = {
     "js/data/training-data.js"
   ],
   "core": [
-    "js/vendor/opencc/opencc-1.4.2.js",
     "js/core/language.js",
     "js/core/chat.js",
     "js/core/app-settings.js",
@@ -153,7 +152,8 @@ window.SZO_SCRIPT_GROUPS = {
   "features_soul": [
     "js/pages/soul-page.js",
     "js/pages/soul-data-page.js",
-    "js/pages/soul-quick-force-fix.js"
+    "js/pages/soul-quick-force-fix.js",
+    "js/pages/soul-series.js"
   ],
   "features_auth": [
     "js/features/auth/license-submit.js",

@@ -240,14 +240,16 @@ window.SZO_SYNC_DATA = SZO_SYNC_DATA;
 // V220: closeDrawer moved to js/utils/common-utils.js.
 // V220: setTopStatus moved to js/utils/common-utils.js.
 
+// V767: entry pages as a card grid
 function renderChoiceMenu(title, rows){
  const safeEsc=typeof esc==='function'?esc:(s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
  byId('reader').innerHTML=`<section class="card choiceMenuPage">
   <h1>${safeEsc(title)}</h1>
   <div class="choiceMenuList">
    ${rows.map(row=>`<button type="button" class="choiceMenuItem" ${row.attr}>
-    <strong>${safeEsc(row.title)}</strong>
-    <small>${safeEsc(row.desc)}</small>
+    <span class="choiceText"><strong>${safeEsc(row.title)}</strong>
+    ${row.desc?`<small>${safeEsc(row.desc)}</small>`:''}</span>
+    <span class="choiceArrow" aria-hidden="true">›</span>
    </button>`).join('')}
   </div>
  </section>`;
@@ -256,14 +258,13 @@ function renderChoiceMenu(title, rows){
 function renderJiangHome(){
  document.body.classList.remove('isHomeView');
  renderChoiceMenu('降神、經驗、修練、寶石、武魂試算',[
-  {title:'副降神模擬',desc:'試算副降神能力與需求',attr:'data-jiang="support"'},
-  {title:'副降神組合推薦方案',desc:'依星等推薦物理、術法、防禦組合',attr:'data-jiang="recommend"'},
-  {title:'主降神比較',desc:'比較主降神能力差異',attr:'data-jiang="compare"'},
-  {title:'降神20星能力總表',desc:'星等資料與累積需求',attr:'data-jiang="stars"'},
+  {title:'副降神試算',desc:'配五隻降神、看連結加成，含組合推薦與存檔比較',attr:'data-jiang="support"'},
+  {title:'主降神比較',desc:'最多五隻主降神並排比較九項能力',attr:'data-jiang="compare"'},
+  {title:'降神20星能力總表',desc:'選一隻降神看 0～20 星各項能力',attr:'data-jiang="stars"'},
   {title:'星等/靈氣試算',desc:'星等與靈氣相關試算',attr:'data-jiang="starAura"'},
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
   {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
-  {title:'寶石試算、加工配方',desc:'',attr:'data-view="gems"'},
+  {title:'寶石試算、加工配方',desc:'三星合成材料、鑲嵌能力與加工配方',attr:'data-view="gems"'},
   {title:'武魂能力試算',desc:'武魂能力與成長試算',attr:'data-view="soul"'}
  ]);
 }
@@ -404,8 +405,8 @@ async function setView(view){
  else if(view==='monster'){
   byId('monsterForm')?.classList.add('active');
   renderChoiceMenu('怪物、封獸查詢',[
-   {title:'查詢怪物',desc:'',attr:'data-view="monsterQuery"'},
-   {title:'查詢封獸',desc:'',attr:'data-view="beastQuery"'}
+   {title:'查詢怪物',desc:'怪物能力、掉落與出沒地圖',attr:'data-view="monsterQuery"'},
+   {title:'查詢封獸',desc:'封獸能力與取得方式',attr:'data-view="beastQuery"'}
   ]);closeDrawer();
  }
  else if(view==='monsterQuery'||view==='beastQuery'){

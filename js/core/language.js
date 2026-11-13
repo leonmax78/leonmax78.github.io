@@ -1,6 +1,23 @@
 (function(){
-  const toSimple=OpenCC.Converter({from:'tw',to:'cn'});
-  const toTraditional=OpenCC.Converter({from:'cn',to:'tw'});
+  // V767: the OpenCC dictionary (~1.2MB) is fetched only when 簡 is in use, or quietly after the
+  // page has settled so search can still match simplified input.
+  let toSimple=null,toTraditional=null,loading=null;
+  function loadConverter(){
+    if(toSimple)return Promise.resolve();
+    if(!loading)loading=new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src='js/vendor/opencc/opencc-1.4.2.js';s.async=true;
+      s.onload=()=>{
+        toSimple=OpenCC.Converter({from:'tw',to:'cn'});
+        toTraditional=OpenCC.Converter({from:'cn',to:'tw'});
+        window.SZO_LANGUAGE={toTraditional,toSimple};
+        resolve();
+      };
+      s.onerror=()=>{loading=null;reject(new Error('opencc'));};
+      document.head.appendChild(s);
+    });
+    return loading;
+  }
   const saved=new WeakMap();
   const skip='script,style,textarea,code,pre,svg,[contenteditable], [translate="no"],.notranslate';
   let mode='tw';
@@ -12,7 +29,7 @@
     if(!record){record={};saved.set(node,record);}
     let entry=record[key];
     if(!entry||current!==entry.output)entry=record[key]={original:current,output:current};
-    const output=mode==='cn'?toSimple(entry.original):entry.original;
+    const output=mode==='cn'&&toSimple?toSimple(entry.original):entry.original;
     if(output!==current)write(output);
     entry.output=output;
   }
@@ -40,6 +57,8 @@
     observer.observe(document.body,options);
   });
   function render(){
+    control.querySelectorAll('button').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===mode)));
+    if(mode==='cn'&&!toSimple){loadConverter().then(render,()=>{});return;}
     observer.disconnect();
     visit(document.body);
     document.documentElement.lang=mode==='cn'?'zh-Hans':'zh-Hant';
@@ -53,6 +72,10 @@
     try{localStorage.setItem('szo.language',mode);}catch(_error){}
     render();
   });
-  window.SZO_LANGUAGE={toTraditional,toSimple};
   render();
+  if(mode!=='cn'){
+    const later=()=>loadConverter().catch(()=>{});
+    const idle=()=>setTimeout(()=>('requestIdleCallback' in window)?requestIdleCallback(later,{timeout:8000}):later(),4000);
+    if(document.readyState==='complete')idle();else window.addEventListener('load',idle);
+  }
 })();
