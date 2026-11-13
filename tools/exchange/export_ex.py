@@ -62,12 +62,20 @@ for e in recipes.values():
     # only the owner's own headings (神魂寶石、老手禮…) and 月服／免服 are shown; menu text is not
     # 上師藥班禪: 天藥之菁 and 藥煉之菁 are listed under their own headings (owner request)
     if not note and e['npc']=='上師藥班禪' and len(e['rew'])==1 and e['rew'][0][0] in ('天藥之菁','藥煉之菁'): note='換'+e['rew'][0][0]
+    # 上師石章嘉: what 天藥之菁 / 藥煉之菁 buy, each under its own heading
+    if not note and e['npc']=='上師石章嘉' and len(e['mat'])==1 and e['mat'][0][0] in ('天藥之菁','藥煉之菁'): note='用'+e['mat'][0][0]
     if note: row['h']=note
     if conds: row['c']='；'.join(conds)
     lim=limit({**e,'fame':''})
     if e['kind']=='對話兌換' and len(e['mult'])>1: lim='；'.join(x for x in (lim,'可一次換 '+'／'.join(f"{m//min(e['mult'])}" for m in sorted(e['mult']))+' 份') if x)
     if lim: row['l']=lim
     rows.append(row)
+# 上師石章嘉: cheapest first inside each heading (owner request)
+order={n:i for i,n in enumerate(['用天藥之菁','用藥煉之菁'])}
+shi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='上師石章嘉']
+if shi:
+    srt=sorted((rows[i] for i in shi),key=lambda r:(order.get(r.get('h'),9),r['m'][0][1] if r['m'] else 0))
+    for i,r in zip(shi,srt): rows[i]=r
 MATS=['皇龍虹鉻','皇龍純金','皇龍星銀','皇龍至鋼','鋼粹之心','天鋼之心','藥煉之菁','天藥之菁','寂滅淨元','同花大聖鑽']
 vers=[v for v in ORDER+['中原（常駐）','節慶活動','不確定'] if any(r['v']==v for r in rows)]
 vers=[v for v in ['中原（常駐）'] if v in vers]+[v for v in vers if v!='中原（常駐）']
