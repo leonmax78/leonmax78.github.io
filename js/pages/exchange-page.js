@@ -47,6 +47,8 @@
   const head = names => { let t = names[0] || ''; for(const n of names) while(t && !n.startsWith(t)) t = t.slice(0, -1); return t; };
   let IV = {};
   // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
+  // 冠聖鑽 under the heading 聖鑽 → 聖鑽 (宇以太核 → 以太)
+  const shortHead = (label, h) => h && !/[・]|月服|免服/.test(h) && label.includes(h) ? h : label;
   function setName(many, g, headed){
     const names = many.map(m => m[0]), info = many.map(m => IV[m[2]]);
     const kind = info.every(x => x) ? (info.every(x => x[1] === 1) ? '武器' : '裝備') : '';
@@ -86,7 +88,7 @@
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
       if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];
-      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: setName(many, x.set[0].g, !!x.set[0].h) };
+      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: shortHead(setName(many, x.set[0].g, !!x.set[0].h), x.set[0].h) };
       const r0 = x.set[0];
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
