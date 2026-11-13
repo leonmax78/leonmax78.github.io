@@ -5,7 +5,8 @@
   const E = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const D = () => { try { if(typeof DATA !== 'undefined') return DATA; } catch(e){} return window.DATA || {}; };
   const stats = () => (D().stats && D().stats.length ? D().stats : ['血量','精力','體魄','力量','智慧','靈敏','術攻','防禦','術防']);
-  const names = () => (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats || {}));
+  const allNames = () => (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats || {}));
+  const names = () => allNames().filter(n => (window.SZO_JIANG_SHOWN||(()=>true))(n));
   const fmt = n => {
     const x = Math.ceil(Number(n || 0));
     try { return x.toLocaleString('zh-Hant'); } catch(e){ return String(x); }
