@@ -59,6 +59,10 @@ for e in recipes.values():
     if not note and e['npc']=='賞金獵人':
         top=[x for x in (p.strip('【】 ').strip() for p in (e['menu'] or '').split(' › ')) if x and not SKIP.search(x)]
         if top: note=top[0]
+    # 欽差大臣: 印信 / 快速兌換 / 龍川金選 / 銀票 (owner request)
+    if not note and e['npc']=='欽差大臣':
+        mn=e['menu'] or ''
+        note='龍川至寶金選禮券' if '龍川' in mn else '銀票兌換' if '銀票' in mn else '快速兌換印信' if '快速' in mn else '兌換印信'
     # 月服／免服 versions get their own heading
     srv=[x for x in conds if x in ('月服','免服')]
     if srv:
@@ -84,6 +88,11 @@ shi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='上師石章嘉']
 if shi:
     srt=sorted((rows[i] for i in shi),key=lambda r:(order.get(r.get('h'),9),r['m'][0][1] if r['m'] else 0))
     for i,r in zip(shi,srt): rows[i]=r
+QC=['兌換印信','快速兌換印信','龍川至寶金選禮券','銀票兌換']
+qi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='欽差大臣']
+if qi:
+    srt=sorted((rows[i] for i in qi),key=lambda r:QC.index(r['h']) if r.get('h') in QC else 9)
+    for i,r in zip(qi,srt): rows[i]=r
 MATS=['皇龍虹鉻','皇龍純金','皇龍星銀','皇龍至鋼','鋼粹之心','天鋼之心','藥煉之菁','天藥之菁','寂滅淨元','同花大聖鑽']
 vers=[v for v in ORDER+['中原（常駐）','節慶活動','不確定'] if any(r['v']==v for r in rows)]
 vers=[v for v in ['中原（常駐）'] if v in vers]+[v for v in vers if v!='中原（常駐）']
