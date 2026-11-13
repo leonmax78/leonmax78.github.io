@@ -45,7 +45,7 @@
   }
   // common tail of the item names, e.g. 圓弧霜白寶石Ⅰ / 三角橄欖寶石Ⅰ → 寶石Ⅰ
   const head = names => { let t = names[0] || ''; for(const n of names) while(t && !n.startsWith(t)) t = t.slice(0, -1); return t; };
-  let IV = {};
+  let IV = {}, KEEP = new Set();
   // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
   // 冠聖鑽 under the heading 聖鑽 → 聖鑽 (宇以太核 → 以太)
   const shortHead = (label, h) => h && !/[・]|月服|免服/.test(h) && label.includes(h) ? h : label;
@@ -182,7 +182,7 @@
       const groups = new Map();
       for(const r of choices(list)){ if(shown >= limit) break; const g = r.h || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown += r.n || 1; }
       out += `<section class="exNpc"><header><h3>${esc(npc.n)}</h3>${showVer ? `<span class="exVer">${esc(list[0].v)}</span>` : ''}<div class="exPlaces">${placesHTML(npc)}</div></header>
-        ${[...groups].map(([g, rs]) => { const list = highFirst ? collapse(rs) : fewFirst(collapse(rs)); const head = !!g; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
+        ${[...groups].map(([g, rs]) => { const list = highFirst || KEEP.has(p) ? collapse(rs) : fewFirst(collapse(rs)); const head = !!g; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
@@ -192,7 +192,7 @@
     const reader = document.getElementById('reader');
     if(!reader) return;
     let data;
-    try{ data = await load(); IV = data.iv || {}; }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    try{ data = await load(); IV = data.iv || {}; KEEP = new Set(data.keep || []); }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     const tabs = [MATS_TAB, ...data.vers];
     if(!tabs.includes(state.tab)) state.tab = MATS_TAB;
     const q = norm(state.query);
