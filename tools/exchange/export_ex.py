@@ -31,6 +31,8 @@ def q(lst):
     return [[n,c,iid.get(n,0)] for n,c in acc.items()]
 # rows the owner asked to hide after the review (2026-11-13)
 HIDE={('伙計','對話 7539')}
+# NPCs standing in maps of two expansions, placed where the owner says they belong
+VER_FIX={'忘歲仙子‧化':'問頂仙途'}
 HIDE_MAT={'藍方募款傳單','綠方募款傳單'}   # quest hand-ins the owner removed
 HIDE_NPC={'夸父幼童','巫醫','老祭司','包月長'}
 npcs=[]; nidx={}; seen_rows=set()
@@ -45,7 +47,7 @@ for e in recipes.values():
         nidx[key]=len(npcs); npcs.append({'n':e['npc'],'p':[list(p) for p in places]})
     note=(d.get('備註（請填）') or '').strip()
     g=label(e['menu'])
-    row={'v':d.get('資料片') or '不確定','k':d.get('類別') or '兌換','p':nidx[key],'g':g,'m':q(e['mat']),'r':q(e['rew'])}
+    row={'v':VER_FIX.get(e['npc']) or d.get('資料片') or '不確定','k':d.get('類別') or '兌換','p':nidx[key],'g':g,'m':q(e['mat']),'r':q(e['rew'])}
     # 名聲／金錢 paid for the exchange read as the first material, not as a note at the end
     cost=[]
     if e.get('fame'): cost.append(['名聲',int(e['fame']),0])
