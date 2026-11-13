@@ -21,7 +21,7 @@
     return dataPromise;
   }
 
-  const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${qty > 1 ? `<span class="exQty">×${Number(qty).toLocaleString()}</span>` : ''}`;
+  const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${typeof qty === 'string' ? `<span class="exQty">×${esc(qty)}</span>` : qty > 1 ? `<span class="exQty">×${Number(qty).toLocaleString()}</span>` : ''}`;
   const items = list => list.map(item).join('<span class="exPlus">＋</span>');
   const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${r.pick ? `<span class="exItem plain">下列其中一款</span>${r.r[0][1] > 1 ? `<span class="exQty">×${Number(r.r[0][1]).toLocaleString()}</span>` : ''}` : items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}${r.pick ? `<div class="exPickList">${r.r.map(x => item([String(x[0]).replace(/^降神魂魄/, ''), 1, x[2]])).join('、')}</div>` : ''}</li>`;
   const placesHTML = npc => npc.p.map(([sid, nid, stage, x, y]) => `<button type="button" class="exPlace" data-ex-npc="${sid}:${nid}" title="看 NPC 對話與地圖位置">${esc(stage)} <small>(${x}, ${y})</small></button>`).join('');
@@ -114,7 +114,24 @@
   }
 
   // Same materials, one of several rewards (西域裝甲禮券 → 劍／勇／術／道／僧裝錦囊) read as one line.
+  // 奇蹟摸彩券 → 奇蹟彩票 ×1／×2／…／×255 is one random draw: 「奇蹟彩票 ×1～255（隨機）」
+  function randomAmounts(list){
+    const by = new Map(), out = [];
+    for(const r of list){
+      const key = r.r.length === 1 ? [sig(r.m), r.r[0][0], r.c || '', r.h || ''].join('#') : null;
+      if(key === null){ out.push(r); continue; }
+      if(!by.has(key)){ const box = { set: [] }; by.set(key, box); out.push(box); }
+      by.get(key).set.push(r);
+    }
+    return out.flatMap(x => {
+      if(!x.set) return [x];
+      const q = [...new Set(x.set.map(r => r.r[0][1]))].sort((a, b) => a - b);
+      if(q.length < 4) return x.set;
+      return [{ ...x.set[0], r: [[x.set[0].r[0][0], `${q[0]}～${q[q.length - 1]}（隨機）`, x.set[0].r[0][2]]], l: '' }];
+    });
+  }
   function choices(list){
+    list = randomAmounts(list);
     const by = new Map(), out = [];
     for(const r of list){
       // same materials, one of several rewards of the same amount (巨門: 「換取下列其中一款 4 個」)
@@ -127,8 +144,8 @@
       if(!x.set) return [x];
       const names = new Set(x.set.map(r => r.r[0][0]));
       if(x.set.length < 2 || names.size < x.set.length) return x.set;
-      const hs = new Set(x.set.map(r => r.h || ''));
-      return [{ ...x.set[0], r: x.set.map(r => r.r[0]), pick: true, n: x.set.length, h: hs.size === 1 ? x.set[0].h : '' }];
+      const hs = new Set(x.set.map(r => r.h || '').filter(Boolean));
+      return [{ ...x.set[0], r: x.set.map(r => r.r[0]), pick: true, n: x.set.length, h: hs.size === 1 ? [...hs][0] : '' }];
     });
   }
 
@@ -136,7 +153,10 @@
   function fewFirst(list){
     const seen = new Map();
     const k0 = r => r.stepN ? '#STEP' : r.many ? '#' + r.label : (r.m[0]?.[0] || '');
+    // 五年禮、六年禮… after the others, in year order
+    const year = k => { const m = String(k).match(/^([一二三四五六七八九十]+)年禮/); return m ? zhNum(m[1]) : 0; };
     list.forEach(r => { const k = k0(r); if(!seen.has(k)) seen.set(k, seen.size); });
+    for(const [k, v] of seen) if(year(k)) seen.set(k, 1000 + year(k));
     const key = r => seen.get(k0(r));
     return list.map((r, i) => [r, i]).sort((a, b) => key(a[0]) - key(b[0]) || (a[0].stepN || 0) - (b[0].stepN || 0) || (a[0].m[0]?.[1] || 0) - (b[0].m[0]?.[1] || 0) || (a[0].r[0]?.[1] || 0) - (b[0].r[0]?.[1] || 0) || a[1] - b[1]).map(x => x[0]);
   }
