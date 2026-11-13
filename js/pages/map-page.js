@@ -645,12 +645,6 @@
   }
 
   function areaLabels(stage){
-    if(Number(stage.stageId) === 381){
-      return '<span class="mapExitDirection" style="left:10px;top:8px"><b aria-hidden="true">↖</b><span>往低鳴裂口</span></span>' +
-        '<span class="mapExitDirection" style="right:10px;top:8px" aria-label="東北出口"><b aria-hidden="true">↗</b></span>' +
-        '<span class="mapExitDirection" style="left:10px;bottom:8px" aria-label="西南出口"><b aria-hidden="true">↙</b></span>' +
-        '<span class="mapExitDirection" style="right:10px;bottom:8px" aria-label="東南出口"><b aria-hidden="true">↘</b></span>';
-    }
     if(Number(stage.stageId) === 15 && (stage.monsters || []).some(m => m.activity === '虛空群魔大遊行')){
       return [
         {name:'第一區', x:82, y:61},
@@ -668,8 +662,33 @@
     }).join('');
   }
 
+  // V774: exits to other maps (from MPC events, tools/import_map_exits.py) — an arrow that
+  // points off the map plus the destination's name; tapping it opens that map.
+  const EXIT_ARROW = '<svg viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="exitGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a3"/><stop offset=".55" stop-color="#f2b33d"/><stop offset="1" stop-color="#c47a12"/></linearGradient></defs><path d="M4 15h17V6l15 14-15 14v-9H4z" fill="url(#exitGold)" stroke="#2a1a05" stroke-width="2.4" stroke-linejoin="round"/></svg>';
+  function exitLabels(stage){
+    const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
+    return (stage.exits || []).map(e => {
+      const angle = Math.atan2(e.y - h / 2, e.x - w / 2) * 180 / Math.PI;
+      const right = e.x > w / 2;
+      const y = Math.max(22, Math.min(h - 22, e.y));
+      const x = Math.max(22, Math.min(w - 22, e.x));
+      const name = `往${e.label}${e.conditional ? '（有條件）' : ''}`;
+      return `<button type="button" class="mapExit ${right ? 'toLeft' : 'toRight'}" data-exit-to="${htmlEscape(e.destination)}" style="left:${x / w * 100}%;top:${y / h * 100}%;--a:${angle.toFixed(1)}deg" title="${htmlEscape(name)}（點一下開啟這張地圖）"><span class="mapExitArrow">${EXIT_ARROW}</span><span class="mapExitName">${htmlEscape(name)}</span></button>`;
+    }).join('');
+  }
+  document.addEventListener('click', ev => {
+    const b = ev.target.closest && ev.target.closest('[data-exit-to]');
+    if(!b) return;
+    ev.preventDefault();
+    state.stageId = Number(b.dataset.exitTo);
+    state.floor = null; state.floorStageId = null;
+    state.monsters.clear(); state.npcs.clear();
+    const stage = currentStage();
+    if(stage) autoCheckMatches(stage);
+    renderLoaded();
+  });
   function transferLabels(stage){
-    if(stage.mapCategory==='tower')return '';
+    if(stage.mapCategory!=='tower')return exitLabels(stage);
     const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
     return (stage.transfers || []).map(point => {
       const x = Math.max(105, Math.min(w - 105, point.x));
