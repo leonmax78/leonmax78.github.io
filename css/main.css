@@ -4549,3 +4549,54 @@ button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bott
 .exMaps button{border-style:dashed;color:#9fd0ff}
 .exMaps button::before{content:"📍";margin-right:3px;font-size:.85em}
 .exNpcChips button{font-weight:700}
+/* 副降神試算 card layout (V755) */
+.jsPage .jsTabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+.jsPage .jsTabs button,.jsPage .jsHeroList button,.jsPage .jsStars button,.jsPage .jsSlot button,.jsPage .jsActions button{font:inherit;color:var(--text,#dce7f5);background:#102a36;border:1px solid #357b83;border-radius:6px;padding:7px 11px;cursor:pointer}
+.jsPage .jsTabs button[aria-selected=true],.jsPage .jsHeroList button.active,.jsPage .jsStars button.active{background:#137b77;color:#fff}
+.jsPage button:disabled{opacity:.35;cursor:not-allowed}
+.jsLayout{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:820px){.jsLayout{grid-template-columns:1fr}}
+.jsSide{display:grid;gap:8px}
+.jsSideHead{font-size:14px;color:var(--muted)}.jsSideHead b{color:#7ee0b5;font-size:16px}
+.jsSide input[type=search]{width:100%;min-width:0}
+.jsHeroList{display:flex;flex-wrap:wrap;gap:6px;max-height:240px;overflow:auto;padding:4px;border:1px solid var(--line);border-radius:8px}
+.jsHeroList button{padding:5px 9px;font-size:13.5px}
+.jsLabel{font-size:12px;font-weight:700;color:var(--muted);margin-top:6px}
+.jsStars{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.jsStars button{padding:5px 0}
+.jsTotals{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:2px 14px}
+.jsTotals div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:4px 0}
+.jsTotals b{color:#f2f7ff}.jsTotals b.zero{color:var(--muted);font-weight:400}
+.jsCombos{display:grid;gap:6px}.jsCombos div{border-left:3px solid #dda84d;padding:4px 8px;background:var(--panel)}.jsCombos small{display:block;color:var(--muted)}
+.jsCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.jsCard{font:inherit;text-align:left;display:grid;gap:4px;align-content:start;min-height:150px;padding:12px;border-radius:10px;border:1px solid #2f6b4f;background:linear-gradient(180deg,#123526,#0d241b);color:var(--text,#dce7f5);cursor:pointer}
+.jsCard.empty{background:transparent;border-style:dashed;border-color:var(--line);color:var(--muted)}
+.jsCard.active{outline:2px solid #53ded3;outline-offset:1px}
+.jsCardRole{font-size:12px;color:#9fd0ff}
+.jsCardName{font-size:18px;font-weight:800}
+.jsCardStar{justify-self:start;font-size:12px;padding:1px 8px;border-radius:999px;background:#dda84d;color:#1b1406;font-weight:800}
+.jsCardStats{font-size:12.5px;color:#cfe;line-height:1.6}
+.jsSlots{display:grid;gap:6px}
+.jsSlot{display:grid;grid-template-columns:24px minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:8px}
+.jsSlot b{color:#dda84d}.jsSlot span{font-size:13px;overflow-wrap:anywhere}
+.jsSlot button{padding:4px 10px}
+.jsActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.jsBelow{margin-top:16px;display:grid;gap:8px}
+/* 副降神試算 portraits + 聯動 filter (V756) */
+.jsSeries{display:flex;flex-wrap:wrap;gap:5px}
+.jsPage .jsSeries button{font:inherit;font-size:12.5px;color:var(--text,#dce7f5);background:#1a2430;border:1px solid #4b5b6e;border-radius:999px;padding:4px 10px;cursor:pointer}
+.jsPage .jsSeries button.active{background:#dda84d;border-color:#dda84d;color:#1b1406;font-weight:800}
+.jsSeries small{margin-left:4px;opacity:.7;font-size:11px}
+.jsHeroList{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px;max-height:340px}
+.jsPage .jsHeroList button{display:grid;justify-items:center;align-content:start;gap:3px;padding:4px 3px 5px;font-size:12.5px;line-height:1.2}
+.jsPage .jsHeroList button.clear{align-content:center;min-height:60px;color:var(--muted);background:transparent;border-style:dashed}
+.jsHeroFace{width:46px;height:46px;border-radius:6px;object-fit:cover;object-position:50% 18%;background:#000;border:1px solid #2b4250}
+.jsHeroFace.none{display:block}
+.jsHeroList button span{overflow-wrap:anywhere;text-align:center}
+.jsCardFace{position:relative;display:block;aspect-ratio:182/170;border-radius:8px;overflow:hidden;background:#05100c;border:2px solid #c9a24a;box-shadow:0 0 0 2px #3a2a10 inset}
+.jsCardFace img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;display:block}
+.jsCard.empty .jsCardFace{border:2px dashed var(--line);box-shadow:none;background:transparent;display:grid;place-items:center}
+.jsCardPlus{font-size:30px;color:var(--muted)}
+.jsCardFace .jsCardStar{position:absolute;right:6px;bottom:6px}
+.jsCard.active .jsCardFace{border-color:#53ded3}
+.jsLayout{grid-template-areas:"pick main" "stat main"}.jsSide{grid-area:pick}.jsMain{grid-area:main}.jsStat{grid-area:stat;display:grid;gap:8px;align-content:start}
+@media (max-width:820px){.jsLayout{grid-template-areas:"pick" "main" "stat"}.jsCards{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.jsCard{min-height:0;padding:6px}.jsCardName{font-size:14px}.jsCardRole{font-size:10.5px}.jsCardStats{font-size:11px}.jsHeroList{max-height:260px}}
