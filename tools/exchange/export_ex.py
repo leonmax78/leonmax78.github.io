@@ -31,13 +31,14 @@ def q(lst):
     return [[n,c,iid.get(n,0)] for n,c in acc.items()]
 # rows the owner asked to hide after the review (2026-11-13)
 HIDE={('伙計','對話 7539')}
+HIDE_MAT={'藍方募款傳單','綠方募款傳單'}   # quest hand-ins the owner removed
 HIDE_NPC={'夸父幼童','巫醫','老祭司','包月長'}
 npcs=[]; nidx={}; seen_rows=set()
 rows=[]
 for e in recipes.values():
     src_id=(f"兌換 {e['id']}（組 {e['group']}）" if e['kind']=='兌換視窗' else f"對話 {e['id']}")
     d=dec.get((e['npc'],src_id,fmt(e['rew'])))
-    if not d or d['保留']!='✓' or (e['npc'],src_id) in HIDE or e['npc'] in HIDE_NPC: continue
+    if not d or d['保留']!='✓' or (e['npc'],src_id) in HIDE or e['npc'] in HIDE_NPC or any(n in HIDE_MAT for n,_ in e['mat']): continue
     places=tuple(tuple(p) for p in e['pls'])
     key=(e['npc'],places)
     if key not in nidx:
@@ -71,6 +72,9 @@ for e in recipes.values():
     if not note and e['npc']=='頂峰軍需官' and e['mat']:
         n0=e['mat'][0][0]
         note='真元' if '真元' in n0 else '聖鑽' if '聖鑽' in n0 else '以太' if '以太' in n0 else ''
+    # 摩羅黑市高幹: 天鋼之心 and 鋼粹之心 apart (owner request)
+    if not note and e['npc']=='摩羅黑市高幹' and e['rew'] and e['rew'][0][0] in ('天鋼之心','鋼粹之心','四聖諦碎片'):
+        note='換'+e['rew'][0][0]
     # 月服／免服 versions get their own heading
     srv=[x for x in conds if x in ('月服','免服')]
     if srv:
@@ -106,6 +110,23 @@ if swap:
     for r in rows:
         if npcs[r['p']]['n']=='義軍資深專員' and r['m'] and r['m'][0][0]=='七年禮兌換券':
             r['l']='；'.join(x for x in (r.get('l'),'可用兩百萬兩銀票交換其他七年禮') if x)
+# 六滅化神 tiers, lowest first (from the 無式仙者 chain and the 聖獸血魄 prices)
+LM=['','真','超','絕','無','帝','終','創','星','皇','終極']
+def lm_tier(r):
+    for x in r['m']+r['r']:
+        n=x[0]
+        m=re.match(r'^(終極|[真超絕無帝終創星皇])?[‧·]?六滅化神',n)
+        if m: return LM.index(m.group(1) or '')
+    return 99
+for who in ('侏人巧匠','無式仙者'):
+    ix=[i for i,r in enumerate(rows) if npcs[r['p']]['n']==who and lm_tier(r)<99]
+    if ix:
+        srt=sorted((rows[i] for i in ix),key=lambda r:(lm_tier(r),0 if r['m'] and '六滅化神' in r['m'][0][0] and '‧' in r['m'][0][0] or (r['m'] and r['m'][0][0]=='六滅化神') else 1))
+        for i,r in zip(ix,srt): rows[i]=r
+mi=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='摩羅黑市高幹']
+if mi:
+    srt=sorted((rows[i] for i in mi),key=lambda r:({'換天鋼之心':0,'換鋼粹之心':1,'換四聖諦碎片':2}.get(r.get('h'),3),r['r'][0][1] if r['r'] else 0))
+    for i,r in zip(mi,srt): rows[i]=r
 DF=['真元','聖鑽','以太']
 di=[i for i,r in enumerate(rows) if npcs[r['p']]['n']=='頂峰軍需官']
 if di:
@@ -144,6 +165,8 @@ for r in rows:
     for x in r['m'][:1]:
         t=byid.get(x[2])
         if t and t.get('Type') in EQUIP: iv[x[2]]=[int(t.get('Level') or 0),2 if t['Type'] in ('MAGIC_FIGURE','UNDER_BOOT') else 1 if t['Type'] in WEAPON else 0]   # 2 = 仙器
-data={'version':'exchange-1112','iv':iv,'vers':vers,'mats':[[m,iid.get(m,0)] for m in MATS],'npcs':npcs,'rows':rows}
+# NPCs whose order is set here; the page keeps it instead of re-sorting by amount
+KEEP=['侏人巧匠','無式仙者','摩羅黑市高幹','頂峰軍需官','欽差大臣','上師石章嘉']
+data={'version':'exchange-1112','keep':[i for i,n in enumerate(npcs) if n['n'] in KEEP],'iv':iv,'vers':vers,'mats':[[m,iid.get(m,0)] for m in MATS],'npcs':npcs,'rows':rows}
 json.dump(data,open(OUT,"w",encoding="utf-8"),ensure_ascii=False,separators=(',',':'))
 print(len(rows),'rows',len(npcs),'npcs',collections.Counter(r['v'] for r in rows).most_common(), 'mats rows',sum(any(x[0] in MATS for x in r['r']) for r in rows))
