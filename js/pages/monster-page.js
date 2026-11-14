@@ -82,7 +82,7 @@ function monsterMapControlsHTML(){
  return SZO_MAP_CLASS.controls('monsterMap',monsterMapScope);
 }
 function monsterMapOptionsHTML(){
- return '<option value="">全部地圖</option>'+monsterMapChoices.filter(s=>SZO_MAP_CLASS.same(s.stageId,monsterMapScope)).map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${s.floor?'':esc(s.id)+' '}${esc(s.name)}</option>`).join('');
+ return '<option value="">全部地圖</option>'+SZO_MAP_CLASS.order(monsterMapChoices.filter(s=>SZO_MAP_CLASS.same(s.stageId,monsterMapScope))).map(s=>`<option value="${esc(s.id)}" ${s.id===window.v88MonsterMap?'selected':''}>${s.floor?'':esc(s.id)+' '}${esc(s.name)}</option>`).join('');
 }
 document.addEventListener('change',event=>{
  const kind=event.target?.id?.match(/^monsterMap(Category|Group|Series)Select$/)?.[1];

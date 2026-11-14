@@ -1035,7 +1035,7 @@
     }
     const selectedKey=state.floorStageId===Number(stage.stageId)&&state.floor?`${stage.stageId}:${state.floor}`:String(stage.stageId);
     const scope=SZO_MAP_CLASS.get(stage.stageId);
-    const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${stages.filter(s=>SZO_MAP_CLASS.same(s.stageId,scope)).flatMap(s=>{
+    const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${SZO_MAP_CLASS.order(stages.filter(s=>SZO_MAP_CLASS.same(s.stageId,scope))).flatMap(s=>{
       const rows=s.mapCategory==='tower'?(s.areas||[]).map(a=>({key:`${s.stageId}:${a.floor}`,label:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
       if(s.mapCategory==='tower'&&selectedKey===String(s.stageId))rows.unshift({key:String(s.stageId),label:s.stageName+'（全圖）'});
       return rows.map(r=>`<option value="${r.key}" ${r.key===selectedKey?'selected':''}>${htmlEscape(r.label)}</option>`);
@@ -1334,7 +1334,7 @@
     if(level){
       const scope=SZO_MAP_CLASS.change(SZO_MAP_CLASS.get(state.stageId),level[1],ev.target.value);
       const tower=scope.group==='終末之塔';
-      const first=(mapData?.stages||[]).find(s=>SZO_MAP_CLASS.same(s.stageId,scope));
+      const first=SZO_MAP_CLASS.order((mapData?.stages||[]).filter(s=>SZO_MAP_CLASS.same(s.stageId,scope)))[0];
       if(!first)return;
       state.query='';state.npcTarget=null;state.stageId=Number(first.stageId);
       state.floor=tower?first.areas[0].floor:null;
