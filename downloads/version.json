@@ -1,10 +1,10 @@
 {
   "display_name": "武冠判讀_正式版",
-  "version": "261110-55",
-  "published_at": "2026-11-11 01:25",
-  "file_name": "Wuguan_261110-55.zip",
-  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261110-55.zip",
+  "version": "261114-56",
+  "published_at": "2026-11-14 20:00",
+  "file_name": "Wuguan_261114-56.zip",
+  "download_url": "https://leonmax78.github.io/downloads/Wuguan_261114-56.zip",
   "page_url": "downloads/",
-  "notes": "全自動記錄期間會鎖住滑鼠，避免有人碰到滑鼠而中斷或點錯；要中途停止請按鍵盤 Esc，記錄完成、停止或出錯時會自動解鎖，超過 40 分鐘也會強制停止。無法鎖定的電腦會沿用「動滑鼠就停止」。全自動是自動操作遊戲，是否使用請自行判斷。沿用原本角色槽位與校正設定。",
-  "sha256": "1a07dd2f2f30eb4e3261e99465d3e0c001bfc4459208c6d5ee037ac7e9b1dedd"
+  "notes": "雙螢幕修正：校正、偵測與全自動只看「最上層神州視窗所在的螢幕」，校正畫面不再出現兩個螢幕；逛街模式的已收納／未收納標籤與小視窗在副螢幕上也會貼著遊戲，不再跑到很遠。原本的綠框校正會自動換算，單螢幕不受影響；把遊戲移到另一個螢幕後若綠框偏掉，請重新校正一次。沿用原本角色槽位與校正設定。",
+  "sha256": "ca5b161404ba4a8a8c1fe1eeeabf4c1604291069f4805dd257f5643366e79c9c"
 }
