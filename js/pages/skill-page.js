@@ -100,6 +100,7 @@
     </section>`;
   }
   window.renderSkillPage = renderSkillPage;
+  window.openSkillSearch = async q => { state.query = String(q || '').trim(); if(typeof setView === 'function') await setView('skill'); else await renderSkillPage(); };
 
   let timer = 0;
   document.addEventListener('input', ev => {

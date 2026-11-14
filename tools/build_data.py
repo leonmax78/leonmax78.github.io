@@ -510,6 +510,13 @@ def copy_outputs_to_project(config: dict) -> None:
         shutil.copy2(merged, target / "raw" / merged.name)
 
 
+def search_icons(items: list, monsters: list) -> dict:
+    return {
+        "items": {str(x["ID"]): str(x["Icon"]) for x in items if str(x.get("Icon") or "").strip()},
+        "monsters": {str(x["ID"]): str(x["Pic"]) for x in monsters if str(x.get("Pic") or "").strip()},
+    }
+
+
 def main() -> None:
     DATA.mkdir(exist_ok=True)
     REPORTS.mkdir(exist_ok=True)
@@ -591,6 +598,8 @@ def main() -> None:
     write_json(DATA / "drop_reverse.json", drop_reverse)
     write_drop_reverse_shards(drop_reverse)
     write_json(DATA / "search_index.json", search_index)
+    # header-search thumbnails: item Icon / monster Pic by ID (small, loaded on first suggestion)
+    write_json(DATA / "search_icons.json", search_icons(items, monsters))
     write_json(DATA / "build_meta.json", build_meta)
     write_data_bundle_js(DATA / "items.bundle.js", "items", items)
     write_data_bundle_js(DATA / "monsters.bundle.js", "monsters", monsters)

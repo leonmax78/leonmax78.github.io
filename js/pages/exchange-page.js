@@ -244,6 +244,8 @@
     fillExIcons(reader);
   }
   window.renderExchangePage = renderExchangePage;
+  // open the page already searched (item 取得方式 / global search)
+  window.openExchangeSearch = async q => { state.query = String(q || '').trim(); state.more = 0; if(typeof setView === 'function') await setView('exchange'); else await renderExchangePage(); };
 
   let timer = 0;
   document.addEventListener('input', ev => {
