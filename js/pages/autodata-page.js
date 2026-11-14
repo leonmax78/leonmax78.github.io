@@ -87,7 +87,7 @@
   const prior=$('map').value,q=$('map-query').value;
   const matches=data.maps.filter(m=>S.matches((m.floor?'終末之塔':m.stageId)+' '+m.stageName,q));
   if(q.trim()&&matches.length&&!matches.some(m=>SZO_MAP_CLASS.same(m.stageId,mapScope)))mapScope=SZO_MAP_CLASS.normalize(SZO_MAP_CLASS.get(matches[0].stageId));
-  const maps=matches.filter(m=>SZO_MAP_CLASS.same(m.stageId,mapScope));
+  const maps=SZO_MAP_CLASS.order(matches.filter(m=>SZO_MAP_CLASS.same(m.stageId,mapScope)));
   $('map-levels').innerHTML=SZO_MAP_CLASS.controls('ae-map',mapScope);
   $('map').innerHTML='<option value="">選擇地圖／樓層</option>'+maps.map(m=>`<option value="${m.key}">${m.floor?'':m.stageId+' '}${E(m.stageName)}</option>`).join('');
   if(maps.some(m=>m.key===prior))$('map').value=prior;
