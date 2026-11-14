@@ -56,19 +56,22 @@
     });
     scripts.set(src,promise);return promise;
   }
+  // V791: keep 14 days of chat (must match supabase/chat-14-days.sql)
+  const KEEP_MS=14*86400000,KEEP_ROWS=300;
+  function stamp(iso){const d=new Date(iso),now=new Date();const hm=d.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false});return d.toDateString()===now.toDateString()?hm:(d.getMonth()+1)+'/'+d.getDate()+' '+hm;}
   function render(){
     const atBottom=log.scrollHeight-log.clientHeight-log.scrollTop<70;
-    const cutoff=Date.now()-86400000;
+    const cutoff=Date.now()-KEEP_MS;
     for(const [id,row] of rows)if(Date.parse(row.created_at)<cutoff)rows.delete(id);
     const ordered=[...rows.values()].sort((a,b)=>a.created_at.localeCompare(b.created_at)||a.id.localeCompare(b.id));
-    while(ordered.length>200)rows.delete(ordered.shift().id);
+    while(ordered.length>KEEP_ROWS)rows.delete(ordered.shift().id);
     const fragment=document.createDocumentFragment();
     for(const row of ordered){
       const li=document.createElement('li');li.className='szoChatMessage';li.dataset.removed=String(!!row.is_removed);
       const header=document.createElement('header'),name=document.createElement('strong'),time=document.createElement('time'),body=document.createElement('p');
       name.setAttribute('translate','no');body.setAttribute('translate','no');
       name.textContent=String(row.nickname||'訪客')+' · '+String(row.user_id||'').slice(0,6);
-      time.dateTime=row.created_at;time.textContent=new Date(row.created_at).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',hour12:false});
+      time.dateTime=row.created_at;time.textContent=stamp(row.created_at);time.title=new Date(row.created_at).toLocaleString('zh-TW',{hour12:false});
       body.textContent=row.is_removed?'訊息已由站長移除':String(row.body||'');
       header.append(name,time);li.append(header,body);fragment.append(li);
     }
@@ -87,7 +90,7 @@
     say('聊天室在線 '+count+' 人');
   }
   async function history(active,token){
-    const result=await client.from('szo_chat_messages').select('id,user_id,nickname,body,created_at,updated_at,is_removed').gte('created_at',new Date(Date.now()-86400000).toISOString()).order('created_at',{ascending:false}).limit(100);
+    const result=await client.from('szo_chat_messages').select('id,user_id,nickname,body,created_at,updated_at,is_removed').gte('created_at',new Date(Date.now()-KEEP_MS).toISOString()).order('created_at',{ascending:false}).limit(KEEP_ROWS);
     if(token!==generation||channel!==active)return false;
     if(result.error)throw result.error;
     (result.data||[]).forEach(merge);render();return true;
