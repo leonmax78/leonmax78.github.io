@@ -81,7 +81,7 @@
    }else if(kind==='monster-drops'){
     await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('怪物資料載入失敗');if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');
     const m=monsters.find(row=>String(row.ID)===String(id));if(!m)throw Error('找不到這個怪物');
-    html=`<div class="itemGroupedDetail"><h1>${esc(nameOf(m))}：掉落資料</h1><div class="detailPreviewDrops">${monsterDropRows(m).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}"><span>${esc(name)}</span><small>${esc(rate)}</small></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
+    html=`<div class="itemGroupedDetail"><h1>${esc(nameOf(m))}：掉落資料<small class="dropSortNote">機率高到低</small></h1><div class="detailPreviewDrops">${dropRowsSorted(monsterDropRows(m)).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}">${dropIconHTML(itemId,name)}<span class="dropText"><span>${esc(name)}</span><small>${esc(rate)}</small></span></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
    }else if(kind==='npc'){
     await ensureMapPageLoaded();
     html=await window.renderNpcPreviewHTML(id);
@@ -119,6 +119,12 @@
    else if(kind==='npc'){actions.innerHTML=((await window.npcPreviewHasShop(id))?`<button type="button" data-preview-open="npcshop" data-id="${esc(id)}">看商店</button>`:'')+(String(id).startsWith(':')?'':`<button type="button" data-preview-npc-map="${esc(id)}">地圖位置</button>`);}
    else if(kind==='quest')actions.innerHTML='<button type="button" data-preview-quest-page>前往任務查詢頁</button>';
    else if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
+   if(['item','monster','quest','npc','npcshop'].includes(kind)){
+    const link=location.origin+location.pathname+'#/'+kind+'/'+encodeURIComponent(id);
+    const share=document.createElement('button');share.type='button';share.className='previewShare';share.textContent='複製連結';share.title=link;
+    share.onclick=async()=>{try{await navigator.clipboard.writeText(link);share.textContent='已複製';}catch(e){window.prompt('複製這個連結',link);}setTimeout(()=>{share.textContent='複製連結';},1600);};
+    actions.appendChild(share);
+   }
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
  // V780: drop list with item icons, highest chance first (rates kept exactly as the game data has them)
