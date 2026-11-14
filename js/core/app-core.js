@@ -577,7 +577,14 @@ function renderHome(){
   ${recent.length?`<div class="homeRow"><span class="homeRowTitle">最近使用</span>${recent.map(a=>btn([a,RECENT_LABELS[a]])).join('')}</div>`:''}
   <div class="homeRow"><span class="homeRowTitle">常用功能</span>${HOME_TOOLS.map(btn).join('')}</div>
  </div></section>`;
+ fitHomePanel();
 }
+// the cover art shrinks to leave room for the panel underneath, so nothing covers the artwork or signature
+function fitHomePanel(){
+ const home=document.querySelector('.homeBlank'),panel=home&&home.querySelector('.homePanel');
+ if(panel)home.style.setProperty('--homePanelH',(panel.offsetHeight+20)+'px');
+}
+window.addEventListener('resize',()=>{if(document.body.classList.contains('isHomeView'))fitHomePanel();});
 function renderLoad(){
  const old=byId('loadCard');
  if(old)old.remove();
