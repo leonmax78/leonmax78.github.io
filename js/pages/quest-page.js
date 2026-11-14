@@ -164,6 +164,7 @@
     for(const quest of data.quests) if((quest.it || []).some(([, n]) => norm(n) === q)) push(quest, `需要／取得「${raw.trim()}」`);
     for(const quest of data.quests) if(norm(quest.n).includes(q)) push(quest, quest.c);
     for(const quest of data.quests) if((quest.it || []).some(([, n]) => norm(n).includes(q))) push(quest, '任務道具：' + quest.it.filter(([, n]) => norm(n).includes(q)).map(x => x[1]).slice(0, 2).join('、'));
+    if(q.length >= 2) for(const quest of data.quests){ if(limit && out.length >= limit) break; if(norm(plain(quest.d) + plain((quest.s || []).join(''))).includes(q)) push(quest, `內容提到「${raw.trim()}」`); }
     return limit ? out.slice(0, limit) : out;
   };
 

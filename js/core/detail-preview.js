@@ -74,7 +74,7 @@
    let html,monsterName='';
    if(kind==='item'){
     await ensureItemPageLoaded();if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');await ensureItemOptionalData('');
-    const item=itemIndex[String(id)];if(!item)throw Error('找不到這個道具');html=itemDetailBodyHTML(item);
+    const item=itemIndex[String(id)];if(!item)throw Error('找不到這個道具');html=itemDetailBodyHTML(item)+`<section class="itemSources" data-item-sources="${esc(id)}"><h2>取得方式</h2><p class="muted" role="status">整理取得方式中…</p></section>`;
    }else if(kind==='beast'){
     await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('封獸資料載入失敗');await ensureMonsterOptionalData('');
     html=beastDetailHTML(id);
@@ -100,6 +100,10 @@
    }else if(kind==='reverse'){
     await ensureItemPageLoaded();
     html=await window.renderReversePreviewHTML(id);
+    // V790: other ways to get it below the drop list
+    await ensureQaPageLoaded();
+    const more=await window.szoItemSourcesHTML(id,{skip:['drops'],show:8}).catch(()=>'');
+    if(more&&!/itemSrcNone/.test(more))html+=`<section class="itemSources"><h2>其他取得方式</h2>${more}</section>`;
    }else{
     await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('怪物資料載入失敗');await ensureMonsterOptionalData('');await ensureItemDataLoaded();
     let m=monsters.find(row=>String(row.ID)===String(id));
@@ -111,6 +115,8 @@
    }
    if(ticket!==request||!dialog.open)return;
    body.innerHTML=html;
+   const srcBox=kind==='item'&&body.querySelector('[data-item-sources]');
+   if(srcBox)ensureQaPageLoaded().then(()=>window.szoItemSourcesHTML(id)).then(h=>{if(ticket===request&&srcBox.isConnected)srcBox.innerHTML='<h2>取得方式</h2>'+h;}).catch(()=>{if(srcBox.isConnected)srcBox.remove();});
    if(kind==='monster'&&highlightItemId)for(const drop of body.querySelectorAll('.detailPreviewDrops [data-item]')){
     if(drop.dataset.item===String(highlightItemId)){drop.classList.add('searchedDrop');drop.title='本次查詢道具';}
    }

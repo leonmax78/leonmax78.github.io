@@ -368,8 +368,36 @@
 
 // V680: header search shows grouped suggestions (items / monsters / maps / NPCs) while typing.
 (function(){
-  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4, quest: 4, talk: 4 };
-  let talkIndex = null, dismissed = false;
+  const LIMIT = { item: 5, monster: 5, map: 3, npc: 4, quest: 4, skill: 3, talk: 4 };
+  let talkIndex = null, iconIndex = null, dismissed = false;
+  // V790: thumbnails — item icons / monster portraits by ID, line icons for the other groups
+  const SVG = {
+    map: '<path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/>',
+    npc: '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-3.8 3.6-5.8 7-5.8s6.2 2 7 5.8"/>',
+    quest: '<path d="M7 3h8l3 3v15H7z"/><path d="M10 10h5M10 14h5M10 18h3"/>',
+    skill: '<path d="M13 2 5 14h6l-1 8 8-12h-6z"/>',
+    talk: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/>',
+    item: '<path d="M5 8h14v12H5z"/><path d="M9 8V5h6v3"/>',
+    monster: '<path d="M5 19c0-6 3-10 7-10s7 4 7 10"/><circle cx="9.5" cy="13" r="1"/><circle cx="14.5" cy="13" r="1"/><path d="M7 9 5 4l4 3M17 9l2-5-4 3"/>'
+  };
+  const glyph = kind => `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${SVG[kind] || SVG.item}</svg>`;
+  function loadIconIndex(){
+    if(iconIndex) return iconIndex;
+    const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+    iconIndex = fetch('data/search_icons.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+    return iconIndex;
+  }
+  function thumb(r, icons){
+    const media = window.SZO_ASSET_MEDIA;
+    let src = '';
+    try{
+      if(r.kind === 'item' && media && icons?.items?.[r.id]) src = media.itemIconSrc({ ID: r.id, Icon: icons.items[r.id], Type: r.type });
+      else if(r.kind === 'monster' && media) src = media.monsterPortraitSrc({ ID: r.id, Pic: icons?.monsters?.[r.id] || '' });
+      else if(r.kind === 'skill' && r.icon) src = `assets/test-media/skill-icons/${r.icon}.png`;
+    }catch(e){}
+    return src ? `<span class="gsIco gsImg"><img src="${esc(src)}" alt="" loading="lazy" onerror="this.parentNode.innerHTML=''"></span>` : `<span class="gsIco gsGlyph gs-${r.kind}">${glyph(r.kind)}</span>`;
+  }
+  function typeLabel(t){ t = String(t || '').trim(); try{ if(typeof ITEM_TYPE_MAP === 'object' && ITEM_TYPE_MAP[t]) return ITEM_TYPE_MAP[t]; }catch(e){} return ''; }
   let mapIndex = null, timer = 0, active = -1, rows = [], composing = false, seq = 0;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
@@ -442,11 +470,10 @@
     if(!q) return [];
     try{ if(typeof window.ensureSearchIndexLoaded === 'function') await window.ensureSearchIndexLoaded(); }catch(e){}
     const idx = (window.SZO_DATA_BUNDLES || {}).search_index || {};
-    const maps = await loadMapIndex();
+    const [maps, icons] = await Promise.all([loadMapIndex(), loadIconIndex()]);
     const out = [];
-    for(const r of rank(idx.items || [], x => x.name, q, LIMIT.item)) out.push({ kind: 'item', label: r.name, sub: 'ID ' + r.row.id, id: r.row.id });
-    for(const r of rank(idx.monsters || [], x => x.name, q, LIMIT.monster)) out.push({ kind: 'monster', label: r.name, sub: r.row.level ? 'Lv.' + r.row.level : '', id: r.row.id });
-    for(const r of rank(maps.stages || [], x => x.stageName, q, LIMIT.map)) out.push({ kind: 'map', label: r.name, sub: '', id: r.row.stageId });
+    for(const r of rank(idx.items || [], x => x.name, q, LIMIT.item)) out.push({ kind: 'item', label: r.name, sub: [typeLabel(r.row.type), 'ID ' + r.row.id].filter(Boolean).join('・'), id: r.row.id, type: r.row.type, icons });
+    for(const r of rank(idx.monsters || [], x => x.name, q, LIMIT.monster)) out.push({ kind: 'monster', label: r.name, sub: r.row.level ? 'Lv.' + r.row.level : '', id: r.row.id, icons });
     const npcs = (maps.npcs || []).map(([name, stageId, npcId, shop, stageName]) => ({ name, stageId, npcId, shop, stageName }));
     npcs.sort((a,b) => b.shop - a.shop);
     const npcCount = new Map();
@@ -455,11 +482,26 @@
       const more = npcCount.get(r.name) > 1 ? ` 等 ${npcCount.get(r.name)} 處` : '';
       out.push({ kind: 'npc', label: r.name, sub: r.row.stageName + more + (r.row.shop ? '・商店' : ''), id: r.row.npcId, stageId: r.row.stageId, stageName: r.row.stageName, shop: r.row.shop });
     }
+    // maps: by name, plus the maps of the NPCs found above (敖姬 → her map)
+    const mapSeen = new Set();
+    for(const r of rank(maps.stages || [], x => x.stageName, q, LIMIT.map)){ mapSeen.add(r.row.stageId); out.push({ kind: 'map', label: r.name, sub: '', id: r.row.stageId }); }
+    for(const n of out.filter(x => x.kind === 'npc')){
+      if(mapSeen.has(n.stageId) || mapSeen.size >= LIMIT.map + 2) continue;
+      mapSeen.add(n.stageId); out.push({ kind: 'map', label: n.stageName, sub: n.label + ' 所在', id: n.stageId, query: n.label, npcId: n.id });
+    }
     try{ if(typeof window.ensureQuestPageLoaded === 'function') await window.ensureQuestPageLoaded(); out.push(...await window.szoQuestRows(raw, LIMIT.quest)); }catch(e){}
+    try{
+      if(typeof window.ensureSkillPageLoaded === 'function') await window.ensureSkillPageLoaded();
+      const sk = await window.loadSkillData();
+      const hits = (sk.skills || []).filter(x => norm(x.n).includes(q)).sort((a, b) => (norm(a.n) === q ? 0 : 1) - (norm(b.n) === q ? 0 : 1) || a.n.length - b.n.length);
+      const seenSkill = new Set();
+      for(const x of hits){ if(seenSkill.has(x.n)) continue; seenSkill.add(x.n); out.push({ kind: 'skill', label: x.n, sub: `${x.k}・${x.t}${x.lv ? '・Lv' + String(x.lv).replace(/（.*$/, '') : ''}`, icon: x.ic }); if(seenSkill.size >= LIMIT.skill) break; }
+    }catch(e){}
     try{ out.push(...await window.szoItemTalkRows(raw, LIMIT.talk)); }catch(e){}
-    return out;
+    const ORDER = ['item', 'monster', 'npc', 'map', 'quest', 'skill', 'talk'];
+    return out.map((r, i) => [r, i]).sort((a, b) => ORDER.indexOf(a[0].kind) - ORDER.indexOf(b[0].kind) || a[1] - b[1]).map(x => x[0]);
   }
-  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC', quest: '任務', talk: '兌換・任務對話' };
+  const KIND = { item: '道具', monster: '怪物', map: '地圖', npc: 'NPC', quest: '任務', skill: '技能', talk: '兌換・任務對話' };
   function render(raw){
     const el = box(); if(!el) return;
     if(!rows.length){ el.hidden = true; el.innerHTML = ''; return; }
@@ -467,7 +509,7 @@
     el.innerHTML = rows.map((r, i) => {
       const head = r.kind !== last ? `<div class="gsHead">${KIND[r.kind]}</div>` : '';
       last = r.kind;
-      return `${head}<div role="option" tabindex="-1" class="gsRow${i === active ? ' active' : ''}" data-gs="${i}"><b>${esc(r.label)}</b><small>${esc(r.sub)}</small></div>`;
+      return `${head}<div role="option" tabindex="-1" class="gsRow gsRowIco${i === active ? ' active' : ''}" data-gs="${i}">${thumb(r, r.icons)}<span class="gsText"><b>${esc(r.label)}</b><small>${esc(r.sub)}</small></span></div>`;
     }).join('') + `<div role="option" tabindex="-1" class="gsAll${active === rows.length ? ' active' : ''}" data-gs="all">查看「${esc(raw)}」的全部結果</div>`;
     place(el);
     el.hidden = false;
@@ -499,7 +541,8 @@
     try{
       if(r.kind === 'item'){ if(P) return P.open('item', r.id); if(window.ensureItemPageLoaded) await window.ensureItemPageLoaded(); if(window.showItem) window.showItem(r.id); }
       else if(r.kind === 'monster'){ if(P) return P.open('monster', r.id); if(window.ensureMonsterPageLoaded) await window.ensureMonsterPageLoaded(); if(window.showMonster) window.showMonster(r.id); }
-      else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, ''); }
+      else if(r.kind === 'map'){ if(window.ensureMapPageLoaded) await window.ensureMapPageLoaded(); if(window.openMapSearchLocation) await window.openMapSearchLocation(r.label, r.query || '', r.npcId); }
+      else if(r.kind === 'skill'){ if(window.ensureSkillPageLoaded) await window.ensureSkillPageLoaded(); if(window.openSkillSearch) await window.openSkillSearch(r.label); }
       else if(r.kind === 'quest'){ if(P) return P.open('quest', r.id); }
       else if(r.kind === 'talk'){ if(P) return P.open('npc', r.key); }
       else if(r.kind === 'npc'){
