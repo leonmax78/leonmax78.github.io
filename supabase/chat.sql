@@ -26,7 +26,7 @@ revoke all on public.szo_chat_bans from anon, authenticated;
 grant select on public.szo_chat_messages to authenticated;
 drop policy if exists szo_chat_read on public.szo_chat_messages;
 create policy szo_chat_read on public.szo_chat_messages for select to authenticated
-  using (created_at >= now() - interval '24 hours');
+  using (created_at >= now() - interval '14 days');
 
 -- All writes go through this function. Browser-side restrictions are not security.
 create or replace function public.szo_send_chat(p_id uuid, p_nickname text, p_body text)
