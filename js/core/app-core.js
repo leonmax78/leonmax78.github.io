@@ -539,9 +539,44 @@ async function setItemSub(kind){
   byId('reader').innerHTML='<section class="card"><h1>頁面讀取失敗</h1><div class="empty">請重新整理後再試一次。</div></section>';
  }
 }
+// V784: home page shortcuts and the visitor's recently used tools (stored only in this browser)
+const HOME_TOOLS=[
+ ['data-view="quest"','任務查詢'],['data-item-open="item"','道具查詢'],['data-view="monsterQuery"','查詢怪物'],
+ ['data-view="map"','地圖查詢'],['data-view="exchange"','兌換、拆解、升階'],['data-jiang="support"','副降神試算'],
+ ['data-view="gems"','寶石試算'],['data-view="skill"','技能查詢']
+];
+const RECENT_LABELS={'data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'副降神試算','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練計算'};
+function szoSetRoute(route){try{history.replaceState(history.state,'',location.pathname+location.search+(route?'#/'+route:''));}catch(e){}}
+window.szoSetRoute=szoSetRoute;
+async function szoOpenRoute(){
+ const m=String(location.hash||'').match(/^#\/([^/]+)(?:\/(.+))?$/);if(!m)return;
+ const [,head,rawArg]=m;const arg=rawArg?decodeURIComponent(rawArg):'';
+ try{
+  if(['item','monster','quest','npc','npcshop'].includes(head)&&arg){await window.SZO_PREVIEW?.open(head,arg);return;}
+  if(head==='jiang'){setJiang(arg||'support');return;}
+  if(head==='items'){await setView('item');if(typeof setItemSub==='function')await setItemSub(arg||'item');return;}
+  if(head==='map'){await setView('map');if(arg&&typeof window.szoOpenStage==='function')window.szoOpenStage(Number(arg));return;}
+  if(document.querySelector(`[data-view="${head}"]`)||['gems','soul','exchange','skill','quest','map','shop','collect','trade','downloads','autodata','monsterQuery','beastQuery','monster','item','mapMenu'].includes(head))await setView(head);
+ }catch(e){}
+}
+function homeRecent(){try{return JSON.parse(localStorage.getItem('szo_recent_tools')||'[]').filter(a=>RECENT_LABELS[a]).slice(0,4);}catch(e){return [];}}
+document.addEventListener('click',e=>{
+ const b=e.target.closest&&e.target.closest('[data-view],[data-jiang],[data-item-open],[data-js-nav]');if(!b)return;
+ const attr=b.dataset.jsNav?`data-jiang="${b.dataset.jsNav}"`:b.dataset.jiang?`data-jiang="${b.dataset.jiang}"`:b.dataset.itemOpen?`data-item-open="${b.dataset.itemOpen}"`:`data-view="${b.dataset.view}"`;
+ // V784: the address bar follows the open tool, so a copied link opens the same page
+ const route=b.dataset.jsNav?'jiang/'+b.dataset.jsNav:b.dataset.jiang?'jiang/'+b.dataset.jiang:b.dataset.itemOpen?'items/'+b.dataset.itemOpen:b.dataset.view;
+ if(route&&route!=='home')szoSetRoute(route);else if(route==='home')szoSetRoute('');
+ if(!RECENT_LABELS[attr])return;
+ try{const list=[attr,...homeRecent().filter(a=>a!==attr)].slice(0,4);localStorage.setItem('szo_recent_tools',JSON.stringify(list));}catch(err){}
+},true);
 function renderHome(){
  document.body.classList.add('isHomeView');
- byId('reader').innerHTML='<section class="homeBlank" aria-label="首頁"></section>';
+ const recent=homeRecent();
+ const btn=([attr,label])=>`<button type="button" class="homeTool" ${attr}>${String(label).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}</button>`;
+ byId('reader').innerHTML=`<section class="homeBlank" aria-label="首頁"><div class="homePanel">
+  ${recent.length?`<div class="homeRow"><span class="homeRowTitle">最近使用</span>${recent.map(a=>btn([a,RECENT_LABELS[a]])).join('')}</div>`:''}
+  <div class="homeRow"><span class="homeRowTitle">常用功能</span>${HOME_TOOLS.map(btn).join('')}</div>
+ </div></section>`;
 }
 function renderLoad(){
  const old=byId('loadCard');
@@ -1615,6 +1650,7 @@ async function init(){
  adoptPreloadedMonsterBundle();
  renderHome();
  const ok=initAuth();
+ if(ok!==false)szoOpenRoute();
  warmLookupDataInBackground();
  warmHeavyLookupPages();
 }

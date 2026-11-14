@@ -925,6 +925,11 @@
 
   // V772: a busy map asks for hundreds of portraits at once and one can fail on a flaky
   // connection; retry twice before falling back to the N / M letter.
+  window.szoOpenStage = function(id){
+    state.stageId = Number(id); state.floor = null; state.floorStageId = null;
+    state.monsters.clear(); state.npcs.clear(); state.query = '';
+    renderLoaded();
+  };
   window.szoMapImgRetry = function(img){
     const n = Number(img.dataset.retry || 0);
     if(n < 2){
@@ -1013,6 +1018,7 @@
   function renderLoaded(){
     const reader = byId('reader');
     if(!reader) return;
+    if(!floatingMap?.open && state.stageId && typeof window.szoSetRoute === 'function') window.szoSetRoute('map/' + state.stageId);
     const stages = filteredStages();
     const stage = currentStage();
     if(!stage){
