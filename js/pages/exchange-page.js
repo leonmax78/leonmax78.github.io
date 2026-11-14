@@ -23,7 +23,7 @@
 
   // 300,000,000,000 經驗 → 3000億
   const bigNum = n => n >= 1e8 && n % 1e6 === 0 ? `${(n / 1e8).toLocaleString()}億` : Number(n).toLocaleString();
-  const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}">${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${typeof qty === 'string' ? `<span class="exQty">×${esc(qty)}</span>` : qty > 1 ? `<span class="exQty">×${bigNum(qty)}</span>` : ''}`;
+  const item = ([name, qty, id]) => `${id ? `<button type="button" class="exItem" data-ex-item="${id}"><span class="exIcon" data-ex-icon="${id}"></span>${esc(name)}</button>` : `<span class="exItem plain">${esc(name)}</span>`}${typeof qty === 'string' ? `<span class="exQty">×${esc(qty)}</span>` : qty > 1 ? `<span class="exQty">×${bigNum(qty)}</span>` : ''}`;
   const items = list => list.map(item).join('<span class="exPlus">＋</span>');
   const rowHTML = r => `<li class="exRow"><span class="exGive">${r.m.length ? items(r.m) : '<span class="exItem plain">—</span>'}</span><b class="exArrow">→</b><span class="exGet">${r.pick ? `<span class="exItem plain">下列其中一款</span>${r.r[0][1] > 1 ? `<span class="exQty">×${Number(r.r[0][1]).toLocaleString()}</span>` : ''}` : items(r.r)}</span>${r.c ? `<small class="exTag">${esc(r.c)}</small>` : ''}${r.l ? `<small class="exTag dim">${esc(r.l)}</small>` : ''}${r.pick ? `<div class="exPickList">${r.r.map(x => item([String(x[0]).replace(/^降神魂魄/, ''), 1, x[2]])).join('、')}</div>` : ''}</li>`;
   const placesHTML = npc => npc.p.map(([sid, nid, stage, x, y]) => `<button type="button" class="exPlace" data-ex-npc="${sid}:${nid}" title="看 NPC 對話與地圖位置">${esc(stage)} <small>(${x}, ${y})</small></button>`).join('');
@@ -188,6 +188,21 @@
     return out || '<div class="empty">沒有符合的兌換。</div>';
   }
 
+  // V787: item icons next to every material / reward (item data loads once, in the background)
+  let iconLoad = null;
+  function fillExIcons(root){
+    const spots = root.querySelectorAll('[data-ex-icon]:empty'); if(!spots.length) return;
+    const paint = () => {
+      const idx = window.itemIndex, media = window.SZO_ASSET_MEDIA; if(!idx || !media) return;
+      root.querySelectorAll('[data-ex-icon]:empty').forEach(sp => {
+        const it = idx[String(sp.dataset.exIcon).trim()]; const src = it && media.itemIconSrc(it);
+        if(src) sp.innerHTML = `<img src="${src}" alt="" loading="lazy" decoding="async" onerror="this.parentNode.remove()">`; else sp.remove();
+      });
+    };
+    if(window.itemIndex && Object.keys(window.itemIndex).length) return paint();
+    if(!iconLoad && typeof window.ensureItemDataLoaded === 'function') iconLoad = window.ensureItemDataLoaded().catch(() => {});
+    iconLoad && iconLoad.then(() => paint());
+  }
   async function renderExchangePage(){
     const reader = document.getElementById('reader');
     if(!reader) return;
@@ -226,6 +241,7 @@
       <div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">${state.tab === MATS_TAB ? '材料' : 'NPC'}</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}
       <div class="exList">${body}</div>
     </section>`;
+    fillExIcons(reader);
   }
   window.renderExchangePage = renderExchangePage;
 
