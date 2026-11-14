@@ -10,7 +10,7 @@
   const H = () => window.SZO_JIANG_HEADS || {info:{}, series:[], img:() => ''};
   const shown = n => { const h = H().info[n]; return !!h && !h[3]; };
   const allNames = () => (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats || {}));
-  const heroes = () => allNames().filter(shown).sort((a,b) => (H().info[a]||[])[2] - (H().info[b]||[])[2]);
+  const heroes = () => allNames().filter(shown).sort((a,b) => (H().info[b]||[])[2] - (H().info[a]||[])[2]);
   const abilityOf = (n, s) => { try{ return typeof ability === 'function' ? (ability(n, s) || {}) : {}; }catch(e){ return {}; } };
   const read = (k, d) => { try{ return JSON.parse(localStorage.getItem(k) || '') ?? d; }catch(e){ return d; } };
   const write = (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
