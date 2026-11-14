@@ -120,6 +120,15 @@
     const btn = document.getElementById('collectFloatingTopBtn');
     if(btn) btn.hidden = !(topAllowed && window.scrollY > 320);
   };
+  // V783: tapping an open menu heading folds its sub-menu back up
+  document.addEventListener('click', ev => {
+    const btn = ev.target.closest && ev.target.closest('#navGroup .navBtn.major');
+    if(!btn) return;
+    const box = btn.nextElementSibling;
+    if(!box || !box.classList.contains('formBox') || !box.classList.contains('active')) return;
+    ev.preventDefault(); ev.stopImmediatePropagation();
+    box.classList.remove('active');
+  }, true);
   window.SZO_SET_GLOBAL_TOP_VISIBLE = function(visible){ topAllowed = !!visible; syncTopBtn(); };
   (function(){
     let lastY = window.scrollY, ticking = false;

@@ -4844,3 +4844,6 @@ html body .dropIcon{width:38px;height:38px;overflow:hidden;position:static}
 html body .dropIcon .assetThumb{width:38px!important;height:38px!important;border:0;border-radius:6px;background:transparent;position:static}
 html body .dropIcon .assetThumb img{max-width:34px!important;max-height:34px!important;position:static}
 html body .dropText{grid-column:2;line-height:1.35}
+/* V783: headings with a sub-menu show whether it is open */
+#navGroup .navBtn.major:has(+ .formBox)>span{display:inline-block;transition:transform .15s}
+#navGroup .navBtn.major:has(+ .formBox.active)>span{transform:rotate(90deg)}
