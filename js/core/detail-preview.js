@@ -107,7 +107,7 @@
     if(!m)throw Error('找不到這個怪物');
     monsterName=nameOf(m);
     const drops=monsterDropRows(m);
-    html=`<div class="itemGroupedDetail"><header class="itemIdentity">${monsterThumbHTML(m)}<h1>${esc(nameOf(m))}</h1></header><h2>怪物資料</h2>${monsterRowsHTML([['等級',m.Level],['生命',m.HP],['精力',m.MP],['種族',raceName(m.Type)],['位置',locOf(nameOf(m))],['經驗',m.DropExp]],'itemSectionGrid')}<h2>能力</h2>${monsterRowsHTML([['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex],['物理防禦',m.ExtraDef],['術法攻擊',m.MagicAttack],['術法防禦',m.MagicDef]],'itemSectionGrid')}<h2>掉落道具</h2><div class="detailPreviewDrops">${drops.map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}"><span>${esc(name)}</span><small>${esc(rate)}</small></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
+    html=`<div class="itemGroupedDetail"><header class="itemIdentity">${monsterThumbHTML(m)}<h1>${esc(nameOf(m))}</h1></header><h2>怪物資料</h2>${monsterRowsHTML([['等級',m.Level],['生命',m.HP],['精力',m.MP],['種族',raceName(m.Type)],['位置',locOf(nameOf(m))],['經驗',m.DropExp]],'itemSectionGrid')}<h2>能力</h2>${monsterRowsHTML([['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex],['物理防禦',m.ExtraDef],['術法攻擊',m.MagicAttack],['術法防禦',m.MagicDef]],'itemSectionGrid')}<h2>掉落道具<small class="dropSortNote">機率高到低</small></h2><div class="detailPreviewDrops">${dropRowsSorted(drops).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}">${dropIconHTML(itemId,name)}<span class="dropText"><span>${esc(name)}</span><small>${esc(rate)}</small></span></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
    }
    if(ticket!==request||!dialog.open)return;
    body.innerHTML=html;
@@ -120,6 +120,20 @@
    else if(kind==='quest')actions.innerHTML='<button type="button" data-preview-quest-page>前往任務查詢頁</button>';
    else if(['collect','shops','beast','monster-drops'].includes(kind))actions.replaceChildren();
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
+ }
+ // V780: drop list with item icons, highest chance first (rates kept exactly as the game data has them)
+ function dropRowsSorted(drops){
+  const val=r=>{const n=parseFloat(r);return Number.isFinite(n)?n:-1;};
+  return drops.slice().sort((a,b)=>val(b[2])-val(a[2]));
+ }
+ function dropIconHTML(itemId,name){
+  try{
+   const idx=window.itemIndex||(typeof itemIndex!=='undefined'?itemIndex:null);
+   const it=idx&&idx[String(itemId).trim()];
+   const media=window.SZO_ASSET_MEDIA;
+   if(!it||!media)return '<span class="dropIcon none"></span>';
+   return `<span class="dropIcon">${media.img(media.itemIconSrc(it),name,'assetThumb itemThumb')}</span>`;
+  }catch(e){return '<span class="dropIcon none"></span>';}
  }
  function pop(event){
   // Closing pops back to the entry under the preview; a preview recorded there is stale (e.g. left over from before a reload).
