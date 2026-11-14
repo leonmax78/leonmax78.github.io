@@ -178,12 +178,31 @@
 
   // tab order chosen by the site owner; any new category goes after these
   const CAT_ORDER = ['資料片任務','一般任務','職業任務','轉職任務','聯動任務','新手任務'];
+  // V792: 主線所需道具一覽 (data/quest_main_mats.json, tools/build_main_quest_mats.py)
+  let matsPromise = null;
+  function loadMainMats(){
+    if(!matsPromise){
+      const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+      const get = url => fetch(url + '?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
+      matsPromise = Promise.all([get('data/quest_main_mats.json'), get('data/search_icons.json')]).then(([mats, icons]) => ({ mats, icons }));
+    }
+    return matsPromise;
+  }
+  function mainMatsHTML(group, m){
+    const rows = m?.mats?.[group];
+    if(!rows?.length) return '';
+    const media = window.SZO_ASSET_MEDIA;
+    const icon = id => { try{ const ic = m.icons?.items?.[id]; const src = ic && media ? media.itemIconSrc({ ID: id, Icon: ic }) : ''; return src ? `<img src="${esc(src)}" alt="" loading="lazy">` : '<i></i>'; }catch(e){ return '<i></i>'; } };
+    return `<section class="questMats"><h2>主線所需道具一覽<small>${esc(group)}・只列需要準備的材料，任務中打怪或拾取的道具不列入</small></h2>
+      <div class="questMatList">${rows.map(([id, name, qty]) => `<button type="button" class="questMat${/^\d+$/.test(qty) ? '' : ' questMatLong'}" data-item="${esc(id)}">${icon(id)}<span>${esc(name)}</span><b>×${esc(qty)}</b></button>`).join('')}</div></section>`;
+  }
   const catsInOrder = cats => cats.slice().sort((a, b) => (CAT_ORDER.indexOf(a) + 1 || 99) - (CAT_ORDER.indexOf(b) + 1 || 99));
   async function renderQuestPage(){
     const reader = document.getElementById('reader');
     if(!reader) return;
     let data;
-    try{ data = await loadQuests(); }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    let mats = null;
+    try{ [data, mats] = await Promise.all([loadQuests(), loadMainMats()]); }catch(e){ reader.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     const groups = (data.groups[state.cat] || []).filter(g => data.quests.some(x => inCat(x, data) && x.g === g));
     const classRow = state.cat === '職業任務' ? `<div class="questGroups questClasses">${CLASSES.map(c => `<button type="button" class="${c === state.cls ? 'active' : ''}" data-quest-cls="${esc(c)}">${esc(c)}<b>${data.quests.filter(x => x.c === state.cat && x.cl === c).length}</b></button>`).join('')}</div>` : '';
     if(state.group && !groups.includes(state.group)) state.group = '';
@@ -197,6 +216,7 @@
       ${state.query ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個任務 <button type="button" class="ghost" data-quest-clear>清除搜尋</button></p>` : `
       <div class="questTabs" role="tablist">${catsInOrder(data.cats).map(c => `<button type="button" role="tab" class="${c === state.cat ? 'active' : ''}" data-quest-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
       ${classRow}<div class="questGroups">${groups.map(g => `<button type="button" class="${g === state.group ? 'active' : ''}" data-quest-group="${esc(g)}">${esc(g)}<b>${data.quests.filter(x => inCat(x, data) && x.g === g).length}</b></button>`).join('')}</div>`}
+      ${!state.query && state.cat === '資料片任務' ? mainMatsHTML(state.group, mats) : ''}
       <div class="questList">${list.slice(0, 200).map(q => `<details class="questCard${q.tag === '主線任務' ? ' questMain' : ''}" data-quest-id="${q.i}"${state.open.has(q.i) ? ' open' : ''}><summary>${questHeadHTML(q, data)}${state.query ? `<small>${esc(q.c)}・${esc(q.g)}</small>` : ''}</summary>${state.open.has(q.i) ? questBodyHTML(q, data) : ''}</details>`).join('') || '<div class="empty">沒有符合的任務。</div>'}</div>
       ${list.length > 200 ? `<p class="muted">只顯示前 200 筆，請輸入更精確的關鍵字。</p>` : ''}
     </section>`;

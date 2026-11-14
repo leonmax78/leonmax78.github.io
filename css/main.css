@@ -4926,3 +4926,22 @@ html body .homePanel{bottom:8px}
 .detailPreview:not(.floatingMap) button.qaLink{all:unset;cursor:pointer;font-weight:800;color:#e9f3ff;border-bottom:1px dashed rgba(127,227,211,.6)}
 .detailPreview:not(.floatingMap) .qaLineMain small button.qaLink{font-weight:600;color:#c6d9f6}
 .detailPreview:not(.floatingMap) button.qaLink:focus-visible{outline:2px solid #56cee0;outline-offset:2px}
+/* V792: 主線所需道具一覽 */
+.questMats{margin:4px 0 14px;padding:12px 14px 14px;border:1px solid rgba(250,204,21,.45);border-left:4px solid #facc15;border-radius:12px;background:linear-gradient(180deg,rgba(250,204,21,.08),rgba(250,204,21,.02))}
+.questMats h2{margin:0 0 10px;font-size:17px;color:#facc15;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.questMats h2 small{font-size:12.5px;font-weight:500;color:var(--muted,#9fb3d1)}
+.questMatList{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+html body button.questMat{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:6px 10px;border:1px solid rgba(148,163,184,.28);border-radius:10px;background:rgba(11,21,39,.75);color:var(--text,#e9f0fa);text-align:left;cursor:pointer;font:inherit}
+html body button.questMat:hover{border-color:#facc15}
+.questMat img,.questMat i{flex:0 0 30px;width:30px;height:30px;object-fit:contain}
+.questMat span{flex:1 1 auto;min-width:0;font-weight:700;overflow-wrap:anywhere}
+.questMat b{flex:0 0 auto;color:#facc15;font-variant-numeric:tabular-nums;font-size:14px;white-space:nowrap}
+@media(max-width:600px){.questMatList{grid-template-columns:repeat(2,minmax(0,1fr))}.questMat b{white-space:normal;text-align:right;font-size:13px}}
+.questMats{min-width:0;max-width:100%;box-sizing:border-box}
+.questMatList>.questMat{min-width:0;box-sizing:border-box}
+.questPage>.questMats{width:auto}
+@media(max-width:600px){.questMat b{max-width:52%;overflow-wrap:anywhere}}
+.questPage{grid-template-columns:minmax(0,1fr)}
+.questList{min-width:0}.questCard{min-width:0;max-width:100%;box-sizing:border-box}.questCard summary{min-width:0}.questFacts{min-width:0;overflow-wrap:anywhere}
+html body button.questMat.questMatLong{flex-wrap:wrap;row-gap:2px}
+.questMatLong b{flex:1 0 100%!important;max-width:none!important;padding-left:38px;text-align:left!important;white-space:normal;font-size:13px}
