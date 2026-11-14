@@ -4,17 +4,13 @@ For every 資料片 group, add up what its 主線任務 ask you to hand in (ques
 keeping only general materials (紀元裂片, 四聖諦, 天鐵 …) and leaving out the
 quest's own pick-ups and kill drops (躁亂異魂, 混亂之魂 …).
 
-An item counts as a quest-only pick-up when
-  * the step that asks for it says to defeat monsters for it or pick it up on the map
-    (打倒/擊敗/掉落/散落/砍除/拆下…), or
-  * nobody drops or sells it, it appears in one quest series only and is cheap
-    (Value < 10000), e.g. 能量積蓄體之一, or
-  * only one monster drops it and it is cheap (a boss's quest drop, 靈王餘燼).
+An item is listed when it shows up in a monster/box drop list (drop_reverse), a shop
+or an exchange — i.e. something players can prepare. Items found nowhere else only
+drop while the quest is active, so they are left out (躁亂異魂, 混亂之魂 …).
 Output: {"group": [[itemId, name, qtyText], …]} in quest order.
 usage: python tools/build_main_quest_mats.py
 """
 import json, re
-from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,26 +45,14 @@ def step_qtys(name, ho_qty, steps, portals):
 def main():
     quests = json.loads((DATA / 'quests.json').read_text('utf-8'))
     rev = json.loads((DATA / 'drop_reverse.json').read_text('utf-8'))
-    value = {str(x['ID']): int(float(x.get('Value') or 0)) for x in json.loads((DATA / 'items.json').read_text('utf-8'))}
-    shop = {str(it['itemId']) for s in json.loads((DATA / 'shop_all.json').read_text('utf-8'))['shops'] for it in s['items']}
+    shop = {str(it['itemId']) for s in json.loads((DATA / 'shop_all.json').read_text('utf-8'))['shops'] for it in s['items'] if it.get('sellPrice') is not None}  # sold, not only bought back
     trade = {str(x[2]) for r in json.loads((DATA / 'exchanges.json').read_text('utf-8'))['rows'] for x in r['m'] + r['r']}
     trade |= set(re.findall(r'"id":"(\d+)"', (DATA / 'abyss-exchanges.js').read_text('utf-8') + (DATA / 'recipe-flows.js').read_text('utf-8')))
-    series = defaultdict(set)
-    for q in quests['quests']:
-        for x in q.get('ho', []) + q.get('it', []):
-            series[str(x[0])].add(q['g'])
 
     def quest_only(iid, name, steps):
-        base = re.sub(r'之[一二三四五六七八九]$', '', name)  # 能量積蓄體之一 → 能量積蓄體
-        said = [s for s in steps if base in s]
-        if said and any(KILL.search(s) for s in said):
-            return True
-        cheap = value.get(iid, 0) < 10000
-        if not rev.get(iid) and iid not in shop and len(series[iid]) < 2 and cheap:
-            return True
-        drops = rev.get(iid, [])
-        # one boss that always drops it (護界靈王 → 靈王餘燼)
-        return len(drops) == 1 and value.get(iid, 0) <= 1000 and (iid not in shop or (drops[0].get('rate') or 0) >= 100)
+        # Owner's rule: anything you can see in a drop list (or buy / exchange) can be
+        # prepared beforehand; items no monster list shows only drop while the quest is active.
+        return not rev.get(iid) and iid not in shop and iid not in trade
 
     out = {}
     for g in quests['groups'].get('資料片任務', []):
