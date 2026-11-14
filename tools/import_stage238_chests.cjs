@@ -12,11 +12,13 @@ const data = JSON.parse(fs.readFileSync(target, 'utf8'));
 const stage = data.stages.find(row => row.stageId === 238);
 assert(stage);
 const chests = [];
-// MPC placements use 38-byte records; the entity ID is at byte 16.
+// MPC placements use 38-byte records that start at u32@24; reading from +2 puts x at byte 0 and the entity ID at byte 16.
+// The last record ends 2 bytes before offset + 38, so stop at offset + 36 (the old `+ 38` check skipped the last placement,
+// which in stage 238 is the fifth 通寶院麗寶箱 at raw 2610,2956).
 const start = bytes.readUInt32LE(24) + 2;
 const end = bytes.readUInt32LE(32);
 assert(end <= bytes.length && start < end);
-for (let offset = start; offset + 38 <= end; offset += 38) {
+for (let offset = start; offset + 36 <= end; offset += 38) {
   const id = bytes.readUInt16LE(offset + 16);
   const row = monsters.get(id);
   if (!row?.Name.includes('寶箱')) continue;
@@ -27,7 +29,7 @@ for (let offset = start; offset + 38 <= end; offset += 38) {
     rawX, rawY, source: 'STAGE238.MPC'
   });
 }
-assert.equal(chests.length, 39);
+assert.equal(chests.length, 40);
 assert(chests.every(row => row.x >= 0 && row.x <= stage.width && row.y >= 0 && row.y <= stage.height));
 stage.chests = chests;
 fs.writeFileSync(target, JSON.stringify(data));

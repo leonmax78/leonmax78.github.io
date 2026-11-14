@@ -22,9 +22,9 @@ async function run(engine, mobile) {
     assert.equal(await page.locator('input[data-map-chest]').count(), 11);
     assert.equal(await page.locator('input[data-map-monster]').count(), 0);
     await page.locator('[data-map-all="chest"]').click();
-    assert.equal(await page.locator('.mapDot[data-map-monster-dot]').count(), 39);
+    assert.equal(await page.locator('.mapDot[data-map-monster-dot]').count(), 40);
     await page.locator('[data-map-none="monster"]').click();
-    assert.equal(await page.locator('.mapDot[data-map-monster-dot]').count(), 39);
+    assert.equal(await page.locator('.mapDot[data-map-monster-dot]').count(), 40);
     await page.waitForFunction(() => [...document.querySelectorAll('.mapOverlay img')].every(img => img.complete && img.naturalWidth > 0));
     await page.screenshot({ path: path.join(root, `outputs/stage238-chests-${mobile ? 'mobile' : 'desktop'}.png`) });
     await page.locator('[data-map-none="chest"]').click();
@@ -32,7 +32,7 @@ async function run(engine, mobile) {
     await page.locator('input[data-map-chest]').first().check();
     assert((await page.locator('.mapDot[data-map-monster-dot]').count()) > 0);
     await page.locator('#mapSearchInput').fill('通寶院麗寶箱');
-    assert.equal(await page.locator('.mapDot[data-map-monster-dot]').count(), 4);
+    assert.equal(await page.locator('.mapDot[data-map-monster-dot]').count(), 5);
     await page.locator('[data-map-clear-search]').click();
     await page.locator('#mapStageSearch').fill('001');
     await page.locator('#mapStageChoices button').first().click();
