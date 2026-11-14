@@ -457,6 +457,18 @@ function searchItems(){
  const filtered=unitRows.filter(it=>itemMatchesKind(it,availableKind));
  renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(filtered):filtered,false);
 }
+// V787: up to three headline numbers on each search result (attack, defence, then base stats)
+const ITEM_KEY_STATS=[['Damage','攻擊'],['MagicAttack','術攻'],['ExtraDef','防禦'],['MagicDef','術防'],['HP','生命'],['MP','精力'],['Con','體魄'],['Str','力量'],['Int','智慧'],['Dex','靈敏']];
+function itemKeyStatsHTML(it){
+ const out=[];
+ for(const [k,label] of ITEM_KEY_STATS){
+  const raw=it[k];const n=Number(raw);if(!raw||!Number.isFinite(n)||n===0)continue;
+  const pct=(k==='HP'||k==='MP')&&['AFFECT_MAX_RATIO','AFFECT_RATIO'].includes(it[k+'Flag']);
+  out.push([Math.abs(n)*(pct?0:1),`${label} ${n>0?'+':''}${n.toLocaleString()}${pct?'%':''}`]);
+ }
+ if(!out.length)return '';
+ return `<div class="rKeys">${out.slice(0,3).map(x=>`<em>${esc(x[1])}</em>`).join('')}</div>`;
+}
 let itemResultPage=1,itemResultRows=[],itemResultIsIndex=false;
 function renderItemSearchResults(rows,indexOnly,more=false){
  if(!more){itemResultPage=1;itemResultRows=rows;itemResultIsIndex=indexOnly;}
@@ -465,7 +477,8 @@ function renderItemSearchResults(rows,indexOnly,more=false){
   const it=indexOnly?{ID:raw.id,Name:raw.name,Level:raw.level,Type:raw.type}:raw;
   const parts=[Number(it.Level)?`Lv.${esc(it.Level)}`:'',esc(itemTypeName(it.Type)||it.Type||''),itemKind(it)?`專剋 ${esc(itemKind(it))}`:'',`ID ${esc(it.ID)}`].filter(Boolean);
   const effect=window.SZO_ITEM_TAXONOMY?.summary(it);if(effect)parts.unshift(esc(effect));
-  return `<button class="resultItem withAsset" data-item="${esc(it.ID)}">${itemThumbHTML(it)}<span class="resultText"><div class="rName">${esc(nameOf(it))}</div><div class="rSub">${parts.join(' / ')}</div></span></button>`;
+  const keys=indexOnly?'':itemKeyStatsHTML(it);
+  return `<button class="resultItem withAsset" data-item="${esc(it.ID)}">${itemThumbHTML(it)}<span class="resultText"><div class="rName">${esc(nameOf(it))}</div><div class="rSub">${parts.join(' / ')}</div>${keys}</span></button>`;
  }).join('')||'<div class="muted">沒有符合的道具。</div>';
  box.innerHTML=`<div class="muted">共 ${rows.length} 筆，已顯示 ${visible.length} 筆</div>`+html+(rows.length>visible.length?'<button type="button" onclick="showMoreItemResults()">顯示更多</button>':'');
 }

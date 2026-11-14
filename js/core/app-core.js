@@ -282,7 +282,7 @@ function showPageLoading(label,detail){
  const text=pageLoadingText(label);
  if(reader.querySelector('.pageLoadingCard')?.dataset.loadingLabel===text.title)return;
  const safeEsc=typeof esc==='function'?esc:(s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
- reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite" data-loading-label="${safeEsc(text.title)}"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section>`;
+ reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite" data-loading-label="${safeEsc(text.title)}"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section><div class="pageSkeleton" aria-hidden="true"><i class="skBar w40"></i><i class="skBar w70"></i><div class="skGrid">${'<i class="skCard"></i>'.repeat(6)}</div></div>`;
 }
 window.showPageLoading=showPageLoading;
 
@@ -335,7 +335,7 @@ function showPageLoading(label,detail){
  const text=pageLoadingText(label);
  if(reader.querySelector('.pageLoadingCard')?.dataset.loadingLabel===text.title)return;
  const safeEsc=typeof esc==='function'?esc:(s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
- reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite" data-loading-label="${safeEsc(text.title)}"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section>`;
+ reader.innerHTML=`<section class="card pageLoadingCard" aria-live="polite" data-loading-label="${safeEsc(text.title)}"><div class="pageLoadingSpinner" aria-hidden="true"></div><div><h1>${safeEsc(text.title)}</h1><div class="muted">${safeEsc(detail||text.body)}</div></div></section><div class="pageSkeleton" aria-hidden="true"><i class="skBar w40"></i><i class="skBar w70"></i><div class="skGrid">${'<i class="skCard"></i>'.repeat(6)}</div></div>`;
 }
 window.showPageLoading=showPageLoading;
 

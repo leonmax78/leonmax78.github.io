@@ -1085,6 +1085,15 @@
               <button type="button" class="ghost mapToolBtn" data-map-fit title="整張地圖縮放到可見範圍">整張地圖</button>
               <button type="button" class="ghost mapToolBtn" data-map-fill title="地圖填滿整個框，超出部分可拖曳查看">填滿畫面</button>
               <button type="button" class="ghost mapToolBtn mapMaxBtn" data-map-max aria-pressed="${state.maximized ? 'true' : 'false'}" title="${state.maximized ? '結束放大（Esc）' : '地圖佔滿整個視窗'}">${state.maximized ? '結束放大' : '放大地圖'}</button>
+              <details class="mapLegend"><summary class="ghost mapToolBtn">圖例</summary><div class="mapLegendBox">
+                <div><span class="mlIcon">${EXIT_ARROW}</span><b>往○○</b>走過去就換地圖，點一下開啟那張地圖</div>
+                <div><span class="mlIcon">${PORTAL_ICON}</span><b>傳送：○○</b>對話後傳送的地點</div>
+                <div><span class="mlChip">（有條件）</span>需要任務、道具或對話選擇才能通過</div>
+                <div><span class="mapDot npc mlDot">N</span>NPC：有頭像時顯示頭像，點一下看對話</div>
+                <div><span class="mapDot monster mlDot">M</span>怪物：在左側清單勾選後才標出位置</div>
+                <div><span class="mlFloor">3樓</span>樓層或區域名稱</div>
+                <div class="muted">兩指或滑桿縮放，拖曳移動地圖</div>
+              </div></details>
             </div>
             <label>縮放
               <input id="mapZoomInput" type="range" min="${MIN_ZOOM}" max="${MAX_ZOOM}" step="0.01" value="${zoomValue()}">
