@@ -457,8 +457,9 @@ function searchItems(){
  const filtered=unitRows.filter(it=>itemMatchesKind(it,availableKind));
  renderItemSearchResults(window.SZO_ITEM_TAXONOMY?window.SZO_ITEM_TAXONOMY.sort(filtered):filtered,false);
 }
-// V787: up to three headline numbers on each search result (attack, defence, then base stats)
-const ITEM_KEY_STATS=[['Damage','攻擊'],['MagicAttack','術攻'],['ExtraDef','防禦'],['MagicDef','術防'],['HP','生命'],['MP','精力'],['Con','體魄'],['Str','力量'],['Int','智慧'],['Dex','靈敏']];
+// V787: up to three headline numbers on each search result — attributes first (力量、靈敏、智慧),
+// then 體魄, life / energy, and attack / defence only when there is room
+const ITEM_KEY_STATS=[['Str','力量'],['Dex','靈敏'],['Int','智慧'],['Con','體魄'],['HP','生命'],['MP','精力'],['Damage','攻擊'],['MagicAttack','術攻'],['ExtraDef','防禦'],['MagicDef','術防']];
 function itemKeyStatsHTML(it){
  const out=[];
  for(const [k,label] of ITEM_KEY_STATS){
