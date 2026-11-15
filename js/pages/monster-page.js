@@ -389,7 +389,7 @@ function beastDetailHTML(index){
  ability.push(['攻擊距離（原始值）',m?.AttackRange??'待補'],['攻擊速度',speedLabels[m?.Attack]||'待補'],['移動速度',speedLabels[m?.Move]||'待補']);
  const skills=m?[["技能1",monsterSkillText(m.Skill1)],["技能2",monsterSkillText(m.Skill2)],["技能3",monsterSkillText(m.Skill3)],["技能4",monsterSkillText(m.Skill4)]]:(row.skills||[]).map((skill,i)=>[`技能${i+1}`,skill]);
  const capture=(row.captureLocations||[]).map((place,i)=>`<button type="button" class="collectTag collectMapTag" onclick="showBeastCaptureLocation(${Number(index)},${i})">${esc(place.stageName)}</button>`).join('');
- return `<section class="monsterCompact"><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div><div class="monsterPanel"><h3>能力資訊${lv?'<small class="beastLvNote beastLv1">Lv.1</small>':''}</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div>${lv?`<div class="monsterPanel beastLv100Panel"><h3>能力資訊<small class="beastLvNote">Lv.100 遊戲實測</small></h3>${monsterRowsHTML(lv100,'monsterStatGrid')}</div>`:''}</div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}${capture?`<div class="monsterPanel beastCapturePanel"><h3>捕捉位置</h3><div class="beastCaptureLinks">${capture}</div></div>`:''}</div></section>`;
+ return `<section class="monsterCompact"><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div>${lv?`<div class="monsterPanel beastLvPanel" data-lv="1"><h3>能力資訊<span class="beastLvTabs" role="tablist"><button type="button" role="tab" class="beastLvTab" data-beast-lv="1" aria-selected="true">Lv.1</button><button type="button" role="tab" class="beastLvTab" data-beast-lv="100" aria-selected="false">Lv.100</button></span></h3><div class="beastLvPane" data-pane="1">${monsterRowsHTML(ability,'monsterStatGrid')}</div><div class="beastLvPane" data-pane="100" hidden><p class="beastLvSrc">遊戲內 Lv.100 實測</p>${monsterRowsHTML(lv100,'monsterStatGrid')}</div></div>`:`<div class="monsterPanel"><h3>能力資訊</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div>`}</div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}${capture?`<div class="monsterPanel beastCapturePanel"><h3>捕捉位置</h3><div class="beastCaptureLinks">${capture}</div></div>`:''}</div></section>`;
 }
 
 async function showBeastCaptureLocation(index,locationIndex){
@@ -633,3 +633,12 @@ window.setMonsterQueryMode=setMonsterQueryMode;
 window.selectBeastStars=selectBeastStars;
 window.showBeastDetail=showBeastDetail;
 window.showBeastCaptureLocation=showBeastCaptureLocation;
+
+// V798: 封獸 Lv.1 / Lv.100 tabs
+document.addEventListener('click',ev=>{
+ const tab=ev.target.closest?.('[data-beast-lv]');if(!tab)return;
+ const panel=tab.closest('.beastLvPanel');if(!panel)return;
+ const lv=tab.dataset.beastLv;panel.dataset.lv=lv;
+ panel.querySelectorAll('[data-beast-lv]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.beastLv===lv)));
+ panel.querySelectorAll('[data-pane]').forEach(p=>{p.hidden=p.dataset.pane!==lv;});
+});
