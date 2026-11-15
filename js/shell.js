@@ -59,6 +59,7 @@
         <button class="navBtn sub" data-jiang="training">修練機制試算 <span>›</span></button>
         <button class="navBtn sub" data-view="gems">寶石試算、加工配方 <span>›</span></button>
         <button class="navBtn sub" data-view="soul">武魂能力試算 <span>›</span></button>
+        <button class="navBtn sub" data-view="machine">角色機體模擬 <span>›</span></button>
         <div id="jiangFields"></div>
       </div>
       <button class="navBtn major" data-view="autodata">離線內掛物品編輯 <span>›</span></button>

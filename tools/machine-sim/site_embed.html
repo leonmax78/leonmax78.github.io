@@ -1,0 +1,27 @@
+<!-- 網站版專用：在網站內以 iframe 開啟時隱藏自己的標題列，並跟著網站的繁／簡設定切換 -->
+<style>
+html.embedded header{display:none}
+html.embedded main{padding-top:4px}
+html.embedded nav{padding-top:6px}
+html.embedded aside{top:6px;max-height:calc(100vh - 12px)}
+</style>
+<script>
+if(window.top!==window)document.documentElement.classList.add('embedded');
+(function(){
+  // Same rules as js/core/language.js; the choice is shared through localStorage 'szo.language'.
+  let toSimple=null,loading=null,mode='tw';
+  const read=()=>{try{return localStorage.getItem('szo.language')==='cn'?'cn':'tw'}catch(e){return 'tw'}};
+  function load(){if(toSimple)return Promise.resolve();if(!loading)loading=new Promise((ok,bad)=>{const s=document.createElement('script');s.src='../js/vendor/opencc/opencc-1.4.2.js';s.onload=()=>{toSimple=OpenCC.Converter({from:'tw',to:'cn'});ok()};s.onerror=()=>{loading=null;bad()};document.head.appendChild(s)});return loading}
+  const saved=new WeakMap(),skip='script,style,textarea,[translate="no"]';
+  function convert(node,key,current,write){let r=saved.get(node);if(!r){r={};saved.set(node,r)}let e=r[key];if(!e||current!==e.output)e=r[key]={original:current,output:current};const out=mode==='cn'&&toSimple?toSimple(e.original):e.original;if(out!==current)write(out);e.output=out}
+  function visit(node){if(node.nodeType===3){if(node.parentElement&&!node.parentElement.closest(skip))convert(node,'text',node.nodeValue,v=>{node.nodeValue=v});return}
+    if(node.nodeType!==1||node.matches(skip))return;if(node.tagName==='OPTION'&&!node.hasAttribute('value'))node.setAttribute('value',node.value);
+    for(const a of ['placeholder','title','aria-label'])if(node.hasAttribute(a))convert(node,a,node.getAttribute(a),v=>node.setAttribute(a,v));for(const c of node.childNodes)visit(c)}
+  const opts={subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['placeholder','title','aria-label']};
+  const ob=new MutationObserver(rs=>{ob.disconnect();for(const r of rs){if(r.type==='childList')for(const n of r.addedNodes)visit(n);else visit(r.target)}ob.observe(document.body,opts)});
+  function render(){mode=read();if(mode==='cn'&&!toSimple){load().then(render,()=>{});return}ob.disconnect();visit(document.body);document.documentElement.lang=mode==='cn'?'zh-Hans':'zh-Hant';ob.observe(document.body,opts)}
+  window.addEventListener('storage',e=>{if(e.key==='szo.language')render()});
+  window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data==='szo-language')render()});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
+})();
+</script>
