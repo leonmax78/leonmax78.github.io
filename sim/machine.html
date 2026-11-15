@@ -113,7 +113,7 @@ aside{position:sticky;top:12px;display:grid;gap:14px;max-height:calc(100vh - 24p
 #out{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:4px 14px 10px}
 #out>summary{padding:10px 0}
 /* 裝備與合成 */
-.slotBoard{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.slotBoard{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
 .slotCard{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:2px 10px;padding:8px 10px;text-align:left;border-radius:10px;min-height:58px}
 .slotCard i{grid-row:span 2;width:40px;height:40px;display:grid;place-items:center;border-radius:8px;background:#0a1322 center/contain no-repeat;border:1px solid var(--line2);font-style:normal;color:var(--muted);font-size:12px}
 .slotCard i img{max-width:32px;max-height:32px}
@@ -130,6 +130,10 @@ aside{position:sticky;top:12px;display:grid;gap:14px;max-height:calc(100vh - 24p
 .pickList .more{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px}
 .recipes>div{border-top:1px dashed var(--line2);padding:8px 0}
 .fillRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}.fillRow button{padding:4px 12px;font-size:13px;border-radius:999px}.fillRow.all{margin:6px 0 4px;padding:8px 10px;border:1px dashed var(--line2);border-radius:10px}
+.soulChips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}.soulChips button{padding:5px 12px;border-radius:999px;font-size:13px}.soulChips small{margin-left:4px;color:var(--muted);font-weight:500}.soulChips button[aria-pressed=true] small{color:#d8fff7}
+.soulRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px}.soulRow select{min-width:180px}
+.soulCard{margin-top:12px;padding:12px 14px;border:1px solid var(--line2);border-radius:12px;background:rgba(9,17,30,.5)}.soulHead{display:flex;align-items:center;gap:14px;margin-bottom:10px}.soulHead img{width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--line2);background:#0b1524}.soulHead strong{display:block;font-size:19px;color:var(--gold)}.soulCard td.bonus{color:#facc15;font-weight:800}
+@media(max-width:600px){.slotBoard{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .hint{margin:-6px 0 12px;color:var(--muted);font-size:13.5px}
 .summary{margin:8px 0 0;padding:8px 10px;border-radius:8px;background:rgba(95,212,192,.07);border:1px solid rgba(95,212,192,.25);font-size:14px}
 @media(max-width:1200px){main{grid-template-columns:minmax(0,1fr) 380px}}
@@ -201,7 +205,24 @@ function pool(parent,title,limit){let box=el('fieldset',parent);el('legend',box,
  return {box,fill,apply(active,add){box.disabled=!active;let left=limit;ns.forEach((n,i)=>{left-=val(n);if(active)add(attrs[i],val(n))});note.textContent=active?'剩餘 '+left+' 點':'尚未啟用'}}}
 let fillAll=el('div',p);fillAll.className='fillRow all';el('small',fillAll,'已啟用的轉職點數一鍵補滿：');attrs.forEach((k,i)=>{let b=el('button',fillAll,k);b.type='button';b.onclick=()=>{turns.forEach(t=>t.fill(i));calc()}});
 let turns=[10,30,50,200,1000].map((n,i)=>pool(p,'第 '+(i+1)+' 轉',n));
-p=section('武魂');let soul=sel(p,[['','不裝備'],...D.souls.map((s,i)=>[i,s.Name])]),owned=num(p,'總收藏武魂數',1,D.souls.length,1),soulInfo=el('p',p);
+// 武魂：與網站「武魂能力試算」相同（聯動分類、收藏數快捷鈕、立繪與能力預覽）
+p=section('武魂');el('p',p,'第 1 隻為原始能力，第 2 隻開始每多 1 隻增加 2.5%。').className='hint';
+const SOUL_ORDER=['神州','霹靂','真侍魂','幻想三國誌','東離劍遊紀','活俠傳','絕代雙驕'];
+const SOUL_NAMES={'霹靂':['素還真','一頁書','葉小釵','亂世狂刀','金獅'],'真侍魂':['霸王丸','娜可露露','橘右京','加爾福特','千兩狂死郎'],'幻想三國誌':['姬軒','姬霜','百玥','貂芷','靡香','虞冰','燕起','趙雲','黃帝','蚩尤（呂布）','莫琳','紅夜','白樺','劉備','關羽','張飛','蘇童顏','莫千千','姬風','姜秀','魔化黃帝','太陰之女'],'東離劍遊紀':['凜雪鴉','殤不患','浪巫謠','阿爾貝盧法','禍世螟蝗'],'活俠傳':['趙活','唐布衣','唐默鈴','龍湘','虞小梅','夏侯蘭'],'絕代雙驕':['江小魚','花無缺','鐵心蘭','張菁','蘇櫻','燕南天','邀月','憐星','江小魚（壹）','燕南天（前）','邀月（參）']};
+const soulSeriesOf=n=>{for(const k in SOUL_NAMES)if(SOUL_NAMES[k].includes(n))return k;return '神州'};
+let soulSeries='',seriesRow=el('div',p);seriesRow.className='soulChips';
+let soulRow=el('div',p);soulRow.className='soulRow';let soulLab=el('label',soulRow,'武魂'),soul=sel(soulLab,[['','不裝備'],...D.souls.map((s,i)=>[i,s.Name])]);
+let owned=num(soulRow,'總收藏武魂數',1,D.souls.length,1);let quick=el('div',soulRow);quick.className='fillRow';
+for(const n of [1,2,3,5,10,20,D.souls.length]){let b=el('button',quick,n===D.souls.length?'滿收藏':String(n));b.type='button';b.onclick=()=>{owned.value=n;calc();save()}}
+let soulInfo=el('div',p);soulInfo.className='soulCard';
+const SOUL_BASE='../assets/test-media/item-icons/i'.replace('item-icons/i','soul-portraits/s');
+function paintSoulChips(){seriesRow.replaceChildren();for(const k of ['',...SOUL_ORDER]){const c=k?D.souls.filter(x=>soulSeriesOf(x.Name)===k).length:D.souls.length;if(k&&!c)continue;let b=el('button',seriesRow,k||'全部');b.type='button';if(k)el('small',b,String(c));b.setAttribute('aria-pressed',String(soulSeries===k));
+ b.onclick=()=>{soulSeries=k;for(const o of soul.options)o.hidden=!!o.value&&!!k&&soulSeriesOf(D.souls[o.value].Name)!==k;paintSoulChips()}}}
+paintSoulChips();
+function paintSoul(equipped,rate){soulInfo.replaceChildren();if(!equipped){el('p',soulInfo,'未裝備武魂（圖鑑 '+D.souls.length+' 隻）').className='muted';return}
+ let head=el('div',soulInfo);head.className='soulHead';let im=el('img',head);im.src=SOUL_BASE+equipped.ID+'.png';im.alt='';im.onerror=()=>im.remove();let t=el('div',head);el('strong',t,equipped.Name);el('small',t,soulSeriesOf(equipped.Name)+'・收藏數 '+val(owned)+'・加成 '+Number((rate*100).toFixed(1))+'%');
+ let tb=el('table',soulInfo),hr=el('tr',tb);['能力','原始','收藏加成','合計'].forEach(x=>el('th',hr,x));
+ for(const [k,l] of [['Base_Str','力量'],['Base_Int','智慧'],['Base_Dex','靈敏'],['Base_Con','體魄'],['Extra_Def','物理防禦'],['Magic_Def','術法防禦']]){const base=Number(equipped[k]||0);if(!base)continue;const bonus=Math.floor(base*rate);let tr=el('tr',tb);el('td',tr,l);el('td',tr,base.toLocaleString());el('td',tr,'+'+bonus.toLocaleString()).className='bonus';el('td',tr,(base+bonus).toLocaleString())}}
 p=section('任務');function quest(name){let row=el('div',p),l=el('label',row),n=el('input',l);n.type='checkbox';l.append(name);return n}
 let wine=quest('品嚐虎骨追風酒'),winePool=pool(p,'虎骨追風酒自由分配',10),zen=quest('佛度有緣人／睡禪：智慧 +2'),fruit=quest('追尋遺失箱貨（無名野果）：生命 +5、精力 +5'),bun=quest('照顧大雜院孤兒（元氣饅頭）：精力 +10');
 const zenAttr={value:'智慧'};  // 佛度有緣人不能化功
@@ -230,8 +251,8 @@ const conversion=new Map();for(const group of ['靈丹','聖靈煉金','真元',
 const WEAPONS=['SWORD','BLADE','HIDDEN_WEAPON','HIDDEN_WEAPON2','WHISK','STAFF','ROD','SPEAR','HAMMER','AXE'];
 // 雙手武器（槍、暗器、拂塵、杖、棍）只放右手格，裝上時左手卸下
 const TWO_HAND=['SPEAR','HIDDEN_WEAPON','HIDDEN_WEAPON2','WHISK','STAFF','ROD'];const twoHand=e=>!!e&&e.type_codes.some(t=>TWO_HAND.includes(t));
-const SLOTS=[{k:'head',n:'頭部',x:10,y:168,types:['HELMET']},{k:'body',n:'身體',x:10,y:201,types:['ARMOR']},{k:'right',n:'右手（右攻）',x:10,y:234,types:WEAPONS},{k:'wrist',n:'手環',x:10,y:267,types:['BRACER']},
- {k:'orn1',n:'裝飾 1',x:177,y:168,types:['ORNAMENT']},{k:'orn2',n:'裝飾 2',x:177,y:201,types:['ORNAMENT']},{k:'left',n:'左手（左攻）',x:177,y:234,types:[...WEAPONS.filter(t=>!TWO_HAND.includes(t)),'SHIELD']},{k:'feet',n:'腳部',x:177,y:267,types:['BOOT']},{k:'under',n:'底腳',x:93,y:233,types:['UNDER_BOOT']}];
+const SLOTS=[{k:'head',n:'頭盔',x:10,y:168,types:['HELMET']},{k:'body',n:'衣服',x:10,y:201,types:['ARMOR']},{k:'wrist',n:'護腕',x:10,y:267,types:['BRACER']},{k:'feet',n:'鞋子',x:177,y:267,types:['BOOT']},
+ {k:'right',n:'右手',x:10,y:234,types:WEAPONS},{k:'left',n:'左手',x:177,y:234,types:[...WEAPONS.filter(t=>!TWO_HAND.includes(t)),'SHIELD']},{k:'orn1',n:'飾品 1',x:177,y:168,types:['ORNAMENT']},{k:'orn2',n:'飾品 2',x:177,y:201,types:['ORNAMENT']},{k:'under',n:'仙器',x:93,y:233,types:['UNDER_BOOT']}];
 const ICON_BASE='../assets/test-media/item-icons/i';
 const iconOf=e=>e?.icon?ICON_BASE+e.icon+'.png':'';
 const slotOf=k=>SLOTS.find(s=>s.k===k);
@@ -310,7 +331,7 @@ function calc(){let parts={},source='職業等級';function add(k,a,b=a){if(!Num
  const nextHole=D.slots.map(s=>+s.NeedLv).filter(n=>n>val(gl)).sort((x,y)=>x-y)[0];gemHead.textContent='目前選擇：'+(brushColor?brushGrade+' 階 '+brushColor+'寶石':'清除寶石');gemFoot.textContent='已解鎖洞數：'+open+' / '+D.slots.length+(nextHole?'　下一洞需求：全降神總等級 '+nextHole:'　已全部解鎖');gemSum.replaceChildren();for(const [k,v] of Object.entries(gemTot)){let r=el('div',gemSum);el('span',r,k);el('b',r,'+'+v.toLocaleString())}if(!Object.keys(gemTot).length)el('p',gemSum,'尚未鑲嵌寶石').className='muted';
  turns.forEach((t,i)=>{source='第 '+(i+1)+' 轉';t.apply(i<Number(rank.value),add)});
  source='任務';winePool.apply(wine.checked,add);if(zen.checked)add(zenAttr.value,2);if(fruit.checked){add('生命',5);add('精力',5)}if(bun.checked)add('精力',10);
- let equipped=D.souls[soul.value],rate=(val(owned)-1)*0.025;soulInfo.textContent='圖鑑 '+D.souls.length+' 隻 ｜ '+(equipped?'收藏加成 '+Number((rate*100).toFixed(1))+'%':'未裝備武魂');if(equipped){source='武魂・'+equipped.Name;for(let k of ['Base_Str','Base_Int','Base_Con','Base_Dex','Extra_Def','Magic_Def']){let base=Number(equipped[k]||0);add(k,base+Math.floor(base*rate))}}
+ let equipped=D.souls[soul.value],rate=(val(owned)-1)*0.025;paintSoul(equipped,rate);if(equipped){source='武魂・'+equipped.Name;for(let k of ['Base_Str','Base_Int','Base_Con','Base_Dex','Extra_Def','Magic_Def']){let base=Number(equipped[k]||0);add(k,base+Math.floor(base*rate))}}
  // 神行（仙鐘疾行、君星靴）同時穿多件也只加一次靈敏
  const swift=gear.map(r=>D.eq[r.pick.value]?.name).find(n=>n==='普信仙鐘譜'||n?.startsWith('君星靴'));
  if(swift){source=swift==='普信仙鐘譜'?'仙鐘疾行（估算）':'君星靴・神行';add('靈敏',Math.floor(D.levels[job.value][val(lv)-1][3]/10))}
