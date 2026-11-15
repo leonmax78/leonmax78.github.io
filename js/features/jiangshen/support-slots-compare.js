@@ -228,6 +228,24 @@
   const headImg = (n, cls) => { const src = headSrc(n); return src ? `<img class="${cls}" src="${src}" alt="" loading="lazy" decoding="async">` : `<span class="${cls} none"></span>`; };
   window.SZO_JIANG_HEADS = {info:HERO_INFO, series:SERIES, img:headImg};
   const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
+  // V805: 副降神試算改用遊戲「副降神通」畫面（底圖 assets/test-media/ui/god_panel.png，座標取自 setting/wnd01.ini 10456～10489）
+  //       右框＝能力合計與成立連結；左側雲紋區＝差 1 隻就成立的提醒；點頭像框選降神
+  const GP = (x,y,w,h) => `left:${x/6.23}%;top:${y/3.22}%;width:${w/6.23}%;height:${h/3.22}%`;
+  function gamePanelHTML(plan,res,near,freeSlot){
+    const frames = [[276,242],[46,242],[161,242],[391,242],[506,242]];   // 主降神在中間，副 1～4 由左至右
+    const t = res.total || {}, n = k => Math.ceil(Number(t[k]||0));
+    const rows = [['血量','最大生命值',432,43,171,'hp'],['精力','最大精力值',432,62,171,''],['力量','力量',432,81,85,'or'],['智慧','智慧',432,101,85,''],['靈敏','靈敏',432,119,85,'gr'],['體魄','體魄',519,81,85,'gr'],['防禦','防禦',519,101,85,''],['術防','術防',519,119,85,'or']];
+    const target = freeSlot >= 0 ? (freeSlot===0 ? '主降神' : '副降神 '+freeSlot) : '';
+    return `<div class="jsGame">
+      ${frames.map(([x,y],i)=>{const p=plan[i]||{};return `<button type="button" class="jsGameFace ${i===activeSlot?'on':''} ${p.n?'':'empty'}" data-js-slot="${i}" style="${GP(x,y,72,72)}" title="${E((i?'副降神 '+i:'主降神')+'：'+(p.n?p.n+' '+p.s+' 星':'點這裡選降神'))}">${p.n?headImg(p.n,'')+`<em>${p.s}★</em>`:'<span>＋</span>'}<i>${i?'副'+i:'主'}</i></button>`;}).join('')}
+      ${rows.map(([k,l,x,y,w,c])=>`<div class="jsGameTxt ${c}" style="${GP(x,y,w,18)}">${l}+${n(k)}</div>`).join('')}
+      <div class="jsGameLinks" style="${GP(436,143,163,82)}">${(res.combos||[]).length ? res.combos.map(c=>`<div title="${E(typeof comboText==='function'?comboText(c):'')}">${E(c)}</div>`).join('') : '<p>尚未成立連結</p>'}</div>
+      <div class="jsGameTxt total" style="${GP(212,213,195,20)}">術法攻擊+${n('術攻')}</div>
+      <div class="jsGameNear" style="${GP(10,10,188,218)}"><div class="jsGameNearHead">差 1 隻就成立</div>
+        ${!plan.some(p=>p.n) ? '<p>點下方頭像框放入降神，這裡會提示還差誰。</p>' : near.length ? near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" ${freeSlot<0?'disabled':''} title="${E((typeof comboText==='function'?comboText(c):'')+(target?'｜點一下放進'+target:'｜五格都滿了'))}">${headImg(miss,'')}<span><b>${E(c)}</b><small>缺 ${E(miss)}</small></span></button>`).join('') : '<p>目前沒有差 1 隻的連結。</p>'}
+      </div>
+    </div>`;
+  }
   // V763: shared bits for the three 降神 tabs
   const canon = n => { try{ return (typeof canonicalName === 'function' && canonicalName(n)) || n; }catch(e){ return n; } };
   const comboList = () => Object.entries(D().comboMembers || {}).map(([c,m]) => [c, (m || []).map(canon)]);
@@ -295,6 +313,7 @@
           <div class="jsCombos">${res.combos && res.combos.length ? res.combos.map(c=>`<div><b>${E(c)}</b><small>${E(typeof comboText === 'function' ? comboText(c) : '')}</small></div>`).join('') : '<small class="muted">沒有成立連結</small>'}</div>
         </div>
         <div class="jsMain">
+          ${gamePanelHTML(plan,res,near,freeSlot)}
           ${near.length ? `<div class="jsNearBox"><div class="jsNearHead">再放 1 隻就能成立的連結<small>點一下直接放進空格</small></div><div class="jsNear">${near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" title="${E(typeof comboText === 'function' ? comboText(c) : '')}">${headImg(miss,'jsHeroFace')}<span><b>${E(c)}</b><small>缺 ${E(miss)}・點一下放進${freeSlot>=0 ? (freeSlot===0?'主降神':'副降神 '+freeSlot) : '目前欄位'}</small></span></button>`).join('')}</div></div>` : ''}
           <div class="jsCards">${plan.map((p,i)=>{
             const a = res.picks.find(x=>x.i===i)?.a || {};
