@@ -405,6 +405,8 @@ function szoAddSectionNav(kind){
  const act=nav.querySelector('.active');if(act)nav.scrollLeft=Math.max(0,act.offsetLeft-16);
 }
 window.szoAddSectionNav=szoAddSectionNav;
+// V806: 分頁一出現就能點（不必等降神功能檔載入）
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-js-nav]');if(!b)return;e.preventDefault();(window.setJiang||setJiang)(b.dataset.jsNav);});
 async function setView(view){
  document.querySelectorAll('body > .jsPickModal').forEach(x=>x.remove());
  if(view!=='home') document.body.classList.remove('isHomeView');

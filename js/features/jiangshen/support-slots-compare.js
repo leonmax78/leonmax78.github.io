@@ -234,12 +234,16 @@
   function gamePanelHTML(plan,res,near,freeSlot){
     const frames = [[276,242],[46,242],[161,242],[391,242],[506,242]];   // 主降神在中間，副 1～4 由左至右
     const t = res.total || {}, n = k => Math.ceil(Number(t[k]||0));
-    const rows = [['血量','最大生命值',432,43,171,'hp'],['精力','最大精力值',432,62,171,''],['力量','力量',432,81,85,'or'],['智慧','智慧',432,101,85,''],['靈敏','靈敏',432,119,85,'gr'],['體魄','體魄',519,81,85,'gr'],['防禦','防禦',519,101,85,''],['術防','術防',519,119,85,'or']];
+    const rows = [['血量','最大生命值',432,42,171,'hp'],['精力','最大精力值',432,62,171,''],['力量','力量',432,81,85,'or'],['智慧','智慧',432,102,85,''],['靈敏','靈敏',432,121,85,'gr'],['體魄','體魄',519,81,85,'gr'],['防禦','防禦',519,102,85,''],['術防','術防',519,121,85,'or']];  // 列位置對齊底圖橫線（42/62/81/102/121，連結列 145/166/187/206）
     const target = freeSlot >= 0 ? (freeSlot===0 ? '主降神' : '副降神 '+freeSlot) : '';
     return `<div class="jsGame">
       ${frames.map(([x,y],i)=>{const p=plan[i]||{};return `<button type="button" class="jsGameFace ${i===activeSlot?'on':''} ${p.n?'':'empty'}" data-js-slot="${i}" style="${GP(x,y,72,72)}" title="${E((i?'副降神 '+i:'主降神')+'：'+(p.n?p.n+' '+p.s+' 星':'點這裡選降神'))}">${p.n?headImg(p.n,'')+`<em>${p.s}★</em>`:'<span>＋</span>'}<i>${i?'副'+i:'主'}</i></button>`;}).join('')}
-      ${rows.map(([k,l,x,y,w,c])=>`<div class="jsGameTxt ${c}" style="${GP(x,y,w,18)}">${l}+${n(k)}</div>`).join('')}
-      <div class="jsGameLinks" style="${GP(436,143,163,82)}">${(res.combos||[]).length ? res.combos.map(c=>`<div title="${E(typeof comboText==='function'?comboText(c):'')}">${E(c)}</div>`).join('') : '<p>尚未成立連結</p>'}</div>
+      ${rows.map(([k,l,x,y,w,c])=>`<div class="jsGameTxt ${c}" style="${GP(x,y,w,17)}">${l}+${n(k)}</div>`).join('')}
+      ${(()=>{const cs=res.combos||[],shown=cs.length>4?cs.slice(0,3):cs;const ys=[145,166,187,206];
+        const cells=shown.map((c,i)=>`<div class="jsGameTxt link" style="${GP(436,ys[i],163,18)}" title="${E(typeof comboText==='function'?comboText(c):'')}">${E(c)}</div>`);
+        if(cs.length>4)cells.push(`<div class="jsGameTxt link more" style="${GP(436,206,163,18)}" title="${E(cs.slice(3).join('、'))}">…另 ${cs.length-3} 條</div>`);
+        if(!cs.length)cells.push(`<div class="jsGameTxt link none" style="${GP(436,145,163,18)}">尚未成立連結</div>`);
+        return cells.join('');})()}
       <div class="jsGameTxt total" style="${GP(212,213,195,20)}">術法攻擊+${n('術攻')}</div>
       <div class="jsGameNear" style="${GP(10,10,188,218)}"><div class="jsGameNearHead">差 1 隻就成立</div>
         ${!plan.some(p=>p.n) ? '<p>點下方頭像框放入降神，這裡會提示還差誰。</p>' : near.length ? near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" ${freeSlot<0?'disabled':''} title="${E((typeof comboText==='function'?comboText(c):'')+(target?'｜點一下放進'+target:'｜五格都滿了'))}">${headImg(miss,'')}<span><b>${E(c)}</b><small>缺 ${E(miss)}</small></span></button>`).join('') : '<p>目前沒有差 1 隻的連結。</p>'}
