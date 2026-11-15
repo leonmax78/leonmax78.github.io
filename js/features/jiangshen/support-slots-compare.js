@@ -228,6 +228,20 @@
   const headImg = (n, cls) => { const src = headSrc(n); return src ? `<img class="${cls}" src="${src}" alt="" loading="lazy" decoding="async">` : `<span class="${cls} none"></span>`; };
   window.SZO_JIANG_HEADS = {info:HERO_INFO, series:SERIES, img:headImg};
   const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
+  // V801: 遊戲「副降神通」面板（shape/wnd/herodevelop_page4 等；座標取自 setting/wnd01.ini 10456～10489）
+  const GP = (x,y,w,h) => `left:${x/6.23}%;top:${y/3.22}%;width:${w/6.23}%;height:${h/3.22}%`;
+  function godPanelHTML(plan,res){
+    const frames = [[276,242],[46,242],[161,242],[391,242],[506,242]];   // 主降神在中間，副 1～4 由左至右
+    const t = res.total || {}, n = k => Math.round(Number(t[k]||0));
+    const rows = [['血量','最大生命值',432,43,171,'hp'],['精力','最大精力值',432,62,171,'mp'],['力量','力量',432,81,80,'or'],['智慧','智慧',432,101,80,''],['靈敏','靈敏',432,119,80,'gr'],['體魄','體魄',519,81,80,'gr'],['防禦','防禦',519,101,80,''],['術防','術防',519,119,80,'or']];
+    const links = (res.combos||[]).slice(0,4);
+    return `<div class="jsGodPanel" aria-label="副降神通">
+      ${frames.map(([x,y],i)=>{const p=plan[i]||{};return `<button type="button" class="jsGodFace ${i===activeSlot?'on':''}" data-js-slot="${i}" style="${GP(x,y,72,72)}" title="${E((i?'副降神 '+i:'主降神')+'：'+(p.n?p.n+' '+p.s+' 星':'空白'))}">${p.n?headImg(p.n,''):''}</button>`;}).join('')}
+      ${rows.map(([k,l,x,y,w,c])=>`<div class="jsGodTxt ${c}" style="${GP(x,y,w,18)}">${l}+${n(k)}</div>`).join('')}
+      ${[147,168,187,208].map((y,i)=>`<div class="jsGodTxt link" style="${GP(432,y,171,18)}">${links[i]?E(links[i]):''}</div>`).join('')}
+      <div class="jsGodTxt total" style="${GP(212,213,195,20)}">成立連結：${(res.combos||[]).length} 條</div>
+    </div>`;
+  }
   // V763: shared bits for the three 降神 tabs
   const canon = n => { try{ return (typeof canonicalName === 'function' && canonicalName(n)) || n; }catch(e){ return n; } };
   const comboList = () => Object.entries(D().comboMembers || {}).map(([c,m]) => [c, (m || []).map(canon)]);
@@ -297,6 +311,7 @@
           <div class="jsNear">${near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" title="${E(typeof comboText === 'function' ? comboText(c) : '')}">${headImg(miss,'jsHeroFace')}<span><b>${E(c)}</b><small>缺 ${E(miss)}・點一下放進${freeSlot>=0 ? (freeSlot===0?'主降神':'副降神 '+freeSlot) : '目前欄位'}</small></span></button>`).join('')}</div>` : ''}
         </div>
         <div class="jsMain">
+          ${godPanelHTML(plan,res)}
           <div class="jsCards">${plan.map((p,i)=>{
             const a = res.picks.find(x=>x.i===i)?.a || {};
             const all = stats().map(st=>[st, Number(a[st]||0)]);
