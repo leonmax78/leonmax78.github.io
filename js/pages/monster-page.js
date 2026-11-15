@@ -379,19 +379,17 @@ function beastDetailHTML(index){
   ['術攻',Math.round((Number(m.MagicAttack)||0)+(Number(m.Int)||0)*2.4)],
   ['術防',Math.round((Number(m.MagicDef)||0)+(Number(m.Int)||0)*0.8)]
  ]:[['生命','待補'],['攻擊',row.attack==null?'待補':`${row.attack}${row.attackPending?'（待確認）':''}`],['防禦','待補'],['術攻','待補'],['術防','待補']];
- // V796: values read from a tamed Lv.100 beast in game replace the computed ones
+ // V797: the computed values above are Lv.1; a tamed Lv.100 read in game is shown next to them
  const lv=row.lv100;
- if(lv){
-  const fmt=v=>Number(v).toLocaleString('zh-TW');
-  const put=(k,v)=>{const i=ability.findIndex(x=>x[0]===k);if(v==null)return;if(i<0)ability.push([k,fmt(v)]);else ability[i]=[k,fmt(v)];};
-  put('生命',lv.hp);put('攻擊',lv.attack);put('防禦',lv.def);put('術攻',lv.matk);put('術防',lv.mdef);put('負重',lv.load);
- }
+ const fmt=v=>Number(v).toLocaleString('zh-TW');
+ const lv100=lv?[['生命',lv.hp],['攻擊',lv.attack],['防禦',lv.def],['術攻',lv.matk],['術防',lv.mdef],['負重',lv.load]].filter(x=>x[1]!=null).map(([k,v])=>[k,fmt(v)]):[];
+ if(lv)for(const r of ability)if(['生命','攻擊','防禦','術攻','術防'].includes(r[0])&&/^\d+$/.test(String(r[1])))r[1]=fmt(r[1]);
  const stats=m?[['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex]]:[];
  const speedLabels={1:'最慢',2:'次慢',3:'普通',4:'次快',5:'最快'};
  ability.push(['攻擊距離（原始值）',m?.AttackRange??'待補'],['攻擊速度',speedLabels[m?.Attack]||'待補'],['移動速度',speedLabels[m?.Move]||'待補']);
  const skills=m?[["技能1",monsterSkillText(m.Skill1)],["技能2",monsterSkillText(m.Skill2)],["技能3",monsterSkillText(m.Skill3)],["技能4",monsterSkillText(m.Skill4)]]:(row.skills||[]).map((skill,i)=>[`技能${i+1}`,skill]);
  const capture=(row.captureLocations||[]).map((place,i)=>`<button type="button" class="collectTag collectMapTag" onclick="showBeastCaptureLocation(${Number(index)},${i})">${esc(place.stageName)}</button>`).join('');
- return `<section class="monsterCompact"><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div><div class="monsterPanel"><h3>能力資訊${lv?'<small class="beastLvNote">Lv.100 遊戲實測</small>':''}</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div></div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}${capture?`<div class="monsterPanel beastCapturePanel"><h3>捕捉位置</h3><div class="beastCaptureLinks">${capture}</div></div>`:''}</div></section>`;
+ return `<section class="monsterCompact"><div class="assetPreviewPanel monsterPreviewPanel"><div class="assetArtPanel">${hero}<h1>${esc(row.name)}</h1><span class="beastTag">封獸 · ${esc(row.stars)}星甕</span></div><div class="assetInfoPanel"><div class="monsterPanel"><h3>怪物資料</h3>${monsterRowsHTML(basic,'monsterDataGrid')}</div><div class="monsterPanel"><h3>能力資訊${lv?'<small class="beastLvNote beastLv1">Lv.1</small>':''}</h3>${monsterRowsHTML(ability,'monsterStatGrid')}</div>${lv?`<div class="monsterPanel beastLv100Panel"><h3>能力資訊<small class="beastLvNote">Lv.100 遊戲實測</small></h3>${monsterRowsHTML(lv100,'monsterStatGrid')}</div>`:''}</div></div><div class="monsterGrid"><div class="monsterPanel"><h3>四圍</h3>${monsterRowsHTML(stats,'monsterStatGrid')}</div>${skills.some(item=>item[1])?`<div class="monsterPanel monsterSkillPanel"><h3>技能資訊</h3>${monsterRowsHTML(skills,'monsterSkillGrid')}</div>`:''}${capture?`<div class="monsterPanel beastCapturePanel"><h3>捕捉位置</h3><div class="beastCaptureLinks">${capture}</div></div>`:''}</div></section>`;
 }
 
 async function showBeastCaptureLocation(index,locationIndex){
