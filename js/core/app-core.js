@@ -394,6 +394,17 @@ function openJiangMenuOnly(){
  byId('jiangForm')?.classList.add('active');
  renderJiangHome();
 }
+// V803: 降神區所有功能共用一排分頁（降神 6 項＋寶石、武魂、角色機體）
+const SZO_JS_SECTIONS=[['support','副降神試算',['support','recommend','supportCompare']],['compare','主降神比較',['compare']],['stars','20星能力總表',['stars']],['starAura','星等／靈氣',['starAura']],['expPill','等級／經驗丹',['expPill']],['training','修練',['training']],['gems','寶石試算',['gems'],1],['soul','武魂試算',['soul'],1],['machine','角色機體模擬',['machine'],1]];
+window.SZO_JIANG_NAV=kind=>`<nav class="jsNav" aria-label="降神、寶石、武魂試算">${SZO_JS_SECTIONS.map(([k,l,g,isView])=>`<button type="button" class="${g.includes(kind)?'active':''}" ${isView?`data-view="${k}"`:`data-js-nav="${k}"`}>${l}</button>`).join('')}</nav>`;
+function szoAddSectionNav(kind){
+ const sec=document.querySelector('#reader > section, #reader section.card, #reader .machineWrap');
+ if(!sec||sec.querySelector('.jsNav'))return;
+ const box=document.createElement('div');box.innerHTML=window.SZO_JIANG_NAV(kind);const nav=box.firstChild;
+ const h1=sec.querySelector('h1');if(h1&&h1.parentNode===sec)h1.after(nav);else sec.prepend(nav);
+ const act=nav.querySelector('.active');if(act)nav.scrollLeft=Math.max(0,act.offsetLeft-16);
+}
+window.szoAddSectionNav=szoAddSectionNav;
 async function setView(view){
  if(view!=='home') document.body.classList.remove('isHomeView');
  currentView=view;
@@ -428,7 +439,7 @@ async function setView(view){
  else if(view==='exchange'){showPageLoading('兌換、拆解、升階查詢'); await ensureExchangePageLoaded(); await renderExchangePage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='gems'){showPageLoading('寶石試算'); await loadScriptGroupOnce('page_gems'); await ensureItemDataLoaded(); renderGemPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='gems'){showPageLoading('寶石試算'); await loadScriptGroupOnce('page_gems'); await ensureItemDataLoaded(); renderGemPage(); szoAddSectionNav('gems'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='soul'){
   currentView='soul';
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='soul'));
@@ -437,6 +448,7 @@ async function setView(view){
   showPageLoading(viewLoadingLabel(view));
   await ensureSoulDataLoaded();
   if(typeof window.renderSoulCalcPage==='function') window.renderSoulCalcPage();
+  szoAddSectionNav('soul');
   closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
  }
  else if(view==='machine'){
@@ -447,6 +459,7 @@ async function setView(view){
   keepNavGroupOpen('machine');
   const v=encodeURIComponent(document.body?.dataset?.version||'');
   byId('reader').innerHTML=`<div class="machineWrap"><iframe class="machineFrame" src="sim/machine.html?v=${v}" title="角色機體模擬"></iframe><p class="machineNote">設定存在這台電腦的瀏覽器，和離線版不共用。<a href="sim/machine.html?v=${v}" target="_blank" rel="noopener">在新分頁開啟</a></p></div>`;
+  szoAddSectionNav('machine');
   closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
  }
  else if(view==='reverse'){await ensureItemPageLoaded(); await renderItemPage('reverse'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}

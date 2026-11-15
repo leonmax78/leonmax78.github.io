@@ -24,7 +24,9 @@
     ['training', '修練', ['training']]
   ];
   const navHTML = kind => `<nav class="jsNav" aria-label="降神功能">${SECTIONS.map(([k,l,group]) => `<button type="button" class="${group.includes(kind) ? 'active' : ''}" data-js-nav="${k}">${l}</button>`).join('')}</nav>`;
-  window.SZO_JIANG_NAV = navHTML;
+  // V803: app-core 的版本另含寶石、武魂、角色機體；有就用它
+  if(typeof window.SZO_JIANG_NAV !== 'function') window.SZO_JIANG_NAV = navHTML;
+  const navOf = kind => window.SZO_JIANG_NAV(kind);
   document.addEventListener('click', e => {
     const b = e.target.closest && e.target.closest('[data-js-nav]');
     if(!b) return;
@@ -36,7 +38,7 @@
     if(!sec || sec.querySelector('.jsNav')) return;
     sec.classList.add('jsSection');
     const h1 = sec.querySelector('h1');
-    const nav = document.createElement('div'); nav.innerHTML = navHTML(kind);
+    const nav = document.createElement('div'); nav.innerHTML = navOf(kind);
     const el = nav.firstChild;
     if(h1 && h1.textContent.includes('降神、經驗、修練試算')) h1.after(el);
     else sec.prepend(el);

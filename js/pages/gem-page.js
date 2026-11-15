@@ -76,6 +76,7 @@
   #gemPage .gemCell.locked{opacity:.35;border-style:dashed;cursor:not-allowed}#gemPage .gemCell:not(.filled) small{color:var(--muted,#9fb0c4)}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
   </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
+  window.szoAddSectionNav?.('gems');  // 降神區共用分頁（每次重畫都補上）
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
   const content=byId('gemContent');
   if(tab==='plan'){

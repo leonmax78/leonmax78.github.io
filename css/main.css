@@ -4957,7 +4957,7 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 .beastLvSrc{margin:0 0 8px;font-size:12px;color:#facc15}
 /* V800: 角色機體模擬（iframe） */
 .machineWrap{display:grid;gap:6px}
-.machineFrame{width:100%;height:calc(100vh - 96px);min-height:620px;border:1px solid rgba(148,163,184,.25);border-radius:12px;background:#0a1220;display:block}
+.machineFrame{width:100%;height:calc(100vh - 150px);min-height:620px;border:1px solid rgba(148,163,184,.25);border-radius:12px;background:#0a1220;display:block}
 .machineNote{margin:0;font-size:12.5px;color:#93a6c3;text-align:right}.machineNote a{color:#7fe3d3;margin-left:8px}
 /* V801: 寶石試算鑲嵌盤（遊戲原圖） */
 #gemPage .gemShapeFill{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px;font-size:13px;color:#9fb0c4}
@@ -4972,3 +4972,7 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 #gemPage .gemArtSum{position:absolute;overflow:auto;font-size:2.1cqw;color:#e8e8e8}
 #gemPage .gemArtSum>div{display:flex;justify-content:space-between;padding:.3cqw .6cqw}#gemPage .gemArtSum b{color:#7fe08a}#gemPage .gemArtSum p{margin:.6cqw;color:#8a8a8a}
 @media(max-width:640px){#gemPage .gemBoard{overflow-x:auto;padding-bottom:6px}#gemPage .gemArt{min-width:560px}}
+/* V803: 降神區分頁在寶石／武魂／角色機體頁也同樣式 */
+#reader .jsNav button{flex:0 0 auto;font:inherit;font-size:14px;font-weight:700;color:var(--text,#dce7f5);background:#14222b;border:1px solid #2f4b5a;border-radius:999px;padding:7px 14px;min-height:0;white-space:nowrap;box-shadow:none}
+#reader .jsNav button.active{background:#dda84d;border-color:#dda84d;color:#1b1406}
+#reader .machineWrap>.jsNav{margin:0 0 4px}
