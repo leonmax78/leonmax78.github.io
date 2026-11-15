@@ -1,0 +1,408 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>四海同舟｜機體模擬</title>
+<style>
+/* V2 design: dark ink + gold, matching the 神州－四海同舟 site */
+:root{color-scheme:dark;--bg:#0a1220;--panel:#111c2e;--panel2:#16233a;--line:#26364f;--line2:#33476a;--text:#e6edf7;--muted:#93a6c3;--accent:#5fd4c0;--accent2:#1d6f66;--gold:#e8c66f;--gold2:#a8843a;--warn:#f59e8b;--r:12px}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 500px at 70% -10%,rgba(95,212,192,.08),transparent 60%),var(--bg);color:var(--text);font:15px/1.55 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif}
+header{position:relative;display:flex;align-items:center;gap:22px;padding:16px max(20px,calc((100vw - 1440px)/2 + 24px));background:#1b2a36 url('__INK__') center/cover;border-bottom:1px solid var(--gold2);box-shadow:0 8px 30px rgba(0,0,0,.35)}
+header::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,14,24,.55),rgba(8,14,24,.1) 60%,rgba(8,14,24,.45));pointer-events:none}
+header>*{position:relative;z-index:1}
+header img{width:200px;max-width:36%;height:52px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+header small{display:block;font-size:12.5px;letter-spacing:.2em;color:var(--gold)}
+header h1{margin:0;font-size:26px;letter-spacing:.06em;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 460px;gap:24px;max-width:1440px;margin:0 auto;padding:20px 24px 48px;align-items:start}
+#inputs{min-width:0}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding:10px 0 12px;margin-bottom:6px;background:linear-gradient(var(--bg) 78%,transparent)}
+nav button{flex:0 0 auto;padding:8px 16px;border-radius:999px;border:1px solid var(--line2);background:var(--panel);color:var(--muted);font-weight:700;letter-spacing:.04em}
+nav button:hover{color:var(--text);border-color:var(--accent)}
+nav button[aria-pressed=true]{background:linear-gradient(180deg,#2a8e80,#1d6f66);color:#fff;border-color:#6fe0cb;box-shadow:0 4px 14px rgba(95,212,192,.25)}
+#inputs>section{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--r);padding:18px 20px 22px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+h2{margin:0 0 14px;font-size:19px;letter-spacing:.06em;color:var(--gold);display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:4px;height:18px;border-radius:2px;background:var(--gold)}
+h3{margin:18px 0 8px;font-size:15.5px;color:#cfe7ff}
+h4{margin:16px 0 6px;color:var(--gold)}
+legend{color:var(--gold);font-weight:700;padding:0 6px}
+small{color:var(--muted)}
+label{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px;margin:4px 10px 4px 0;color:#c9d6ea}
+button,select,input,textarea{font:inherit;color:var(--text);background:#0d1828;border:1px solid var(--line2);border-radius:8px;padding:7px 10px;max-width:100%}
+select{padding-right:28px}
+input[type=number]{width:96px;font-variant-numeric:tabular-nums}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent)}
+button{cursor:pointer;background:#182740;font-weight:600}
+button:hover:not(:disabled){border-color:var(--accent);background:#1d3150}
+button:disabled{opacity:.45;cursor:not-allowed}
+button[aria-pressed=true]{background:#1d6f66;border-color:#6fe0cb;color:#fff}
+input:focus-visible,select:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+fieldset{border:1px solid var(--line2);border-radius:10px;margin:10px 0;padding:10px 14px;background:rgba(9,17,30,.45)}
+fieldset:disabled{opacity:.55}
+details{border-top:1px solid var(--line)}#inputs>details{margin-top:14px;padding:0 4px}
+summary{cursor:pointer;padding:10px 2px;color:var(--accent);font-weight:700}
+table{width:100%;border-collapse:collapse}
+td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+th{font-size:13.5px;color:#a9bddb;font-weight:600}
+td{font-variant-numeric:tabular-nums}
+tbody tr:nth-child(even),tr:nth-child(even){background:rgba(255,255,255,.025)}
+textarea{width:100%;min-height:70px}
+.practice{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.practice>div{display:flex;flex-direction:column;gap:4px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(9,17,30,.4)}
+.practice label{justify-content:space-between;margin:0}
+.godrow{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:rgba(9,17,30,.45)}
+.godrow>button{min-width:180px;text-align:left}
+.godPanel{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:url('__GODPANEL__') 0 0/100% 100% no-repeat;border-radius:6px;margin-bottom:12px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.godFace{position:absolute;padding:0;border:0;background:transparent;border-radius:2px;cursor:pointer;overflow:hidden}.godFace img{position:absolute;inset:5.5%;width:89%;height:89%;object-fit:cover}.godFace:hover{box-shadow:0 0 0 .3cqw var(--gold)}.godFace.on{box-shadow:0 0 1.2cqw .5cqw rgba(110,230,255,.9),inset 0 0 0 .3cqw rgba(110,230,255,.9)}
+.godTxt{position:absolute;display:flex;align-items:center;white-space:nowrap;font-size:2.15cqw;line-height:1;color:#f2f2f2;text-shadow:0 0 2px #000,0 1px 1px #000;padding-left:.4cqw;font-variant-numeric:tabular-nums}.godTxt.hp{color:#ff5a46}.godTxt.or{color:#ffb84d}.godTxt.gr{color:#5fd35f}.godTxt.link{justify-content:center;color:#f3e27a}.godTxt.total{justify-content:center;color:#fff;font-size:2.25cqw}
+.godGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.godGrid .godrow{flex-direction:column;align-items:stretch;margin:0;padding:8px}.godGrid .godrow>button{min-width:0;font-size:13px;white-space:normal}.godGrid .godrow label{margin:0;justify-content:space-between}
+@media(max-width:600px){.godGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.planSave,.planList{display:grid;gap:8px;margin:10px 0;padding:12px 14px;border:1px solid var(--line2);border-radius:var(--r);background:rgba(9,17,30,.5)}
+.planSave{grid-template-columns:auto minmax(0,1fr) auto;align-items:center}.planSave b,.planHead{color:var(--gold);font-size:14px}
+.planRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#0b1524}
+.planRow.on{border-color:var(--gold);background:rgba(232,198,111,.08)}.planName{flex:1 1 180px;display:flex;align-items:center;gap:8px;min-width:0}.planName strong{overflow-wrap:anywhere}
+.planTag{font-size:12px;padding:1px 8px;border-radius:999px;background:var(--gold);color:#1a1405;font-weight:800}
+.planRow button{padding:5px 10px;font-size:13px}.planRow button.primary,.planSave button{background:linear-gradient(180deg,#2a8e80,#1d6f66);border-color:#6fe0cb;color:#fff}.planRow button.danger:hover{border-color:#f87171;color:#fca5a5}
+@media(max-width:600px){.planSave{grid-template-columns:1fr}}
+.gemPanel{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:0 0/100% 100% no-repeat;margin-top:10px;border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.gemTxt{position:absolute;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-size:2.1cqw;color:#f1e7c8;text-shadow:0 1px 2px #000;letter-spacing:.05em}
+.gemSum{position:absolute;overflow:auto;font-size:2.1cqw;color:#e8e8e8}.gemSum>div{display:flex;justify-content:space-between;padding:.3cqw .6cqw}.gemSum b{color:#7fe08a;font-variant-numeric:tabular-nums}.gemSum p{margin:.6cqw;color:#8a8a8a}
+.gemHole{position:absolute;padding:0;border:0;background:0 0/100% 100% no-repeat;cursor:pointer;border-radius:3px}
+.gemHole:not(:disabled):hover{filter:brightness(1.35);box-shadow:0 0 0 .25cqw var(--gold)}.gemHole:disabled{cursor:not-allowed;opacity:1}
+.gemHole span{position:absolute;inset:8%;display:grid;place-items:center}.gemHole img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 .4cqw rgba(255,255,255,.35))}
+.gemHole em{position:absolute;right:-6%;bottom:-8%;font:800 1.7cqw/1 sans-serif;font-style:normal;color:#fff;text-shadow:0 0 2px #000,0 0 2px #000}
+.cmpHead{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:14px 0;padding:14px 16px;border-radius:var(--r);background:linear-gradient(120deg,rgba(232,198,111,.12),rgba(95,212,192,.08));border:1px solid var(--line2)}
+.cmpHead>div:not(.cmpSum){display:grid}.cmpHead small{color:var(--muted);font-size:12px}.cmpHead strong{font-size:17px}.cmpArrow{font-size:22px;color:var(--gold)}
+.cmpSum{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}.cmpStat{display:grid;justify-items:center;min-width:76px;padding:6px 10px;border-radius:10px;background:#0b1626;border:1px solid var(--line2)}.cmpStat b{font-size:20px;line-height:1.2}.cmpStat.up b{color:#4ade80}.cmpStat.down b{color:#f87171}.cmpStat.chg b{color:var(--gold)}
+.cmpCard{margin:12px 0;padding:12px 14px 14px;border-radius:var(--r);border:1px solid var(--line);background:rgba(9,17,30,.5)}.cmpCard>h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:16px;color:var(--gold)}
+.cmpBadge{font-size:12px;padding:1px 9px;border-radius:999px;background:#1d2b44;color:#cfe0f5;font-weight:700}.cmpBadge.chg{background:rgba(232,198,111,.18);color:var(--gold)}
+.cmpToggle{margin:0 0 0 auto;font-size:13px;color:var(--muted);font-weight:500}
+.cmpStatGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}.cmpGroup{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#0b1524}.cmpGroup h4{margin:0 0 6px;font-size:13px;color:#9fc6e8;letter-spacing:.1em}
+.cmpRow{display:grid;grid-template-columns:4.5em 1fr auto;align-items:baseline;gap:8px;padding:4px 6px;border-radius:6px;font-variant-numeric:tabular-nums;font-size:14px}
+.cmpRow .lab{color:#c9d6ea}.cmpRow .val s,.cfgRow .val s{color:#7c8ea8;text-decoration:none}.cmpRow .val strong{color:#fff}.cmpRow .delta{font-weight:800;white-space:nowrap}
+.cmpRow.up{background:rgba(74,222,128,.08)}.cmpRow.up .delta{color:#4ade80}.cmpRow.down{background:rgba(248,113,113,.09)}.cmpRow.down .delta{color:#f87171}.cmpRow.same .delta{color:#5d6f88}.cmpRow.same .val{color:#7c8ea8}
+.cfgGroup{border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:0 10px;background:#0b1524}.cfgGroup>summary{display:flex;align-items:center;gap:8px;color:#cfe7ff}
+.cfgRow{display:grid;grid-template-columns:minmax(7em,30%) 1fr;gap:10px;padding:6px 2px;border-top:1px solid var(--line);font-size:13.5px}.cfgRow .lab{color:#9fb3d1}.cfgRow .val{overflow-wrap:anywhere}.cfgRow .val strong{color:var(--gold);font-weight:700}
+.matGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}.matChip{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:10px;background:#0b1524;border:1px solid rgba(232,198,111,.35)}.matChip b{color:var(--gold);font-variant-numeric:tabular-nums}
+.cmpCard.god td.add{color:#4ade80;font-weight:700}.cmpCard.god tr.total td{font-weight:800;color:var(--gold);border-top:2px solid var(--line2)}
+.cmpCard details table tr.up td:last-child{color:#4ade80}.cmpCard details table tr.down td:last-child{color:#f87171}
+.cmpEmpty{margin:14px 0;padding:22px;text-align:center;border:1px dashed var(--line2);border-radius:var(--r);color:var(--muted)}.cmpEmpty strong{display:block;color:var(--text);font-size:16px;margin-bottom:6px}.muted{color:var(--muted)}
+@media(max-width:600px){.cmpSum{margin-left:0}.cmpRow{grid-template-columns:4em 1fr;}.cmpRow .delta{grid-column:2}.cfgRow{grid-template-columns:1fr}}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:6px;max-height:460px;overflow:auto;margin-top:10px;padding:4px}
+.gallery button{display:grid;justify-items:center;gap:4px;padding:8px 4px;font-size:13px;font-weight:600}
+.gallery img{width:52px;height:52px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,.04)}
+.gemSlots{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:8px;margin-top:10px}
+.gemSlot{border:1px solid var(--line2);border-radius:10px;padding:10px;background:rgba(9,17,30,.5);text-align:left;font-weight:500}
+/* 能力面板：遊戲「物品欄」重製 */
+aside{position:sticky;top:12px;display:grid;gap:14px;max-height:calc(100vh - 24px);overflow:auto;scrollbar-width:thin;padding-bottom:6px}
+.gamePanel{position:relative;width:100%;aspect-ratio:223/311;container-type:inline-size;background:url('__PANEL__') 0 0/100% 100% no-repeat;border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.55);user-select:none}
+.gamePanel .gpTitle{position:absolute;left:30%;width:40%;top:2.1%;height:6.2%;display:grid;place-items:center;font:700 5.6cqw/1 "Noto Serif TC","PMingLiU",serif;letter-spacing:.5em;padding-left:.5em;color:#2b2a22;text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.gp{position:absolute;display:flex;align-items:center;white-space:nowrap;font-size:4.6cqw;line-height:1;color:#f4f1e6;text-shadow:0 0 2px #000,0 1px 1px #000;font-variant-numeric:tabular-nums}
+.gp.v{justify-content:flex-end;color:#fff;padding-right:1.2cqw}
+.gp.lab{color:#f1e7c8}
+.gp span{display:inline-block;transform-origin:right center}
+.gp.lab span,.gp.l span{transform-origin:left center}
+.gpSlot{position:absolute;padding:0;border:0;border-radius:2px;background:transparent;display:grid;place-items:center;cursor:pointer}
+.gpSlot:hover,.gpSlot:focus-visible{outline:.6cqw solid var(--gold);outline-offset:0;background:rgba(232,198,111,.12)}
+.gpSlot.on{background:rgba(10,14,20,.55);box-shadow:inset 0 0 0 .4cqw rgba(232,198,111,.55)}
+.gpSlot img{width:78%;height:78%;object-fit:contain;filter:drop-shadow(0 1px 1px #000)}
+.gpSlot.ghost img{opacity:.5;filter:grayscale(.5) drop-shadow(0 1px 1px #000)}
+.gpSlot.sel{outline:.6cqw solid #6fe0cb}
+.vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.vital{border:1px solid var(--line2);border-radius:10px;padding:8px 10px;background:var(--panel)}
+.vital b{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.vital span{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+.vital.hp span{color:#ff8a8a}.vital.mp span{color:#9fb8ff}.vital.wt span{color:var(--gold)}
+#out{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:4px 14px 10px}
+#out>summary{padding:10px 0}
+/* 裝備與合成 */
+.slotBoard{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.slotCard{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:2px 10px;padding:8px 10px;text-align:left;border-radius:10px;min-height:58px}
+.slotCard i{grid-row:span 2;width:40px;height:40px;display:grid;place-items:center;border-radius:8px;background:#0a1322 center/contain no-repeat;border:1px solid var(--line2);font-style:normal;color:var(--muted);font-size:12px}
+.slotCard i img{max-width:32px;max-height:32px}
+.slotCard b{font-size:12px;color:var(--gold);font-weight:700}
+.slotCard span{font-size:13.5px;line-height:1.3;overflow-wrap:anywhere}
+.slotCard.empty span{color:var(--muted)}
+.slotEditor{border:1px solid var(--line2);border-radius:var(--r);padding:14px;background:rgba(9,17,30,.45)}
+.slotEditor .cur{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:#0b1626;border:1px solid var(--line);margin:8px 0}
+.slotEditor .cur img{width:36px;height:36px;object-fit:contain}
+.slotEditor .cur strong{font-size:16px}
+.pickList{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;max-height:340px;overflow:auto;margin:8px 0;padding:2px}
+.pickList button{display:flex;align-items:center;gap:8px;text-align:left;font-weight:500;padding:6px 8px;font-size:13.5px}
+.pickList img{width:28px;height:28px;object-fit:contain;flex:0 0 28px}
+.pickList .more{grid-column:1/-1;text-align:center;color:var(--muted);font-size:13px}
+.recipes>div{border-top:1px dashed var(--line2);padding:8px 0}
+.fillRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}.fillRow button{padding:4px 12px;font-size:13px;border-radius:999px}.fillRow.all{margin:6px 0 4px;padding:8px 10px;border:1px dashed var(--line2);border-radius:10px}
+.hint{margin:-6px 0 12px;color:var(--muted);font-size:13.5px}
+.summary{margin:8px 0 0;padding:8px 10px;border-radius:8px;background:rgba(95,212,192,.07);border:1px solid rgba(95,212,192,.25);font-size:14px}
+@media(max-width:1200px){main{grid-template-columns:minmax(0,1fr) 380px}}
+@media(max-width:860px){main{display:flex;flex-direction:column;padding:12px 12px 32px;gap:14px}aside{position:static;max-height:none;overflow:visible;order:-1;max-width:460px;width:100%;margin:0 auto}#inputs{width:100%}header{padding:10px 12px;gap:12px}header h1{font-size:20px}header img{height:40px}#inputs>section{padding:14px 12px 18px}.practice{grid-template-columns:1fr}td,th{padding:5px 4px;font-size:13px}nav{top:0}}
+</style>
+<!--__SITE__-->
+<header><img src="__LOGO__" alt="神州－四海同舟"><div><small>角色試算</small><h1>角色機體模擬</h1></div></header><main><article id="inputs"></article><aside id="side"></aside></main>
+<script>const D=__DATA__;
+const el=(tag,parent,text)=>{let n=document.createElement(tag);if(text!=null)n.textContent=text;parent.append(n);return n};
+// 右側：遊戲「物品欄」重製（底圖取自 shape/wnd3/m_item3.SHP，座標取自 setting/wnd03.ini 5010～5050）
+const gp=el('div',side);gp.className='gamePanel';gp.setAttribute('aria-label','能力面板');el('div',gp,'角色機體').className='gpTitle';
+function gpCell(x,y,w,cls,text){let d=el('div',gp);d.className='gp '+cls;Object.assign(d.style,{left:x/2.23+'%',top:y/3.11+'%',width:w/2.23+'%',height:16/3.11+'%'});let sp=el('span',d,text);return sp}
+const gpTop={job:gpCell(10,37,30,'l',''),lv:gpCell(36,37,24,'v',''),ji:gpCell(62,37,12,'lab','級')};
+const GP_STATS=[[10,40,[['體魄','體魄'],['力量','力量'],['智慧','智慧'],['靈敏','靈敏'],['防禦','面板防禦'],['罪孽','']]],[79,108,[['冰防','冰抗'],['火防','火抗'],['雷防','雷抗'],['冥防','冥抗'],['術攻','面板術攻'],['術防','面板術防']]],[144,174,[['抗毒','中毒抗性'],['抗定','麻痺抗性'],['抗盲','盲目抗性'],['抗咒','封咒抗性'],['右攻','右攻（估算）'],['左攻','左攻（估算）']]]];
+const gpVals=[];GP_STATS.forEach(([lx,vx,rows])=>rows.forEach(([lab,key],i)=>{if(!key)return;const y=61+i*16;gpCell(lx,y,26,'lab',lab);gpVals.push([key,gpCell(vx,y,lx===144?38:34,'v','0')])}));
+const gpSlots=new Map();
+const vit=el('div',side);vit.className='vitals';const vitals=[['生命上限（估算）','生命上限','hp'],['精力上限（估算）','精力上限','mp'],['負重上限','負重上限','wt']].map(([k,n,c])=>{let d=el('div',vit);d.className='vital '+c;el('b',d,n);return [k,el('span',d,'0')]});
+const out=el('details',side);out.id='out';el('summary',out,'完整能力數值（含範圍與來源加總）');const outBody=el('div',out);
+function fitText(){for(const sp of gp.querySelectorAll('.gp span')){sp.style.transform='';const box=sp.parentNode.clientWidth;if(sp.scrollWidth>box&&box)sp.style.transform='scaleX('+(box/sp.scrollWidth)+')'}}
+new ResizeObserver(()=>requestAnimationFrame(fitText)).observe(gp);
+function paintPanel(stats){const short=v=>!v?'0':v[0]===v[1]?Math.round(v[0]).toLocaleString('en-US').replace(/,/g,''):Math.round(v[0])+'~'+Math.round(v[1]);
+ gpTop.job.textContent=job.options[job.selectedIndex].text;gpTop.lv.textContent=val(lv);
+ for(const [k,sp] of gpVals)sp.textContent=k?(stats[k]?short(stats[k]):k.includes('攻（估算）')?'—':'0'):'0';
+ for(const [k,sp] of vitals)sp.textContent=stats[k]?(stats[k][0]===stats[k][1]?Math.round(stats[k][0]).toLocaleString():Math.round(stats[k][0]).toLocaleString()+'～'+Math.round(stats[k][1]).toLocaleString()):'0';
+ requestAnimationFrame(fitText)}
+let nav=el('nav',inputs),panels=[];nav.setAttribute('aria-label','能力加成來源');
+function section(title){let b=el('button',nav,title),s=el('section',inputs);panels.push([b,s]);el('h2',s,title);b.onclick=()=>panels.forEach(([tab,panel])=>{panel.hidden=tab!==b;tab.setAttribute('aria-pressed',String(tab===b))});s.hidden=panels.length>1;b.setAttribute('aria-pressed',String(!s.hidden));return s}
+function sel(p,rows){let s=el('select',p);for(let [v,n] of rows)s.add(new Option(n,v));return s}
+function num(p,title,min,max,v){let l=el('label',p,title),n=el('input',l);Object.assign(n,{type:'number',min,max,value:v});return n}
+function val(n){return Math.min(+n.max,Math.max(+n.min,Math.trunc(+n.value||0)))}
+function btn(p,t,f){el('button',p,t).onclick=()=>{f();calc()}}
+let p=section('角色'),job=sel(p,Object.entries({CLASS_WARRIOR:'勇士',CLASS_SWORDMAN:'劍俠',CLASS_TAOIST:'道人',CLASS_PRIEST:'僧侶',CLASS_ASSASSIN:'術者'})),lv=num(p,'角色等級',1,2000,1);
+let score=num(panels[0][1],'武冠分數',0,999999,0);
+p=panels[0][1];el('h3',p,'轉職');let rank=sel(p,['未轉職','一轉','二轉','三轉','四轉','五轉'].map((n,i)=>[i,n]));
+const attrs=['體魄','力量','智慧','靈敏'];
+function pool(parent,title,limit){let box=el('fieldset',parent);el('legend',box,title+'（'+limit+' 點）');let ns=attrs.map(k=>num(box,k,0,limit,0)),note=el('small',box);
+ ns.forEach(n=>n.addEventListener('input',()=>{let free=limit-ns.filter(x=>x!==n).reduce((s,x)=>s+val(x),0);if(n.value!=='')n.value=Math.min(val(n),free)}));
+ let fillRow=el('div',box);fillRow.className='fillRow';el('small',fillRow,'剩餘點數一鍵補滿：');
+ const fill=i=>{if(box.disabled)return;let left=limit-ns.reduce((s,x)=>s+val(x),0);if(left>0)ns[i].value=val(ns[i])+left};
+ attrs.forEach((k,i)=>{let b=el('button',fillRow,k);b.type='button';b.onclick=()=>{fill(i);calc()}});
+ return {box,fill,apply(active,add){box.disabled=!active;let left=limit;ns.forEach((n,i)=>{left-=val(n);if(active)add(attrs[i],val(n))});note.textContent=active?'剩餘 '+left+' 點':'尚未啟用'}}}
+let fillAll=el('div',p);fillAll.className='fillRow all';el('small',fillAll,'已啟用的轉職點數一鍵補滿：');attrs.forEach((k,i)=>{let b=el('button',fillAll,k);b.type='button';b.onclick=()=>{turns.forEach(t=>t.fill(i));calc()}});
+let turns=[10,30,50,200,1000].map((n,i)=>pool(p,'第 '+(i+1)+' 轉',n));
+p=section('武魂');let soul=sel(p,[['','不裝備'],...D.souls.map((s,i)=>[i,s.Name])]),owned=num(p,'總收藏武魂數',1,D.souls.length,1),soulInfo=el('p',p);
+p=section('任務');function quest(name){let row=el('div',p),l=el('label',row),n=el('input',l);n.type='checkbox';l.append(name);return n}
+let wine=quest('品嚐虎骨追風酒'),winePool=pool(p,'虎骨追風酒自由分配',10),zen=quest('佛度有緣人／睡禪：智慧 +2'),fruit=quest('追尋遺失箱貨（無名野果）：生命 +5、精力 +5'),bun=quest('照顧大雜院孤兒（元氣饅頭）：精力 +10');
+const zenAttr={value:'智慧'};  // 佛度有緣人不能化功
+p=section('降神');
+// 遊戲「副降神通」頁重製：底圖 shape/wnd/herodevelop_page4 等，座標取自 setting/wnd01.ini 10456～10489
+const godPanel=el('div',p);godPanel.className='godPanel';
+const GOD_FRAMES=[[276,242],[46,242],[161,242],[391,242],[506,242]];  // 主降神在中間，副 1～4 由左至右
+const godFaces=GOD_FRAMES.map(([x,y],i)=>{let b=el('button',godPanel);b.type='button';b.className='godFace';Object.assign(b.style,{left:x/6.23+'%',top:y/3.22+'%',width:72/6.23+'%',height:72/3.22+'%'});b.setAttribute('aria-label',i?'副降神 '+i:'主降神');b.onclick=()=>{activeGod=i;paintGods()};return b});
+function godText(x,y,w,cls,t=''){let d=el('div',godPanel,t);d.className='godTxt '+cls;Object.assign(d.style,{left:x/6.23+'%',top:y/3.22+'%',width:w/6.23+'%',height:18/3.22+'%'});return d}
+const GOD_STATS=[['生命','最大生命值',432,43,171,'hp'],['精力','最大精力值',432,62,171,'mp'],['力量','力量',432,81,80,'or'],['智慧','智慧',432,101,80,'wh'],['靈敏','靈敏',432,119,80,'gr'],['體魄','體魄',519,81,80,'gr'],['物防','防禦',519,101,80,'wh'],['術防','術防',519,119,80,'or']].map(([k,label,x,y,w,c])=>[k,label,godText(x,y,w,c)]);
+const godLinks=[147,168,187,208].map(y=>godText(432,y,171,'link'));const godTotal=godText(212,213,195,'total');
+function paintGodPanel(parts){const t={},links=[];for(const [name,v] of Object.entries(parts)){if(/^(主降神・|副降神 \d+・|降神連結・)/.test(name))for(const [k,x] of Object.entries(v))t[k]=(t[k]||0)+x[0];if(name.startsWith('降神連結・'))links.push(name.slice(5))}
+ for(const [k,label,d] of GOD_STATS)d.textContent=label+'+'+Math.round(t[k]||0).toLocaleString('en-US').replace(/,/g,'');
+ godLinks.forEach((d,i)=>d.textContent=links[i]||'');godTotal.textContent='全降神總等級：'+val(gl);if(document.activeElement!==godLv)godLv.value=gl.value}  // 同神魂寶石頁的輸入
+const godLv=num(p,'全降神總等級（與神魂寶石頁同步）',0,20000,0);godLv.addEventListener('input',()=>{gl.value=godLv.value});
+const godGrid=el('div',p);godGrid.className='godGrid';
+let activeGod=0,slotBtns=[],picks=Array.from({length:5},(_,i)=>{let row=el('div',godGrid);row.className='godrow';row.style.order=[2,0,1,3,4][i];let b=el('button',row);slotBtns.push(b);b.onclick=()=>{activeGod=i;paintGods()};let a=sel(row,[['','空白'],...Object.keys(D.gods).map(n=>[n,n])]);a.hidden=true;let s=sel(el('label',row,'星等'),Array.from({length:21},(_,n)=>[n,n+' 星']));s.min=0;s.max=20;let lvIn=num(row,'培養等級',0,Math.max(...Object.keys(D.auraCost).map(Number)),200);lvIn.parentNode.hidden=true;s.addEventListener('change',()=>lvIn.value=val(s)*20);return [a,s,lvIn]});  // 培養等級＝星等×20（10 星＝200 等），不另外輸入
+let series=sel(p,[['','全部系列'],...[...new Set(Object.values(D.hero).filter(v=>!v[3]).map(v=>v[1]))].map(n=>[n,n])]),searchGod=el('input',p);searchGod.placeholder='搜尋降神';btn(p,'卸下此槽',()=>picks[activeGod][0].value='');let gallery=el('div',p);gallery.className='gallery';
+const godFace=key=>{for(const [name,v] of Object.entries(D.hero))if((D.gods[name]?name:D.aliases[name])===key&&!v[3])return D.heads[v[0]];return ''};
+function paintGods(){slotBtns.forEach((b,i)=>{let n=picks[i][0].value;b.textContent=(i?'副降神 '+i:'主降神')+' · '+(n||'空白');b.setAttribute('aria-pressed',i===activeGod)});godFaces.forEach((b,i)=>{const n=picks[i][0].value,src=godFace(n);b.replaceChildren();b.classList.toggle('on',i===activeGod);b.title=(i?'副降神 '+i:'主降神')+'：'+(n||'空白');if(src){let im=el('img',b);im.src=src;im.alt=''}});gallery.replaceChildren();for(let [name,v] of Object.entries(D.hero).sort((a,b)=>b[1][2]-a[1][2])){let key=D.gods[name]?name:D.aliases[name];if(!D.gods[key]||v[3]||series.value&&series.value!==v[1]||!name.includes(searchGod.value))continue;let b=el('button',gallery);let img=el('img',b);img.src=D.heads[v[0]];img.alt='';el('span',b,name);b.disabled=picks.some(([a],i)=>i!==activeGod&&a.value===key);b.onclick=()=>{picks[activeGod][0].value=key;calc();save()}}}
+
+p=section('修練進度');let groups=new Map(),freePools=new Map(),trains=D.train.map(t=>{if(!groups.has(t.group)){let box=el('details',p);box.open=!groups.size;el('summary',box,t.group);let grid=el('div',box);grid.className='practice';groups.set(t.group,grid)}let grid=groups.get(t.group),row=el('div',grid),n=num(row,t.name+'（最高 '+t.maxLevel+' 階）',0,t.maxLevel,0);n.oninput=()=>{if(n.value!=='')n.value=val(n)};if(t.effectStats.includes('自由分配能力值')){let group=el('fieldset',row),label=el('legend',group,'自由分配'),fields=attrs.map(k=>num(group,k,0,0,0));freePools.set(t.id,{fields,label});}return n});
+let diamonds=groups.get('聖鑽');for(let key of ['同花大聖鑽','五鑽連貫心']){let g=groups.get(key),box=g.parentNode;diamonds.append(...g.children);box.remove()}let deriveDiamonds=()=>{for(let [i,t] of D.train.entries())if(t.deriveRule?.type==='minCurrentLevel'){trains[i].disabled=true;trains[i].title='自動取五鑽最低階';trains[i].value=Math.min(...t.deriveRule.sourceIds.map(id=>val(trains[D.train.findIndex(x=>x.id===id)])))}};
+const conversion=new Map();for(const group of ['靈丹','聖靈煉金','真元','聖鑽','以太核']){let grid=groups.get(group),label=document.createElement('label');grid.before(label);label.append('化功後屬性 ');conversion.set(group,sel(label,[['','保留原屬性'],...attrs.map(k=>[k,'集中到'+k])]));}conversion.get('聖靈煉金').value='智慧';
+// 裝備：與遊戲「物品欄」相同的 9 格（setting/wnd01.ini 的 26～33、160）
+const WEAPONS=['SWORD','BLADE','HIDDEN_WEAPON','HIDDEN_WEAPON2','WHISK','STAFF','ROD','SPEAR','HAMMER','AXE'];
+// 雙手武器（槍、暗器、拂塵、杖、棍）只放右手格，裝上時左手卸下
+const TWO_HAND=['SPEAR','HIDDEN_WEAPON','HIDDEN_WEAPON2','WHISK','STAFF','ROD'];const twoHand=e=>!!e&&e.type_codes.some(t=>TWO_HAND.includes(t));
+const SLOTS=[{k:'head',n:'頭部',x:10,y:168,types:['HELMET']},{k:'body',n:'身體',x:10,y:201,types:['ARMOR']},{k:'right',n:'右手（右攻）',x:10,y:234,types:WEAPONS},{k:'wrist',n:'手環',x:10,y:267,types:['BRACER']},
+ {k:'orn1',n:'裝飾 1',x:177,y:168,types:['ORNAMENT']},{k:'orn2',n:'裝飾 2',x:177,y:201,types:['ORNAMENT']},{k:'left',n:'左手（左攻）',x:177,y:234,types:[...WEAPONS.filter(t=>!TWO_HAND.includes(t)),'SHIELD']},{k:'feet',n:'腳部',x:177,y:267,types:['BOOT']},{k:'under',n:'底腳',x:93,y:233,types:['UNDER_BOOT']}];
+const ICON_BASE='__ICONBASE__';
+const iconOf=e=>e?.icon?ICON_BASE+e.icon+'.png':'';
+const slotOf=k=>SLOTS.find(s=>s.k===k);
+const fits=(e,slot)=>!!e&&(!slot.types||e.type_codes.some(t=>slot.types.includes(t)));
+// Saved builds list equipment in any order (older versions had no slots): put each item in a slot.
+function assignSlots(list){let used=new Set(),out=[];for(const it of list||[]){const e=D.eq[it?.pick];if(!e)continue;let k=it.slot&&slotOf(it.slot)&&!used.has(it.slot)&&fits(e,slotOf(it.slot))?it.slot:null;if(!k){let c=SLOTS.filter(s=>fits(e,s)&&!used.has(s.k));if(e.base_stats.damage){const pref=it.hand==='left'?'left':'right';c.sort((a,b)=>(b.k===pref)-(a.k===pref))}k=c[0]?.k||'extra'}if(k!=='extra')used.add(k);out.push({...it,slot:k})}return out}
+p=section('裝備與合成');let equipBox=p,gear=[],activeSlot='head';
+el('p',p,'點選格子後挑選裝備；位置與遊戲「物品欄」相同。武器放右手或左手即決定持用手。').className='hint';
+let board=el('div',p);board.className='slotBoard';let editors=el('div',p);
+function openSlot(k){activeSlot=k;for(const r of gear)r.box.hidden=r.slot!==k;paintSlots()}
+function equip(slotKey){const slot=slotOf(slotKey)||{k:'extra',n:'其他',types:null};let box=el('section',editors);box.className='slotEditor';box.hidden=slot.k!==activeSlot;
+ el('h3',box,slot.n+(slot.k==='extra'?'（舊設定，無對應格子）':''));let cur=el('div',box);cur.className='cur';
+ let pick={value:''},rs=el('div',box),r={pick,recipes:[],slot:slot.k,box,cur};rs.className='recipes';gear.push(r);
+ let handLabel=el('label',box,'持用手'),hand=sel(handLabel,[['right','右手'],['left','左手']]);handLabel.hidden=true;hand.value=slot.k==='left'?'left':'right';r.hand=hand;r.handLabel=handLabel;
+ let tools=el('div',box),q=el('input',tools);q.placeholder='搜尋裝備名稱';q.type='search';
+ let filters=['main_category','series_group','tier','display_type'].map((k,i)=>[k,sel(el('label',tools,['大類','系列','品階','種類'][i]),[])]);
+ let count=el('small',tools),list=el('div',box);list.className='pickList';
+ const pool=D.eq.map((e,i)=>[i,e]).filter(([,e])=>fits(e,slot));
+ function options(){let rows=pool;for(let [k,s] of filters){let old=s.value,values=[...new Set(rows.map(([,e])=>e[k]).filter(Boolean))];s.replaceChildren(new Option('全部',''),...values.map(v=>new Option(v,v)));if(values.includes(old))s.value=old;s.parentNode.hidden=values.length<2;if(s.value)rows=rows.filter(([,e])=>e[k]===s.value)}
+  rows=rows.filter(([,e])=>(e.name+e.display_type).includes(q.value.trim()));list.replaceChildren();count.textContent='符合 '+rows.length+' 件';
+  for(let [i,e] of rows.slice(0,150)){let b=el('button',list);b.type='button';const src=iconOf(e);if(src){let im=el('img',b);im.src=src;im.alt='';im.loading='lazy'}el('span',b,e.name);b.setAttribute('aria-pressed',String(String(i)===String(pick.value)));b.onclick=()=>{if(String(pick.value)===String(i))return;pick.value=String(i);rs.replaceChildren();r.recipes=[];options();handRule(slot.k);calc();save()}}
+  if(rows.length>150)el('div',list,'只顯示前 150 件，請用搜尋或篩選縮小範圍').className='more'}
+ r.options=options;q.oninput=options;for(let [,s] of filters)s.onchange=options;options();
+ let acts=el('div',box);btn(acts,'＋ 加入合成配方',()=>r.append());btn(acts,'卸下',()=>{pick.value='';rs.replaceChildren();r.recipes=[];options()});r.summary=el('p',box);r.summary.className='summary';let h1=el('h4',box,'合成'),h2=el('h4',box,'更換裝備');box.append(cur,h1,acts,rs,r.summary,h2,tools,list);
+ r.append=(saved)=>{if(pick.value==='')return;let e=D.eq[pick.value],under=e.type_codes.includes('UNDER_BOOT'),row=el('div',rs),eligible=D.recipes.map((v,i)=>[i,v]).filter(([,v])=>v.effects?.length&&(under?v.group==='stable_70':['stable_1','stable_12','stable_50'].includes(v.group))&&v.type_codes.some(t=>e.type_codes.includes(t)||(['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(t)&&e.display_type==='暗器')));
+ const promo=v=>[571,572,573,574,580,581,582,583,584,585,586,587,588,589,590,591].includes(+v.id);
+ let levels=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>eligible.some(([,v])=>v.group===g||(g==='stable_99'&&promo(v))));
+ let stage=sel(row,levels.map(g=>[g,'安定值 '+g.slice(7)+(g==='stable_99'?'（限時追加）':'')])),a=sel(row,[]),n=num(row,'次數',1,1,1),details=el('div',row),pair=[a,n];r.recipes.push(pair);pair.stage=stage;pair.inputs=[];
+ function choices(){a.replaceChildren(new Option('選擇配方',''));for(let [i,v] of eligible)if(stage.value===v.group||(stage.value==='stable_99'&&promo(v)))a.add(new Option(v.name,i));configure()}
+ function configure(){let rec=D.recipes[a.value];n.max=stage.value==='stable_99'?(under?29:49):Number(stage.value.slice(7))||1;n.value=rec?(stage.value==='stable_99'?n.max:Math.min(+n.max,rec.default_use_count||1)):1;effects()}
+ function effects(overrides={}){details.replaceChildren();pair.inputs=[];let rec=D.recipes[a.value];if(!rec)return;rec.effects.forEach((v,i)=>{let times=v.stackable===false?1:val(n),lo=(v.min??v.value)*times,hi=(v.max??v.value)*times;if(!Number.isFinite(lo+hi))return;let avg=(lo+hi)/2;if(lo===hi){el('span',details,v.label+' +'+lo+'　');return}let field=num(details,v.label,lo,hi,avg);field.step='any';field.title='預設平均值，可輸入實際合成總值';if(overrides[i]!=null&&Number.isFinite(+overrides[i]))field.value=Math.max(lo,Math.min(hi,+overrides[i]));field.onchange=()=>field.value=field.value===''?avg:Math.max(lo,Math.min(hi,+field.value));el('small',details,'（'+lo+'～'+hi+'）　');pair.inputs[i]=field})}
+ stage.onchange=choices;a.onchange=configure;n.oninput=()=>effects();n.onchange=()=>{n.value=val(n);effects()};choices();
+ if(saved){stage.value=saved[2]||D.recipes[saved[0]]?.group||stage.value;choices();a.value=saved[0];configure();n.value=saved[1];n.value=val(n);effects(saved[3]||{})}
+ btn(row,'移除',()=>{r.recipes=r.recipes.filter(x=>x!==pair);row.remove()})}}
+for(const s of SLOTS){let b=el('button',gp);b.type='button';b.className='gpSlot';Object.assign(b.style,{left:s.x/2.23+'%',top:s.y/3.11+'%',width:32/2.23+'%',height:32/3.11+'%'});b.setAttribute('aria-label',s.n);b.onclick=()=>{panels.find(([,sec])=>sec===equipBox)[0].click();openSlot(s.k);equipBox.scrollIntoView({behavior:'smooth',block:'start'})};gpSlots.set(s.k,b)}
+for(const s of SLOTS)equip(s.k);
+function clearSlot(k){const g=gear.find(x=>x.slot===k);if(!g||g.pick.value==='')return;g.pick.value='';g.box.querySelector('.recipes').replaceChildren();g.recipes=[];g.options()}
+function handRule(k){const R=gear.find(x=>x.slot==='right');if(k==='right'&&twoHand(D.eq[R.pick.value]))clearSlot('left');if(k==='left'&&twoHand(D.eq[R.pick.value])&&gear.find(x=>x.slot==='left').pick.value!=='')clearSlot('right')}
+function paintSlots(){board.replaceChildren();for(const r of gear){const s=slotOf(r.slot)||{n:'其他'},e=D.eq[r.pick.value];let b=el('button',board);b.type='button';b.className='slotCard'+(e?'':' empty');b.setAttribute('aria-pressed',String(r.slot===activeSlot));let i=el('i',b);const src=iconOf(e);if(src){let im=el('img',i);im.src=src;im.alt=''}else i.textContent='空';el('b',b,s.n);const R2=D.eq[gear.find(g=>g.slot==='right')?.pick.value];el('span',b,e?e.name:r.slot==='left'&&twoHand(R2)?'雙手武器佔用':'未裝備');b.onclick=()=>openSlot(r.slot);
+ r.cur.replaceChildren();if(e){const src2=iconOf(e);if(src2){let im=el('img',r.cur);im.src=src2;im.alt=''}let t=el('div',r.cur);el('strong',t,e.name);el('small',t,' '+[e.display_type,e.series_group,e.tier].filter(Boolean).join('・'))}else el('span',r.cur,'尚未裝備，從下方挑選');r.summary.hidden=!e}
+ for(const [k,btnEl] of gpSlots){const r=gear.find(g=>g.slot===k),e=D.eq[r?.pick.value];btnEl.replaceChildren();btnEl.classList.toggle('on',!!e);btnEl.classList.toggle('sel',k===activeSlot&&!panels.find(([,s])=>s===equipBox)?.[1].hidden);btnEl.title=slotOf(k).n+'：'+(e?e.name:'未裝備');let src=iconOf(e);
+  // 跟遊戲一樣：右手拿雙手武器時，左手格也顯示同一把（淡化）
+  const R=D.eq[gear.find(g=>g.slot==='right')?.pick.value];if(k==='left'&&!e&&twoHand(R)){src=iconOf(R);btnEl.classList.add('ghost');btnEl.title='左手：雙手武器佔用（'+R.name+'）'}else btnEl.classList.remove('ghost');
+  if(src){let im=el('img',btnEl);im.src=src;im.alt=''}}}
+p=section('神魂寶石');let gl=num(p,'全降神總等級',0,20000,0),shapes=['','圓弧','三角','四方','五稜','六緯'],slots=[],gemBy=new Map(D.gems.map(g=>[g.ID,g]));let brushGrade=1,brushColor='湛藍',brushButtons=[];const colors=[['湛藍','力量','#2f6fd0'],['緋紅','靈敏','#c8434b'],['碧綠','智慧','#3f9e3a'],['玄黃','體魄','#b8902c'],['多彩','四屬','#9b59c9'],['橄欖','術攻','#7f8f2a'],['鋯褐','生命','#9a6233'],['蒼紫','精力','#6a4fb0'],['燦黑','防禦','#555d68'],['霜白','術防','#c9d3dd'],['','清除','#888']];let grades=el('div',p),swatches=el('div',p);for(let n=1;n<=6;n++){let b=el('button',grades,n+' 階');brushButtons.push([b,()=>n===brushGrade]);b.onclick=()=>{brushGrade=n;calc()}}for(let [color,label,tint] of colors){let b=el('button',swatches,label);b.title=color||label;b.style.borderBottom='4px solid '+tint;brushButtons.push([b,()=>color===brushColor]);b.onclick=()=>{brushColor=color;calc()}}function applyBrush(filter,toggle=false){for(let [,a,s] of slots){if(!filter(s)||+s.NeedLv>val(gl))continue;let g=D.gems.find(x=>x.Shape===s.Shape&&+x.Grade===brushGrade&&x.name.includes(brushColor));if(!brushColor)a.value='';else if(g)a.value=toggle&&a.value===g.ID?'':g.ID}calc();save()}btn(p,'填滿已開孔',()=>applyBrush(()=>true));btn(p,'清空寶石',()=>{if(confirm('清空全部寶石？'))for(let [,a] of slots)a.value=''})
+
+ const aliasGem={Base_HP:'生命',Base_MP:'精力',Base_Con:'體魄',Base_Str:'力量',Base_Int:'智慧',Base_Dex:'靈敏',Extra_Def:'防禦',Magic_Att:'術攻',Magic_Def:'術防'};
+// 遊戲「神魂寶石」頁重製：底圖 Gem_Base、孔 Gem_Slot_N_Open／Lock（DATA2/shape/wnd），6 塊石板各 5 孔
+const GEM_ART=__GEMART__;
+let shapeRow=el('div',p);shapeRow.className='fillRow';el('small',shapeRow,'依形狀填滿：');for(let shape=1;shape<=5;shape++)btn(shapeRow,shapes[shape],()=>applyBrush(s=>+s.Shape===shape));
+let gemWrap=el('div',p);gemWrap.className='gemPanel';gemWrap.style.backgroundImage='url('+GEM_ART.Gem_Base+')';
+const gpos=(d,x,y,w,h)=>Object.assign(d.style,{left:x/6.23+'%',top:y/3.22+'%',width:w/6.23+'%',height:h/3.22+'%'});
+let gemHead=el('div',gemWrap);gemHead.className='gemTxt';gpos(gemHead,55,25,323,27);let gemFoot=el('div',gemWrap);gemFoot.className='gemTxt';gpos(gemFoot,27,268,381,28);
+let gemTitle=el('div',gemWrap,'寶石加成');gemTitle.className='gemTxt';gpos(gemTitle,427,22,176,28);let gemSum=el('div',gemWrap);gemSum.className='gemSum';gpos(gemSum,432,54,166,236);
+const GEM_TABS=[[12,67],[149,67],[286,67],[12,162],[149,162],[286,162]],GEM_HOLES=[[29,36],[66,36],[105,36],[49,70],[86,70]];
+for(let s of D.slots){const i=+s.ID-1,[tx,ty]=GEM_TABS[Math.floor(i/5)],[cx,cy]=GEM_HOLES[i%5];let b=el('button',gemWrap);b.type='button';b.className='gemHole';gpos(b,tx+cx-16,ty+cy-16,32,32);el('span',b);slots[i]=[b,{value:''},s];b.onclick=()=>applyBrush(t=>t.ID===s.ID,true)}
+const alias={Con:'體魄',Str:'力量',Int:'智慧',Dex:'靈敏',Def:'物防',MDef:'術防',MaxHP:'生命',MaxMP:'精力',Base_Con:'體魄',Base_Str:'力量',Base_Int:'智慧',Base_Dex:'靈敏',Base_HP:'生命',Base_MP:'精力',Extra_Def:'物防',Magic_Att:'術攻',Magic_Def:'術防','防禦':'物防','血量':'生命','術法攻擊':'術攻','敏捷':'靈敏'};
+function calc(){let parts={},source='職業等級';function add(k,a,b=a){if(!Number.isFinite(+a)||!Number.isFinite(+b)||(!+a&&!+b))return;k=alias[k]||k;let t=parts[source]??={},v=t[k]??=[0,0];v[0]+=+a;v[1]+=+b}
+ D.levels[job.value][val(lv)-1].forEach((v,i)=>add(['體魄','力量','智慧','靈敏'][i],v));let c=D.crown.filter(r=>r.Value<=val(score)).at(-1);source=c?.Name||'武冠';for(let k of ['Con','Str','Int','Dex','Def','MDef','MaxHP','MaxMP'])add(k,c?.[k]);
+ const names=picks.map(([a])=>a.value);picks.forEach(([a,n],i)=>{for(let opt of a.options)opt.disabled=!!opt.value&&opt.value!==a.value&&names.includes(opt.value);source=(i?'副降神 '+i:'主降神')+'・'+a.value;for(let [k,v] of Object.entries(D.gods[a.value]||{}))add(k,Math.ceil(v*D.stars[k][val(n)]*(i?0.1:1)))});
+ for(let [name,members] of Object.entries(D.comboMembers)){if(members.length&&members.every(m=>names.includes(m)||names.includes(D.aliases[m]))){source='降神連結・'+name;for(let [k,v] of Object.entries(D.comboBonuses[name]||{}))add(k,v)}}
+ deriveDiamonds(); source='修練';trains.forEach((n,i)=>{let t=D.train[i],effects=t.effectsByLevel[val(n)]||{};for(let [k,v] of Object.entries(effects))if(k!=='自由分配能力值')add(attrs.includes(k)?(conversion.get(t.group)?.value||k):k,v);let pool=freePools.get(t.id);if(!pool)return;let limit=effects['自由分配能力值']||0,left=limit;
+ for(let f of pool.fields){f.max=limit;let use=Math.min(left,val(f));if(f.value!==''&&Number(f.value)!==use)f.value=use;left-=use}
+ pool.fields.forEach((f,j)=>{f.max=left+Number(f.value);f.disabled=!limit;add(attrs[j],Number(f.value))});pool.label.textContent='可分配 '+limit+' 點，剩餘 '+left+' 點'});
+ const hands=[];
+ for(let r of gear){let {pick,recipes}=r;r.summary.textContent='';if(pick.value==='')continue;let subtotal={},rolls={};function itemStat(k,l,h=l){if(!k||!Number.isFinite(+l)||!Number.isFinite(+h))return;add(k,l,h);let key=alias[k]||k,v=subtotal[key]??=[0,0];v[0]+=+l;v[1]+=+h}source='裝備';for(let v of Object.values(D.eq[pick.value].base_stats||{}))itemStat(v.label,v.value??v.min,v.value??v.max);source='合成';for(let pair of recipes){let [a,n]=pair;if(!D.recipes[a.value])continue;D.recipes[a.value].effects.forEach((v,i)=>{let count=v.stackable===false?1:val(n),l=(v.min??v.value)*count,h=(v.max??v.value)*count,f=pair.inputs[i];if(f)(rolls[alias[v.label]||v.label]??=[]).push(f);itemStat(v.label,f&&f.value!==''?Math.max(l,Math.min(h,+f.value)):(l+h)/2)})}
+ if(job.value==='CLASS_SWORDMAN'&&D.eq[pick.value].base_stats.damage&&subtotal['傷害']){
+   hands.push({range:subtotal['傷害'],side:r.hand.value});
+ }
+ el('span',r.summary,'合成後：');for(let [k,[l,h]] of Object.entries(subtotal)){let fields=rolls[k];if(!fields||l!==h){el('span',r.summary,k+' '+(l===h?l:l+'～'+h)+'　');continue}
+ const current=f=>f.value===''?(+f.min + +f.max)/2:Math.max(+f.min,Math.min(+f.max,+f.value));
+ const fixed=l-fields.reduce((s,f)=>s+current(f),0),lo=fixed+fields.reduce((s,f)=>s+(+f.min),0),hi=fixed+fields.reduce((s,f)=>s+(+f.max),0);
+ let field=num(r.summary,k,lo,hi,l);field.step='any';el('small',r.summary,'（'+lo+'～'+hi+'）　');
+ field.oninput=e=>e.stopPropagation();field.onchange=e=>{e.stopPropagation();let target=field.value===''?l:Math.max(lo,Math.min(hi,+field.value)),delta=target-l;for(let f of fields){let before=current(f),after=Math.max(+f.min,Math.min(+f.max,before+delta));f.value=after;delta-=after-before}calc();save()};field.onkeydown=e=>{if(e.key==='Enter')field.blur()}}}
+ paintGods();for(let [b,selected] of brushButtons)b.setAttribute('aria-pressed',selected());source='寶石';let open=0;const gemTot={};for(let [b,a,s] of slots){b.disabled=+s.NeedLv>val(gl);let g=gemBy.get(a.value);b.style.backgroundImage='url('+GEM_ART['Gem_Slot_'+s.Shape+'_'+(b.disabled?'Lock':'Open')]+')';b.classList.toggle('filled',!!g&&!b.disabled);const sp=b.querySelector('span');sp.replaceChildren();if(g&&!b.disabled){const src=g.icon?ICON_BASE+g.icon+'.png':'';if(src){let im=el('img',sp);im.src=src;im.alt=''}el('em',sp,['','Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ'][+g.Grade]||g.Grade)}b.title='第 '+s.ID+' 孔（'+shapes[s.Shape]+'）· '+(b.disabled?'全降神總等級 '+s.NeedLv+' 開孔':g?g.name+'：'+Object.entries(aliasGem).filter(([k])=>+g[k]).map(([k,n])=>n+' +'+g[k]).join('、'):'未鑲嵌，點一下用目前選的寶石鑲入');if(!b.disabled){open++;if(g)for(let k in aliasGem){add(alias[k],g[k]);if(+g[k])gemTot[aliasGem[k]]=(gemTot[aliasGem[k]]||0)+ +g[k]}}}
+ const nextHole=D.slots.map(s=>+s.NeedLv).filter(n=>n>val(gl)).sort((x,y)=>x-y)[0];gemHead.textContent='目前選擇：'+(brushColor?brushGrade+' 階 '+brushColor+'寶石':'清除寶石');gemFoot.textContent='已解鎖洞數：'+open+' / '+D.slots.length+(nextHole?'　下一洞需求：全降神總等級 '+nextHole:'　已全部解鎖');gemSum.replaceChildren();for(const [k,v] of Object.entries(gemTot)){let r=el('div',gemSum);el('span',r,k);el('b',r,'+'+v.toLocaleString())}if(!Object.keys(gemTot).length)el('p',gemSum,'尚未鑲嵌寶石').className='muted';
+ turns.forEach((t,i)=>{source='第 '+(i+1)+' 轉';t.apply(i<Number(rank.value),add)});
+ source='任務';winePool.apply(wine.checked,add);if(zen.checked)add(zenAttr.value,2);if(fruit.checked){add('生命',5);add('精力',5)}if(bun.checked)add('精力',10);
+ let equipped=D.souls[soul.value],rate=(val(owned)-1)*0.025;soulInfo.textContent='圖鑑 '+D.souls.length+' 隻 ｜ '+(equipped?'收藏加成 '+Number((rate*100).toFixed(1))+'%':'未裝備武魂');if(equipped){source='武魂・'+equipped.Name;for(let k of ['Base_Str','Base_Int','Base_Con','Base_Dex','Extra_Def','Magic_Def']){let base=Number(equipped[k]||0);add(k,base+Math.floor(base*rate))}}
+ // 神行（仙鐘疾行、君星靴）同時穿多件也只加一次靈敏
+ const swift=gear.map(r=>D.eq[r.pick.value]?.name).find(n=>n==='普信仙鐘譜'||n?.startsWith('君星靴'));
+ if(swift){source=swift==='普信仙鐘譜'?'仙鐘疾行（估算）':'君星靴・神行';add('靈敏',Math.floor(D.levels[job.value][val(lv)-1][3]/10))}
+ paintGodPanel(parts);
+ let sums={};for(let t of Object.values(parts))for(let [k,v] of Object.entries(t)){let n=sums[k]??=[0,0];n[0]+=v[0];n[1]+=v[1]}
+ const fmt=v=>v[0]===v[1]?v[0].toLocaleString():v.map(x=>x.toLocaleString()).join(' ～ ');
+ outBody.replaceChildren();let tbl=el('table',outBody);currentStats={};function line(k,v){currentStats[k]=v}
+ const hpOffset={CLASS_WARRIOR:95,CLASS_SWORDMAN:80,CLASS_ASSASSIN:65,CLASS_PRIEST:50,CLASS_TAOIST:40}[job.value];
+ const derived=[0,1].map(i=>{const get=k=>sums[k]?.[i]||0,c=get('體魄'),s=get('力量'),w=get('智慧'),x=get('靈敏'),level=val(lv);
+ // Verified flat crown and god bonuses are applied after equipment percentages.
+ function resource(stat,base){let post=0;for(const [name,t] of Object.entries(parts))if(name===crownSource||/^(主降神・|副降神 \d+・|降神連結・)/.test(name))post+=t[stat]?.[i]||0;
+ return Math.floor(Math.floor(base+get(stat)-post)*(100+get(stat+'上限（%）'))/100)+post}
+ const crownSource=D.crown.filter(r=>r.Value<=val(score)).at(-1)?.Name||'武冠';
+return {'面板術攻':w*2.4+get('術攻'),'面板術防':w*0.8+get('術防'),'面板防禦':c*0.2+x*0.1+get('物防'),'生命上限（估算）':resource('生命',c*5+level+hpOffset),'精力上限（估算）':resource('精力',(2*c+28*w)/10+level+100-hpOffset),'負重上限':c*0.3+s*0.5+50}});
+ for(let k of Object.keys(derived[0]))line(k,derived.map(v=>Math.round(v[k])));
+ const armed=gear.map(r=>D.eq[r.pick.value]).filter(e=>e?.base_stats.damage);
+ if(job.value==='CLASS_SWORDMAN'&&hands.length===2&&hands[0].side!==hands[1].side&&armed.every(w=>w.type_codes.some(t=>['SWORD','BLADE'].includes(t)))){
+   hands.forEach(({range:[lo,hi],side})=>line(side==='left'?'左攻（估算）':'右攻（估算）',[0,1].map(i=>{
+     const hit=2+(4*(sums['力量']?.[i]||0)+(sums['靈敏']?.[i]||0))/100;
+     return Math.floor(hit*Math.floor((lo+hi)/2)/2);
+   })));
+ }
+ const taoistAttack=job.value==='CLASS_TAOIST'&&(!armed.length||(armed.length===1&&armed[0].type_codes.includes('STAFF')));
+ const hiddenWeaponAttack=job.value==='CLASS_ASSASSIN'&&armed.length===1&&armed[0].type_codes.includes('HIDDEN_WEAPON');
+ // 右手拿雙手武器（槍、暗器、拂塵、杖、棍）：右攻＝命中×平均傷害÷2、左攻＝命中。劍俠＋泣槍奈‧芙蒂與遊戲 227556／1065 吻合（誤差 2）
+ const twoHandAttack=armed.length===1&&twoHand(armed[0]);
+ if(taoistAttack||hiddenWeaponAttack||twoHandAttack){
+   const hit=[0,1].map(i=>2+(4*(sums['力量']?.[i]||0)+(sums['靈敏']?.[i]||0))/100);
+   const left=armed.length&&gear.find(r=>D.eq[r.pick.value]?.base_stats.damage).hand.value==='left';
+   const damage=armed.length?sums['傷害']:null,average=damage?(damage[0]+damage[1])/2:2;
+   line(left?'左攻（估算）':'右攻（估算）',hit.map(n=>Math.floor(n*average/2)));line(left?'右攻（估算）':'左攻（估算）',hit.map(Math.floor));
+ }
+ for(let [k,v] of Object.entries(sums))line(['術攻','術防','物防','生命','精力'].includes(k)?'直接'+k+'加成':k,v);
+ for(const [k,label] of [['右攻（估算）'],['左攻（估算）'],['面板術攻','術攻'],['體魄'],['力量'],['智慧'],['靈敏'],['面板防禦','防禦'],['面板術防','術防'],['生命上限（估算）'],['精力上限（估算）'],['冰抗','冰防'],['火抗','火防'],['雷抗','雷防'],['冥抗','冥防'],['中毒抗性','抗毒'],['麻痺抗性','抗定'],['盲目抗性','抗盲'],['封咒抗性','抗咒']]){let tr=el('tr',tbl);el('th',tr,label||k);el('td',tr,currentStats[k]?fmt(currentStats[k]):k.includes('攻（估算）')?'未推算':'0')}
+ paintPanel(currentStats);paintSlots();renderCompare()}
+// This snapshot also runs in the previous offline version, before it had persistence.
+function snapshot(){return {v:1,zenAttr:typeof zenAttr==='undefined'?'智慧':zenAttr.value,conversion:typeof conversion==='undefined'?{}:Object.fromEntries([...conversion].map(([k,n])=>[k,n.value])),base:[job,lv,score,rank,soul,owned,gl].map(x=>x.value),quests:[wine,zen,fruit,bun].map(x=>x.checked),points:[...turns,winePool].map(t=>Array.from(t.box.querySelectorAll('input'),n=>n.value)),gods:picks.map(r=>r.map(x=>x.value)),training:trains.map(n=>val(n)),free:typeof freePools==='undefined'?{}:Object.fromEntries([...freePools].map(([k,p])=>[k,p.fields.map(n=>n.value)])),stones:slots.map(r=>r[1].value),equipment:gear.filter(r=>r.pick.value!=='').map(r=>({slot:r.slot,pick:r.pick.value,...(D.eq[r.pick.value]?.base_stats.damage?{hand:r.hand.value}:{}),recipes:r.recipes.map(pair=>pair.stage?[pair[0].value,pair[1].value,pair.stage.value,Object.fromEntries(Object.entries(pair.inputs).map(([i,f])=>[i,f.value]))]:pair.map(n=>n.value))}))}}
+let loading=false;function restore(s){if(s?.v!==1||!Array.isArray(s.equipment)||!Array.isArray(s.base))throw Error('不是機體設定');loading=true;try{
+ let fill=(nodes,vs)=>nodes.forEach((n,i)=>{if(vs?.[i]!=null)n.value=vs[i]});fill([job,lv,score,rank,soul,owned,gl],s.base);[wine,zen,fruit,bun].forEach((n,i)=>n.checked=!!s.quests[i]);[...turns,winePool].forEach((t,i)=>fill([...t.box.querySelectorAll('input')],s.points[i]));picks.forEach((r,i)=>fill(r,[s.gods[i]?.[0]||'',s.gods[i]?.[1]??0,(Number(s.gods[i]?.[1])||0)*20]));fill(trains,s.training);for(let [k,n] of conversion)n.value=attrs.includes(s.conversion?.[k])?s.conversion[k]:(k==='聖靈煉金'&&s.conversion?.[k]===undefined?'智慧':'');trains.forEach(n=>n.value=val(n));for(let [k,p] of freePools)fill(p.fields,s.free?.[k]);fill(slots.map(r=>r[1]),s.stones);
+ editors.replaceChildren();gear=[];for(const sl of SLOTS)equip(sl.k);for(let item of assignSlots(s.equipment)){let r=item.slot==='extra'?(equip('extra'),gear.at(-1)):gear.find(g=>g.slot===item.slot);r.pick.value=String(item.pick);r.options();for(let pair of item.recipes||[])r.append(pair)}handRule('right');
+ calc()}finally{loading=false}}
+const key='szo-simulator-v1';function save(){if(!loading)try{localStorage.setItem(key,JSON.stringify(snapshot()))}catch{}}
+const resetCharacter=el('button',panels[0][1],'全部清除');resetCharacter.onclick=e=>{
+ e.stopPropagation();
+ if(!confirm('清除目前角色的所有配置並重新開始？未另存的配置會消失，已儲存的方案會保留。'))return;
+ try{localStorage.removeItem(key)}catch{alert('無法清除目前設定');return}
+ location.reload();
+};
+let io=el('details',inputs);el('summary',io,'設定備份與舊版轉移');let command='copy(JSON.stringify(('+snapshot.toString()+')()))';el('p',io,'在仍開著的舊版分頁按 F12，於 Console 執行下方指令，再將複製的設定貼入此處。');el('textarea',io).value=command;let transfer=el('textarea',io);transfer.placeholder='設定 JSON';btn(io,'匯出目前設定',()=>transfer.value=JSON.stringify(snapshot()));btn(io,'載入貼上的設定',()=>{try{let s=JSON.parse(transfer.value);if(confirm('以貼上的設定取代目前配置？')){restore(s);save()}}catch{alert('無法讀取這份設定')}});
+let currentStats={},plans={};const planKey='szo-machine-plans-v1';try{plans=JSON.parse(localStorage.getItem(planKey))||{}}catch{}
+let cp=section('方案比較');
+// 步驟 1：存方案；步驟 2：選一個已存方案當比較基準（下方即顯示差異）
+el('p',cp,'先把目前配置存成方案，之後修改裝備、修練等設定，再選它當「比較基準」，下面就會列出能力和材料的差異。').className='hint';
+let saveBox=el('div',cp);saveBox.className='planSave';el('b',saveBox,'① 儲存目前配置');let title=el('input',saveBox);title.placeholder='替這個方案取名，例如「現在的裝備」';title.maxLength=60;
+let saveBtn=el('button',saveBox,'儲存為新方案');saveBtn.type='button';
+let listBox=el('div',cp);listBox.className='planList';let basePick={value:''},report=el('div',cp);
+function refreshPlans(id){basePick.value=id&&plans[id]?id:'';listBox.replaceChildren();let h=el('b',listBox,'② 已存方案（點「設為比較基準」）');h.className='planHead';
+ const ids=Object.keys(plans);if(!ids.length){el('p',listBox,'還沒有存任何方案。').className='muted';return}
+ for(const k of ids){const pl=plans[k],on=k===basePick.value;let row=el('div',listBox);row.className='planRow'+(on?' on':'');let nm=el('div',row);nm.className='planName';el('strong',nm,pl.name);if(on)el('span',nm,'比較基準').className='planTag';
+  const b=(t,cls,f)=>{let x=el('button',row,t);x.type='button';if(cls)x.className=cls;x.onclick=e=>{e.stopPropagation();f();save()}};
+  b(on?'取消比較':'設為比較基準',on?'':'primary',()=>{refreshPlans(on?'':k);calc()});
+  b('載入此方案','',()=>{if(confirm('用「'+pl.name+'」取代目前配置？')){restore(pl.config);refreshPlans(k)}});
+  b('用目前配置覆蓋','',()=>{if(confirm('用目前配置覆蓋「'+pl.name+'」？'))storePlan(k,pl.name)});
+  b('刪除','danger',()=>{if(!confirm('刪除「'+pl.name+'」？'))return;let next={...plans};delete next[k];if(writePlans(next))refreshPlans(basePick.value===k?'':basePick.value);calc()})}}
+function writePlans(next){try{localStorage.setItem(planKey,JSON.stringify(next));plans=next;return true}catch{alert('本機無法儲存，請先匯出目前設定');return false}}
+function storePlan(id,name){let plan={name,config:snapshot(),stats:structuredClone(currentStats)};if(writePlans({...plans,[id]:plan}))refreshPlans(id);calc()}
+saveBtn.onclick=e=>{e.stopPropagation();if(!title.value.trim()){title.focus();title.placeholder='請先輸入方案名稱';return}storePlan(crypto.randomUUID(),title.value.trim());title.value=''};
+cp.append(report);refreshPlans('');inputs.append(io);
+function configChanges(parent,old,now,table){
+ function describe(s){let m=new Map(),set=(k,v)=>m.set(k,String(v));let b=s.base;
+ ['職業','角色等級','武冠分數','轉職','裝備武魂','武魂收藏數','全降神總等級'].forEach((k,i)=>set(k,i===0?[...job.options].find(o=>o.value===b[i])?.text:i===4?(D.souls[b[i]]?.Name||'不裝備'):b[i]));
+ s.gods.forEach(([name,star,level],i)=>set(i?'副降神 '+i:'主降神',name?name+' '+star+'星':'空白'));
+ s.training.forEach((n,i)=>set('修練・'+D.train[i].name,n+' 階'));for(let [k] of conversion)set('化功・'+k,(s.conversion?.[k]??(k==='聖靈煉金'?'智慧':''))||'保留原屬性');
+ for(let t of D.train.filter(t=>freePools.has(t.id)))set('自由配點・'+t.name,attrs.map((k,i)=>k+' '+(s.free?.[t.id]?.[i]||0)).join('、'));
+ s.points.forEach((v,i)=>set(i===5?'虎骨酒分配':'第 '+(i+1)+' 轉配點',v.map((n,j)=>attrs[j]+' '+n).join('、')));
+ s.quests.forEach((v,i)=>set(['品嚐虎骨追風酒','佛度有緣人／睡禪','追尋遺失箱貨','照顧大雜院孤兒'][i],v?'完成':'未完成'));
+ s.stones.forEach((id,i)=>set('寶石・第 '+(i+1)+' 孔',gemBy.get(id)?.name||'未鑲嵌'));
+ assignSlots(s.equipment).forEach((e,i)=>{let pos=e.slot==='extra'?'其他裝備 '+(i+1):'裝備・'+slotOf(e.slot).n;set(pos,D.eq[e.pick]?.name||'未裝備');e.recipes.forEach(([id,n,stage,over],j)=>{let r=D.recipes[id];if(!r)return;let vals=r.effects.map((v,h)=>{let count=v.stackable===false?1:Number(n),l=(v.min??v.value)*count,u=(v.max??v.value)*count;return v.label+' '+(over?.[h]||((l+u)/2))});set(pos+'・配方 '+(j+1),r.name+'／安定 '+(stage||r.group).slice(7)+'／'+n+' 次・'+vals.join('、'))})});return m}
+ let a=describe(old),b=describe(now);return [...new Set([...a.keys(),...b.keys()])].filter(k=>a.get(k)!==b.get(k)).map(k=>[k,a.get(k)??'—',b.get(k)??'—'])}
+// 方案比較 V2：分項卡片＋顏色（綠＝提升、紅＝下降）
+const CMP_GROUPS=[['攻擊',[['右攻（估算）','右攻'],['左攻（估算）','左攻'],['面板術攻','術攻']]],['四圍',[['體魄'],['力量'],['智慧'],['靈敏']]],['防禦',[['面板防禦','防禦'],['面板術防','術防'],['冰抗','冰防'],['火抗','火防'],['雷抗','雷防'],['冥抗','冥防']]],['上限',[['生命上限（估算）','生命上限'],['精力上限（估算）','精力上限'],['負重上限']]],['抗性',[['中毒抗性','抗毒'],['麻痺抗性','抗定'],['盲目抗性','抗盲'],['封咒抗性','抗咒']]]];
+const CFG_GROUPS=[['基本設定',k=>['職業','角色等級','武冠分數','轉職','裝備武魂','武魂收藏數','寶石開孔等級'].includes(k)],['降神',k=>/^(主降神|副降神)/.test(k)],['裝備與合成',k=>/^(裝備・|其他裝備)/.test(k)],['修練',k=>k.startsWith('修練・')],['配點與化功',k=>/^(化功・|自由配點・|第 \d 轉配點|虎骨酒分配)/.test(k)],['神魂寶石',k=>k.startsWith('寶石・')],['任務',()=>true]];
+function renderCompare(){report.replaceChildren();let base=plans[basePick.value],before=new Map((base?.config.gods||[]).filter(r=>r[0]).map(r=>[r[0],r])),nf=n=>Math.round(n).toLocaleString('zh-TW');
+ const card=(title,cls='')=>{let c=el('section',report);c.className='cmpCard '+cls;let h=el('h3',c);el('span',h,title);return [c,h]};
+ const badge=(h,text,cls)=>{let b=el('b',h,text);b.className='cmpBadge '+(cls||'')};
+ if(!base){let e=el('div',report);e.className='cmpEmpty';el('strong',e,'尚未選擇基準方案');el('p',e,'先在上方輸入名稱按「另存目前方案」，之後調整配置，再選它當基準，就能看到能力與材料的差異。');return}
+ let now=snapshot(),fmt=v=>v[0]===v[1]?nf(v[0]):v.map(nf).join('～');
+ // 能力變化
+ const rows=[];let up=0,down=0;
+ for(const [g,list] of CMP_GROUPS)for(const [k,label] of list){let A=base.stats[k],B=currentStats[k];let d=null;if(A&&B)d=B.map((v,i)=>v-A[i]);else if(!k.includes('攻（估算）')){A??=[0,0];B??=[0,0];d=B.map((v,i)=>v-A[i])}
+  const dir=!d?0:Math.sign(d[0]+d[1]);if(dir>0)up++;if(dir<0)down++;rows.push({g,k,label:label||k,A,B,d,dir})}
+ const cfg=configChanges(null,base.config,now,null);
+ let head=el('div',report);head.className='cmpHead';let hp=el('div',head);el('small',hp,'基準方案');el('strong',hp,base.name);el('span',head,'→').className='cmpArrow';let hn=el('div',head);el('small',hn,'比較對象');el('strong',hn,'目前機體');
+ let sum=el('div',head);sum.className='cmpSum';for(const [t,n,c] of [['能力提升',up,'up'],['能力下降',down,'down'],['配置異動',cfg.length,'chg']]){let x=el('span',sum);x.className='cmpStat '+c;el('b',x,String(n));el('small',x,t)}
+ let [c1,h1]=card('能力變化');let only=el('label',h1);let chk=el('input',only);chk.type='checkbox';chk.checked=!!window.__cmpOnly;only.append('只看有變化');chk.onchange=()=>{window.__cmpOnly=chk.checked;renderCompare()};only.className='cmpToggle';
+ let grid=el('div',c1);grid.className='cmpStatGrid';
+ for(const [g] of CMP_GROUPS){const list=rows.filter(r=>r.g===g&&(!chk.checked||r.dir));if(!list.length)continue;let box=el('div',grid);box.className='cmpGroup';el('h4',box,g);
+  for(const r of list){let row=el('div',box);row.className='cmpRow '+(r.dir>0?'up':r.dir<0?'down':'same');el('span',row,r.label).className='lab';
+   if(!r.d){el('span',row,(r.A?fmt(r.A):'未推算')+' → '+(r.B?fmt(r.B):'未推算')).className='val';el('span',row,'—').className='delta';continue}
+   let v=el('span',row);v.className='val';el('s',v,fmt(r.A));v.append(' → ');el('strong',v,fmt(r.B));
+   const sign=n=>(n>0?'+':'')+nf(n);el('span',row,(r.dir>0?'▲ ':r.dir<0?'▼ ':'')+(r.d[0]===r.d[1]?sign(r.d[0]):r.d.map(sign).join('～'))).className='delta'}}
+ if(chk.checked&&!up&&!down)el('p',c1,'能力沒有變化。').className='muted';
+ // 其他明細（直接加成等）
+ const known=new Set(rows.map(r=>r.k)),extra=[...new Set([...Object.keys(base.stats),...Object.keys(currentStats)])].filter(k=>!known.has(k));
+ if(extra.length){let det=el('details',c1);el('summary',det,'其他明細（直接加成、傷害等）');let t=el('table',det);for(const k of extra){let A=base.stats[k]||[0,0],B=currentStats[k]||[0,0],d=B[0]-A[0]+B[1]-A[1];let tr=el('tr',t);tr.className=d>0?'up':d<0?'down':'';el('th',tr,k);el('td',tr,fmt(A));el('td',tr,fmt(B))}}
+ // 配置異動
+ let [c2,h2]=card('配置異動');badge(h2,cfg.length+' 項',cfg.length?'chg':'');
+ if(!cfg.length)el('p',c2,'配置與基準方案相同。').className='muted';
+ let rest=[...cfg];for(const [g,test] of CFG_GROUPS){const list=rest.filter(([k])=>test(k));rest=rest.filter(x=>!list.includes(x));if(!list.length)continue;let box=el('details',c2);box.className='cfgGroup';box.open=list.length<=8;let sm=el('summary',box);el('span',sm,g);badge(sm,String(list.length));
+  for(const [k,A,B] of list){let row=el('div',box);row.className='cfgRow';el('span',row,k.replace(/^(修練|寶石|化功|自由配點|裝備)・/,'')).className='lab';let v=el('span',row);v.className='val';el('s',v,A);v.append(' → ');el('strong',v,B)}}
+ // 材料
+ let materials=new Map(),add=(name,n)=>{if(n>0)materials.set(name,(materials.get(name)||0)+n)};
+ D.train.forEach((t,i)=>add(t.item,t.costs.slice(Number(base.config.training[i])||0,Number(now.training[i])||0).reduce((sum,n)=>sum+n,0)));
+ let gems=new Map();for(let [slots,sign] of [[base.config.stones,-1],[now.stones,1]])for(let id of slots){if(id)gems.set(id,(gems.get(id)||0)+sign)}
+ for(let [id,n] of gems)add(gemBy.get(id)?.name||id,n);
+ if(materials.size){let [c3,h3]=card('需要準備的材料','mat');badge(h3,materials.size+' 種');let g=el('div',c3);g.className='matGrid';for(let [name,n] of materials){let m=el('div',g);m.className='matChip';el('span',m,name);el('b',m,'×'+nf(n))}}
+ // 降神培養投資
+ let changed=picks.map(([a,s],i)=>{let prev=base.config.gods[i];return !!a.value&&(a.value!==prev?.[0]||val(s)!==Number(prev?.[1]))});
+ if(changed.some(Boolean)){let [c4]=card('降神培養投資','god');let t=el('table',c4),hr=el('tr',t);['目標降神','累計魂魄','累計靈氣','追加魂魄','追加靈氣'].forEach(x=>el('th',hr,x));let tot=[0,0,0,0];
+  for(let [i,[a,s]] of picks.entries()){if(!changed[i])continue;let old=before.get(a.value),souls=D.soulCost[val(s)],aura=D.auraCost[val(s)*20],v=[souls,aura,Math.max(0,souls-(D.soulCost[old?.[1]]||0)),Math.max(0,aura-(old?D.auraCost[(Number(old[1])||0)*20]||0:0))];let tr=el('tr',t);el('td',tr,(i?'副':'主')+'・'+a.value+' '+val(s)+' 星');v.forEach((x,j)=>{let td=el('td',tr,nf(x));if(j>1&&x)td.className='add'});v.forEach((x,j)=>tot[j]+=x)}
+  let tr=el('tr',t);tr.className='total';el('td',tr,'合計');tot.forEach(x=>el('td',tr,nf(x)));
+  el('small',c4,'追加以基準方案中的同名降神為準；未列入者從零計，不扣除卸下角色。靈氣以星等×20 的培養等級計算（10 星＝200 等）。')}}
+inputs.addEventListener('input',()=>{calc();save()});inputs.addEventListener('change',()=>{calc();save()});inputs.addEventListener('click',e=>{if(e.target.tagName==='BUTTON')save()});try{let s=localStorage.getItem(key);if(s)restore(JSON.parse(s))}catch{}calc();</script></html>

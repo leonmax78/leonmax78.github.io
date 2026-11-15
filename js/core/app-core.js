@@ -265,7 +265,8 @@ function renderJiangHome(){
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
   {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
   {title:'寶石試算、加工配方',desc:'三星合成材料、鑲嵌能力與加工配方',attr:'data-view="gems"'},
-  {title:'武魂能力試算',desc:'武魂能力與成長試算',attr:'data-view="soul"'}
+  {title:'武魂能力試算',desc:'武魂能力與成長試算',attr:'data-view="soul"'},
+  {title:'角色機體模擬',desc:'職業、降神、修練、裝備、寶石一起算，仿遊戲物品欄，可存方案比較',attr:'data-view="machine"'}
  ]);
 }
 
@@ -296,6 +297,7 @@ function viewLoadingLabel(view){
   downloads:'工具下載區',
   trade:'玩家交易區',
   soul:'武魂能力試算',
+  machine:'角色機體模擬',
   reverse:'掉落反查'
  };
  return labels[view]||'頁面';
@@ -347,6 +349,7 @@ function viewLoadingLabel(view){
   downloads:'工具下載區',
   trade:'玩家交易區',
   soul:'武魂能力試算',
+  machine:'角色機體模擬',
   reverse:'掉落反查'
  };
  return labels[view]||'頁面';
@@ -436,6 +439,16 @@ async function setView(view){
   if(typeof window.renderSoulCalcPage==='function') window.renderSoulCalcPage();
   closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
  }
+ else if(view==='machine'){
+  // V800: 角色機體模擬 — 獨立頁（sim/machine.html，tools/machine-sim 產生）以 iframe 開啟，資料只在這裡才載入
+  currentView='machine';
+  document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='machine'));
+  document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
+  keepNavGroupOpen('machine');
+  const v=encodeURIComponent(document.body?.dataset?.version||'');
+  byId('reader').innerHTML=`<div class="machineWrap"><iframe class="machineFrame" src="sim/machine.html?v=${v}" title="角色機體模擬"></iframe><p class="machineNote">設定存在這台電腦的瀏覽器，和離線版不共用。<a href="sim/machine.html?v=${v}" target="_blank" rel="noopener">在新分頁開啟</a></p></div>`;
+  closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
+ }
  else if(view==='reverse'){await ensureItemPageLoaded(); await renderItemPage('reverse'); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
 }
 window.setView = setView;
@@ -510,7 +523,7 @@ function openItemMenuOnly(){
  ]);
 }
 // 子功能所屬的選單群組：開啟子功能時保持該群組展開，並標示群組按鈕。
-const SZO_NAV_PARENT={soul:['jiangForm','jiang'],gems:['jiangForm','jiang'],collect:['itemForm','item'],map:['mapForm','mapMenu'],shop:['mapForm','mapMenu']};
+const SZO_NAV_PARENT={soul:['jiangForm','jiang'],machine:['jiangForm','jiang'],gems:['jiangForm','jiang'],collect:['itemForm','item'],map:['mapForm','mapMenu'],shop:['mapForm','mapMenu']};
 function keepNavGroupOpen(view){
  const parent=SZO_NAV_PARENT[view];
  if(!parent)return;
@@ -545,7 +558,7 @@ const HOME_TOOLS=[
  ['data-view="map"','地圖查詢'],['data-view="exchange"','兌換、拆解、升階'],['data-jiang="support"','副降神試算'],
  ['data-view="gems"','寶石試算'],['data-view="skill"','技能查詢']
 ];
-const RECENT_LABELS={'data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'副降神試算','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練計算'};
+const RECENT_LABELS={'data-view="machine"':'角色機體模擬','data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'副降神試算','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練計算'};
 function szoSetRoute(route){try{history.replaceState(history.state,'',location.pathname+location.search+(route?'#/'+route:''));}catch(e){}}
 window.szoSetRoute=szoSetRoute;
 async function szoOpenRoute(){
