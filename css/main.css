@@ -4993,3 +4993,26 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 .jsPickBox .jsStars{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:5px}
 @media(max-width:600px){.jsPickBox .jsStars{grid-template-columns:repeat(7,minmax(0,1fr))}.jsPickModal{padding:8px;align-items:start}.jsPickBox{max-height:calc(100vh - 16px)}}
 .jsPickBox .jsSide>*{grid-column:1/-1!important;grid-row:auto!important}
+/* V805: 副降神試算＝遊戲「副降神通」畫面 */
+.jsPage .jsCards,.jsPage .jsNearBox,.jsPage .jsStat{display:none}
+.jsPage .jsLayout{grid-template-columns:1fr!important;grid-template-areas:"main"!important}
+.jsGame{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:url(../assets/test-media/ui/god_panel.png) 0 0/100% 100% no-repeat;border-radius:6px;box-shadow:0 10px 26px rgba(0,0,0,.4);margin-bottom:10px}
+.jsPage .jsGameFace{position:absolute;padding:0;border:0;background:transparent;border-radius:2px;cursor:pointer;overflow:hidden;min-height:0}
+.jsGameFace img{position:absolute;inset:5.5%;width:89%;height:89%;object-fit:cover}
+.jsGameFace.empty span{position:absolute;inset:0;display:grid;place-items:center;font-size:4cqw;color:rgba(255,255,255,.35)}
+.jsGameFace em{position:absolute;right:7%;bottom:7%;font:800 1.6cqw/1 sans-serif;font-style:normal;color:#ffe08a;background:rgba(0,0,0,.65);padding:.3cqw .5cqw;border-radius:.4cqw}
+.jsGameFace i{position:absolute;left:7%;top:7%;font:700 1.5cqw/1 sans-serif;font-style:normal;color:#fff;background:rgba(0,0,0,.55);padding:.25cqw .45cqw;border-radius:.4cqw}
+.jsGameFace:hover{box-shadow:0 0 0 .3cqw #e8c66f}
+.jsGameFace.on{box-shadow:0 0 1.2cqw .5cqw rgba(110,230,255,.9),inset 0 0 0 .3cqw rgba(110,230,255,.9)}
+.jsGameTxt{position:absolute;display:flex;align-items:center;white-space:nowrap;font-size:2.15cqw;line-height:1;color:#f2f2f2;text-shadow:0 0 2px #000,0 1px 1px #000;padding-left:.4cqw;font-variant-numeric:tabular-nums}
+.jsGameTxt.hp{color:#ff5a46}.jsGameTxt.or{color:#ffb84d}.jsGameTxt.gr{color:#5fd35f}.jsGameTxt.total{justify-content:center;color:#fff;font-size:2.25cqw}
+.jsGameLinks{position:absolute;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:.35cqw;font-size:2cqw;color:#f3e27a;text-shadow:0 1px 1px #000}
+.jsGameLinks p{margin:.5cqw 0;color:#8a8a8a;font-size:1.8cqw}
+.jsGameNear{position:absolute;overflow:auto;display:flex;flex-direction:column;gap:.5cqw;padding:.8cqw;border:1px solid rgba(221,168,77,.75);border-radius:.8cqw;background:rgba(8,10,14,.84);box-shadow:0 0 1.2cqw rgba(0,0,0,.6)}
+.jsGameNearHead{font-size:2.1cqw;font-weight:800;color:#f3cf86;padding-bottom:.4cqw;border-bottom:1px solid rgba(221,168,77,.4)}
+.jsGameNear p{margin:.4cqw 0;font-size:1.8cqw;color:#9fb0c4;line-height:1.4}
+.jsPage .jsGameNear button{display:flex;align-items:center;gap:.8cqw;padding:.4cqw .6cqw;border-radius:.6cqw;border:1px solid rgba(221,168,77,.5);background:rgba(26,37,48,.92);text-align:left;font:inherit;font-size:1.8cqw;line-height:1.25;color:#e6edf7;cursor:pointer;min-height:0}
+.jsPage .jsGameNear button:hover:not(:disabled){border-color:#f3cf86;background:rgba(221,168,77,.18)}
+.jsGameNear img{width:4.4cqw;height:4.4cqw;object-fit:cover;border-radius:.4cqw;flex:0 0 auto}
+.jsGameNear span{display:grid;min-width:0}.jsGameNear b{color:#f3cf86;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.jsGameNear small{color:#9fb0c4;font-size:1.6cqw}
+@media(max-width:640px){.jsPage .jsMain{overflow-x:auto;padding-bottom:6px}.jsGame{min-width:560px}}
