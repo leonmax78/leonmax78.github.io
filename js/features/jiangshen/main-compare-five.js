@@ -67,7 +67,7 @@
     const reader = $('reader');
     if(!reader) return;
     reader.innerHTML = `<section class="card mainComparePage">
-      <h1>降神、經驗、修練試算</h1>
+      <h1>降神、經驗、修練、寶石、武魂試算</h1>
       <h2>主降神比較</h2>
       <div class="kvGrid mainCompareGrid">${labels.map(pickCard).join('')}</div>
       <div class="quick mainCompareAction">

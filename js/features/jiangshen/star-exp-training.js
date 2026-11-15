@@ -16,7 +16,7 @@
  window.setJiang=function(kind){
   if(kind==='starAura'){
    const r=$('reader'); if(!r)return;
-   r.innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>星等 / 靈氣計算</h2>
+   r.innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>星等 / 靈氣計算</h2>
    <div class="calcTabs"><button class="calcTab active" type="button" data-star-tab="star">星等計算</button><button class="calcTab" type="button" data-star-tab="aura">靈氣計算</button></div>
    <div id="starTabNeed"><h3>星等：需要的降神數量</h3><div class="kvGrid">
    <div class="kv"><div class="k">目前星等</div><div class="v"><select id="needCur">${starOpts(0)}</select></div></div>
@@ -32,7 +32,7 @@
   }
   if(kind==='expPill'){
    const r=$('reader'); if(!r)return;
-   r.innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>等級 / 經驗丹</h2>
+   r.innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>等級 / 經驗丹</h2>
    <div class="calcTabs"><button class="calcTab active" type="button" data-exp-tab="need">等級經驗</button><button class="calcTab" type="button" data-exp-tab="eat">經驗丹升等</button></div>
    <div id="expTabNeed"><h3>等級：需要的經驗值</h3><div class="kvGrid">
    <div class="kv"><div class="k">現在等級</div><div class="v"><input id="expCur" type="number" value="1"></div></div>

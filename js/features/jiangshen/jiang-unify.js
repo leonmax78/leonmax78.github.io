@@ -40,7 +40,7 @@
     const h1 = sec.querySelector('h1');
     const nav = document.createElement('div'); nav.innerHTML = navOf(kind);
     const el = nav.firstChild;
-    if(h1 && h1.textContent.includes('降神、經驗、修練試算')) h1.after(el);
+    if(h1 && h1.textContent.includes('降神、經驗、修練、寶石、武魂試算')) h1.after(el);
     else sec.prepend(el);
     const act = el.querySelector('.active'); if(act) el.scrollLeft = Math.max(0, act.offsetLeft - 16);
   }
@@ -79,7 +79,7 @@
     const vals = picks.map(p => p.n ? abilityOf(p.n, p.s) : null);
     const filled = vals.filter(Boolean).length;
     const best = Object.fromEntries(stats().map(st => [st, Math.max(...vals.filter(Boolean).map(v => Math.ceil(Number(v[st]||0))), 0)]));
-    r.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+    r.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
       <div class="jsLayout">
         ${pickerHTML(cmpState, {head:`正在設定：<b>降神 ${'ABCDE'[cmpState.active]}</b>`, current:cur.n, used:picks.map(p=>p.n), clear:true, stars:true, star:cur.s})}
         <div class="jsMain">
@@ -112,7 +112,7 @@
     let n = read(STAR_KEY, '');
     if(!n || !D().baseStats || !D().baseStats[n]) n = heroes()[0] || '';
     const rows = Array.from({length:21}, (_,lv) => abilityOf(n, lv));
-    r.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+    r.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
       <div class="jsLayout jsStarsLayout">
         ${pickerHTML(starState, {head:'選一隻降神，右邊顯示 0～20 星的能力', current:n})}
         <div class="jsMain">
@@ -151,7 +151,7 @@
     const r = $('reader'); if(!r || r.__juObs) return;
     r.__juObs = new MutationObserver(() => {
       const h1 = r.querySelector('h1');
-      if(lastKind && h1 && h1.textContent.includes('降神、經驗、修練試算') && !r.querySelector('.jsNav')) addNav(lastKind);
+      if(lastKind && h1 && h1.textContent.includes('降神、經驗、修練、寶石、武魂試算') && !r.querySelector('.jsNav')) addNav(lastKind);
     });
     r.__juObs.observe(r, {childList:true});
   };

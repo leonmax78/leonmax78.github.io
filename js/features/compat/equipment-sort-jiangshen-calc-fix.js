@@ -6,7 +6,7 @@
   const N = (id,d=0)=>{const el=$(id); const n=Number(el?el.value:d); return Number.isFinite(n)?n:d;};
   const F = (n)=>{try{return Number(n||0).toLocaleString('zh-Hant');}catch(e){return String(n??'');}};
   const FB = (n)=>{try{return BigInt(n||0).toLocaleString('zh-Hant');}catch(e){return String(n??'0');}};
-  const JiangTitle = '降神、經驗、修練試算';
+  const JiangTitle = '降神、經驗、修練、寶石、武魂試算';
   function closeMenu(){ if(typeof closeDrawer==='function') closeDrawer(); }
   function scrollTop(){ try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);} }
   function optionsNames(){
