@@ -52,6 +52,13 @@ textarea{width:100%;min-height:70px}
 .godPanel{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:url('__GODPANEL__') 0 0/100% 100% no-repeat;border-radius:6px;margin-bottom:12px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
 .godFace{position:absolute;padding:0;border:0;background:transparent;border-radius:2px;cursor:pointer;overflow:hidden}.godFace img{position:absolute;inset:5.5%;width:89%;height:89%;object-fit:cover}.godFace:hover{box-shadow:0 0 0 .3cqw var(--gold)}.godFace.on{box-shadow:0 0 1.2cqw .5cqw rgba(110,230,255,.9),inset 0 0 0 .3cqw rgba(110,230,255,.9)}
 .godTxt{position:absolute;display:flex;align-items:center;white-space:nowrap;font-size:2.15cqw;line-height:1;color:#f2f2f2;text-shadow:0 0 2px #000,0 1px 1px #000;padding-left:.4cqw;font-variant-numeric:tabular-nums}.godTxt.hp{color:#ff5a46}.godTxt.or{color:#ffb84d}.godTxt.gr{color:#5fd35f}.godTxt.link{justify-content:center;color:#f3e27a}.godTxt.total{justify-content:center;color:#fff;font-size:2.25cqw}
+.godNear{position:absolute;overflow:auto;display:flex;flex-direction:column;gap:.5cqw;padding:.8cqw;border:1px solid rgba(221,168,77,.7);border-radius:.8cqw;background:rgba(8,10,14,.82);box-shadow:0 0 1.2cqw rgba(0,0,0,.6)}
+.godNearHead{font-size:2.1cqw;font-weight:800;color:#f3cf86;padding-bottom:.4cqw;border-bottom:1px solid rgba(221,168,77,.4)}
+.godNear p{margin:.4cqw 0;font-size:1.8cqw;color:#9fb0c4}
+.godNear button{display:flex;align-items:center;gap:.8cqw;padding:.4cqw .6cqw;border-radius:.6cqw;border:1px solid rgba(221,168,77,.5);background:rgba(26,37,48,.9);text-align:left;font-size:1.8cqw;line-height:1.25;color:#e6edf7}
+.godNear button:hover:not(:disabled){border-color:#f3cf86;background:rgba(221,168,77,.18)}
+.godNear img{width:4.4cqw;height:4.4cqw;object-fit:cover;border-radius:.4cqw;flex:0 0 auto}
+.godNear span{display:grid;min-width:0}.godNear b{color:#f3cf86;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.godNear small{color:#9fb0c4;font-size:1.6cqw}
 .godGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.godGrid .godrow{flex-direction:column;align-items:stretch;margin:0;padding:8px}.godGrid .godrow>button{min-width:0;font-size:13px;white-space:normal}.godGrid .godrow label{margin:0;justify-content:space-between}
 @media(max-width:600px){.godGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .planSave,.planList{display:grid;gap:8px;margin:10px 0;padding:12px 14px;border:1px solid var(--line2);border-radius:var(--r);background:rgba(9,17,30,.5)}
@@ -205,6 +212,17 @@ const GOD_FRAMES=[[276,242],[46,242],[161,242],[391,242],[506,242]];  // 主降�
 const godFaces=GOD_FRAMES.map(([x,y],i)=>{let b=el('button',godPanel);b.type='button';b.className='godFace';Object.assign(b.style,{left:x/6.23+'%',top:y/3.22+'%',width:72/6.23+'%',height:72/3.22+'%'});b.setAttribute('aria-label',i?'副降神 '+i:'主降神');b.onclick=()=>{activeGod=i;paintGods()};return b});
 function godText(x,y,w,cls,t=''){let d=el('div',godPanel,t);d.className='godTxt '+cls;Object.assign(d.style,{left:x/6.23+'%',top:y/3.22+'%',width:w/6.23+'%',height:18/3.22+'%'});return d}
 const GOD_STATS=[['生命','最大生命值',432,43,171,'hp'],['精力','最大精力值',432,62,171,'mp'],['力量','力量',432,81,80,'or'],['智慧','智慧',432,101,80,'wh'],['靈敏','靈敏',432,119,80,'gr'],['體魄','體魄',519,81,80,'gr'],['物防','防禦',519,101,80,'wh'],['術防','術防',519,119,80,'or']].map(([k,label,x,y,w,c])=>[k,label,godText(x,y,w,c)]);
+// 左側雲紋區：差 1 隻就成立的連結提醒（點一下放進空格）
+const godNear=el('div',godPanel);godNear.className='godNear';Object.assign(godNear.style,{left:10/6.23+'%',top:10/3.22+'%',width:190/6.23+'%',height:218/3.22+'%'});
+const canonGod=n=>D.gods[n]?n:D.aliases[n]||n;
+function paintGodNear(){const have=new Set(picks.map(([a])=>a.value).filter(Boolean));godNear.replaceChildren();
+ const rows=Object.entries(D.comboMembers).filter(([,m])=>m.length>1).map(([c,m])=>[c,m.map(canonGod).filter(x=>!have.has(x))]).filter(([,miss])=>miss.length===1&&D.gods[miss[0]]);
+ let h=el('div',godNear,'差 1 隻就成立');h.className='godNearHead';
+ if(!have.size){el('p',godNear,'先放入降神，這裡會提示還差誰。');return}
+ if(!rows.length){el('p',godNear,'目前沒有差 1 隻的連結。');return}
+ const empty=picks.findIndex(([a])=>!a.value);
+ for(const [c,[miss]] of rows.slice(0,8)){let b=el('button',godNear);b.type='button';const src=godFace(miss);if(src){let im=el('img',b);im.src=src;im.alt=''}let t=el('span',b);el('b',t,c);el('small',t,'缺 '+miss);b.disabled=empty<0;b.title=empty<0?'五格都滿了':'放進'+(empty?'副降神 '+empty:'主降神');
+  b.onclick=()=>{const i=picks.findIndex(([a])=>!a.value);if(i<0)return;picks[i][0].value=miss;if(!val(picks[i][1])){picks[i][1].value=i?'1':'20';picks[i][1].dispatchEvent(new Event('change'))}activeGod=i;calc();save()}}}
 const godLinks=[147,168,187,208].map(y=>godText(432,y,171,'link'));const godTotal=godText(212,213,195,'total');
 function paintGodPanel(parts){const t={},links=[];for(const [name,v] of Object.entries(parts)){if(/^(主降神・|副降神 \d+・|降神連結・)/.test(name))for(const [k,x] of Object.entries(v))t[k]=(t[k]||0)+x[0];if(name.startsWith('降神連結・'))links.push(name.slice(5))}
  for(const [k,label,d] of GOD_STATS)d.textContent=label+'+'+Math.round(t[k]||0).toLocaleString('en-US').replace(/,/g,'');
@@ -307,7 +325,7 @@ function calc(){let parts={},source='職業等級';function add(k,a,b=a){if(!Num
  // 神行（仙鐘疾行、君星靴）同時穿多件也只加一次靈敏
  const swift=gear.map(r=>D.eq[r.pick.value]?.name).find(n=>n==='普信仙鐘譜'||n?.startsWith('君星靴'));
  if(swift){source=swift==='普信仙鐘譜'?'仙鐘疾行（估算）':'君星靴・神行';add('靈敏',Math.floor(D.levels[job.value][val(lv)-1][3]/10))}
- paintGodPanel(parts);
+ paintGodPanel(parts);paintGodNear();
  let sums={};for(let t of Object.values(parts))for(let [k,v] of Object.entries(t)){let n=sums[k]??=[0,0];n[0]+=v[0];n[1]+=v[1]}
  const fmt=v=>v[0]===v[1]?v[0].toLocaleString():v.map(x=>x.toLocaleString()).join(' ～ ');
  outBody.replaceChildren();let tbl=el('table',outBody);currentStats={};function line(k,v){currentStats[k]=v}
