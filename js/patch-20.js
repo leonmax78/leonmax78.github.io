@@ -52,7 +52,7 @@
   function comboTextBlock(res){ return res.combos&&res.combos.length?res.combos.map(c=>`<div class="notice"><b>${E(c)}</b><br>${E(((D().comboMembers||{})[c]||[]).join('、'))}<br>${E(typeof comboText==='function'?comboText(c):'')}</div>`).join(''):'<div class="empty">沒有成立連結</div>'; }
 
   function renderSupport(){
-    $('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>副降神試算</h2><div class="notice">主降神以 100% 能力計算；副降神 1～4 各 10%。可以直接試算，也可以存入 A～E 後到比較頁做 2～5 組比較。</div>${planHtml('P')}<div class="supportSaveBar"><button id="calcSupportOnce" type="button">直接試算</button><label style="margin:0">存檔到<select id="supportSaveSlot">${SLOT_LETTERS.map((x,i)=>`<option value="${i}">${x}</option>`).join('')}</select></label><button id="saveSupportSlot" type="button">存檔</button><button id="openSupportCompare" type="button">開啟存檔比較</button></div><h3>目前存檔</h3><div id="supportSlotList" class="kvGrid"></div></section>`;
+    $('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>副降神試算</h2><div class="notice">主降神以 100% 能力計算；副降神 1～4 各 10%。可以直接試算，也可以存入 A～E 後到比較頁做 2～5 組比較。</div>${planHtml('P')}<div class="supportSaveBar"><button id="calcSupportOnce" type="button">直接試算</button><label style="margin:0">存檔到<select id="supportSaveSlot">${SLOT_LETTERS.map((x,i)=>`<option value="${i}">${x}</option>`).join('')}</select></label><button id="saveSupportSlot" type="button">存檔</button><button id="openSupportCompare" type="button">開啟存檔比較</button></div><h3>目前存檔</h3><div id="supportSlotList" class="kvGrid"></div></section>`;
     fillPlan('P',getCurrent());
     document.querySelectorAll('.supportInput').forEach(el=>el.addEventListener('change',saveCurrent));
     refreshSlotList();

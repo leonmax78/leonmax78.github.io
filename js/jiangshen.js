@@ -35,7 +35,7 @@ function fillJiangFields(kind){
  const stars20=Array.from({length:21},(_,i)=>`<option value="${i}" ${i===20?'selected':''}>${i} 星</option>`).join('');
 
  if(kind==='support'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>副降神模擬</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>副降神模擬</h2>
   <div class="notice">主降神以 100% 能力計算；副降神 1～4 以原本能力的 10% 計算。</div>
   <div class="kvGrid">
     <div class="kv"><div class="k">主降神</div><div class="v"><select id="jsN0" class="jsSupportName" data-index="0">${opts}</select><label>星等</label><select id="jsS0">${stars1}</select></div></div>
@@ -46,20 +46,20 @@ function fillJiangFields(kind){
  }
 
  if(kind==='compare'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>主降神比較</h2><div class="kvGrid">
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>主降神比較</h2><div class="kvGrid">
   <div class="kv"><div class="k">降神 A</div><div class="v"><select id="jsA">${opts}</select><label>星等</label><select id="jsAS">${stars20}</select></div></div>
   <div class="kv"><div class="k">降神 B</div><div class="v"><select id="jsB">${opts}</select><label>星等</label><select id="jsBS">${stars20}</select></div></div>
   </div><div class="quick"><button id="calcCompare">產生比較頁<small>比較兩位主降神能力差異</small></button></div></section>`;
  }
 
  if(kind==='stars'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>20星等</h2><div class="muted">選擇降神後，產生 0～20 星完整能力總表。</div><div class="kvGrid">
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>20星等</h2><div class="muted">選擇降神後，產生 0～20 星完整能力總表。</div><div class="kvGrid">
   <div class="kv"><div class="k">選擇降神</div><div class="v"><select id="jsStarName">${opts}</select></div></div>
   </div><div class="quick"><button id="calcStars">產生 0～20 星能力總表<small>完整顯示各星等能力</small></button></div></section>`;
  }
 
  if(kind==='starAura'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>星等 / 靈氣</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>星等 / 靈氣</h2>
   <h3>星等：需要的降神數量</h3>
   <div class="kvGrid">
     <div class="kv"><div class="k">目前星等</div><div class="v"><select id="needCur">${Array.from({length:21},(_,i)=>`<option value="${i}">${i} 星</option>`).join('')}</select></div></div>
@@ -76,7 +76,7 @@ function fillJiangFields(kind){
  }
 
  if(kind==='expPill'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>等級 / 經驗丹</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>等級 / 經驗丹</h2>
   <div class="calcTabs">
     <button class="calcTab active" data-exp-tab="need">等級經驗</button>
     <button class="calcTab" data-exp-tab="eat">經驗丹升等</button>
@@ -205,7 +205,7 @@ function renderTrainingCalc(){
     </div>
   </div>`;
  }
- byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>修練機制</h2>
+ byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>修練機制</h2>
  <div class="notice">選擇目前階與目標階，會計算需要材料，以及從目前階提升到目標階增加的能力。計算結果預設隱藏，按下「計算修練」後才會顯示。</div>
  <div class="kvGrid">
   <div class="kv"><div class="k">分類篩選</div><div class="v"><select id="trainGroupFilter">${groupOpts}</select></div></div>

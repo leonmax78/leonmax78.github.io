@@ -6,7 +6,7 @@
   const num = (id,d=0)=>{ const el=$(id); const n=Number(el?el.value:d); return Number.isFinite(n)?n:d; };
   const fmt = (n)=>{ const x=Math.ceil(Number(n||0)); try{return x.toLocaleString('zh-Hant');}catch(e){return String(x);} };
   const fmtBig = (n)=>{ try{return BigInt(n||0).toLocaleString('zh-Hant');}catch(e){return String(n??'0');} };
-  const title = '降神、經驗、修練試算';
+  const title = '降神、經驗、修練、寶石、武魂試算';
   const stats = ()=> (D().stats && D().stats.length ? D().stats : ['血量','精力','體魄','力量','智慧','靈敏','術攻','防禦','術防']);
   const names = ()=> (D().displayNames && D().displayNames.length ? D().displayNames : Object.keys(D().baseStats||{}));
   const optionsNames = (blank=true)=> (blank?'<option value="">空白</option>':'') + names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('');

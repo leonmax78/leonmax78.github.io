@@ -38,7 +38,7 @@
   function renderCompare(){
     const r = $('reader'); if(!r) return;
     r.innerHTML = `<section class="card">
-      <h1>降神、經驗、修練試算</h1>
+      <h1>降神、經驗、修練、寶石、武魂試算</h1>
       <h2>主降神比較</h2>
       <div class="kvGrid">
         <div class="kv comparePickCard"><div class="k">降神 A</div><div class="v"><select id="jsA">${optionsNames()}</select><label>星等</label><select id="jsAS">${starOptions(20)}</select></div></div>
@@ -50,7 +50,7 @@
   function renderStars(){
     const r = $('reader'); if(!r) return;
     r.innerHTML = `<section class="card">
-      <h1>降神、經驗、修練試算</h1>
+      <h1>降神、經驗、修練、寶石、武魂試算</h1>
       <h2>降神20星能力總表</h2>
       <div class="kvGrid"><div class="kv"><div class="k">選擇降神</div><div class="v"><select id="jsStarName">${optionsNames(false)}</select></div></div></div>
       <div class="quick"><button id="calcStars" type="button">產生 0 ~ 20 星能力總表<small>完整顯示各星等能力</small></button></div>

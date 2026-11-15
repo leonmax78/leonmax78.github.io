@@ -183,7 +183,7 @@
 
   function renderSupportLegacy(){
     const reader = $('reader'); if(!reader) return;
-    reader.innerHTML = `<section class="card"><h1>降神、經驗、修練試算</h1><h2>副降神試算</h2>
+    reader.innerHTML = `<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>副降神試算</h2>
       <div class="notice">主降神以 100% 能力計算；副降神 1 ~ 4 各 10%。可直接試算，也可以存入 A ~ E 後做比較。</div>
       ${planHtml('P')}
       <div class="supportSaveBar">
@@ -217,7 +217,7 @@
 
   // V755: card layout like the 神魂寶石 page — pick a slot card, choose 降神 and 星等 on the left,
   // totals and 連結 update at once. Same storage (szo_support_current / slots) as before.
-  let activeSlot = 0, heroQuery = '', heroSeries = '';
+  let activeSlot = 0, heroQuery = '', heroSeries = '', pickerOpen = false;  // V804: 選降神／星等改成點降神格才跳出
   // V756: portrait (BODYWND body{Head}) and 聯動 series for each 降神: name -> [head, series, game order, hidden?]; series from the owner's 降神分類.xlsx
   const HERO_INFO = {"蝦兵":[6001,"（待定）原創一般",1,1],"蟹將":[6002,"（待定）原創一般",2,1],"鬼卒":[6003,"（待定）原創稀有",3,1],"白骨妖":[6004,"（待定）原創精英",4,1],"傘鬼":[6005,"（待定）原創精英",5,1],"河童":[6006,"（待定）原創一般",6,1],"猴精":[6007,"（待定）原創一般",7,1],"火元素":[6008,"（待定）原創一般",8,1],"風元素":[6009,"（待定）原創精英",9,1],"水元素":[6010,"（待定）原創精英",10,1],"土元素":[6011,"（待定）原創一般",11,1],"兔精":[6012,"（待定）原創精英",12,1],"狐精":[6013,"（待定）原創精英",13,1],"狸妖":[6014,"（待定）原創精英",14,1],"侏人戰將":[6015,"（待定）原創一般",15,1],"金翅鳥":[6016,"（待定）原創一般",16,1],"牛頭":[6017,"（待定）原創一般",17,1],"馬面":[6018,"（待定）原創一般",18,1],"喇嘛":[6019,"（待定）原創精英",19,1],"魔女":[6020,"（待定）原創精英",20,1],"天將":[6021,"（待定）原創稀有",21,1],"火麒麟":[6022,"（待定）原創一般",22,1],"冰麒麟":[6023,"（待定）原創稀有",23,1],"毒麒麟":[6024,"（待定）原創精英",24,1],"合薩兒":[6025,"（待定）原創稀有",25,1],"哲別":[6026,"（待定）原創一般",26,1],"衝石徹":[6027,"（待定）原創一般",27,1],"東瀛劍聖":[6028,"（待定）原創一般",28,1],"東瀛忍尊":[6029,"（待定）原創稀有",29,1],"象神格涅沙":[6030,"（待定）原創一般",30,1],"東海龍王":[6031,"（待定）原創稀有",31,1],"蒼狼大汗":[6032,"（待定）原創一般",32,1],"非我":[6033,"（待定）原創一般",33,1],"樓蘭公主":[6034,"（待定）原創精英",34,1],"西域邪神":[6035,"（待定）原創精英",35,1],"鬼嶽將軍":[6036,"（待定）原創一般",36,1],"濕婆":[6037,"（待定）原創稀有",37,1],"波斯武帝":[6038,"（待定）原創稀有",38,1],"修羅魔君":[6039,"傳說",39,1],"無界閻羅":[6040,"傳說",40,1],"魔獄邪帝":[6041,"傳說",41,1],"天鬼神":[6042,"傳說",42,1],"九華神曜":[6043,"傳說",43,1],"四聖太宰":[6044,"傳說",44,1],"呂布":[6045,"傳說降神",45],"應龍":[6046,"傳說降神",46],"雅典娜":[6047,"傳說降神",47],"毛古":[6048,"特殊類",48,1],"劉備":[6049,"幻想三國誌",49],"關羽":[6050,"幻想三國誌",50],"張飛":[6051,"幻想三國誌",51],"趙雲":[6052,"幻想三國誌",52],"計蒙":[6053,"幻想三國誌5",53],"玄京":[6054,"幻想三國誌5",54],"殊臣":[6055,"幻想三國誌5",55],"玄冥":[6056,"幻想三國誌5",56],"鐵馥雪":[6057,"幻想三國誌5",57],"慕容妍":[6058,"幻想三國誌5",58],"嚴朔":[6059,"幻想三國誌5",59],"勾芒":[6060,"幻想三國誌5",60],"雷歐納德":[6061,"幻世錄一轉",61],"克羅蒂":[6066,"幻世錄一轉",62],"緹娜":[6062,"幻世錄一轉",63],"琥":[6063,"幻世錄一轉",64],"雷特":[6064,"幻世錄一轉",65],"雪拉":[6065,"幻世錄一轉",66],"精靈王克里歐司":[6069,"幻世錄一轉",67],"劍豪雷歐納德":[6071,"幻世錄二轉",68],"神官緹娜":[6072,"幻世錄二轉",69],"魍魎劍士克羅蒂":[6082,"幻世錄二轉",70],"神射手琥":[6081,"幻世錄二轉",71],"天行者雷特":[6083,"幻世錄二轉",72],"精靈使雪拉":[6084,"幻世錄二轉",73],"漢克斯":[6067,"幻世錄一轉",74],"暗殺者漢克斯":[6085,"幻世錄二轉",75],"嚎":[6068,"幻世錄一轉",76],"狂戰士嚎":[6086,"幻世錄二轉",77],"咕嚕":[6070,"幻世錄一轉",78],"魔物咕嚕":[6080,"幻世錄二轉",79],"魔神":[6089,"幻世錄三轉",80],"素還真":[6077,"霹靂布袋戲",81],"一頁書":[6078,"霹靂布袋戲",82],"葉小釵":[6079,"霹靂布袋戲",83],"終焉劍使雷歐納德":[6087,"幻世錄三轉",84],"公主緹娜":[6088,"幻世錄三轉",85],"魔將克羅蒂":[6099,"幻世錄三轉",86],"魔將塔克斯":[6102,"幻世錄三轉",87],"魔將傲":[6101,"幻世錄三轉",88],"魔將席德爾":[6100,"幻世錄三轉",89],"妖精王克里歐司":[6098,"幻世錄三轉",90],"霸王丸":[6113,"真侍魂",91],"娜可露露":[6114,"真侍魂",92],"橘右京":[6115,"真侍魂",93],"加爾福特":[6116,"真侍魂",94],"千兩狂死郎":[6117,"真侍魂",95],"姬軒":[6130,"幻想三國誌",96],"姬霜":[6131,"幻想三國誌",97],"百玥":[6132,"幻想三國誌",98],"貂芷":[6133,"幻想三國誌",99],"糜香":[6134,"幻想三國誌",100],"虞冰":[6135,"幻想三國誌",101],"黃帝":[6136,"幻想三國誌",102],"孟祈":[6140,"超時空英雄傳說",103],"凜雪鴉":[6142,"東離劍遊紀",104],"殤不患":[6143,"東離劍遊紀",105],"浪巫謠":[6144,"東離劍遊紀",106],"阿爾貝盧法":[6145,"東離劍遊紀",107],"禍世螟蝗":[6146,"東離劍遊紀",108],"紅夜":[6163,"幻想三國誌鳳凰誓",109],"白樺":[6164,"幻想三國誌鳳凰誓",110],"魔化黃帝":[6139,"幻想三國誌鳳凰誓",111],"趙活":[6165,"活俠傳",112],"唐布衣":[6166,"活俠傳",113],"唐默鈴":[6167,"活俠傳",114],"龍湘":[6168,"活俠傳",115],"虞小梅":[6169,"活俠傳",116],"夏侯蘭":[6170,"活俠傳",117],"楊鐵":[6179,"超時空英雄傳說",118],"雪兒":[6180,"超時空英雄傳說",119],"無雙":[6181,"超時空英雄傳說",120],"韓凱蒂":[6182,"超時空英雄傳說",121],"江小魚":[6196,"新絕代雙驕",122],"花無缺":[6197,"新絕代雙驕",123],"鐵心蘭":[6198,"新絕代雙驕",124],"張菁":[6199,"新絕代雙驕",125],"蘇櫻":[6200,"新絕代雙驕",126],"憐星":[6201,"新絕代雙驕",127],"燕南天":[6202,"新絕代雙驕",128],"魔黃":[6139,"幻想三國誌鳳凰誓",111,1],"咕嚕(一轉)":[6070,"幻世錄一轉",78,1]};
   // V758: the owner's hidden list applies to every 降神 page (比較、20星總表、推薦…)
@@ -271,12 +271,12 @@
     const cardLinks = n => res.combos.filter(c => ((D().comboMembers || {})[c] || []).map(canon).includes(canon(n)));
     const cmpOk = cmpSlot !== null && normalizeSet(slots[cmpSlot]).some(p=>p.n);
     const cmpTotal = cmpOk ? calcPlan(slots[cmpSlot]).total : null;
-    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
       ${JS_TABS('support')}
       <div class="jsSticky" id="jsSticky">${plan.map((p,i)=>`<button type="button" data-js-jump="${i}" class="${i===activeSlot?'active':''}">${p.n ? headImg(p.n,'') : '<span>＋</span>'}<small>${i===0?'主':'副'+i}</small></button>`).join('')}</div>
       <div class="jsLayout">
+        ${pickerOpen ? `<div class="jsPickModal jsPage" id="jsPickModal"><div class="jsPickBox" role="dialog" aria-modal="true" aria-label="選擇降神與星等"><div class="jsPickTop"><b>設定 ${E(RATE_LABEL(activeSlot).replace('・',' '))}</b><span class="jsPickCur">${cur.n ? E(cur.n)+'・'+cur.s+' 星' : '尚未選擇'}</span><button type="button" class="jsPickDone" id="jsPickDone">完成</button></div>
         <aside class="jsSide">
-          <div class="jsSideHead">正在設定：<b>${E(RATE_LABEL(activeSlot).replace('・',' '))}</b></div>
           <input id="jsHeroSearch" type="search" placeholder="搜尋降神名稱" value="${E(heroQuery)}">
           <div class="jsSeries">${['', ...SERIES].map(k => `<button type="button" class="${heroSeries===k?'active':''}" data-js-series="${E(k)}">${k ? E(k) + `<small>${seriesCount(k)}</small>` : '全部'}</button>`).join('')}</div>
           <div class="jsHeroList">${['', ...heroes].map(n => {
@@ -287,16 +287,15 @@
           <div class="jsLabel">星等</div>
           <div class="jsStars">${Array.from({length:21},(_,i)=>`<button type="button" class="${cur.s===i ? 'active' : ''}" data-js-star="${i}">${i}</button>`).join('')}</div>
           <button type="button" class="jsStarAll" id="jsStarAll" ${plan.slice(1).some(p=>p.n) ? '' : 'disabled'}>副降神全部設為 ${cur.s} 星</button>
-        </aside>
+        </aside></div></div>` : ''}
         <div class="jsStat">
           <div class="jsLabel">總能力（含連結）</div>
           <div class="jsTotals">${stats().map(st=>`<div><span>${E(window.SZO_DISPLAY.label(st))}</span><b class="${Number(res.total[st])?'':'zero'}">+${fmt(res.total[st])}</b></div>`).join('')}</div>
           <div class="jsLabel">成立連結</div>
           <div class="jsCombos">${res.combos && res.combos.length ? res.combos.map(c=>`<div><b>${E(c)}</b><small>${E(typeof comboText === 'function' ? comboText(c) : '')}</small></div>`).join('') : '<small class="muted">沒有成立連結</small>'}</div>
-          ${near.length ? `<div class="jsLabel">差 1 隻就成立</div>
-          <div class="jsNear">${near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" title="${E(typeof comboText === 'function' ? comboText(c) : '')}">${headImg(miss,'jsHeroFace')}<span><b>${E(c)}</b><small>缺 ${E(miss)}・點一下放進${freeSlot>=0 ? (freeSlot===0?'主降神':'副降神 '+freeSlot) : '目前欄位'}</small></span></button>`).join('')}</div>` : ''}
         </div>
         <div class="jsMain">
+          ${near.length ? `<div class="jsNearBox"><div class="jsNearHead">再放 1 隻就能成立的連結<small>點一下直接放進空格</small></div><div class="jsNear">${near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" title="${E(typeof comboText === 'function' ? comboText(c) : '')}">${headImg(miss,'jsHeroFace')}<span><b>${E(c)}</b><small>缺 ${E(miss)}・點一下放進${freeSlot>=0 ? (freeSlot===0?'主降神':'副降神 '+freeSlot) : '目前欄位'}</small></span></button>`).join('')}</div></div>` : ''}
           <div class="jsCards">${plan.map((p,i)=>{
             const a = res.picks.find(x=>x.i===i)?.a || {};
             const all = stats().map(st=>[st, Number(a[st]||0)]);
@@ -323,11 +322,12 @@
     </section>`;
     // the card has a transform, so a fixed bar inside it would scroll away: host it on <body>
     document.querySelectorAll('body > .jsSticky').forEach(x => x.remove());
+    document.querySelectorAll('body > .jsPickModal').forEach(x => x.remove());
     const sticky = $('jsSticky'); if(sticky) document.body.appendChild(sticky);
     const rerender = () => { const y = window.scrollY; renderSupport(); window.scrollTo(0, y); };
     const toPicker = () => { if(window.matchMedia('(max-width:820px)').matches) document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); };
-    reader.querySelectorAll('[data-js-slot]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsSlot); rerender(); toPicker(); });
-    document.querySelectorAll('[data-js-jump]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsJump); rerender(); document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); });
+    reader.querySelectorAll('[data-js-slot]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsSlot); pickerOpen = true; rerender(); });
+    document.querySelectorAll('[data-js-jump]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsJump); pickerOpen = true; rerender(); });
     const place = (slot, n) => {
       const set = getCurrent(); const was = set[slot].n; set[slot].n = n;
       if(n && !was) set[slot].s = slot===0 ? 20 : 1;
@@ -336,7 +336,7 @@
     reader.querySelectorAll('[data-js-hero]').forEach(b=>b.onclick=()=>{
       const set = place(activeSlot, b.dataset.jsHero);
       // move on to the next empty slot so five picks take five taps
-      if(b.dataset.jsHero){ const next = set.findIndex((p,i)=>i>activeSlot && !p.n); if(next>=0) activeSlot = next; }
+      // stay on this slot so its 星等 can be set right away
       rerender();
     });
     reader.querySelectorAll('[data-js-fill]').forEach(b=>b.onclick=()=>{
@@ -347,12 +347,16 @@
     });
     reader.querySelectorAll('[data-js-series]').forEach(b=>b.onclick=()=>{ heroSeries = b.dataset.jsSeries; rerender(); });
     reader.querySelectorAll('[data-js-star]').forEach(b=>b.onclick=()=>{ const set = getCurrent(); set[activeSlot].s = Number(b.dataset.jsStar); setCurrent(set); rerender(); });
-    $('jsStarAll').onclick = () => { const set = getCurrent(); set.forEach((p,i)=>{ if(i>0 && p.n) p.s = cur.s; }); setCurrent(set); rerender(); };
+    if($('jsStarAll')) $('jsStarAll').onclick = () => { const set = getCurrent(); set.forEach((p,i)=>{ if(i>0 && p.n) p.s = cur.s; }); setCurrent(set); rerender(); };
     const search = $('jsHeroSearch');
-    search.oninput = () => { heroQuery = search.value; const pos = search.selectionStart; rerender(); const s2 = $('jsHeroSearch'); s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} };
+    if(search) search.oninput = () => { heroQuery = search.value; const pos = search.selectionStart; rerender(); const s2 = $('jsHeroSearch'); s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} };
     reader.querySelectorAll('[data-js-save]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsSave); const all = getSlots(); all[i] = getCurrent(); setSlots(all); rerender(); });
     reader.querySelectorAll('[data-js-load]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsLoad); setCurrent(getSlots()[i]); activeSlot = 0; rerender(); });
     reader.querySelectorAll('[data-js-cmp]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsCmp); cmpSlot = cmpSlot===i ? null : i; rerender(); });
+    const closePick = () => { pickerOpen = false; rerender(); };
+    if($('jsPickDone')) $('jsPickDone').onclick = closePick;
+    const modal = $('jsPickModal');
+    if(modal){ modal.onclick = e => { if(e.target === modal) closePick(); }; document.body.appendChild(modal); const h = e => { if(e.key === 'Escape' && $('jsPickModal')){ document.removeEventListener('keydown', h); closePick(); } }; document.addEventListener('keydown', h); }
     $('jsClearAll').onclick = () => { setCurrent(defaultSet()); activeSlot = 0; rerender(); };
     $('jsDetail').onclick = () => { renderSupportLegacy(); calcSupportOnce(); };
   }
@@ -402,7 +406,7 @@
     const slots = getSlots();
     const filled = slots.map(s => normalizeSet(s).some(p=>p.n));
     if(!cmpPick) cmpPick = filled.slice();
-    $('reader').innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+    $('reader').innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
       ${JS_TABS('supportCompare')}
       <div class="jsLabel">點選要比較的存檔（可多選，存檔在「副降神試算」下方存入）</div>
       <div class="jsCmpPick">${SLOT_LETTERS.map((x,i)=>`<button type="button" data-cmp-pick="${i}" class="${cmpPick[i] && filled[i] ? 'active' : ''}" ${filled[i] ? '' : 'disabled'}><b>${x}</b>${filled[i] ? miniHeads(slots[i]) : '<span class="muted">空白</span>'}</button>`).join('')}</div>
@@ -721,7 +725,7 @@
   function renderRecommend(){
     const reader = $('reader'); if(!reader) return;
     const stars = recommendStars();
-    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練試算</h1>
+    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
       ${JS_TABS('recommend')}
       <div class="muted" style="margin-bottom:10px">設定主降神與 4 個副降神的星等，依物理、術法、防禦方向推薦前 5 個組合；副降神以 10% 計入，並含成立連結的加成。</div>
       <div class="jsRecForm">

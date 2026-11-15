@@ -8,7 +8,7 @@
   window.setJiang=function(kind){
     if(kind!=='starAura'){ if(oldSetJiang) return oldSetJiang(kind); return; }
     const r=_byId2('reader'); if(!r)return;
-    r.innerHTML=`<section class="card"><h1>降神、經驗、修練試算</h1><h2>星等 / 靈氣計算</h2>
+    r.innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>星等 / 靈氣計算</h2>
       <div class="calcTabs"><button class="calcTab active" type="button" data-star-tab="star">星等計算</button><button class="calcTab" type="button" data-star-tab="aura">靈氣計算</button></div>
       <div id="starTabNeed"><h3>星等：需要的降神數量</h3><div class="kvGrid">
         <div class="kv"><div class="k">目前星等</div><div class="v"><select id="needCur">${starOptions(0)}</select></div></div>
