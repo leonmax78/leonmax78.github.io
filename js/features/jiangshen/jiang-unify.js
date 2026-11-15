@@ -27,12 +27,7 @@
   // V803: app-core 的版本另含寶石、武魂、角色機體；有就用它
   if(typeof window.SZO_JIANG_NAV !== 'function') window.SZO_JIANG_NAV = navHTML;
   const navOf = kind => window.SZO_JIANG_NAV(kind);
-  document.addEventListener('click', e => {
-    const b = e.target.closest && e.target.closest('[data-js-nav]');
-    if(!b) return;
-    e.preventDefault();
-    window.setJiang(b.dataset.jsNav);
-  });
+  // V806: [data-js-nav] clicks are handled in app-core (works before this file loads)
   function addNav(kind){
     const sec = document.querySelector('#reader > section, #reader section.card');
     if(!sec || sec.querySelector('.jsNav')) return;

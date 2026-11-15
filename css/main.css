@@ -5016,3 +5016,5 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 .jsGameNear img{width:4.4cqw;height:4.4cqw;object-fit:cover;border-radius:.4cqw;flex:0 0 auto}
 .jsGameNear span{display:grid;min-width:0}.jsGameNear b{color:#f3cf86;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.jsGameNear small{color:#9fb0c4;font-size:1.6cqw}
 @media(max-width:640px){.jsPage .jsMain{overflow-x:auto;padding-bottom:6px}.jsGame{min-width:560px}}
+.jsGameTxt.link{justify-content:center;color:#f3e27a;font-size:2cqw}.jsGameTxt.link.more{color:#c9b98a;cursor:help}.jsGameTxt.link.none{color:#8a8a8a;font-size:1.8cqw}
+.jsGameTxt{overflow:hidden}
