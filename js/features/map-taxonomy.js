@@ -24,8 +24,8 @@
   if(kind==='Series')scope.series=value;
   return normalize(scope);
  }
- // 七寶仙境 listed like the 六滅 series, newest/strongest first: 極 → 神 → 帝 → 超 → 真 → 初代
- const QIBAO=['極','神','帝','超','真','七'];
+ // 七寶仙境 order as the owner listed it: 神 → 帝 → 絕 → 極 → 超 → 真 → 初代
+ const QIBAO=['神','帝','絕','極','超','真','七'];
  const rank=s=>{const c=get(s.stageId);if(c.group!=='七寶')return 0;const i=QIBAO.indexOf(String(s.stageName||s.name||'').trim()[0]);return i<0?QIBAO.length:i;};
  const order=list=>list.map((s,i)=>[s,i]).sort((a,b)=>rank(a[0])-rank(b[0])||a[1]-b[1]).map(x=>x[0]);
  window.SZO_MAP_CLASS={get,visible,same,normalize,controls,change,order};
