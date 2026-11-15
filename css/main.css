@@ -4959,3 +4959,25 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 .machineWrap{display:grid;gap:6px}
 .machineFrame{width:100%;height:calc(100vh - 96px);min-height:620px;border:1px solid rgba(148,163,184,.25);border-radius:12px;background:#0a1220;display:block}
 .machineNote{margin:0;font-size:12.5px;color:#93a6c3;text-align:right}.machineNote a{color:#7fe3d3;margin-left:8px}
+/* V801: 寶石試算鑲嵌盤（遊戲原圖） */
+#gemPage .gemShapeFill{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-bottom:8px;font-size:13px;color:#9fb0c4}
+#gemPage .gemShapeFill .gemRowHead{padding:4px 12px;border-radius:999px}
+#gemPage .gemArt{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:url(../assets/test-media/ui/gem/Gem_Base.png) 0 0/100% 100% no-repeat;border-radius:6px;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+#gemPage .gemArt .gemCell{position:absolute;aspect-ratio:auto;max-height:none;padding:0;border:0;border-radius:3px;background:0 0/100% 100% no-repeat;display:block;cursor:pointer}
+#gemPage .gemArt .gemCell:not(:disabled):hover{filter:brightness(1.35);box-shadow:0 0 0 .25cqw #e8c66f}
+#gemPage .gemArt .gemCell:disabled{opacity:1;cursor:not-allowed}
+#gemPage .gemArt .gemCell img{position:absolute;inset:8%;width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 0 .4cqw rgba(255,255,255,.35))}
+#gemPage .gemArt .gemCell em{position:absolute;right:-6%;bottom:-8%;font:800 1.7cqw/1 sans-serif;font-style:normal;color:#fff;text-shadow:0 0 2px #000,0 0 2px #000}
+#gemPage .gemArtTxt{position:absolute;display:flex;align-items:center;justify-content:center;white-space:nowrap;font-size:2.1cqw;color:#f1e7c8;text-shadow:0 1px 2px #000}
+#gemPage .gemArtSum{position:absolute;overflow:auto;font-size:2.1cqw;color:#e8e8e8}
+#gemPage .gemArtSum>div{display:flex;justify-content:space-between;padding:.3cqw .6cqw}#gemPage .gemArtSum b{color:#7fe08a}#gemPage .gemArtSum p{margin:.6cqw;color:#8a8a8a}
+/* V801: 副降神試算上方的遊戲「副降神通」面板 */
+.jsGodPanel{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:url(../assets/test-media/ui/god_panel.png) 0 0/100% 100% no-repeat;border-radius:6px;margin:0 0 12px;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.jsGodPanel .jsGodFace{position:absolute;padding:0;border:0;background:transparent;border-radius:2px;cursor:pointer;overflow:hidden;min-height:0}
+.jsGodPanel .jsGodFace img{position:absolute;inset:5.5%;width:89%;height:89%;object-fit:cover}
+.jsGodPanel .jsGodFace:hover{box-shadow:0 0 0 .3cqw #e8c66f}
+.jsGodPanel .jsGodFace.on{box-shadow:0 0 1.2cqw .5cqw rgba(110,230,255,.9),inset 0 0 0 .3cqw rgba(110,230,255,.9)}
+.jsGodPanel .jsGodTxt{position:absolute;display:flex;align-items:center;white-space:nowrap;font-size:2.15cqw;line-height:1;color:#f2f2f2;text-shadow:0 0 2px #000,0 1px 1px #000;padding-left:.4cqw;font-variant-numeric:tabular-nums}
+.jsGodPanel .jsGodTxt.hp{color:#ff5a46}.jsGodPanel .jsGodTxt.or{color:#ffb84d}.jsGodPanel .jsGodTxt.gr{color:#5fd35f}
+.jsGodPanel .jsGodTxt.link{justify-content:center;color:#f3e27a}.jsGodPanel .jsGodTxt.total{justify-content:center;color:#fff;font-size:2.25cqw}
+@media(max-width:640px){#gemPage .gemBoard{overflow-x:auto;padding-bottom:6px}#gemPage .gemArt{min-width:560px}}

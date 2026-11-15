@@ -147,16 +147,23 @@
   const colorOf=id=>{const n=name(id);return (COLORS.find(([c])=>n.includes(c))||[''])[0];};
   const gemFor=(shape,grade,color)=>Object.values(data.gems).find(g=>exchange.names[g.ID]&&Number(g.Shape)===Number(shape)&&Number(g.Grade)===Number(grade)&&name(g.ID).includes(color));
   const roman=g=>'ⅠⅡⅢⅣⅤⅥ'[g-1]||'';
+  // V801: 鑲嵌盤改用遊戲「神魂寶石」頁原圖（Gem_Base、Gem_Slot_N_Open／Lock），6 塊石板各 5 孔
+  const GEM_TABS=[[12,67],[149,67],[286,67],[12,162],[149,162],[286,162]],GEM_HOLES=[[29,36],[66,36],[105,36],[49,70],[86,70]];
+  const gemPos=(x,y,w,h)=>`left:${x/6.23}%;top:${y/3.22}%;width:${w/6.23}%;height:${h/3.22}%`;
   const brush=state.brush||(state.brush={grade:1,color:'湛藍'});
   content.innerHTML=`<div class="gemCalc"><div class="gemCalcSide">
    <div class="gemCalcTop"><label>降神總等級<input id="gemLevel" type="number" min="0" max="20000" value="${state.level}"></label><p id="gemOpened" aria-live="polite"></p></div>
    <div class="gemBrush"><div class="gemBrushRow" role="group" aria-label="品階">${[1,2,3,4,5,6].map(g=>`<button type="button" data-brush-grade="${g}">${roman(g)}</button>`).join('')}</div>
    <div class="gemBrushRow gemColors" role="group" aria-label="顏色">${COLORS.map(([c,l])=>`<button type="button" data-brush-color="${c}" style="--tint:${TINT[c]}"><i></i>${l}</button>`).join('')}<button type="button" data-brush-color=""><i></i>清除</button></div>
-   <p class="gemHint">選好品階與顏色後點格子；點左邊形狀名稱可整排套用。</p></div></div>
+   <p class="gemHint">選好品階與顏色後點石板上的孔；再點一次拿掉。上方「依形狀套用」可一次填滿同形狀。</p></div></div>
    <div class="gemCalcRest"><div id="gemTotal" class="gemTotalGrid" aria-live="polite"></div>
    <div class="gemBatch"><button id="gemFillAll" type="button">全部套用</button><button id="gemClear" type="button">清空寶石</button></div>
    <div class="gemBatch"><select id="gemSaveSlot" aria-label="存檔">${LETTERS.map((x,i)=>`<option value="${i}">${x}：${esc(slotLabel(readSlots()[i]))}</option>`).join('')}</select><button id="gemSave" type="button">存檔</button><button id="gemLoad" type="button">讀取</button><button id="gemOpenCompare" type="button">存檔比較</button></div><p id="gemSaveNote" aria-live="polite"></p>
-  </div><div class="gemBoard">${[1,2,3,4,5].map(shape=>`<div class="gemRow"><button type="button" class="gemRowHead" data-fill-shape="${shape}">${shapes[shape]}</button>${data.slots.filter(s=>Number(s.Shape)===shape).map(s=>`<button type="button" class="gemCell" data-cell="${s.ID}"></button>`).join('')}</div>`).join('')}
+  </div><div class="gemBoard">
+   <div class="gemShapeFill"><span>依形狀套用：</span>${[1,2,3,4,5].map(shape=>`<button type="button" class="gemRowHead" data-fill-shape="${shape}">${shapes[shape]}</button>`).join('')}</div>
+   <div class="gemArt">${data.slots.map(s=>{const i=Number(s.ID)-1,[tx,ty]=GEM_TABS[Math.floor(i/5)],[cx,cy]=GEM_HOLES[i%5];return `<button type="button" class="gemCell" data-cell="${s.ID}" style="${gemPos(tx+cx-16,ty+cy-16,32,32)}"></button>`;}).join('')}
+    <div class="gemArtTxt" id="gemArtHead" style="${gemPos(55,25,323,27)}"></div><div class="gemArtTxt" id="gemArtFoot" style="${gemPos(27,268,381,28)}"></div>
+    <div class="gemArtTxt" style="${gemPos(427,22,176,28)}">寶石加成</div><div class="gemArtSum" id="gemArtSum" style="${gemPos(432,54,166,236)}"></div></div>
    <p id="gemCellNote" class="gemHint" aria-live="polite"></p></div></div>`;
   const media=window.SZO_ASSET_MEDIA;
   const refresh=()=>{
@@ -170,7 +177,12 @@
     const c=g?colorOf(g.ID):'',item=g&&typeof items!=='undefined'?items.find(i=>String(i.ID)===String(g.ID)):null;
     cell.style.setProperty('--tint',c?TINT[c]:'transparent');cell.classList.toggle('filled',!!g);
     cell.title=`第 ${s.ID} 格 · ${Number(s.NeedLv).toLocaleString()} 等`+(g?` · ${name(g.ID)}（${detail(g)}）`:'');
-    cell.innerHTML=g?`${item&&media?media.img(media.itemIconSrc(item),'',''):`<i></i>`}<em>${roman(Number(g.Grade))}</em><small>${esc((COLORS.find(([x])=>x===c)||['',''])[1])}</small>`:`<small>${locked?Number(s.NeedLv).toLocaleString():'＋'}</small>`;}
+    cell.style.backgroundImage=`url(assets/test-media/ui/gem/Gem_Slot_${s.Shape}_${locked?'Lock':'Open'}.png)`;
+    cell.innerHTML=g&&!locked?`${item&&media?media.img(media.itemIconSrc(item),'',''):`<i></i>`}<em>${roman(Number(g.Grade))}</em>`:'';}
+   const next=data.slots.map(s=>Number(s.NeedLv)).filter(n=>n>state.level).sort((a,b)=>a-b)[0];
+   byId('gemArtHead').textContent=brush.color?`目前選擇：${roman(brush.grade)} 階 ${brush.color}寶石（${(COLORS.find(([x])=>x===brush.color)||['',''])[1]}）`:'目前選擇：清除寶石';
+   byId('gemArtFoot').textContent=`已解鎖洞數：${result.slots} / ${data.slots.length}`+(next?`　下一洞需求：降神總等級 ${next.toLocaleString()}`:'　已全部解鎖');
+   byId('gemArtSum').innerHTML=Object.entries(stats).filter(([k])=>result.total[k]).map(([k,n])=>`<div><span>${n}</span><b>+${result.total[k].toLocaleString()}</b></div>`).join('')||'<p>尚未鑲嵌寶石</p>';
    save();
   };
   const paint=slot=>{if(!brush.color){delete state.picks[slot.ID];return;}const g=gemFor(slot.Shape,brush.grade,brush.color);if(g)state.picks[slot.ID]=g.ID;};
