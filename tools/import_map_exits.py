@@ -19,6 +19,10 @@ ROOT = Path(__file__).resolve().parents[1]
 # freely. (stage, destination) pairs listed here are confirmed.
 PORTAL_KEEP = {(127, 132)}   # 亂石林 穹蒼結界 → 大汗陵墓
 
+# 七寶仙境到處都是回京城的傳送格，箭頭擠成一團，站長要求不顯示
+def skip_exit(stage_name, dest):
+    return '七寶' in stage_name and dest == 7
+
 
 def load_msgs(folder):
     msgs = {}
@@ -116,7 +120,7 @@ def main(mpc_dir, msg_dir=None):
                     continue
                 for a in br['actions']:
                     dest = a[3]
-                    if a[0] != 3 or dest == sid or dest not in names:
+                    if a[0] != 3 or dest == sid or dest not in names or skip_exit(stage['stageName'], dest):
                         continue
                     e = exits.setdefault((ev['id'], dest), dict(pts=[(o[1], o[2]) for o in src], cond=False))
                     if br['conditions'] or len(ev['branches']) > 1:
