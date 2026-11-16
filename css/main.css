@@ -5031,3 +5031,6 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 /* V809: 全降神總等級輸入框不撐高（手機版 input 有最小高度） */
 html body .jsGame .jsGameTxt.total{align-items:center;gap:.3cqw;margin:0!important;padding:0!important}
 html body .jsGame .jsGameTxt.total input{height:3.1cqw!important;min-height:0!important;max-height:3.1cqw!important;padding:0 .5cqw!important;margin:0 0 0 .4cqw!important;font-size:2.1cqw!important;line-height:1!important;box-sizing:border-box;appearance:textfield;-webkit-appearance:none;border-radius:.4cqw!important}
+/* V810: 地圖「隱藏傳點名稱」：只留箭頭，滑鼠移上去或聚焦時才顯示名稱 */
+html.mapExitLabelsHidden .mapExit .mapExitName{display:none}
+html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .mapExit:focus-visible .mapExitName{display:inline-block}
