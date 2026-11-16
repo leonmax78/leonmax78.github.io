@@ -16,9 +16,7 @@
   const write = (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
 
   const SECTIONS = [
-    ['support', '降神模擬', ['support','recommend','starAura','supportCompare']],
-    ['compare', '主降神比較', ['compare']],
-    ['stars', '20星能力總表', ['stars']],
+    ['support', '降神模擬', ['support','recommend','compare','stars','starAura','supportCompare']],
     ['expPill', '等級／經驗丹', ['expPill']],
     ['training', '修練進度', ['training']]
   ];

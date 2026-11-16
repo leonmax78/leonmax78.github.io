@@ -4994,8 +4994,9 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 @media(max-width:600px){.jsPickBox .jsStars{grid-template-columns:repeat(7,minmax(0,1fr))}.jsPickModal{padding:8px;align-items:start}.jsPickBox{max-height:calc(100vh - 16px)}}
 .jsPickBox .jsSide>*{grid-column:1/-1!important;grid-row:auto!important}
 /* V805: 副降神試算＝遊戲「副降神通」畫面 */
-.jsPage .jsCards,.jsPage .jsNearBox,.jsPage .jsStat{display:none}
-.jsPage .jsLayout{grid-template-columns:1fr!important;grid-template-areas:"main"!important}
+.jsSupportPage .jsCards,.jsSupportPage .jsNearBox,.jsSupportPage .jsStat{display:none}
+.jsSupportPage .jsLayout{grid-template-columns:1fr!important;grid-template-areas:"main"!important}
+.jsSticky{display:none!important}
 .jsGame{position:relative;width:100%;aspect-ratio:623/322;container-type:inline-size;background:url(../assets/test-media/ui/god_panel.png) 0 0/100% 100% no-repeat;border-radius:6px;box-shadow:0 10px 26px rgba(0,0,0,.4);margin-bottom:10px}
 .jsPage .jsGameFace{position:absolute;padding:0;border:0;background:transparent;border-radius:2px;cursor:pointer;overflow:hidden;min-height:0}
 .jsGameFace img{position:absolute;inset:5.5%;width:89%;height:89%;object-fit:cover}

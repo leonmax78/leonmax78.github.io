@@ -308,9 +308,8 @@
       .map(([c,m]) => [c, m.find(x => !have.has(x))]).filter(([,miss]) => shown(miss)).slice(0, 8);
     const freeSlot = plan.findIndex(p => !p.n);
     const cardLinks = n => res.combos.filter(c => ((D().comboMembers || {})[c] || []).map(canon).includes(canon(n)));
-    reader.innerHTML = `<section class="card jsPage"><h1>角色養成試算</h1>
+    reader.innerHTML = `<section class="card jsPage jsSupportPage"><h1>角色養成試算</h1>
       ${JS_TABS('support')}
-      <div class="jsSticky" id="jsSticky">${plan.map((p,i)=>`<button type="button" data-js-jump="${i}" class="${i===activeSlot?'active':''}">${p.n ? headImg(p.n,'') : '<span>＋</span>'}<small>${i===0?'主':'副'+i}</small></button>`).join('')}</div>
       <div class="jsLayout">
         ${pickerOpen ? `<div class="jsPickModal jsPage" id="jsPickModal"><div class="jsPickBox" role="dialog" aria-modal="true" aria-label="選擇降神與星等"><div class="jsPickTop"><b>設定 ${E(RATE_LABEL(activeSlot).replace('・',' '))}</b><span class="jsPickCur">${cur.n ? E(cur.n)+'・'+cur.s+' 星' : '尚未選擇'}</span><button type="button" class="jsPickDone" id="jsPickDone">完成</button></div>
         <aside class="jsSide">
@@ -362,7 +361,6 @@
     // the card has a transform, so a fixed bar inside it would scroll away: host it on <body>
     document.querySelectorAll('body > .jsSticky').forEach(x => x.remove());
     document.querySelectorAll('body > .jsPickModal').forEach(x => x.remove());
-    const sticky = $('jsSticky'); if(sticky) document.body.appendChild(sticky);
     const rerender = () => { const y = window.scrollY; renderSupport(); window.scrollTo(0, y); };
     const toPicker = () => { if(window.matchMedia('(max-width:820px)').matches) document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); };
     reader.querySelectorAll('[data-js-slot]').forEach(b=>b.onclick=()=>{ activeSlot = Number(b.dataset.jsSlot); pickerOpen = true; rerender(); });
