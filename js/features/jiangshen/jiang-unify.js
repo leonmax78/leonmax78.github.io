@@ -63,7 +63,7 @@
 
   // ---------- 主降神比較 ----------
   const CMP_KEY = 'szo_jiang_main_compare_v2';
-  const cmpState = {q:'', series:'', active:0};
+  const cmpState = {q:'', series:'', active:0, open:false};
   function renderCompare(){
     const r = $('reader'); if(!r) return;
     const picks = (read(CMP_KEY, null) || []).concat(Array(5).fill(null)).slice(0,5).map(p => p && p.n ? {n:p.n, s:Number(p.s ?? 20)} : {n:'', s:20});
@@ -72,9 +72,13 @@
     const vals = picks.map(p => p.n ? abilityOf(p.n, p.s) : null);
     const filled = vals.filter(Boolean).length;
     const best = Object.fromEntries(stats().map(st => [st, Math.max(...vals.filter(Boolean).map(v => Math.ceil(Number(v[st]||0))), 0)]));
-    r.innerHTML = `<section class="card jsPage"><h1>角色養成試算</h1>
-      <div class="jsLayout">
+    // V819: 和降神模擬一樣，點卡片才跳出選降神／星等的視窗
+    document.querySelectorAll('body > .jsPickModal').forEach(x => x.remove());
+    r.innerHTML = `<section class="card jsPage jsComparePage"><h1>角色養成試算</h1>
+      ${cmpState.open ? `<div class="jsPickModal jsPage" id="juPickModal"><div class="jsPickBox" role="dialog" aria-modal="true" aria-label="選擇降神與星等"><div class="jsPickTop"><b>設定 降神 ${'ABCDE'[cmpState.active]}</b><span class="jsPickCur">${cur.n ? E(cur.n) + '・' + cur.s + ' 星' : '尚未選擇'}</span><button type="button" class="jsPickDone" id="juPickDone">完成</button></div>
         ${pickerHTML(cmpState, {head:`正在設定：<b>降神 ${'ABCDE'[cmpState.active]}</b>`, current:cur.n, used:picks.map(p=>p.n), clear:true, stars:true, star:cur.s})}
+      </div></div>` : ''}
+      <div>
         <div class="jsMain">
           <div class="jsCards">${picks.map((p,i) => `<button type="button" class="jsCard ${i===cmpState.active?'active':''} ${p.n?'':'empty'}" data-ju-slot="${i}">
             <span class="jsCardRole">降神 ${'ABCDE'[i]}</span>
@@ -89,11 +93,18 @@
     </section>`;
     addNav('compare');
     const rerender = keepScroll(renderCompare);
-    r.querySelectorAll('[data-ju-slot]').forEach(b => b.onclick = () => { cmpState.active = Number(b.dataset.juSlot); rerender(); if(window.matchMedia('(max-width:820px)').matches) document.querySelector('.jsSide')?.scrollIntoView({behavior:'smooth',block:'start'}); });
-    bindPicker(cmpState, rerender, n => {
-      picks[cmpState.active].n = n; save();
-      if(n){ const next = picks.findIndex((p,i) => i > cmpState.active && !p.n); if(next >= 0) cmpState.active = next; }
-    }, s => { picks[cmpState.active].s = s; save(); });
+    r.querySelectorAll('[data-ju-slot]').forEach(b => b.onclick = () => { cmpState.active = Number(b.dataset.juSlot); cmpState.open = true; rerender(); });
+    // stay on this slot so its 星等 can be set right away; 完成 closes the window
+    bindPicker(cmpState, rerender, n => { picks[cmpState.active].n = n; save(); }, s => { picks[cmpState.active].s = s; save(); });
+    const modal = $('juPickModal');
+    if(modal){
+      const close = () => { cmpState.open = false; rerender(); };
+      $('juPickDone').onclick = close;
+      modal.onclick = e => { if(e.target === modal) close(); };
+      document.body.appendChild(modal);
+      const h = e => { if(e.key === 'Escape' && $('juPickModal')){ document.removeEventListener('keydown', h); close(); } };
+      document.addEventListener('keydown', h);
+    }
     $('juClear').onclick = () => { write(CMP_KEY, []); cmpState.active = 0; rerender(); };
   }
 
