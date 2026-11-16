@@ -1,7 +1,7 @@
 // 技能查詢: five classes + crossover skills, built from the game files by tools/build_skills.py.
 (function(){
   'use strict';
-  const state = { sheet: '劍俠', group: '', query: '', view: (() => { try{ return localStorage.getItem('szo_skill_view') || 'card'; }catch(e){ return 'card'; } })() };
+  const state = { sheet: '劍俠', group: '', query: '', view: (() => { try{ return localStorage.getItem('szo_skill_view_v2') || 'list'; }catch(e){ return 'list'; } })() };  // V832: 預設收合（精簡列表），點一列才展開完整卡片
   let dataPromise = null;
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/[\s　]+/g, ''); };
@@ -96,7 +96,7 @@
     reader.querySelector('[data-skill-results]').innerHTML = `${q ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個技能 <button type="button" class="ghost" data-skill-clear>清除搜尋</button></p>` : `
       <div class="questTabs" role="tablist">${data.sheets.map(k => `<button type="button" role="tab" class="${k === state.sheet ? 'active' : ''}" data-skill-sheet="${esc(k)}">${esc(k)}</button>`).join('')}</div>
       <div class="questGroups">${groups.map(([t, n]) => `<button type="button" class="${t === state.group ? 'active' : ''}" data-skill-group="${esc(t)}">${esc(t)}<b>${n}</b></button>`).join('')}</div>`}
-      <div class="skillViewToggle" role="group" aria-label="顯示方式"><button type="button" data-skill-view="card" class="${state.view === 'card' ? 'active' : ''}">完整卡片</button><button type="button" data-skill-view="list" class="${state.view === 'list' ? 'active' : ''}">精簡列表</button></div>
+      <div class="skillViewToggle" role="group" aria-label="顯示方式"><button type="button" data-skill-view="list" class="${state.view === 'list' ? 'active' : ''}">收合（點一列展開）</button><button type="button" data-skill-view="card" class="${state.view === 'card' ? 'active' : ''}">全部展開</button></div>
       <div class="skillList${state.view === 'list' ? ' skillRows' : ''}">${list.slice(0, 150).map(s => state.view === 'list' ? rowHTML(s, !!q) : cardHTML(s, !!q)).join('') || '<div class="empty">沒有符合的技能。</div>'}</div>
       ${list.length > 150 ? '<p class="muted">只顯示前 150 筆，請輸入更精確的關鍵字。</p>' : ''}`;
   }
@@ -127,7 +127,7 @@
     const group = t.closest?.('[data-skill-group]');
     if(group){ state.group = group.dataset.skillGroup; renderSkillPage(); return; }
     const view = t.closest?.('[data-skill-view]');
-    if(view){ state.view = view.dataset.skillView; try{ localStorage.setItem('szo_skill_view', state.view); }catch(e){} renderSkillPage(); return; }
+    if(view){ state.view = view.dataset.skillView; try{ localStorage.setItem('szo_skill_view_v2', state.view); }catch(e){} renderSkillPage(); return; }
     if(t.closest?.('[data-skill-clear]')){ state.query = ''; renderSkillPage(); return; }
     const item = t.closest?.('[data-skill-item]');
     if(item){ ev.preventDefault(); window.SZO_PREVIEW?.open('item', item.dataset.skillItem); return; }

@@ -1048,8 +1048,14 @@
     }
     const selectedKey=state.floorStageId===Number(stage.stageId)&&state.floor?`${stage.stageId}:${state.floor}`:String(stage.stageId);
     const scope=SZO_MAP_CLASS.get(stage.stageId);
-    const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${SZO_MAP_CLASS.order(stages.filter(s=>SZO_MAP_CLASS.same(s.stageId,scope))).flatMap(s=>{
-      const rows=s.mapCategory==='tower'?(s.areas||[]).map(a=>({key:`${s.stageId}:${a.floor}`,label:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
+    // V832: 終末之塔每 10 層一段（Ⅰ＝1～10 樓、Ⅱ＝11～20 樓…），先選段再選樓層
+    const ROMAN=n=>{let r='';for(const [v,c] of [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']])while(n>=v){r+=c;n-=v;}return r;};
+    const scopeStages=SZO_MAP_CLASS.order(stages.filter(s=>SZO_MAP_CLASS.same(s.stageId,scope)));
+    const towerFloors=scopeStages.filter(s=>s.mapCategory==='tower').flatMap(s=>(s.areas||[]).map(a=>Number(a.floor))).filter(Boolean);
+    const towerSeg=towerFloors.length>10?Math.ceil((state.floorStageId===Number(stage.stageId)&&state.floor?state.floor:Math.min(...towerFloors))/10):0;
+    const segOptions=towerSeg?[...new Set(towerFloors.map(f=>Math.ceil(f/10)))].sort((a,b)=>a-b).map(g=>`<option value="${g}" ${g===towerSeg?'selected':''}>終末之塔 ${ROMAN(g)}（${g*10-9}～${g*10} 樓）</option>`).join(''):'';
+    const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${scopeStages.flatMap(s=>{
+      const rows=s.mapCategory==='tower'?(s.areas||[]).filter(a=>!towerSeg||Math.ceil(a.floor/10)===towerSeg).map(a=>({key:`${s.stageId}:${a.floor}`,label:towerSeg?`${a.floor} 樓`:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
       if(s.mapCategory==='tower'&&selectedKey===String(s.stageId))rows.unshift({key:String(s.stageId),label:s.stageName+'（全圖）'});
       return rows.map(r=>`<option value="${r.key}" ${r.key===selectedKey?'selected':''}>${htmlEscape(r.label)}</option>`);
     }).join('')}</optgroup>`;
@@ -1060,6 +1066,7 @@
           <input id="mapSearchInput" value="${htmlEscape(state.query)}" placeholder="例如：京城、大山犬、敖姬">
         </label>
         ${SZO_MAP_CLASS.controls('map',scope)}
+        ${segOptions?`<label>樓段<select id="mapTowerSeg">${segOptions}</select></label>`:''}
         <label>${scope.group==='終末之塔'?'樓層':'地圖'}
           <select id="mapStageSelect">${stageOptions}</select>
         </label>
@@ -1361,6 +1368,13 @@
         (stage.npcs||[]).forEach(n=>state.npcs.add(npcKey(n)));
       }
       renderLoaded();return;
+    }
+    if(ev.target?.id === 'mapTowerSeg'){
+      // 換樓段：跳到該段第一個樓層
+      const g=Number(ev.target.value);
+      const all=(mapData.stages||[]).filter(t=>t.mapCategory==='tower').flatMap(t=>(t.areas||[]).map(x=>({id:t.stageId,f:Number(x.floor)}))).filter(x=>Math.ceil(x.f/10)===g).sort((x,y)=>x.f-y.f).map(x=>`${x.id}:${x.f}`)[0];
+      if(all){ const sel=byId('mapStageSelect'); const opt=document.createElement('option'); opt.value=all; sel.appendChild(opt); sel.value=all; sel.dispatchEvent(new Event('change',{bubbles:true})); }
+      return;
     }
     if(ev.target?.id === 'mapStageSelect'){
       const [stageId,floor]=ev.target.value.split(':').map(Number);

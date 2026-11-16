@@ -1486,8 +1486,12 @@ function renderTrainingCalc(){
   <div class="kv"><div class="k">分類篩選</div><div class="v"><select id="trainGroupFilter">${groupOpts}</select></div></div>
   <div class="kv"><div class="k">快速設定</div><div class="v"><div class="quick" style="margin-top:0"><button id="trainCurrentZero" type="button">目前階歸0<small>只把目前階設為 0，目標階不變</small></button><button id="trainCurrentMax" type="button">目前階滿階<small>只把目前階設為滿階，目標階不變</small></button></div></div></div>
  </div>
- <h3>修練項目</h3>
- <div class="trainingList">${sortedTrainingData().map(card).join('')}</div>
+ <div class="trainSticky" id="trainSticky" aria-live="polite"></div>
+ <h3>修練項目<small class="trainExpandAll"><button type="button" id="trainOpenAll">全部展開</button><button type="button" id="trainCloseAll">全部收合</button></small></h3>
+ ${(()=>{ // V832: 依分類收合，標題列直接顯示該分類需要的材料
+   const groups=[];for(const pair of sortedTrainingData()){const g=trainingViewGroupValue(pair.x.group||'');let box=groups.find(b=>b.g===g);if(!box)groups.push(box={g,rows:[]});box.rows.push(pair);}
+   return groups.map(b=>`<details class="trainGroup" data-group-box="${esc(b.g)}"><summary><b>${esc(trainingGroupLabel(b.g))}</b><small>${b.rows.length} 項</small><span class="trainGroupSum" data-group-sum="${esc(b.g)}"></span></summary><div class="trainingList">${b.rows.map(card).join('')}</div></details>`).join('');
+ })()}
  <div class="quick"><button id="calcTraining" type="button">計算修練<small>只統計目前分類篩選內的項目</small></button></div>
  <div id="trainingResultWrap" style="display:none"><div id="trainingResult"></div></div>
  </section>`;
@@ -1506,6 +1510,9 @@ function bindTrainingControls(){
  if(max)max.onclick=function(e){e.preventDefault();setTrainingCurrentMax();};
  const calc=byId('calcTraining');
  if(calc)calc.onclick=function(e){e.preventDefault();calcTraining();};
+ const openAll=byId('trainOpenAll'),closeAll=byId('trainCloseAll');
+ if(openAll)openAll.onclick=()=>document.querySelectorAll('.trainGroup').forEach(d=>{if(d.style.display!=='none')d.open=true;});
+ if(closeAll)closeAll.onclick=()=>document.querySelectorAll('.trainGroup').forEach(d=>d.open=false);
  document.querySelectorAll('.trainCur,.trainTar').forEach(el=>{
   el.oninput=function(){updateTrainingNeeds();};
   el.onchange=function(){clampTrainingInputs();updateTrainingNeeds();};
@@ -1514,6 +1521,8 @@ function bindTrainingControls(){
 function filterTrainingRows(){
  const g=byId('trainGroupFilter')?.value||'';
  document.querySelectorAll('[data-train-row]').forEach(el=>{el.style.display=(!g||el.dataset.group===g)?'':'none';});
+ document.querySelectorAll('[data-group-box]').forEach(el=>{el.style.display=(!g||el.dataset.groupBox===g)?'':'none';if(g&&el.dataset.groupBox===g)el.open=true;});
+ updateTrainingTotals();
  const wrap=byId('trainingResultWrap'); if(wrap)wrap.style.display='none';
 }
 function applyTrainingDerivedLevels(){
@@ -1564,6 +1573,25 @@ function updateTrainingNeeds(){
   const tar=Math.max(cur,Math.min(max,intOf(tarEl.value,max)));
   needEl.textContent=fmt(trainingLevelNeed(x,cur,tar));
  });
+ updateTrainingTotals();
+}
+// V832: 分類標題與頂端固定列的材料合計（依分類篩選）
+function updateTrainingTotals(){
+ const sticky=byId('trainSticky');if(!sticky)return;
+ const filter=byId('trainGroupFilter')?.value||'';const all={},per={};
+ trainingData().forEach((x,i)=>{
+  const curEl=document.querySelector(`.trainCur[data-i="${i}"]`),tarEl=document.querySelector(`.trainTar[data-i="${i}"]`);if(!curEl||!tarEl)return;
+  const max=Number(x.maxLevel||0),cur=Math.max(0,Math.min(max,intOf(curEl.value,0))),tar=Math.max(cur,Math.min(max,intOf(tarEl.value,max)));
+  const need=trainingLevelNeed(x,cur,tar);if(!need)return;
+  const g=trainingViewGroupValue(x.group||''),item=x.item||'材料';
+  (per[g]??={})[item]=(per[g][item]||0)+need;
+  if(!filter||filter===g)all[item]=(all[item]||0)+need;
+ });
+ const list=o=>Object.entries(o).map(([k,v])=>`${esc(k)} ×${fmt(v)}`).join('、');
+ document.querySelectorAll('[data-group-sum]').forEach(el=>{const o=per[el.dataset.groupSum]||{};el.innerHTML=Object.keys(o).length?list(o):'已達目標';});
+ const open=!!sticky.querySelector('details[open]'),n=Object.keys(all).length;
+ sticky.innerHTML=`<details ${open?'open':''}><summary><b>${filter?esc(trainingGroupLabel(filter))+' ':''}需要材料合計</b><span>${n?n+' 種材料・點這裡'+(open?'收起':'展開'):'都已達目標階'}</span></summary>${n?`<div class="trainStickyList">${list(all)}</div>`:''}</details>`;
+ sticky.querySelector('details').ontoggle=e=>{const sp=e.target.querySelector('summary span');if(sp&&n)sp.textContent=n+' 種材料・點這裡'+(e.target.open?'收起':'展開');};
 }
 function setTrainingCurrentZero(){
  trainingData().forEach((x,i)=>{

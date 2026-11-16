@@ -41,9 +41,11 @@ d['auraCost']={k:v['total'] for k,v in j['auraTable'].items()}
 item_by_id={r['ID']:r for r in load('items')}
 for e in c['equipment']:
     item=item_by_id.get(str(e['item_id']),{})
-    for k,label in [('IceDef','冰抗'),('FireDef','火抗'),('LightningDef','雷抗'),('DarkDef','冥抗')]:
+    # 元素抗性用與 compound_config 相同的鍵（ice_def…），避免同一個抗性被算兩次
+    for k,key,label in [('IceDef','ice_def','冰抗'),('FireDef','fire_def','火抗'),('LightningDef','lightning_def','雷抗'),('DarkDef','dark_def','冥抗')]:
+        e['base_stats'].pop(key,None)
         if int(item.get(k,0)):
-            e['base_stats'][k]=dict(label=label,value=int(item[k]))
+            e['base_stats'][key]=dict(label=label,value=int(item[k]))
     magic=int(item_by_id.get(str(e['item_id']),{}).get('MagicAttack',0))
     if magic and 'm_attack' not in e['base_stats']:
         e['base_stats']['m_attack']=dict(label='術法攻擊',value=magic)
