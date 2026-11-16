@@ -110,17 +110,21 @@
 
   // ---------- 20星能力總表 ----------
   const STAR_KEY = 'szo_jiang_star_table_v1';
-  const starState = {q:'', series:''};
+  const starState = {q:'', series:'', open:false};
   function renderStars(){
     const r = $('reader'); if(!r) return;
     let n = read(STAR_KEY, '');
     if(!n || !D().baseStats || !D().baseStats[n]) n = heroes()[0] || '';
     const rows = Array.from({length:21}, (_,lv) => abilityOf(n, lv));
-    r.innerHTML = `<section class="card jsPage"><h1>角色養成試算</h1>
-      <div class="jsLayout jsStarsLayout">
-        ${pickerHTML(starState, {head:'選一隻降神，右邊顯示 0～20 星的能力', current:n})}
+    // V820: 點降神格子才跳出選擇視窗，畫面只留能力表
+    document.querySelectorAll('body > .jsPickModal').forEach(x => x.remove());
+    r.innerHTML = `<section class="card jsPage jsStarsPage"><h1>角色養成試算</h1>
+      ${starState.open ? `<div class="jsPickModal jsPage" id="juPickModal"><div class="jsPickBox" role="dialog" aria-modal="true" aria-label="選擇降神"><div class="jsPickTop"><b>選擇降神</b><span class="jsPickCur">${n ? '目前：' + E(n) : ''}</span><button type="button" class="jsPickDone" id="juPickDone">關閉</button></div>
+        ${pickerHTML(starState, {head:'點一隻降神，顯示它 0～20 星的能力', current:n})}
+      </div></div>` : ''}
+      <div>
         <div class="jsMain">
-          ${n ? `<div class="jsStarHead"><span class="jsCardFace">${H().img(n,'')}</span><div><b>${E(n)}</b><small>${E((H().info[n]||[])[1] || '')}</small><small>0～20 星能力總表（主降神 100% 數值）</small></div></div>
+          ${n ? `<button type="button" class="jsStarHead jsStarPick" id="juStarPick" title="點這裡換降神"><span class="jsCardFace">${H().img(n,'')}</span><div><b>${E(n)}</b><small>${E((H().info[n]||[])[1] || '')}</small><small>0～20 星能力總表（主降神 100% 數值）</small><em>點頭像換降神</em></div></button>
           <div class="tableWrap"><table class="compareTable jsStarTable"><thead><tr><th>星等</th>${stats().map(st => `<th>${E(label(st))}</th>`).join('')}</tr></thead><tbody>
           ${rows.map((a,lv) => `<tr class="${lv===20 ? 'top' : lv%5===0 ? 'step' : ''}"><td>${lv} 星</td>${stats().map(st => `<td>${fmt(a[st])}</td>`).join('')}</tr>`).join('')}
           </tbody></table></div>` : '<div class="empty">沒有降神資料</div>'}
@@ -129,7 +133,17 @@
     </section>`;
     addNav('stars');
     const rerender = keepScroll(renderStars);
-    bindPicker(starState, rerender, name => { if(name) write(STAR_KEY, name); if(window.matchMedia('(max-width:820px)').matches) setTimeout(() => document.querySelector('.jsStarHead')?.scrollIntoView({behavior:'smooth',block:'start'}), 30); }, () => {});
+    bindPicker(starState, rerender, name => { if(name){ write(STAR_KEY, name); starState.open = false; } }, () => {});
+    if($('juStarPick')) $('juStarPick').onclick = () => { starState.open = true; rerender(); };
+    const modal = $('juPickModal');
+    if(modal){
+      const close = () => { starState.open = false; rerender(); };
+      $('juPickDone').onclick = close;
+      modal.onclick = e => { if(e.target === modal) close(); };
+      document.body.appendChild(modal);
+      const h = e => { if(e.key === 'Escape' && $('juPickModal')){ document.removeEventListener('keydown', h); close(); } };
+      document.addEventListener('keydown', h);
+    }
   }
 
   // ---------- live 星等／靈氣、等級／經驗丹 ----------

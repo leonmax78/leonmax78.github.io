@@ -5071,3 +5071,7 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 /* V818: 圖例關閉鈕 */
 .mapLegendBox .mlClose{justify-self:stretch;margin-top:2px;padding:7px 10px;border-radius:8px;border:1px solid #dda84d;color:#ffe7a3;background:transparent;font:inherit;cursor:pointer}
 @media(max-width:820px){.mapLegend[open]{display:block;flex:1 0 100%;width:100%}.mapLegendBox{position:static!important;width:auto!important;margin-top:6px;box-shadow:none}}
+/* V820: 20星能力總表：點頭像換降神 */
+.jsPage .jsStarPick{width:100%;text-align:left;font:inherit;color:inherit;background:#102a36;border:1px solid #357b83;border-radius:10px;padding:10px;cursor:pointer}
+.jsPage .jsStarPick:hover{border-color:#53ded3}
+.jsStarPick em{display:inline-block;margin-top:4px;font-style:normal;font-size:12px;color:#53ded3;border:1px solid #357b83;border-radius:999px;padding:2px 10px}
