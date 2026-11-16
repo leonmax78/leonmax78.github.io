@@ -230,6 +230,10 @@
   const RATE_LABEL = i => i===0 ? '主降神・100%' : `副降神 ${i}・10%`;
   // V805: 副降神試算改用遊戲「副降神通」畫面（底圖 assets/test-media/ui/god_panel.png，座標取自 setting/wnd01.ini 10456～10489）
   //       右框＝能力合計與成立連結；左側雲紋區＝差 1 隻就成立的提醒；點頭像框選降神
+  // 全降神總等級：與寶石試算（localStorage szo-gem-calculator-v1 的 level）共用
+  const GEM_KEY = 'szo-gem-calculator-v1';
+  function godTotalLevel(){ try{ const g = JSON.parse(localStorage.getItem(GEM_KEY)||'null'); if(g && g.level != null) return Number(g.level)||0; }catch(e){} return 5000; }
+  function setGodTotalLevel(v){ try{ const g = JSON.parse(localStorage.getItem(GEM_KEY)||'null') || {level:5000,picks:{}}; g.level = Math.max(0, Math.min(20000, Math.floor(Number(v)||0))); if(!g.picks) g.picks = {}; localStorage.setItem(GEM_KEY, JSON.stringify(g)); }catch(e){} }
   const GP = (x,y,w,h) => `left:${x/6.23}%;top:${y/3.22}%;width:${w/6.23}%;height:${h/3.22}%`;
   function gamePanelHTML(plan,res,near,freeSlot){
     const frames = [[276,242],[46,242],[161,242],[391,242],[506,242]];   // 主降神在中間，副 1～4 由左至右
@@ -244,7 +248,7 @@
         if(cs.length>4)cells.push(`<div class="jsGameTxt link more" style="${GP(436,206,163,18)}" title="${E(cs.slice(3).join('、'))}">…另 ${cs.length-3} 條</div>`);
         if(!cs.length)cells.push(`<div class="jsGameTxt link none" style="${GP(436,145,163,18)}">尚未成立連結</div>`);
         return cells.join('');})()}
-      <div class="jsGameTxt total" style="${GP(212,213,195,20)}">術法攻擊+${n('術攻')}</div>
+      <label class="jsGameTxt total" style="${GP(212,213,195,20)}">全降神總等級：<input id="jsGodLv" type="number" min="0" max="20000" inputmode="numeric" value="${godTotalLevel()}" title="與寶石試算的「降神總等級」同步"></label>
       <div class="jsGameNear" style="${GP(10,10,188,218)}"><div class="jsGameNearHead">差 1 隻就成立</div>
         ${!plan.some(p=>p.n) ? '<p>點下方頭像框放入降神，這裡會提示還差誰。</p>' : near.length ? near.map(([c,miss])=>`<button type="button" data-js-fill="${E(miss)}" ${freeSlot<0?'disabled':''} title="${E((typeof comboText==='function'?comboText(c):'')+(target?'｜點一下放進'+target:'｜五格都滿了'))}">${headImg(miss,'')}<span><b>${E(c)}</b><small>缺 ${E(miss)}</small></span></button>`).join('') : '<p>目前沒有差 1 隻的連結。</p>'}
       </div>
@@ -376,6 +380,7 @@
     reader.querySelectorAll('[data-js-save]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsSave); const all = getSlots(); all[i] = getCurrent(); setSlots(all); rerender(); });
     reader.querySelectorAll('[data-js-load]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsLoad); setCurrent(getSlots()[i]); activeSlot = 0; rerender(); });
     reader.querySelectorAll('[data-js-cmp]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsCmp); cmpSlot = cmpSlot===i ? null : i; rerender(); });
+    if($('jsGodLv')) $('jsGodLv').oninput = e => setGodTotalLevel(e.target.value);
     const closePick = () => { pickerOpen = false; rerender(); };
     if($('jsPickDone')) $('jsPickDone').onclick = closePick;
     const modal = $('jsPickModal');
