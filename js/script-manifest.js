@@ -175,15 +175,6 @@ window.SZO_SCRIPT_GROUPS = {
     "js/features/jiangshen/excel-tables-fix.js",
     "js/features/jiangshen/main-compare-five.js",
     "js/features/jiangshen/jiang-unify.js"
-  ],
-  "not_loaded_legacy": [
-    "js/legacy/not-loaded/app-esmodule-unused.js",
-    "js/legacy/not-loaded/jiangshen-duplicate-unused.js",
-    "js/legacy/not-loaded/archived-patches-v218/",
-    "js/legacy/not-loaded/js-modules/",
-    "js/legacy/not-loaded/html-modules/",
-    "js/legacy/not-loaded/old-jiangshen-support-v222/",
-    "js/legacy/not-loaded/root-duplicates-v235/"
   ]
 };
 window.SZO_SCRIPT_MANIFEST = [
