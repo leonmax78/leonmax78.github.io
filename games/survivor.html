@@ -37,6 +37,9 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
 .choice button{display:flex;gap:10px;align-items:center}
 .choice button:hover,.pick button:hover{border-color:var(--teal)}
 .choice em{font-style:normal;font-size:12px;color:var(--teal);margin-left:6px}
+.choice button.pili{border-color:#c98bff;background:linear-gradient(90deg,#2a1840,#102a36)}.choice button.pili em{color:#e3b8ff}
+.pick small.piliN{color:#d6a8ff}
+.slots span.pili{border-color:#c98bff}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .stats div{background:#0c1a24;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
 .stats b{display:block;font-size:22px;color:var(--gold2)}
@@ -63,6 +66,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
   <h2>選擇職業</h2><div class="pick" id="jobPick"></div>
   <h2>選擇地圖（霹靂聯動）</h2><div class="pick" id="mapPick"></div>
   <button class="btn go" id="startBtn" type="button">出戰</button>
+  <p class="note">升到 3 級後，升級選項有機會出現紫色的「霹靂聯動」技能，只會出現該職業能學的。技能欄最多 6 個。</p>
   <p class="note">電腦：WASD 或方向鍵移動，空白鍵暫停。手機：在畫面任一處按住拖曳移動。試玩版，數值仍在調整。</p>
 </div></div>
 <div class="screen" id="levelUp"><div class="box"><h1>升級！</h1><p>選一項強化</p><div class="choice" id="choices"></div></div></div>
@@ -110,6 +114,27 @@ const W = {
   三昧真火:{ic:'m0023',kind:'aura',dmg:6,cd:0.5,area:85,desc:'真火圍繞自身'},
   天師隕石術:{ic:'m0139',kind:'rain',dmg:60,cd:4.5,area:110,n:1,desc:'隕石砸落造成大範圍傷害'}
 };
+// 霹靂布袋戲聯動技能：可學職業依遊戲技能資料（skills.json 的 cl 欄位）
+const PILI = {
+  天問三誓:{ic:'m0239',kind:'rain',dmg:40,cd:2.2,area:70,n:2,cl:['劍俠','勇士','道人'],desc:'救世劍訣掃蕩目標周圍'},
+  怒火燒盡九重天:{ic:'m0240',kind:'rain',dmg:55,cd:3.2,area:115,n:1,cl:['劍俠','勇士','術者','道人','僧侶'],desc:'烈陽般的怒火焚燒大範圍'},
+  蒼龍一吼破雲關:{ic:'m0241',kind:'wave',dmg:38,cd:2.0,area:34,cl:['劍俠','勇士','術者','道人','僧侶'],desc:'蒼藍龍氣直線貫穿'},
+  天地根:{ic:'m0242',kind:'ring',dmg:42,cd:3.2,area:170,cl:['勇士','術者','道人'],desc:'三教秘招，震盪自身周圍'},
+  君子風:{ic:'m0243',kind:'ring',dmg:36,cd:4.2,area:250,cl:['劍俠','勇士','術者','道人','僧侶'],desc:'君子之風橫掃最大範圍'},
+  大梵聖掌:{ic:'m0244',kind:'homing',dmg:45,cd:1.8,n:1,cl:['劍俠','勇士','術者','道人','僧侶'],desc:'佛門掌力追擊遠處敵人'},
+  一氣動山河:{ic:'m0245',kind:'ring',dmg:30,cd:2.6,area:160,cl:['勇士','術者','僧侶'],desc:'雄渾氣勁震退周圍敵人'},
+  笑盡英雄:{ic:'m0246',kind:'rain',dmg:44,cd:2.8,area:105,n:1,cl:['勇士','僧侶'],desc:'昂嘯真元重創敵群'},
+  天龍吼:{ic:'m0247',kind:'rain',dmg:70,cd:3.4,area:75,n:1,cl:['勇士','術者','僧侶'],desc:'千里碎腦神音，重擊極遠敵人'},
+  '天關雙煉‧夜武一擊':{ic:'m0248',kind:'homing',dmg:40,cd:2.0,n:2,cl:['術者','僧侶'],desc:'雙陽合一，兩道掌勁追敵'},
+  蓮華聖路開天光:{ic:'m0249',kind:'rain',dmg:65,cd:4.0,area:150,n:1,cl:['道人','僧侶'],desc:'四蓮聖力，超大範圍天光'},
+  天劍三絕:{ic:'m0250',kind:'rain',dmg:34,cd:2.0,area:60,n:3,cl:['劍俠','勇士'],desc:'聖路、聖耀、聖威三式連擊'},
+  心劍:{ic:'m0251',kind:'darts',dmg:30,cd:1.0,n:2,cl:['劍俠','勇士','術者','道人','僧侶'],desc:'以意化劍，瞬取敵命'},
+  般若懺:{ic:'m0252',kind:'orbit',dmg:20,cd:0,area:105,n:3,cl:['劍俠','僧侶'],desc:'佛門秘招，懺力環身'},
+  劍以創生:{ic:'m0253',kind:'wave',dmg:34,cd:1.6,area:26,cl:['劍俠','勇士','道人'],desc:'創生之劍直線貫穿'},
+  刀以毀滅:{ic:'m0254',kind:'arc',dmg:48,cd:1.6,area:150,cl:['劍俠','勇士'],desc:'毀滅之刀大範圍劈砍'}
+};
+for(const [n, v] of Object.entries(PILI)) W[n] = {...v, pili:true};
+const MAX_WEAPONS = 6;
 const JOBS = [
   {id:'勇士',ic:'m0084',start:'旋氣斬',pool:['地裂波','幻象刀','震衝錘'],hp:150,spd:150,armor:2,desc:'血厚防高，近身揮砍'},
   {id:'劍俠',ic:'m0096',start:'御劍術',pool:['劍氣波','萬劍歸宗','殘影劍'],hp:115,spd:160,armor:1,desc:'飛劍追敵，攻守平均'},
@@ -257,11 +282,16 @@ function fire(w, dt){
 function options(){
   const out = [];
   for(const w of G.weapons) if(w.lv < MAXLV) out.push({type:'wup', name:w.name, ic:w.ic, text:W[w.name].desc, lv:w.lv + 1});
-  for(const n of G.job.pool) if(!G.weapons.some(w => w.name === n)) out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1});
+  const room = G.weapons.length < MAX_WEAPONS;
+  if(room) for(const n of G.job.pool) if(!G.weapons.some(w => w.name === n)) out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1});
+  // 霹靂聯動技能：只出現本職業可學的，每次升級最多抽一個
+  const pili = room ? Object.keys(PILI).filter(n => PILI[n].cl.includes(G.job.id) && !G.weapons.some(w => w.name === n)) : [];
+  if(pili.length && G.p.lv >= 3 && Math.random() < 0.45){ const n = pickOne(pili); out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1, pili:true}); }
   for(const [n, v] of Object.entries(P)) if((G.passives[n] || 0) < MAXLV) out.push({type:'pas', name:n, ic:v.ic, text:v.desc, lv:(G.passives[n] || 0) + 1});
   for(let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
   // 新技能優先出現一個
   const pickNew = out.findIndex(o => o.type === 'wnew'); if(pickNew > 2 && Math.random() < 0.6) [out[0], out[pickNew]] = [out[pickNew], out[0]];
+  const piliPick = out.findIndex(o => o.pili); if(piliPick > 2) [out[1], out[piliPick]] = [out[piliPick], out[1]];
   const list = out.slice(0, 3);
   if(!list.length) list.push({type:'heal', name:'療傷', ic:'m0029', text:'回復 40% 生命', lv:0});
   return list;
@@ -270,7 +300,8 @@ function showLevelUp(){
   G.state = 'level'; const box = $('choices'); box.replaceChildren();
   for(const o of options()){
     const b = document.createElement('button'); b.type = 'button';
-    b.innerHTML = `<img src="${ICON(o.ic)}" alt=""><span><b>${o.name}${o.lv ? `<em>${o.type === 'wnew' ? '新技能' : 'Lv ' + o.lv}</em>` : ''}</b><small>${o.text}${o.type === 'wup' ? '：傷害、冷卻、數量提升' : ''}</small></span>`;
+    b.innerHTML = `<img src="${ICON(o.ic)}" alt=""><span><b>${o.name}${o.lv ? `<em>${o.pili ? '霹靂聯動' : o.type === 'wnew' ? '新技能' : 'Lv ' + o.lv}</em>` : ''}</b><small>${o.text}${o.type === 'wup' ? '：傷害、冷卻、數量提升' : ''}</small></span>`;
+    if(o.pili) b.classList.add('pili');
     b.onclick = () => { apply(o); $('levelUp').classList.remove('on'); G.levelQueue--; if(G.levelQueue > 0) showLevelUp(); else { G.state = 'play'; last = performance.now(); } };
     box.appendChild(b);
   }
@@ -289,7 +320,7 @@ function apply(o){
 }
 function refreshSlots(){
   const s = $('slots'); s.replaceChildren();
-  for(const w of G.weapons){ const e = document.createElement('span'); e.style.backgroundImage = `url(${ICON(w.ic)})`; e.title = w.name; e.innerHTML = `<b>${w.lv}</b>`; s.appendChild(e); }
+  for(const w of G.weapons){ const e = document.createElement('span'); if(w.pili) e.classList.add('pili'); e.style.backgroundImage = `url(${ICON(w.ic)})`; e.title = w.name; e.innerHTML = `<b>${w.lv}</b>`; s.appendChild(e); }
   for(const [n, lv] of Object.entries(G.passives)){ const e = document.createElement('span'); e.style.backgroundImage = `url(${ICON(P[n].ic)})`; e.style.borderColor = '#357b83'; e.title = n; e.innerHTML = `<b>${lv}</b>`; s.appendChild(e); }
 }
 
@@ -340,7 +371,7 @@ function update(dt){
   // area effects
   for(const f of G.fx){
     f.t -= dt;
-    if(f.kind === 'ring'){ f.r = f.R * (1 - f.t / f.T); for(const e of G.enemies){ if(e.dead || f.hit.has(e)) continue; const d = Math.hypot(e.x - f.x, e.y - f.y); if(d < f.r + e.r){ f.hit.add(e); hurt(e, f.dmg, (e.x - f.x) / (d || 1) * 18, (e.y - f.y) / (d || 1) * 18); } } }
+    if(f.kind === 'ring'){ f.r = clamp(f.R * (1 - f.t / f.T), 0, f.R); for(const e of G.enemies){ if(e.dead || f.hit.has(e)) continue; const d = Math.hypot(e.x - f.x, e.y - f.y); if(d < f.r + e.r){ f.hit.add(e); hurt(e, f.dmg, (e.x - f.x) / (d || 1) * 18, (e.y - f.y) / (d || 1) * 18); } } }
     if(f.kind === 'warn' && f.t <= 0 && !f.done){ f.done = true; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - f.x, e.y - f.y) < f.r + e.r) hurt(e, f.dmg, 0, 0); G.fx.push({kind:'boom', x:f.x, y:f.y, r:f.r, t:0.25, T:0.25, ic:f.ic}); }
   }
   G.fx = G.fx.filter(f => f.t > 0);
@@ -386,9 +417,9 @@ function draw(){
   // warnings / booms / rings / arcs
   for(const f of G.fx){
     const k = f.t / f.T;
-    if(f.kind === 'warn'){ ctx.strokeStyle = 'rgba(255,230,140,' + (0.4 + 0.5 * (1 - k)) + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (1.1 - 0.1 * k), 0, 7); ctx.stroke(); }
+    if(f.kind === 'warn'){ ctx.strokeStyle = 'rgba(255,230,140,' + (0.4 + 0.5 * (1 - k)) + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(f.x, f.y, Math.max(0, f.r * (1.1 - 0.1 * k)), 0, 7); ctx.stroke(); }
     if(f.kind === 'boom'){ ctx.fillStyle = 'rgba(255,220,120,' + (0.55 * k) + ')'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); const ic = img(ICON(f.ic)); if(ready(ic)){ ctx.globalAlpha = k; ctx.drawImage(ic, f.x - 20, f.y - 20, 40, 40); ctx.globalAlpha = 1; } }
-    if(f.kind === 'ring'){ ctx.strokeStyle = 'rgba(255,215,120,' + (0.9 * k) + ')'; ctx.lineWidth = 6 * k + 2; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.stroke(); }
+    if(f.kind === 'ring'){ ctx.strokeStyle = 'rgba(255,215,120,' + (0.9 * k) + ')'; ctx.lineWidth = Math.max(1, 6 * k + 2); ctx.beginPath(); ctx.arc(f.x, f.y, Math.max(0, f.r || 0), 0, 7); ctx.stroke(); }
     if(f.kind === 'arc'){ ctx.fillStyle = 'rgba(200,240,255,' + (0.45 * k) + ')'; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.arc(f.x, f.y, f.r, f.a - Math.PI / 2, f.a + Math.PI / 2); ctx.closePath(); ctx.fill(); }
   }
   // enemies (sorted by y so lower ones overlap upper ones)
@@ -469,7 +500,7 @@ document.addEventListener('visibilitychange', () => { if(document.hidden) pause(
 // ---------- title ----------
 function buildTitle(){
   const jp = $('jobPick'); jp.replaceChildren();
-  JOBS.forEach((j, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === jobSel); b.innerHTML = `<img src="${ICON(j.ic)}" alt=""><b>${j.id}</b><small>${j.desc}</small><small>起始：${j.start}</small>`; b.onclick = () => { jobSel = i; buildTitle(); }; jp.appendChild(b); });
+  JOBS.forEach((j, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === jobSel); b.innerHTML = `<img src="${ICON(j.ic)}" alt=""><b>${j.id}</b><small>${j.desc}</small><small>起始：${j.start}</small><small class="piliN">霹靂聯動技能 ${Object.values(PILI).filter(v => v.cl.includes(j.id)).length} 種</small>`; b.onclick = () => { jobSel = i; buildTitle(); }; jp.appendChild(b); });
   const mp = $('mapPick'); mp.replaceChildren();
   let best = {}; try{ best = JSON.parse(localStorage.getItem('szo-survivor-best') || '{}'); }catch(e){}
   D.maps.forEach((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === mapSel); const rec = best[JOBS[jobSel].id + '|' + m[1]]; b.innerHTML = `<b>${m[1]}</b><small>難度：${m[2]}</small><small>${rec ? '最佳：' + Math.floor(rec / 60) + ' 分 ' + Math.floor(rec % 60) + ' 秒' : '尚未挑戰'}</small>`; b.onclick = () => { mapSel = i; buildTitle(); }; mp.appendChild(b); });
