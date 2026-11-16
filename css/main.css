@@ -5068,3 +5068,6 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .jsSubTabs,.jsPage .jsSubTabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .jsSubTabs::-webkit-scrollbar{display:none}
 .jsSubTabs button{flex:0 0 auto;white-space:nowrap}
+/* V818: 圖例關閉鈕 */
+.mapLegendBox .mlClose{justify-self:stretch;margin-top:2px;padding:7px 10px;border-radius:8px;border:1px solid #dda84d;color:#ffe7a3;background:transparent;font:inherit;cursor:pointer}
+@media(max-width:820px){.mapLegend[open]{display:block;flex:1 0 100%;width:100%}.mapLegendBox{position:static!important;width:auto!important;margin-top:6px;box-shadow:none}}
