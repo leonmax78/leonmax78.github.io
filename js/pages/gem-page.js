@@ -2,7 +2,7 @@
  const shapes=['','圓弧','三角','四方','五稜','六緯'];
  const stats={Base_HP:'生命',Base_MP:'精力',Base_Con:'體魄',Base_Str:'力量',Base_Int:'智慧',Base_Dex:'敏捷',Extra_Def:'防禦',Magic_Att:'術攻',Magic_Def:'術防'};
  const key='szo-gem-calculator-v1';
- let state={level:5000,picks:{}},tab='plan';
+ let state={level:5000,picks:{}},tab='calc';
  try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&typeof saved.picks==='object'&&saved.picks)state={level:Number(saved.level)||0,picks:saved.picks,rec:saved.rec};}catch(e){}
  const save=()=>{try{localStorage.setItem(key,JSON.stringify(state));}catch(e){}};
 
@@ -75,7 +75,7 @@
   #gemPage .gemCell img{width:58%;height:auto;max-width:40px}#gemPage .gemCell>i{width:40%;aspect-ratio:1;border-radius:50%;background:var(--tint)}#gemPage .gemCell em{position:absolute;top:2px;left:4px;font-style:normal;font-size:11px;color:#ffe08a}#gemPage .gemCell small{font-size:11px;line-height:1.2;white-space:nowrap}
   #gemPage .gemCell.locked{opacity:.35;border-style:dashed;cursor:not-allowed}#gemPage .gemCell:not(.filled) small{color:var(--muted,#9fb0c4)}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
-  </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['plan','三星合成材料'],['calc','鑲嵌能力試算'],['recommend','推薦方案'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
+  </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['calc','鑲嵌能力試算'],['recommend','推薦方案'],['plan','三星合成材料'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   window.szoAddSectionNav?.('gems');  // 降神區共用分頁（每次重畫都補上）
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
   const content=byId('gemContent');
