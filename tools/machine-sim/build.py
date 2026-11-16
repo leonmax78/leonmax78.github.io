@@ -47,6 +47,18 @@ for e in c['equipment']:
     magic=int(item_by_id.get(str(e['item_id']),{}).get('MagicAttack',0))
     if magic and 'm_attack' not in e['base_stats']:
         e['base_stats']['m_attack']=dict(label='術法攻擊',value=magic)
+    # compound_config 的第Ⅴ階裝備只剩耐久／重量，原本屬性從 items.json 補回（不改原始資料檔）
+    if item and not any(k in e['base_stats'] for k in ('con','str','int','dex','def','m_def','hp','mp','damage')):
+        for src,key,label in [('Con','con','體魄'),('Str','str','力量'),('Int','int','智慧'),('Dex','dex','敏捷'),('HP','hp','生命'),('MP','mp','精力'),
+                              ('ExtraDef','def','物防'),('MagicDef','m_def','術防'),('Attack','attack','命中'),('AttackRange','attack_range','攻擊距離'),
+                              ('IceAttack','ice_attack','冰傷'),('IceProb','ice_prob','冰傷機率'),('FireAttack','fire_attack','火傷'),('FireProb','fire_prob','火傷機率'),
+                              ('LightningAttack','lightning_attack','雷傷'),('LightningProb','lightning_prob','雷傷機率'),('DarkAttack','dark_attack','冥傷'),('DarkProb','dark_prob','冥傷機率'),
+                              ('ParalysisRes','paralysis_res','麻痺抗性'),('PosionRes','poison_res','中毒抗性'),('BlindRes','blind_res','盲目抗性'),('SilentRes','silent_res','封咒抗性')]:
+            if int(item.get(src,0)):
+                if item.get(src+'Flag')=='AFFECT_MAX_RATIO': label+='上限（%）'
+                e['base_stats'][key]=dict(label=label,value=int(item[src]))
+        if int(item.get('DamageMax',0)):
+            e['base_stats']['damage']=dict(label='傷害',min=int(item.get('DamageMin',0)),max=int(item['DamageMax']))
     for field,label in [('HP','生命'),('MP','精力')]:
         stat=e['base_stats'].get(field.lower())
         if stat and (e.get('raw_item') or {}).get(field+'Flag')=='AFFECT_MAX_RATIO':
