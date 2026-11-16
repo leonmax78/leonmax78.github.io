@@ -72,6 +72,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
   <h2>選擇地圖（霹靂聯動）</h2><div class="pick" id="mapPick"></div>
   <button class="btn go" id="startBtn" type="button">出戰</button>
   <p class="note">升到 3 級後，升級選項有機會出現紫色的「霹靂聯動」技能，只會出現該職業能學的。技能欄最多 6 個。</p>
+  <p class="note">只能走在遊戲裡原本能走的地方，懸崖、水池、建築和欄杆都過不去；怪物也會沿著路繞過來。</p>
   <p class="note">角色、地圖、技能特效、音樂與音效皆取自遊戲原始素材；地圖為 1:1 原尺寸。</p>
   <p class="note">電腦：WASD 或方向鍵移動，空白鍵暫停。手機：在畫面任一處按住拖曳移動。試玩版，數值仍在調整。</p>
 </div></div>
@@ -97,8 +98,35 @@ const ready = im => im && im.complete && im.naturalWidth > 0;
 
 // ---------- 遊戲素材：一轉角色、技能特效、音效（由 tools/survivor 從遊戲檔案轉出） ----------
 const SV = 'sv/';
-let CHAR = null, FX = null, SND = null;
-const loaded = Promise.all(['char.json','fx.json','snd.json'].map(f => fetch(SV + f).then(r => r.json()))).then(([c, f, s]) => { CHAR = c; FX = f; SND = s; });
+let CHAR = null, FX = null, SND = null, WALK = null;
+const loaded = Promise.all(['char.json','fx.json','snd.json','walk.json'].map(f => fetch(SV + f).then(r => r.json()))).then(([c, f, s, w]) => { CHAR = c; FX = f; SND = s; WALK = w; });
+// ---------- 行走範圍：取自遊戲地圖檔的阻擋格（32px 一格），玩家和怪物都只能走在可行走的格子上 ----------
+const CELL = 32;
+function cellOf(x, y){ return (y >> 5) * G.gw + (x >> 5); }
+function canWalk(x, y){ if(x < 0 || y < 0 || x >= WW || y >= WH) return false; return G.grid[(Math.floor(y) >> 5) * G.gw + (Math.floor(x) >> 5)] === 1; }
+function bodyFits(x, y, r){ return canWalk(x - r, y) && canWalk(x + r, y) && canWalk(x, y - r * 0.6) && canWalk(x, y + r * 0.6); }
+// 從玩家所在格往外擴散，算出每一格到玩家的步數；怪物往步數較小的鄰格走，就會沿著路繞過牆
+const NB = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+function buildFlow(){
+  const gw = G.gw, gh = G.gh, dist = G.dist; dist.fill(-1);
+  const sx = clamp(Math.floor(G.p.x) >> 5, 0, gw - 1), sy = clamp(Math.floor(G.p.y) >> 5, 0, gh - 1), q = G.queue; let head = 0, tail = 0;
+  dist[sy * gw + sx] = 0; q[tail++] = sy * gw + sx;
+  while(head < tail){ const c = q[head++], cx = c % gw, cy = (c - cx) / gw, d = dist[c] + 1;
+    for(let k = 0; k < 4; k++){ const x = cx + NB[k][0], y = cy + NB[k][1]; if(x < 0 || y < 0 || x >= gw || y >= gh) continue; const n = y * gw + x; if(G.grid[n] !== 1 || dist[n] >= 0) continue; dist[n] = d; q[tail++] = n; } }
+}
+function flowStep(e, sp, dt){
+  const p = G.p, gw = G.gw, cx = Math.floor(e.x) >> 5, cy = Math.floor(e.y) >> 5, here = G.dist[cy * gw + cx];
+  let tx = p.x, ty = p.y;
+  if(here > 1){ let best = here, bx = -1, by = -1;
+    for(const [dx, dy] of NB){ const x = cx + dx, y = cy + dy; if(x < 0 || y < 0 || x >= gw || y >= G.gh) continue; const d = G.dist[y * gw + x]; if(d < 0 || d >= best) continue;
+      if(dx && dy && (G.grid[cy * gw + x] !== 1 || G.grid[y * gw + cx] !== 1)) continue;  // 不斜切牆角
+      best = d; bx = x; by = y; }
+    if(bx >= 0){ tx = bx * CELL + 16; ty = by * CELL + 16; } }
+  const dx = tx - e.x, dy = ty - e.y, d = Math.hypot(dx, dy) || 1, nx = e.x + dx / d * sp * dt, ny = e.y + dy / d * sp * dt;
+  if(canWalk(nx, ny)){ e.x = nx; e.y = ny; } else if(canWalk(nx, e.y)) e.x = nx; else if(canWalk(e.x, ny)) e.y = ny;
+  e.dir = p.x < e.x ? -1 : 1;
+}
+function nudge(e, kx, ky){ if(canWalk(e.x + kx, e.y + ky)){ e.x += kx; e.y += ky; } }
 const CHAR_DIR = {劍俠:['p1','p6'], 術者:['p2','p7'], 僧侶:['p3','p8'], 勇士:['p4','p9'], 道人:['p5','pa']};
 // 實心的特效照原樣畫；其餘是發光特效，用加亮混色
 const FX_SOLID = new Set(['天地根','大梵聖掌','玄冰術','地裂波','怒火燒盡九重天','君子風','毒煙術']);
@@ -225,10 +253,12 @@ function newGame(){
   G = {
     state:'play', t:0, kills:0, job, map, mapDir:SV + 'map/' + map[0] + '/', ww:WW, wh:WH, tierBase:map[3],
     char:CHAR[folder], charImg:img(SV + 'char_' + folder + '.webp'), moving:false,
-    p:{x:WW / 2, y:WH / 2, r:14, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:90, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
+    gw:WALK[map[0]].w, gh:WALK[map[0]].h, grid:Uint8Array.from(WALK[map[0]].bits, c => c === '1' ? 1 : 0), flowT:0,
+    dist:new Int16Array(WALK[map[0]].w * WALK[map[0]].h), queue:new Int32Array(WALK[map[0]].w * WALK[map[0]].h),
+    p:{x:WALK[map[0]].start[0] * CELL + 16, y:WALK[map[0]].start[1] * CELL + 16, r:14, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:90, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
     weapons:[], passives:{}, enemies:[], shots:[], fx:[], orbs:[], nums:[], clouds:[], spawnT:0, nextBoss:BOSS_EVERY, boss:null, levelQueue:0
   };
-  addWeapon(job.start);
+  buildFlow(); addWeapon(job.start);
   $('jobName').textContent = job.id + '・' + map[1]; music(true);
   ['title','over','paused','levelUp'].forEach(s => $(s).classList.remove('on'));
   $('hud').hidden = false; refreshSlots(); toast(map[1] + '　開戰');
@@ -247,8 +277,11 @@ function weaponStat(w){
 // ---------- enemies ----------
 function tierNow(){ return clamp(G.tierBase + Math.floor(G.t / 120), 0, 5); }
 function spawnEnemy(boss){
-  const p = G.p, ang = rnd(0, Math.PI * 2), dist = Math.hypot(VW, VH) / 2 + 60;
-  const x = clamp(p.x + Math.cos(ang) * dist, 10, G.ww - 10), y = clamp(p.y + Math.sin(ang) * dist, 10, G.wh - 10);
+  const p = G.p, far = Math.hypot(VW, VH) / 2 + 40;
+  let x = 0, y = 0, ok = false;
+  for(let i = 0; i < 40 && !ok; i++){ const ang = rnd(0, Math.PI * 2), dd = far + rnd(0, 160) - i * 6; x = p.x + Math.cos(ang) * dd; y = p.y + Math.sin(ang) * dd; ok = dd > 220 && canWalk(x, y) && G.dist[cellOf(Math.floor(x), Math.floor(y))] > 0; }
+  if(!ok){ for(let i = 0; i < 200 && !ok; i++){ const c = Math.floor(Math.random() * G.grid.length); if(G.dist[c] > 9){ x = (c % G.gw) * CELL + 16; y = Math.floor(c / G.gw) * CELL + 16; ok = true; } } }
+  if(!ok) return;
   const minutes = G.t / 60, hard = 1 + G.tierBase * 0.35;
   if(boss){
     const b = D.boss[Math.min(D.boss.length - 1, Math.floor(G.t / BOSS_EVERY) * 2 + G.tierBase * 2 + Math.floor(Math.random() * 2))];
@@ -265,7 +298,7 @@ function spawnEnemy(boss){
 function hurt(e, dmg, kx, ky){
   if(e.dead) return;
   e.hp -= dmg; e.hitT = 0.12;
-  if(!e.boss && (kx || ky)){ e.x += kx; e.y += ky; }
+  if(!e.boss && (kx || ky)) nudge(e, kx, ky);
   G.nums.push({x:e.x + rnd(-8, 8), y:e.y - e.h * 0.6, v:Math.round(dmg), t:0.7});
   if(e.hp <= 0){
     e.dead = true; G.kills++; sfx('_death', 0.16, 320);
@@ -370,7 +403,9 @@ function update(dt){
   // move
   const [mx, my] = moveDir();
   G.moving = !!(mx || my); if(G.moving){ p.face = [mx, my]; }
-  p.x = clamp(p.x + mx * p.spd * dt, p.r, G.ww - p.r); p.y = clamp(p.y + my * p.spd * dt, p.r, G.wh - p.r);
+  { const nx = p.x + mx * p.spd * dt, ny = p.y + my * p.spd * dt, r = 9;
+    if(bodyFits(nx, ny, r)){ p.x = nx; p.y = ny; } else if(bodyFits(nx, p.y, r)) p.x = nx; else if(bodyFits(p.x, ny, r)) p.y = ny; }
+  G.flowT -= dt; if(G.flowT <= 0){ G.flowT = 0.25; buildFlow(); }
   p.inv = Math.max(0, p.inv - dt); p.hp = Math.min(p.max, p.hp + p.regen * dt);
   // spawn
   const rate = 0.9 + G.t / 40 + G.tierBase * 0.4;
@@ -385,12 +420,12 @@ function update(dt){
     if(e.dead) continue;
     e.hitT = Math.max(0, e.hitT - dt); e.slow = Math.max(0, e.slow - dt);
     const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1, sp = e.spd * (e.slow ? 0.45 : 1);
-    e.x += dx / d * sp * dt; e.y += dy / d * sp * dt; e.dir = dx < 0 ? -1 : 1;
+    flowStep(e, sp, dt);
     if(d < e.r + p.r && p.inv <= 0){ const dmg = Math.max(1, e.dmg - p.armor); p.hp -= dmg; p.inv = 0.6; sfx('_hurt', 0.35); G.nums.push({x:p.x, y:p.y - 30, v:Math.round(dmg), t:0.7, bad:true}); }
   }
   // light separation so crowds spread out
   const es = G.enemies;
-  for(let i = 0; i < es.length; i += 2){ const a = es[i], b = es[(i * 7 + 3) % es.length]; if(a === b || a.dead || b.dead) continue; const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy), m = a.r + b.r; if(d > 0 && d < m){ const k = (m - d) / d * 0.5; a.x += dx * k; a.y += dy * k; b.x -= dx * k; b.y -= dy * k; } }
+  for(let i = 0; i < es.length; i += 2){ const a = es[i], b = es[(i * 7 + 3) % es.length]; if(a === b || a.dead || b.dead) continue; const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy), m = a.r + b.r; if(d > 0 && d < m){ const k = (m - d) / d * 0.5; nudge(a, dx * k, dy * k); nudge(b, -dx * k, -dy * k); } }
   // shots
   for(const s of G.shots){
     s.life -= dt;
