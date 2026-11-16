@@ -5018,3 +5018,11 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 @media(max-width:640px){.jsPage .jsMain{overflow-x:auto;padding-bottom:6px}.jsGame{min-width:560px}}
 .jsGameTxt.link{justify-content:center;color:#f3e27a;font-size:2cqw}.jsGameTxt.link.more{color:#c9b98a;cursor:help}.jsGameTxt.link.none{color:#8a8a8a;font-size:1.8cqw}
 .jsGameTxt{overflow:hidden}
+/* V807: 手機橫放（高度很矮）時，頂部標題列不固定，捲動就收起，不再擋住內容 */
+@media (max-height:500px) and (orientation:landscape){
+  html body .topbar{position:relative!important;top:auto!important;transform:none!important}
+  .jsPickModal{padding:6px;align-items:start}
+  .jsPickBox{max-height:calc(100dvh - 12px)}
+  .jsSticky{top:0!important}
+  .jsGame,.godPanel{max-width:calc((100dvh - 16px) * 1.935);margin-inline:auto}
+}
