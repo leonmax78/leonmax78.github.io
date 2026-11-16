@@ -5058,3 +5058,8 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .jsCmpTable td small.up{color:#6fe0a8}.jsCmpTable td small.down{color:#f08a8a}
 .jsCmpTable th.jsCmpCur{color:#53ded3}
 .jsCmpNote{margin-top:8px}
+/* V815: 子分頁在非 .jsPage 的頁面（星等／靈氣）也用同一套樣式 */
+.jsSubTabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.jsSubTabs button{font:inherit;font-size:13px;line-height:1.4;color:var(--text,#dce7f5);background:#102a36;border:1px solid #357b83;border-radius:6px;padding:5px 12px;cursor:pointer;box-shadow:none;min-height:0;width:auto}
+.jsSubTabs button[aria-selected=true]{background:#137b77;color:#fff}
+.jsSubTabs+h2{margin-top:6px}
