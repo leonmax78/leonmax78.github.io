@@ -5064,3 +5064,7 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .jsSubTabs button{font:inherit;font-size:13px;line-height:1.4;color:var(--text,#dce7f5);background:#102a36;border:1px solid #357b83;border-radius:6px;padding:5px 12px;cursor:pointer;box-shadow:none;min-height:0;width:auto}
 .jsSubTabs button[aria-selected=true]{background:#137b77;color:#fff}
 .jsSubTabs+h2{margin-top:6px}
+/* V817: 子分頁排成一列，放不下時左右滑 */
+.jsSubTabs,.jsPage .jsSubTabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.jsSubTabs::-webkit-scrollbar{display:none}
+.jsSubTabs button{flex:0 0 auto;white-space:nowrap}

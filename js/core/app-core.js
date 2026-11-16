@@ -258,9 +258,7 @@ function renderChoiceMenu(title, rows){
 function renderJiangHome(){
  document.body.classList.remove('isHomeView');
  renderChoiceMenu('角色養成試算',[
-  {title:'降神模擬',desc:'配主降神與四隻副降神、看連結加成，含組合推薦、星等／靈氣與五組存檔比較',attr:'data-jiang="support"'},
-  {title:'主降神比較',desc:'最多五隻主降神並排比較九項能力',attr:'data-jiang="compare"'},
-  {title:'降神20星能力總表',desc:'選一隻降神看 0～20 星各項能力',attr:'data-jiang="stars"'},
+  {title:'降神模擬',desc:'配主降神與四隻副降神看連結加成；含組合推薦、主降神比較、20星能力總表、星等／靈氣與五組存檔比較',attr:'data-jiang="support"'},
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
   {title:'修練進度',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
   {title:'寶石試算、加工配方',desc:'三星合成材料、鑲嵌能力與加工配方',attr:'data-view="gems"'},
@@ -415,7 +413,9 @@ window.szoAddSectionNav=szoAddSectionNav;
 const SZO_JS_SUBS=[['support','降神模擬'],['recommend','組合推薦方案'],['compare','主降神比較'],['stars','20星能力總表'],['starAura','星等／靈氣']];
 window.SZO_JIANG_SUBTABS=active=>SZO_JS_SUBS.some(x=>x[0]===active)?`<div class="jsTabs jsSubTabs">${SZO_JS_SUBS.map(([k,l])=>`<button type="button" ${k===active?'aria-selected="true"':`data-js-nav="${k}"`}>${l}</button>`).join('')}</div>`:'';
 // V806: 分頁一出現就能點（不必等降神功能檔載入）
-document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-js-nav]');if(!b)return;e.preventDefault();(window.setJiang||setJiang)(b.dataset.jsNav);});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-js-nav]');if(!b)return;e.preventDefault();(window.setJiang||setJiang)(b.dataset.jsNav);
+ // 子分頁排成一列：切換後把目前這頁捲到看得見的位置
+ [80,400,1200].forEach(t=>setTimeout(()=>{const s=document.querySelector('#reader .jsSubTabs'),a=s&&s.querySelector('[aria-selected=true]');if(a)s.scrollLeft=Math.max(0,a.offsetLeft-s.offsetLeft-16);},t));});
 async function setView(view){
  document.querySelectorAll('body > .jsPickModal, body > .jsSticky').forEach(x=>x.remove());
  if(view!=='home') document.body.classList.remove('isHomeView');
