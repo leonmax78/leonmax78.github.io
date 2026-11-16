@@ -676,6 +676,19 @@
     }
     return groups;
   }
+  // V810: 隱藏傳點名稱（只留箭頭），記在這台瀏覽器
+  function exitLabelsHidden(){ try{ return localStorage.getItem('szo-map-exit-labels') === 'hide'; }catch(e){ return false; } }
+  function applyExitLabels(){ document.documentElement.classList.toggle('mapExitLabelsHidden', exitLabelsHidden()); }
+  applyExitLabels();
+  document.addEventListener('click', ev => {
+    const b = ev.target.closest && ev.target.closest('[data-map-exit-labels]');
+    if(!b) return;
+    ev.preventDefault();
+    const hide = !exitLabelsHidden();
+    try{ localStorage.setItem('szo-map-exit-labels', hide ? 'hide' : 'show'); }catch(e){}
+    applyExitLabels();
+    document.querySelectorAll('[data-map-exit-labels]').forEach(x => { x.setAttribute('aria-pressed', String(hide)); x.textContent = hide ? '顯示傳點名稱' : '隱藏傳點名稱'; });
+  });
   function exitLabels(stage){
     const w = Number(stage.width) || 1, h = Number(stage.height) || 1;
     return groupedExits(stage).map(g => {
@@ -1082,6 +1095,7 @@
           <div class="mapZoomBar">
             <div class="mapViewTools">
               <button type="button" class="ghost mapToolBtn" data-map-list-toggle aria-pressed="${state.listHidden ? 'true' : 'false'}">${state.listHidden ? '顯示清單' : '隱藏清單'}</button>
+              <button type="button" class="ghost mapToolBtn" data-map-exit-labels aria-pressed="${exitLabelsHidden() ? 'true' : 'false'}" title="傳送點只留箭頭，不顯示地圖名稱（滑鼠移上去仍可看到）">${exitLabelsHidden() ? '顯示傳點名稱' : '隱藏傳點名稱'}</button>
               <button type="button" class="ghost mapToolBtn" data-map-fit title="整張地圖縮放到可見範圍">整張地圖</button>
               <button type="button" class="ghost mapToolBtn" data-map-fill title="地圖填滿整個框，超出部分可拖曳查看">填滿畫面</button>
               <button type="button" class="ghost mapToolBtn mapMaxBtn" data-map-max aria-pressed="${state.maximized ? 'true' : 'false'}" title="${state.maximized ? '結束放大（Esc）' : '地圖佔滿整個視窗'}">${state.maximized ? '結束放大' : '放大地圖'}</button>
