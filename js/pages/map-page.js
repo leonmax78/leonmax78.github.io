@@ -1107,6 +1107,7 @@
                 <div><span class="mapDot monster mlDot">M</span>怪物：在左側清單勾選後才標出位置</div>
                 <div><span class="mlFloor">3樓</span>樓層或區域名稱</div>
                 <div class="muted">兩指或滑桿縮放，拖曳移動地圖</div>
+                <button type="button" class="ghost mlClose" data-map-legend-close>關閉圖例</button>
               </div></details>
             </div>
             <label>縮放
@@ -1849,3 +1850,12 @@
   window.ensureMapPageLoaded = async function(){ return true; };
   window.renderStageMapPage = renderStageMapPage;
 })();
+
+// V818: 圖例在手機上會蓋住「圖例」按鈕：點圖例本身、關閉鈕或其他地方都會收起
+document.addEventListener('click', e => {
+  for (const d of document.querySelectorAll('details.mapLegend[open]')) {
+    const sum = d.querySelector(':scope > summary');
+    if (sum && sum.contains(e.target)) continue;
+    d.open = false;
+  }
+}, true);
