@@ -328,8 +328,9 @@ return {'面板術攻':w*2.4+get('術攻'),'面板術防':w*0.8+get('術防'),'�
  }
  const taoistAttack=job.value==='CLASS_TAOIST'&&(!armed.length||(armed.length===1&&armed[0].type_codes.includes('STAFF')));
  const hiddenWeaponAttack=job.value==='CLASS_ASSASSIN'&&armed.length===1&&armed[0].type_codes.includes('HIDDEN_WEAPON');
- // 右手拿雙手武器（槍、暗器、拂塵、杖、棍）：右攻＝命中×平均傷害÷2、左攻＝命中。劍俠＋泣槍奈‧芙蒂與遊戲 227556／1065 吻合（誤差 2）
- const twoHandAttack=armed.length===1&&twoHand(armed[0]);
+ // 只拿一把武器（雙手武器，或單手武器而另一手空著）：右攻＝命中×平均傷害÷2、左攻＝命中。
+ // 劍俠＋泣槍奈‧芙蒂與遊戲 227556／1065 吻合（誤差 2）；單手武器依站長確認用同一算法
+ const twoHandAttack=armed.length===1;
  if(taoistAttack||hiddenWeaponAttack||twoHandAttack){
    const hit=[0,1].map(i=>2+(4*(sums['力量']?.[i]||0)+(sums['靈敏']?.[i]||0))/100);
    const left=armed.length&&gear.find(r=>D.eq[r.pick.value]?.base_stats.damage).hand.value==='left';
