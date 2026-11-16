@@ -261,8 +261,8 @@ function renderJiangHome(){
   {title:'降神模擬',desc:'配主降神與四隻副降神看連結加成；含組合推薦、主降神比較、20星能力總表、星等／靈氣與五組存檔比較',attr:'data-jiang="support"'},
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
   {title:'修練進度',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
-  {title:'寶石試算、加工配方',desc:'三星合成材料、鑲嵌能力與加工配方',attr:'data-view="gems"'},
   {title:'武魂能力試算',desc:'武魂能力與成長試算',attr:'data-view="soul"'},
+  {title:'寶石試算、加工配方',desc:'鑲嵌能力、推薦方案、三星合成材料與加工配方',attr:'data-view="gems"'},
   {title:'角色機體模擬',desc:'職業、降神、修練、裝備、寶石一起算，仿遊戲物品欄，可存方案比較',attr:'data-view="machine"'}
  ]);
 }
@@ -392,7 +392,7 @@ function openJiangMenuOnly(){
  renderJiangHome();
 }
 // V803: 降神區所有功能共用一排分頁（降神 6 項＋寶石、武魂、角色機體）
-const SZO_JS_SECTIONS=[['support','降神模擬',['support','recommend','compare','stars','starAura','supportCompare']],['expPill','等級／經驗丹',['expPill']],['training','修練進度',['training']],['gems','寶石試算',['gems'],1],['soul','武魂試算',['soul'],1],['machine','角色機體模擬',['machine'],1]];
+const SZO_JS_SECTIONS=[['support','降神模擬',['support','recommend','compare','stars','starAura','supportCompare']],['expPill','等級／經驗丹',['expPill']],['training','修練進度',['training']],['soul','武魂試算',['soul'],1],['gems','寶石試算',['gems'],1],['machine','角色機體模擬',['machine'],1]];
 window.SZO_JIANG_NAV=kind=>`<nav class="jsNav" aria-label="降神、寶石、武魂試算">${SZO_JS_SECTIONS.map(([k,l,g,isView])=>`<button type="button" class="${g.includes(kind)?'active':''}" ${isView?`data-view="${k}"`:`data-js-nav="${k}"`}>${l}</button>`).join('')}</nav>`;
 function szoAddSectionNav(kind){
  const sec=document.querySelector('#reader > section, #reader section.card, #reader .machineWrap');
