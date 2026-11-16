@@ -257,13 +257,12 @@ function renderChoiceMenu(title, rows){
 
 function renderJiangHome(){
  document.body.classList.remove('isHomeView');
- renderChoiceMenu('降神、經驗、修練、寶石、武魂試算',[
-  {title:'副降神試算',desc:'配五隻降神、看連結加成，含組合推薦與存檔比較',attr:'data-jiang="support"'},
+ renderChoiceMenu('角色養成試算',[
+  {title:'降神模擬',desc:'配主降神與四隻副降神、看連結加成，含組合推薦、星等／靈氣與五組存檔比較',attr:'data-jiang="support"'},
   {title:'主降神比較',desc:'最多五隻主降神並排比較九項能力',attr:'data-jiang="compare"'},
   {title:'降神20星能力總表',desc:'選一隻降神看 0～20 星各項能力',attr:'data-jiang="stars"'},
-  {title:'星等/靈氣試算',desc:'星等與靈氣相關試算',attr:'data-jiang="starAura"'},
   {title:'等級/經驗丹試算',desc:'經驗與丹藥需求試算',attr:'data-jiang="expPill"'},
-  {title:'修練計算',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
+  {title:'修練進度',desc:'四聖、天照、靈丹、煉金、真元、聖鑽材料計算',attr:'data-jiang="training"'},
   {title:'寶石試算、加工配方',desc:'三星合成材料、鑲嵌能力與加工配方',attr:'data-view="gems"'},
   {title:'武魂能力試算',desc:'武魂能力與成長試算',attr:'data-view="soul"'},
   {title:'角色機體模擬',desc:'職業、降神、修練、裝備、寶石一起算，仿遊戲物品欄，可存方案比較',attr:'data-view="machine"'}
@@ -312,16 +311,16 @@ function itemSubLoadingLabel(kind){
 }
 function jiangLoadingLabel(kind){
  const labels={
-  support:'副降神模擬',
-  recommend:'副降神組合推薦方案',
-  supportCompare:'副降神存檔比較',
+  support:'降神模擬',
+  recommend:'降神組合推薦方案',
+  supportCompare:'降神模擬',
   compare:'主降神比較',
   stars:'降神20星能力總表',
   starAura:'星等/靈氣試算',
   expPill:'等級/經驗丹試算',
-  training:'修練機制試算'
+  training:'修練進度'
  };
- return labels[kind]||'降神、經驗、修練、寶石、武魂試算';
+ return labels[kind]||'角色養成試算';
 }
 
 function pageLoadingText(label){
@@ -364,16 +363,16 @@ function itemSubLoadingLabel(kind){
 }
 function jiangLoadingLabel(kind){
  const labels={
-  support:'副降神模擬',
-  recommend:'副降神組合推薦方案',
-  supportCompare:'副降神存檔比較',
+  support:'降神模擬',
+  recommend:'降神組合推薦方案',
+  supportCompare:'降神模擬',
   compare:'主降神比較',
   stars:'降神20星能力總表',
   starAura:'星等/靈氣試算',
   expPill:'等級/經驗丹試算',
-  training:'修練機制試算'
+  training:'修練進度'
  };
- return labels[kind]||'降神、經驗、修練、寶石、武魂試算';
+ return labels[kind]||'角色養成試算';
 }
 
 function adoptPreloadedMonsterBundle(){
@@ -395,7 +394,7 @@ function openJiangMenuOnly(){
  renderJiangHome();
 }
 // V803: 降神區所有功能共用一排分頁（降神 6 項＋寶石、武魂、角色機體）
-const SZO_JS_SECTIONS=[['support','副降神試算',['support','recommend','supportCompare']],['compare','主降神比較',['compare']],['stars','20星能力總表',['stars']],['starAura','星等／靈氣',['starAura']],['expPill','等級／經驗丹',['expPill']],['training','修練',['training']],['gems','寶石試算',['gems'],1],['soul','武魂試算',['soul'],1],['machine','角色機體模擬',['machine'],1]];
+const SZO_JS_SECTIONS=[['support','降神模擬',['support','recommend','starAura','supportCompare']],['compare','主降神比較',['compare']],['stars','20星能力總表',['stars']],['expPill','等級／經驗丹',['expPill']],['training','修練進度',['training']],['gems','寶石試算',['gems'],1],['soul','武魂試算',['soul'],1],['machine','角色機體模擬',['machine'],1]];
 window.SZO_JIANG_NAV=kind=>`<nav class="jsNav" aria-label="降神、寶石、武魂試算">${SZO_JS_SECTIONS.map(([k,l,g,isView])=>`<button type="button" class="${g.includes(kind)?'active':''}" ${isView?`data-view="${k}"`:`data-js-nav="${k}"`}>${l}</button>`).join('')}</nav>`;
 function szoAddSectionNav(kind){
  const sec=document.querySelector('#reader > section, #reader section.card, #reader .machineWrap');
@@ -403,8 +402,18 @@ function szoAddSectionNav(kind){
  const box=document.createElement('div');box.innerHTML=window.SZO_JIANG_NAV(kind);const nav=box.firstChild;
  const h1=sec.querySelector('h1');if(h1&&h1.parentNode===sec)h1.after(nav);else sec.prepend(nav);
  const act=nav.querySelector('.active');if(act)nav.scrollLeft=Math.max(0,act.offsetLeft-16);
+ szoAddSubTabs(kind,nav);
 }
+function szoAddSubTabs(kind,nav){
+ const html=window.SZO_JIANG_SUBTABS?window.SZO_JIANG_SUBTABS(kind):'';
+ if(!html||!nav||(nav.nextElementSibling&&nav.nextElementSibling.classList.contains('jsSubTabs')))return;
+ const b=document.createElement('div');b.innerHTML=html;nav.after(b.firstChild);
+}
+window.szoAddSubTabs=szoAddSubTabs;
 window.szoAddSectionNav=szoAddSectionNav;
+// V813: 降神模擬底下的子分頁（星等／靈氣併入；存檔比較移到降神模擬頁最下方）
+const SZO_JS_SUBS=[['support','降神模擬'],['recommend','組合推薦方案'],['starAura','星等／靈氣']];
+window.SZO_JIANG_SUBTABS=active=>SZO_JS_SUBS.some(x=>x[0]===active)?`<div class="jsTabs jsSubTabs">${SZO_JS_SUBS.map(([k,l])=>`<button type="button" ${k===active?'aria-selected="true"':`data-js-nav="${k}"`}>${l}</button>`).join('')}</div>`:'';
 // V806: 分頁一出現就能點（不必等降神功能檔載入）
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-js-nav]');if(!b)return;e.preventDefault();(window.setJiang||setJiang)(b.dataset.jsNav);});
 async function setView(view){
@@ -572,10 +581,10 @@ async function setItemSub(kind){
 // V784: home page shortcuts and the visitor's recently used tools (stored only in this browser)
 const HOME_TOOLS=[
  ['data-view="quest"','任務查詢'],['data-item-open="item"','道具查詢'],['data-view="monsterQuery"','查詢怪物'],
- ['data-view="map"','地圖查詢'],['data-view="exchange"','兌換、拆解、升階'],['data-jiang="support"','副降神試算'],
+ ['data-view="map"','地圖查詢'],['data-view="exchange"','兌換、拆解、升階'],['data-jiang="support"','降神模擬'],
  ['data-view="gems"','寶石試算'],['data-view="skill"','技能查詢']
 ];
-const RECENT_LABELS={'data-view="machine"':'角色機體模擬','data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'副降神試算','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練計算'};
+const RECENT_LABELS={'data-view="machine"':'角色機體模擬','data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'降神模擬','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練進度'};
 function szoSetRoute(route){try{history.replaceState(history.state,'',location.pathname+location.search+(route?'#/'+route:''));}catch(e){}}
 window.szoSetRoute=szoSetRoute;
 async function szoOpenRoute(){
@@ -1095,7 +1104,7 @@ async function ensureJiangshenToolLoaded(){
   ];
   try{
    setTopStatus("Loading jiangshen tool");
-   showPageLoading(window.SZO_PENDING_JIANG_LABEL||'降神、經驗、修練、寶石、武魂試算');
+   showPageLoading(window.SZO_PENDING_JIANG_LABEL||'角色養成試算');
    for(const src of list)await loadScriptOnce(src);
    jiangshenToolReady=true;
    setTopStatus("Ready");
@@ -1220,7 +1229,7 @@ function fillJiangFields(kind){
  if(kind==='starAura'){
   const starOptions=Array.from({length:21},(_,i)=>`<option value="${i}" ${i===20?'selected':''}>${i} 星</option>`).join('');
   const starOptionsZero=Array.from({length:21},(_,i)=>`<option value="${i}">${i} 星</option>`).join('');
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>星等/靈氣試算</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>角色養成試算</h1><h2>星等/靈氣試算</h2>
   <div class="calcTabs"><button class="calcTab active" type="button" data-star-tab="star">星等計算</button><button class="calcTab" type="button" data-star-tab="aura">靈氣計算</button></div>
   <div id="starTabNeed">
     <h3>星等：需要的降神數量</h3>
@@ -1248,7 +1257,7 @@ function fillJiangFields(kind){
  }
 
  if(kind==='expPill'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>等級/經驗丹試算</h2>
+  byId('reader').innerHTML=`<section class="card"><h1>角色養成試算</h1><h2>等級/經驗丹試算</h2>
   <div class="calcTabs"><button class="calcTab active" type="button" data-exp-tab="need">等級經驗</button><button class="calcTab" type="button" data-exp-tab="eat">經驗丹升等</button></div>
   <div id="expTabNeed">
     <h3>等級：需要的經驗值</h3>
@@ -1288,14 +1297,14 @@ function fillJiangFields(kind){
    window.renderMainCompareFive();
    return;
   }
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>主降神比較</h2><div class="kvGrid">
+  byId('reader').innerHTML=`<section class="card"><h1>角色養成試算</h1><h2>主降神比較</h2><div class="kvGrid">
   <div class="kv"><div class="k">降神 A</div><div class="v"><select id="jsA">${opts}</select><label>星</label><select id="jsAS">${stars20}</select></div></div>
   <div class="kv"><div class="k">降神 B</div><div class="v"><select id="jsB">${opts}</select><label>星</label><select id="jsBS">${stars20}</select></div></div>
   </div><div class="quick"><button id="calcCompare">計算比較<small>比較兩位主降神的能力差異</small></button></div></section>`;
  }
 
  if(kind==='stars'){
-  byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>降神20星能力總表</h2><div class="muted">選擇降神後，產生 0 到 20 星的能力總表。</div><div class="kvGrid">
+  byId('reader').innerHTML=`<section class="card"><h1>角色養成試算</h1><h2>降神20星能力總表</h2><div class="muted">選擇降神後，產生 0 到 20 星的能力總表。</div><div class="kvGrid">
   <div class="kv"><div class="k">選擇降神</div><div class="v"><select id="jsStarName">${opts}</select></div></div>
   </div><div class="quick"><button id="calcStars">產生 0 ~ 20 星能力總表<small>完整顯示各星等能力</small></button></div></section>`;
  }
@@ -1471,7 +1480,7 @@ function renderTrainingCalc(){
     </div>
   </div>`;
  }
- byId('reader').innerHTML=`<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>修練機制試算</h2>
+ byId('reader').innerHTML=`<section class="card"><h1>角色養成試算</h1><h2>修練進度</h2>
  <div class="notice">選擇目前階與目標階，會計算需要材料，以及從目前階提升到目標階增加的能力。計算結果預設隱藏，按下「計算修練」後才會顯示。</div>
  <div class="kvGrid">
   <div class="kv"><div class="k">分類篩選</div><div class="v"><select id="trainGroupFilter">${groupOpts}</select></div></div>
@@ -1661,7 +1670,7 @@ function backLabelFor(view){
  if(view==='reverse')return '返回道具反查';
  if(view==='shop')return '返回商店販賣資訊';
  if(view==='downloads')return '返回工具下載區';
- if(view==='jiang')return '返回降神、經驗、修練、寶石、武魂試算';
+ if(view==='jiang')return '返回角色養成試算';
  return '返回首頁';
 }
 function backButtonHTML(view){

@@ -5048,3 +5048,13 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .sdTable td.zero{color:#56667c}
 .sdTable tbody tr:nth-child(even) td{background-color:rgba(255,255,255,.02)}
 @media(max-width:600px){.sdTable{font-size:12.5px}.sdTable th,.sdTable td{padding:6px 7px}}
+/* V813: 降神模擬：存檔比較移到最下方，五組存檔可一起比較 */
+.jsPage .jsTopActions{margin-top:14px}
+.jsSaveCmp{margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+.jsSaveCmp h3{margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.jsSaveCmp h3 small{font-size:12px;font-weight:400;color:var(--muted)}
+.jsPage .jsSlot button.jsCmpToggle.on{background:#0f4f4a;border-color:#53ded3;color:#fff}
+.jsCmpTable td small{display:block;font-size:11px;line-height:1.2}
+.jsCmpTable td small.up{color:#6fe0a8}.jsCmpTable td small.down{color:#f08a8a}
+.jsCmpTable th.jsCmpCur{color:#53ded3}
+.jsCmpNote{margin-top:8px}

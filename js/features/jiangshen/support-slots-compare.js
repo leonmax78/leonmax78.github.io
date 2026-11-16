@@ -119,7 +119,7 @@
   function add(a,b){ const out={}; for(const st of stats()) out[st] = Math.ceil(Number(a?.[st] || 0) + Number(b?.[st] || 0)); return out; }
   function kvGrid(obj){ return `<div class="kvGrid">${stats().map(st=>`<div class="kv"><div class="k">${E(window.SZO_DISPLAY.label(st))}</div><div class="v">${fmt(obj?.[st] || 0)}</div></div>`).join('')}</div>`; }
   function emptyMsg(msg){ if(typeof empty === 'function') empty(msg); else alert(msg); }
-  function supportBackBtn(){ return '<button class="backBtn" type="button" onclick="setJiang(\'support\')">← 返回副降神試算</button>'; }
+  function supportBackBtn(){ return '<button class="backBtn" type="button" onclick="setJiang(\'support\')">← 返回降神模擬</button>'; }
   function defaultSet(){ return Array.from({length:5},()=>({n:'',s:1})); }
   function readJson(k,def){ try{return JSON.parse(localStorage.getItem(k) || '') || def;}catch(e){return def;} }
   function writeJson(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
@@ -183,7 +183,7 @@
 
   function renderSupportLegacy(){
     const reader = $('reader'); if(!reader) return;
-    reader.innerHTML = `<section class="card"><h1>降神、經驗、修練、寶石、武魂試算</h1><h2>副降神試算</h2>
+    reader.innerHTML = `<section class="card"><h1>角色養成試算</h1><h2>降神模擬</h2>
       <div class="notice">主降神以 100% 能力計算；副降神 1 ~ 4 各 10%。可直接試算，也可以存入 A ~ E 後做比較。</div>
       ${planHtml('P')}
       <div class="supportSaveBar">
@@ -191,7 +191,6 @@
         <label style="margin:0">存檔到<select id="supportSaveSlot">${SLOT_LETTERS.map((x,i)=>`<option value="${i}">${x}</option>`).join('')}</select></label>
         <button id="saveSupportSlot" type="button">存檔</button>
         <button id="loadSupportSlot" type="button">讀取</button>
-        <button id="openSupportCompare" type="button">開啟存檔比較</button>
       </div>
       <div id="supportLoadNotice" class="muted"></div>
       <h3>目前存檔</h3><div id="supportSlotList" class="kvGrid"></div>
@@ -212,7 +211,6 @@
       alert('已存入存檔 ' + SLOT_LETTERS[idx] + '：' + slotSummary(plan));
     };
     $('loadSupportSlot').onclick = () => loadSupportSlot(Number($('supportSaveSlot').value || 0));
-    $('openSupportCompare').onclick = renderSupportCompare;
   }
 
   // V755: card layout like the 神魂寶石 page — pick a slot card, choose 降神 and 星等 on the left,
@@ -258,9 +256,24 @@
   const canon = n => { try{ return (typeof canonicalName === 'function' && canonicalName(n)) || n; }catch(e){ return n; } };
   const comboList = () => Object.entries(D().comboMembers || {}).map(([c,m]) => [c, (m || []).map(canon)]);
   const combosOf = list => (typeof activeCombos === 'function' ? activeCombos(list.filter(Boolean)) : []);
-  const JS_TABS = active => (window.SZO_JIANG_NAV ? window.SZO_JIANG_NAV('support') : '') + `<div class="jsTabs jsSubTabs">${[['support','副降神試算'],['recommend','組合推薦方案'],['supportCompare','存檔比較']].map(([k,l]) => `<button type="button" ${k===active ? 'aria-selected="true"' : `onclick="setJiang('${k}')"`}>${l}</button>`).join('')}</div>`;
+  const JS_TABS = active => (window.SZO_JIANG_NAV ? window.SZO_JIANG_NAV('support') : '') + (window.SZO_JIANG_SUBTABS ? window.SZO_JIANG_SUBTABS(active) : '');
   const miniHeads = set => `<span class="jsMini">${normalizeSet(set).map((p,i) => p.n ? `<span title="${E(p.n)} ${p.s}星">${headImg(p.n,'')}${i===0 ? `<em>${p.s}</em>` : ''}</span>` : '<span class="none"></span>').join('')}</span>`;
-  let cmpSlot = null;
+  // V813: 存檔比較併到降神模擬最下方：目前組合＋勾選的存檔（預設有存的都比）
+  const cmpOff = [false,false,false,false,false];
+  const cmpOn = i => !cmpOff[i];
+  function saveCompareTable(plan, res, slots){
+    const cols = [{label:'目前組合', set:plan, res, cur:true}].concat(SLOT_LETTERS.map((x,i)=>({i, label:'存檔 '+x, set:slots[i]}))
+      .filter(c => cmpOn(c.i) && normalizeSet(c.set).some(p=>p.n)).map(c => ({...c, res:calcPlan(c.set)})));
+    if(cols.length < 2) return '<div class="empty">還沒有可比較的存檔。選好降神後按上面的「存入」，最多可存五組一起比較。</div>';
+    const rows = stats().map(st => {
+      const vals = cols.map(c => Math.ceil(Number(c.res.total[st] || 0)));
+      const max = Math.max(...vals);
+      return `<tr><td>${E(window.SZO_DISPLAY.label(st))}</td>${cols.map((c,k) => { const d = vals[k] - vals[0]; return `<td class="${max>0 && vals[k]===max ? 'supportBest' : ''}">${fmt(vals[k])}${k && d ? `<small class="${d>0?'up':'down'}">${d>0?'+':''}${fmt(d)}</small>` : ''}</td>`; }).join('')}</tr>`;
+    }).join('');
+    return `<div class="tableWrap"><table class="compareTable jsCmpTable"><thead><tr><th>能力</th>${cols.map(c=>`<th class="${c.cur?'jsCmpCur':''}"><b>${E(c.label)}</b>${miniHeads(c.set)}</th>`).join('')}</tr></thead><tbody>${rows}
+      <tr><td>成立連結</td>${cols.map(c=>`<td class="jsCmpLinks">${c.res.combos.length ? c.res.combos.map(x=>`<i title="${E(typeof comboText === 'function' ? comboText(x) : '')}">${E(x)}</i>`).join('') : '<span class="muted">無</span>'}</td>`).join('')}</tr>
+    </tbody></table></div><div class="muted jsCmpNote">每列最高值以醒目顏色標示；存檔欄下方的小字是和目前組合的差距。</div>`;
+  }
   if(!window.__jsStickyBound){
     window.__jsStickyBound = true;
     window.addEventListener('scroll', () => {
@@ -295,9 +308,7 @@
       .map(([c,m]) => [c, m.find(x => !have.has(x))]).filter(([,miss]) => shown(miss)).slice(0, 8);
     const freeSlot = plan.findIndex(p => !p.n);
     const cardLinks = n => res.combos.filter(c => ((D().comboMembers || {})[c] || []).map(canon).includes(canon(n)));
-    const cmpOk = cmpSlot !== null && normalizeSet(slots[cmpSlot]).some(p=>p.n);
-    const cmpTotal = cmpOk ? calcPlan(slots[cmpSlot]).total : null;
-    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
+    reader.innerHTML = `<section class="card jsPage"><h1>角色養成試算</h1>
       ${JS_TABS('support')}
       <div class="jsSticky" id="jsSticky">${plan.map((p,i)=>`<button type="button" data-js-jump="${i}" class="${i===activeSlot?'active':''}">${p.n ? headImg(p.n,'') : '<span>＋</span>'}<small>${i===0?'主':'副'+i}</small></button>`).join('')}</div>
       <div class="jsLayout">
@@ -337,14 +348,15 @@
           }).join('')}</div>
         </div>
       </div>
-      <div class="jsBelow">
-          <div class="jsLabel">存檔</div>
+      <div class="jsActions jsTopActions"><button type="button" id="jsDetail">看各降神能力明細</button><button type="button" id="jsClearAll">全部清空</button></div>
+      <div class="jsBelow jsSaveCmp">
+          <h3>存檔比較<small>五組存檔 A～E，勾選「比較」就會和目前組合並排</small></h3>
           <div class="jsSlots">${SLOT_LETTERS.map((x,i)=>{
             const empty = !normalizeSet(slots[i]).some(p=>p.n);
-            return `<div class="jsSlot ${cmpSlot===i && !empty ? 'cmp' : ''}"><b>${x}</b>${empty ? '<span class="muted">空白</span>' : miniHeads(slots[i])}<button type="button" data-js-save="${i}">存入</button><button type="button" data-js-load="${i}" ${empty?'disabled':''}>讀取</button><button type="button" data-js-cmp="${i}" ${empty?'disabled':''}>${cmpSlot===i && !empty ? '收起' : '和目前比較'}</button></div>`;
+            const on = !empty && cmpOn(i);
+            return `<div class="jsSlot ${on ? 'cmp' : ''}"><b>${x}</b>${empty ? '<span class="muted">空白</span>' : miniHeads(slots[i])}<button type="button" data-js-save="${i}">存入</button><button type="button" data-js-load="${i}" ${empty?'disabled':''}>讀取</button><button type="button" class="jsCmpToggle ${on?'on':''}" data-js-cmp="${i}" ${empty?'disabled':''} aria-pressed="${on}">${on ? '✓ 比較' : '比較'}</button></div>`;
           }).join('')}</div>
-          ${cmpOk ? `<div class="jsDiff"><div class="jsLabel">目前組合 比 存檔 ${SLOT_LETTERS[cmpSlot]}</div><div class="jsTotals">${stats().map(st=>{ const d = Math.ceil(Number(res.total[st]||0)) - Math.ceil(Number(cmpTotal[st]||0)); return `<div><span>${E(window.SZO_DISPLAY.label(st))}</span><b class="${d>0?'up':d<0?'down':'zero'}">${d>0?'+':''}${fmt(d)}</b></div>`; }).join('')}</div></div>` : ''}
-          <div class="jsActions"><button type="button" id="jsDetail">看各降神能力明細</button><button type="button" id="jsClearAll">全部清空</button></div>
+          ${saveCompareTable(plan, res, slots)}
       </div>
     </section>`;
     // the card has a transform, so a fixed bar inside it would scroll away: host it on <body>
@@ -379,7 +391,7 @@
     if(search) search.oninput = () => { heroQuery = search.value; const pos = search.selectionStart; rerender(); const s2 = $('jsHeroSearch'); s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} };
     reader.querySelectorAll('[data-js-save]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsSave); const all = getSlots(); all[i] = getCurrent(); setSlots(all); rerender(); });
     reader.querySelectorAll('[data-js-load]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsLoad); setCurrent(getSlots()[i]); activeSlot = 0; rerender(); });
-    reader.querySelectorAll('[data-js-cmp]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsCmp); cmpSlot = cmpSlot===i ? null : i; rerender(); });
+    reader.querySelectorAll('[data-js-cmp]').forEach(b=>b.onclick=()=>{ const i = Number(b.dataset.jsCmp); cmpOff[i] = cmpOn(i); rerender(); });
     if($('jsGodLv')) $('jsGodLv').oninput = e => setGodTotalLevel(e.target.value);
     const closePick = () => { pickerOpen = false; rerender(); };
     if($('jsPickDone')) $('jsPickDone').onclick = closePick;
@@ -428,7 +440,7 @@
     saveCurrent();
     const res = calcPlan(readPlan('P'));
     if(!res.picks.length){ emptyMsg('請至少選擇一位降神'); return; }
-    $('reader').innerHTML = `<section class="card">${supportBackBtn()}<h1>副降神試算結果</h1>
+    $('reader').innerHTML = `<section class="card">${supportBackBtn()}<h1>降神模擬結果</h1>
       <div class="muted">${picksText(res)}</div>
       ${detailTable(res)}
       <h3>成立連結</h3>${comboTextBlock(res)}
@@ -440,9 +452,9 @@
     const slots = getSlots();
     const filled = slots.map(s => normalizeSet(s).some(p=>p.n));
     if(!cmpPick) cmpPick = filled.slice();
-    $('reader').innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
+    $('reader').innerHTML = `<section class="card jsPage"><h1>角色養成試算</h1>
       ${JS_TABS('supportCompare')}
-      <div class="jsLabel">點選要比較的存檔（可多選，存檔在「副降神試算」下方存入）</div>
+      <div class="jsLabel">點選要比較的存檔（可多選，存檔在「降神模擬」下方存入）</div>
       <div class="jsCmpPick">${SLOT_LETTERS.map((x,i)=>`<button type="button" data-cmp-pick="${i}" class="${cmpPick[i] && filled[i] ? 'active' : ''}" ${filled[i] ? '' : 'disabled'}><b>${x}</b>${filled[i] ? miniHeads(slots[i]) : '<span class="muted">空白</span>'}</button>`).join('')}</div>
       <div id="supportCompareResult"></div>
     </section>`;
@@ -454,7 +466,7 @@
     const out = $('supportCompareResult'); if(!out) return;
     const cols = SLOT_LETTERS.map((x,idx)=>({idx,label:'存檔 '+x,set:slots[idx],res:calcPlan(slots[idx])}))
       .filter(c => cmpPick && cmpPick[c.idx] && c.res.picks.length);
-    if(!cols.length){ out.innerHTML='<div class="empty">還沒有可比較的存檔。先到「副降神試算」選好降神，按下方的「存入」。</div>'; return; }
+    if(!cols.length){ out.innerHTML='<div class="empty">還沒有可比較的存檔。先到「降神模擬」選好降神，按下方的「存入」。</div>'; return; }
     out.innerHTML = `<div class="tableWrap"><table class="compareTable jsCmpTable"><thead><tr><th>能力</th>${cols.map(c=>`<th><b>${E(c.label)}</b>${miniHeads(c.set)}</th>`).join('')}</tr></thead><tbody>
       ${stats().map(st=>{
         const vals = cols.map(c=>Math.ceil(Number(c.res.total[st] || 0)));
@@ -729,7 +741,7 @@
   let lastRecPlans = [];
   function recommendCard(metric, plan, idx){
     return `<article class="jsRecCard">
-      <div class="jsRecHead"><b>${idx + 1}. ${E(metric.title)}</b><span class="muted">分數 ${fmt(plan.score)}</span><button type="button" data-rec-apply="${idx}">套用到副降神試算</button></div>
+      <div class="jsRecHead"><b>${idx + 1}. ${E(metric.title)}</b><span class="muted">分數 ${fmt(plan.score)}</span><button type="button" data-rec-apply="${idx}">套用到降神模擬</button></div>
       <div class="jsRecPicks">${plan.picks.map((p,i)=>`<div class="jsRecPick ${i===0?'main':''}"><span class="jsCardFace">${headImg(p.n,'')}<span class="jsCardStar">${p.s} 星</span></span><b>${E(p.n)}</b><small>${E(REC_SLOTS[i])}${i===0?'・100%':'・10%'}</small></div>`).join('')}</div>
       <div class="jsRecFoot"><span>${statLine(plan.total, metric.keys)}</span><span>成立連結：${plan.combos?.length ? plan.combos.map(c=>`<i>${E(c)}</i>`).join('') : '無'}</span></div>
     </article>`;
@@ -759,7 +771,7 @@
   function renderRecommend(){
     const reader = $('reader'); if(!reader) return;
     const stars = recommendStars();
-    reader.innerHTML = `<section class="card jsPage"><h1>降神、經驗、修練、寶石、武魂試算</h1>
+    reader.innerHTML = `<section class="card jsPage"><h1>角色養成試算</h1>
       ${JS_TABS('recommend')}
       <div class="muted" style="margin-bottom:10px">設定主降神與 4 個副降神的星等，依物理、術法、防禦方向推薦前 5 個組合；副降神以 10% 計入，並含成立連結的加成。</div>
       <div class="jsRecForm">
@@ -780,7 +792,7 @@
   window.setJiang = function(kind){
     if(kind === 'support'){ window.renderSupportSlotsPage(); return; }
     if(kind === 'recommend'){ window.renderJiangRecommendPage(); return; }
-    if(kind === 'supportCompare'){ window.renderSupportComparePage(); return; }
+    if(kind === 'supportCompare'){ window.renderSupportSlotsPage(); setTimeout(() => document.querySelector('.jsSaveCmp')?.scrollIntoView({behavior:'smooth',block:'start'}), 60); return; }
     if(typeof oldSetJiang === 'function') return oldSetJiang(kind);
   };
 })();
