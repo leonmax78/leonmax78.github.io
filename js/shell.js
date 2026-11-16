@@ -50,10 +50,8 @@
       <!-- The editor stays separate from item search and loads only when opened. -->
       <button class="navBtn major" data-view="jiang">角色養成試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
-        <div class="subMenuNote">降神、經驗、修練、寶石、武魂與機體試算</div>
-        <button class="navBtn sub" data-jiang="support">降神模擬（含推薦、星等／靈氣、存檔比較） <span>›</span></button>
-        <button class="navBtn sub" data-jiang="compare">主降神比較 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="stars">降神20星能力總表 <span>›</span></button>
+        <div class="subMenuNote">角色養成試算</div>
+        <button class="navBtn sub" data-jiang="support">降神模擬 <span>›</span></button>
         <button class="navBtn sub" data-jiang="expPill">等級/經驗丹試算 <span>›</span></button>
         <button class="navBtn sub" data-jiang="training">修練進度 <span>›</span></button>
         <button class="navBtn sub" data-view="gems">寶石試算、加工配方 <span>›</span></button>
