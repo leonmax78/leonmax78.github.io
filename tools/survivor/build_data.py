@@ -16,6 +16,9 @@ for m in mons:
     pic, name = m.get('Pic'), (m.get('Name') or '').strip()
     if pic not in have or pic in seen or 'NO_ATTACK' in m.get('Flag', '') or not name or re.search(r'[測試]|GM|npc', name, re.I):
         continue
+    # 寶箱、石像、紅包這類場景物件沒有「移動」和「攻擊」數值，不能當怪物
+    if not m.get('Move') or not m.get('DamageMax'):
+        continue
     lv = int(m.get('Level') or 0)
     if lv < 1 or lv > 260:
         continue
