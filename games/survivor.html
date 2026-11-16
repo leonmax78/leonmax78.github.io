@@ -124,7 +124,8 @@ function sfx(name, vol = 0.3, gap = 240){
   let el = a.pool.find(x => x.paused || x.ended); if(!el){ if(a.pool.length >= 2) return; el = new Audio(SV + 'snd/' + SND[name]); a.pool.push(el); }
   el.volume = vol; try{ el.currentTime = 0; }catch(e){} el.play().catch(() => {});
 }
-function music(on){ if(on && !muted){ if(!bgm.src) bgm.src = SV + 'snd/bgm.mp3'; bgm.play().catch(() => {}); } else bgm.pause(); }
+// 三張霹靂地圖各配一首霹靂音樂：琉璃仙境 PILI01、聖靈界線 PILI02、火宅佛獄 PILI03
+function music(on){ if(on && !muted){ const want = SV + 'snd/pili' + (mapSel + 1) + '.mp3'; if(bgm.dataset.src !== want){ bgm.dataset.src = want; bgm.src = want; } bgm.play().catch(() => {}); } else bgm.pause(); }
 
 // ---------- weapons: 技能名稱與圖示取自遊戲技能資料 ----------
 // kind: arc 揮砍 / ring 擴散震波 / orbit 環繞 / homing 追蹤飛劍 / wave 直線貫穿 / rain 天降範圍
