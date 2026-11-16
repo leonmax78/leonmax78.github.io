@@ -47,8 +47,10 @@ for e in c['equipment']:
     magic=int(item_by_id.get(str(e['item_id']),{}).get('MagicAttack',0))
     if magic and 'm_attack' not in e['base_stats']:
         e['base_stats']['m_attack']=dict(label='術法攻擊',value=magic)
-    # compound_config 的第Ⅴ階裝備只剩耐久／重量，原本屬性從 items.json 補回（不改原始資料檔）
-    if item and not any(k in e['base_stats'] for k in ('con','str','int','dex','def','m_def','hp','mp','damage')):
+    # 跟網站合成頁一樣以遊戲道具資料（items.json）為準：第Ⅴ階裝備在 compound_config 只剩耐久／重量，
+    # 武觀神兵Ⅱ～Ⅳ的元素傷害種類也與遊戲不符；這裡改用道具資料重建，不改原始資料檔
+    if item:
+        for k in [k for k in e['base_stats'] if k.endswith(('_attack','_prob')) and k!='m_attack']: del e['base_stats'][k]
         for src,key,label in [('Con','con','體魄'),('Str','str','力量'),('Int','int','智慧'),('Dex','dex','敏捷'),('HP','hp','生命'),('MP','mp','精力'),
                               ('ExtraDef','def','物防'),('MagicDef','m_def','術防'),('Attack','attack','命中'),('AttackRange','attack_range','攻擊距離'),
                               ('IceAttack','ice_attack','冰傷'),('IceProb','ice_prob','冰傷機率'),('FireAttack','fire_attack','火傷'),('FireProb','fire_prob','火傷機率'),
