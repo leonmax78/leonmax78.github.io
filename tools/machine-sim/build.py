@@ -13,7 +13,7 @@ here=pathlib.Path(__file__).parent
 _repo=here.parents[1] if (here.parents[1]/'data/jiangshen.json').exists() else here.parent/'網站/leonmax78.github.io-main/leonmax78.github.io-main'
 data=pathlib.Path(os.environ.get('SZO_SITE') or _repo)/'data'
 import subprocess,base64
-revision=subprocess.check_output(['git','-C',str(data.parent),'rev-parse','origin/main'],text=True).strip()
+revision=subprocess.check_output(['git','-C',str(data.parent),'rev-parse',os.environ.get('SZO_REV','origin/main')],text=True).strip()
 def site(path): return subprocess.check_output(['git','-C',str(data.parent),'show',revision+':'+path])
 def load(n): return json.loads(site('data/'+n+'.json'))
 _lv=here/'level.ini' if (here/'level.ini').exists() else here.parent/'拆包與歷史資料/1029深淵/1027/data1/setting/level.ini'
@@ -120,6 +120,7 @@ for i in item_by_id.values(): names_to_id.setdefault(i.get('Name'),i['ID'])
 for e in d['eq']:
     item=item_by_id.get(str(e.get('item_id') or names_to_id.get(e['name'],'')))
     if item: e['icon']=icon_of(item)
+    if item and item.get('Class'): e['classes']=[c.strip() for c in item['Class'].split(',')]
 for g in d['gems']:
     item=item_by_id.get(str(g['ID']))
     if item: g['icon']=icon_of(item)

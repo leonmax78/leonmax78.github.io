@@ -232,6 +232,7 @@ const fits=(e,slot)=>!!e&&(!slot.types||e.type_codes.some(t=>slot.types.includes
 // Saved builds list equipment in any order (older versions had no slots): put each item in a slot.
 function assignSlots(list){let used=new Set(),out=[];for(const it of list||[]){const e=D.eq[it?.pick];if(!e)continue;let k=it.slot&&slotOf(it.slot)&&!used.has(it.slot)&&fits(e,slotOf(it.slot))?it.slot:null;if(!k){let c=SLOTS.filter(s=>fits(e,s)&&!used.has(s.k));if(e.base_stats.damage){const pref=it.hand==='left'?'left':'right';c.sort((a,b)=>(b.k===pref)-(a.k===pref))}k=c[0]?.k||'extra'}if(k!=='extra')used.add(k);out.push({...it,slot:k})}return out}
 p=section('裝備與合成');let equipBox=p,gear=[],activeSlot='head';
+job.addEventListener('change',()=>gear.forEach(r=>r.options()));
 el('p',p,'點選格子後挑選裝備；位置與遊戲「物品欄」相同。武器放右手或左手即決定持用手。').className='hint';
 let board=el('div',p);board.className='slotBoard';let editors=el('div',p);
 function openSlot(k){activeSlot=k;for(const r of gear)r.box.hidden=r.slot!==k;paintSlots()}
@@ -243,7 +244,7 @@ function equip(slotKey){const slot=slotOf(slotKey)||{k:'extra',n:'其他',types:
  let filters=['main_category','series_group','tier','display_type'].map((k,i)=>[k,sel(el('label',tools,['大類','系列','品階','種類'][i]),[])]);
  let count=el('small',tools),list=el('div',box);list.className='pickList';
  const pool=D.eq.map((e,i)=>[i,e]).filter(([,e])=>fits(e,slot));
- function options(){let rows=pool;for(let [k,s] of filters){let old=s.value,values=[...new Set(rows.map(([,e])=>e[k]).filter(Boolean))];s.replaceChildren(new Option('全部',''),...values.map(v=>new Option(v,v)));if(values.includes(old))s.value=old;s.parentNode.hidden=values.length<2;if(s.value)rows=rows.filter(([,e])=>e[k]===s.value)}
+ function options(){let rows=pool.filter(([,e])=>!e.classes||e.classes.includes(job.value));for(let [k,s] of filters){let old=s.value,values=[...new Set(rows.map(([,e])=>e[k]).filter(Boolean))];s.replaceChildren(new Option('全部',''),...values.map(v=>new Option(v,v)));if(values.includes(old))s.value=old;s.parentNode.hidden=values.length<2;if(s.value)rows=rows.filter(([,e])=>e[k]===s.value)}
   rows=rows.filter(([,e])=>(e.name+e.display_type).includes(q.value.trim()));list.replaceChildren();count.textContent='符合 '+rows.length+' 件';
   for(let [i,e] of rows.slice(0,150)){let b=el('button',list);b.type='button';const src=iconOf(e);if(src){let im=el('img',b);im.src=src;im.alt='';im.loading='lazy'}el('span',b,e.name);b.setAttribute('aria-pressed',String(String(i)===String(pick.value)));b.onclick=()=>{if(String(pick.value)===String(i))return;pick.value=String(i);rs.replaceChildren();r.recipes=[];options();handRule(slot.k);calc();save()}}
   if(rows.length>150)el('div',list,'只顯示前 150 件，請用搜尋或篩選縮小範圍').className='more'}
