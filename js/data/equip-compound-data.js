@@ -278,12 +278,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 555,
           "max": 565
         },
-        "lightning_attack": {
-          "label": "雷傷",
+        "fire_attack": {
+          "label": "火傷",
           "value": 50
         },
-        "lightning_prob": {
-          "label": "雷傷機率",
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 46
         },
         "attack": {
@@ -373,12 +373,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 572,
           "max": 582
         },
-        "lightning_attack": {
-          "label": "雷傷",
+        "fire_attack": {
+          "label": "火傷",
           "value": 54
         },
-        "lightning_prob": {
-          "label": "雷傷機率",
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 47
         },
         "attack": {
@@ -468,12 +468,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 586,
           "max": 596
         },
-        "lightning_attack": {
-          "label": "雷傷",
+        "fire_attack": {
+          "label": "火傷",
           "value": 56
         },
-        "lightning_prob": {
-          "label": "雷傷機率",
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 48
         },
         "attack": {
@@ -546,6 +546,39 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2615
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2670
+        },
+        "hp": {
+          "label": "生命",
+          "value": 50
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 608,
+          "max": 618
+        },
+        "fire_attack": {
+          "label": "火傷",
+          "value": 60
+        },
+        "fire_prob": {
+          "label": "火傷機率",
+          "value": 49
+        },
+        "attack": {
+          "label": "命中",
+          "value": 4
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 1
+        },
         "durability": {
           "label": "耐久",
           "value": 850
@@ -1492,12 +1525,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 572,
           "max": 597
         },
-        "fire_attack": {
-          "label": "火傷",
+        "ice_attack": {
+          "label": "冰傷",
           "value": 48
         },
-        "fire_prob": {
-          "label": "火傷機率",
+        "ice_prob": {
+          "label": "冰傷機率",
           "value": 46
         },
         "attack": {
@@ -1593,12 +1626,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 589,
           "max": 614
         },
-        "fire_attack": {
-          "label": "火傷",
+        "ice_attack": {
+          "label": "冰傷",
           "value": 52
         },
-        "fire_prob": {
-          "label": "火傷機率",
+        "ice_prob": {
+          "label": "冰傷機率",
           "value": 47
         },
         "attack": {
@@ -1694,12 +1727,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 603,
           "max": 628
         },
-        "fire_attack": {
-          "label": "火傷",
+        "ice_attack": {
+          "label": "冰傷",
           "value": 54
         },
-        "fire_prob": {
-          "label": "火傷機率",
+        "ice_prob": {
+          "label": "冰傷機率",
           "value": 48
         },
         "attack": {
@@ -1774,6 +1807,43 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1425
+        },
+        "str": {
+          "label": "力量",
+          "value": 2640
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2505
+        },
+        "hp": {
+          "label": "生命",
+          "value": 55
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 625,
+          "max": 650
+        },
+        "ice_attack": {
+          "label": "冰傷",
+          "value": 58
+        },
+        "ice_prob": {
+          "label": "冰傷機率",
+          "value": 49
+        },
+        "attack": {
+          "label": "命中",
+          "value": 3
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 1
+        },
         "durability": {
           "label": "耐久",
           "value": 990
@@ -3093,6 +3163,67 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 4695
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 4845
+        },
+        "hp": {
+          "label": "生命",
+          "value": 40
+        },
+        "mp": {
+          "label": "精力",
+          "value": 35
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 566,
+          "max": 574
+        },
+        "ice_attack": {
+          "label": "冰傷",
+          "value": 51
+        },
+        "ice_prob": {
+          "label": "冰傷機率",
+          "value": 14
+        },
+        "fire_attack": {
+          "label": "火傷",
+          "value": 51
+        },
+        "fire_prob": {
+          "label": "火傷機率",
+          "value": 14
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 51
+        },
+        "lightning_prob": {
+          "label": "雷傷機率",
+          "value": 14
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 51
+        },
+        "dark_prob": {
+          "label": "冥傷機率",
+          "value": 14
+        },
+        "attack": {
+          "label": "命中",
+          "value": 4
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 8
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -4209,6 +4340,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 503,
           "max": 512
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1040
+        },
         "dark_attack": {
           "label": "冥傷",
           "value": 28
@@ -4307,12 +4442,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 515,
           "max": 524
         },
-        "ice_attack": {
-          "label": "冰傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1060
+        },
+        "dark_attack": {
+          "label": "冥傷",
           "value": 30
         },
-        "ice_prob": {
-          "label": "冰傷機率",
+        "dark_prob": {
+          "label": "冥傷機率",
           "value": 41
         },
         "attack": {
@@ -4405,12 +4544,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 532,
           "max": 541
         },
-        "ice_attack": {
-          "label": "冰傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1085
+        },
+        "dark_attack": {
+          "label": "冥傷",
           "value": 32
         },
-        "ice_prob": {
-          "label": "冰傷機率",
+        "dark_prob": {
+          "label": "冥傷機率",
           "value": 42
         },
         "attack": {
@@ -4503,12 +4646,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 546,
           "max": 555
         },
-        "ice_attack": {
-          "label": "冰傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1110
+        },
+        "dark_attack": {
+          "label": "冥傷",
           "value": 34
         },
-        "ice_prob": {
-          "label": "冰傷機率",
+        "dark_prob": {
+          "label": "冥傷機率",
           "value": 43
         },
         "attack": {
@@ -4584,6 +4731,43 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "int": {
+          "label": "智慧",
+          "value": 2680
+        },
+        "hp": {
+          "label": "生命",
+          "value": 35
+        },
+        "mp": {
+          "label": "精力",
+          "value": 45
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 568,
+          "max": 577
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1140
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 36
+        },
+        "dark_prob": {
+          "label": "冥傷機率",
+          "value": 44
+        },
+        "attack": {
+          "label": "命中",
+          "value": 4
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 1
+        },
         "durability": {
           "label": "耐久",
           "value": 800
@@ -4652,6 +4836,11 @@ const EQUIP_COMPOUND_DATA={
           "label": "精力",
           "value": 50
         },
+        "damage": {
+          "label": "傷害",
+          "min": 352,
+          "max": 366
+        },
         "m_attack": {
           "label": "術攻",
           "value": 690
@@ -4660,17 +4849,33 @@ const EQUIP_COMPOUND_DATA={
           "label": "物防",
           "value": 295
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
+        },
         "ice_attack": {
           "label": "冰傷",
-          "value": 42
-        },
-        "dark_attack": {
-          "label": "冥傷",
           "value": 42
         },
         "ice_prob": {
           "label": "冰傷機率",
           "value": 25
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 42
         },
         "dark_prob": {
           "label": "冥傷機率",
@@ -4691,11 +4896,6 @@ const EQUIP_COMPOUND_DATA={
         "weight": {
           "label": "重量",
           "value": 4000
-        },
-        "damage": {
-          "label": "傷害",
-          "min": 352,
-          "max": 366
         },
         "level": 233,
         "clevel": 2
@@ -4790,21 +4990,41 @@ const EQUIP_COMPOUND_DATA={
           "min": 396,
           "max": 411
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 815
+        },
         "def": {
           "label": "物防",
           "value": 485
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
         },
         "fire_attack": {
           "label": "火傷",
           "value": 42
         },
-        "lightning_attack": {
-          "label": "雷傷",
-          "value": 43
-        },
         "fire_prob": {
           "label": "火傷機率",
           "value": 25
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 43
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -4915,21 +5135,41 @@ const EQUIP_COMPOUND_DATA={
           "min": 425,
           "max": 439
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 860
+        },
         "def": {
           "label": "物防",
           "value": 720
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
         },
         "fire_attack": {
           "label": "火傷",
           "value": 43
         },
-        "lightning_attack": {
-          "label": "雷傷",
-          "value": 43
-        },
         "fire_prob": {
           "label": "火傷機率",
           "value": 20
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 43
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -5040,21 +5280,41 @@ const EQUIP_COMPOUND_DATA={
           "min": 468,
           "max": 482
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 930
+        },
         "def": {
           "label": "物防",
           "value": 800
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 30
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 30
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 30
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 30
         },
         "ice_attack": {
           "label": "冰傷",
           "value": 45
         },
-        "dark_attack": {
-          "label": "冥傷",
-          "value": 45
-        },
         "ice_prob": {
           "label": "冰傷機率",
           "value": 20
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 45
         },
         "dark_prob": {
           "label": "冥傷機率",
@@ -5165,21 +5425,41 @@ const EQUIP_COMPOUND_DATA={
           "min": 520,
           "max": 537
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1050
+        },
         "def": {
           "label": "物防",
           "value": 900
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 32
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 32
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 32
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 32
         },
         "fire_attack": {
           "label": "火傷",
           "value": 48
         },
-        "lightning_attack": {
-          "label": "雷傷",
-          "value": 48
-        },
         "fire_prob": {
           "label": "火傷機率",
           "value": 20
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 48
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -5290,21 +5570,41 @@ const EQUIP_COMPOUND_DATA={
           "min": 541,
           "max": 557
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1150
+        },
         "def": {
           "label": "物防",
           "value": 1150
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 34
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 34
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 34
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 34
         },
         "ice_attack": {
           "label": "冰傷",
           "value": 50
         },
-        "lightning_attack": {
-          "label": "雷傷",
-          "value": 50
-        },
         "ice_prob": {
           "label": "冰傷機率",
           "value": 20
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 50
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -5415,21 +5715,41 @@ const EQUIP_COMPOUND_DATA={
           "min": 576,
           "max": 590
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1240
+        },
         "def": {
           "label": "物防",
           "value": 1500
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 35
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 35
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 35
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 35
         },
         "ice_attack": {
           "label": "冰傷",
           "value": 52
         },
-        "lightning_attack": {
-          "label": "雷傷",
-          "value": 52
-        },
         "ice_prob": {
           "label": "冰傷機率",
           "value": 20
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 52
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -5544,6 +5864,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 585,
           "max": 601
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1010
+        },
         "fire_attack": {
           "label": "火傷",
           "value": 48
@@ -5654,12 +5978,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 597,
           "max": 613
         },
-        "lightning_attack": {
-          "label": "雷傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1030
+        },
+        "fire_attack": {
+          "label": "火傷",
           "value": 50
         },
-        "lightning_prob": {
-          "label": "雷傷機率",
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 51
         },
         "attack": {
@@ -5764,12 +6092,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 614,
           "max": 630
         },
-        "lightning_attack": {
-          "label": "雷傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1055
+        },
+        "fire_attack": {
+          "label": "火傷",
           "value": 52
         },
-        "lightning_prob": {
-          "label": "雷傷機率",
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 52
         },
         "attack": {
@@ -5874,12 +6206,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 628,
           "max": 644
         },
-        "lightning_attack": {
-          "label": "雷傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1080
+        },
+        "fire_attack": {
+          "label": "火傷",
           "value": 54
         },
-        "lightning_prob": {
-          "label": "雷傷機率",
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 53
         },
         "attack": {
@@ -5959,6 +6295,51 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1500
+        },
+        "str": {
+          "label": "力量",
+          "value": 4435
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2630
+        },
+        "hp": {
+          "label": "生命",
+          "value": 45
+        },
+        "mp": {
+          "label": "精力",
+          "value": 40
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 650,
+          "max": 666
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1110
+        },
+        "fire_attack": {
+          "label": "火傷",
+          "value": 56
+        },
+        "fire_prob": {
+          "label": "火傷機率",
+          "value": 54
+        },
+        "attack": {
+          "label": "命中",
+          "value": 3
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 2
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -6186,20 +6567,24 @@ const EQUIP_COMPOUND_DATA={
           "min": 433,
           "max": 463
         },
-        "fire_attack": {
-          "label": "火傷",
-          "value": 43
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 765
         },
         "ice_attack": {
           "label": "冰傷",
           "value": 43
         },
-        "fire_prob": {
-          "label": "火傷機率",
-          "value": 30
-        },
         "ice_prob": {
           "label": "冰傷機率",
+          "value": 30
+        },
+        "fire_attack": {
+          "label": "火傷",
+          "value": 43
+        },
+        "fire_prob": {
+          "label": "火傷機率",
           "value": 30
         },
         "paralysis_res": {
@@ -6328,17 +6713,21 @@ const EQUIP_COMPOUND_DATA={
           "min": 463,
           "max": 493
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 810
+        },
         "lightning_attack": {
           "label": "雷傷",
-          "value": 45
-        },
-        "dark_attack": {
-          "label": "冥傷",
           "value": 45
         },
         "lightning_prob": {
           "label": "雷傷機率",
           "value": 25
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 45
         },
         "dark_prob": {
           "label": "冥傷機率",
@@ -6470,17 +6859,21 @@ const EQUIP_COMPOUND_DATA={
           "min": 529,
           "max": 554
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 880
+        },
         "fire_attack": {
           "label": "火傷",
-          "value": 50
-        },
-        "lightning_attack": {
-          "label": "雷傷",
           "value": 50
         },
         "fire_prob": {
           "label": "火傷機率",
           "value": 25
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 50
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -6612,17 +7005,21 @@ const EQUIP_COMPOUND_DATA={
           "min": 591,
           "max": 624
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1000
+        },
         "fire_attack": {
           "label": "火傷",
-          "value": 52
-        },
-        "lightning_attack": {
-          "label": "雷傷",
           "value": 52
         },
         "fire_prob": {
           "label": "火傷機率",
           "value": 25
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 52
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -6754,17 +7151,21 @@ const EQUIP_COMPOUND_DATA={
           "min": 618,
           "max": 652
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1100
+        },
         "ice_attack": {
           "label": "冰傷",
-          "value": 55
-        },
-        "dark_attack": {
-          "label": "冥傷",
           "value": 55
         },
         "ice_prob": {
           "label": "冰傷機率",
           "value": 25
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 55
         },
         "dark_prob": {
           "label": "冥傷機率",
@@ -6896,17 +7297,21 @@ const EQUIP_COMPOUND_DATA={
           "min": 658,
           "max": 693
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1190
+        },
         "fire_attack": {
           "label": "火傷",
-          "value": 58
-        },
-        "lightning_attack": {
-          "label": "雷傷",
           "value": 58
         },
         "fire_prob": {
           "label": "火傷機率",
           "value": 25
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 58
         },
         "lightning_prob": {
           "label": "雷傷機率",
@@ -7026,6 +7431,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 627,
           "max": 659
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 780
+        },
         "lightning_attack": {
           "label": "雷傷",
           "value": 53
@@ -7116,12 +7525,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 639,
           "max": 671
         },
-        "dark_attack": {
-          "label": "冥傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 800
+        },
+        "lightning_attack": {
+          "label": "雷傷",
           "value": 55
         },
-        "dark_prob": {
-          "label": "冥傷機率",
+        "lightning_prob": {
+          "label": "雷傷機率",
           "value": 31
         },
         "attack": {
@@ -7206,12 +7619,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 656,
           "max": 688
         },
-        "dark_attack": {
-          "label": "冥傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 825
+        },
+        "lightning_attack": {
+          "label": "雷傷",
           "value": 59
         },
-        "dark_prob": {
-          "label": "冥傷機率",
+        "lightning_prob": {
+          "label": "雷傷機率",
           "value": 32
         },
         "attack": {
@@ -7296,12 +7713,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 670,
           "max": 702
         },
-        "dark_attack": {
-          "label": "冥傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 850
+        },
+        "lightning_attack": {
+          "label": "雷傷",
           "value": 61
         },
-        "dark_prob": {
-          "label": "冥傷機率",
+        "lightning_prob": {
+          "label": "雷傷機率",
           "value": 33
         },
         "attack": {
@@ -7373,6 +7794,39 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 4860
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 4835
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 692,
+          "max": 724
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 880
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 65
+        },
+        "lightning_prob": {
+          "label": "雷傷機率",
+          "value": 34
+        },
+        "attack": {
+          "label": "命中",
+          "value": 3
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 2
+        },
         "durability": {
           "label": "耐久",
           "value": 825
@@ -7567,6 +8021,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 460,
           "max": 517
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 600
+        },
         "dark_attack": {
           "label": "冥傷",
           "value": 48
@@ -7677,6 +8135,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 495,
           "max": 555
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 640
         },
         "ice_attack": {
           "label": "冰傷",
@@ -7908,6 +8370,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 604,
           "max": 674
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 810
+        },
         "fire_attack": {
           "label": "火傷",
           "value": 64
@@ -8018,6 +8484,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 632,
           "max": 699
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 925
         },
         "dark_attack": {
           "label": "冥傷",
@@ -8130,6 +8600,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 681,
           "max": 742
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1010
+        },
         "ice_attack": {
           "label": "冰傷",
           "value": 72
@@ -8237,6 +8711,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 587,
           "max": 607
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 965
+        },
         "dark_attack": {
           "label": "冥傷",
           "value": 43
@@ -8339,12 +8817,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 599,
           "max": 619
         },
-        "fire_attack": {
-          "label": "火傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 985
+        },
+        "dark_attack": {
+          "label": "冥傷",
           "value": 45
         },
-        "fire_prob": {
-          "label": "火傷機率",
+        "dark_prob": {
+          "label": "冥傷機率",
           "value": 41
         },
         "attack": {
@@ -8441,12 +8923,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 616,
           "max": 636
         },
-        "fire_attack": {
-          "label": "火傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1010
+        },
+        "dark_attack": {
+          "label": "冥傷",
           "value": 49
         },
-        "fire_prob": {
-          "label": "火傷機率",
+        "dark_prob": {
+          "label": "冥傷機率",
           "value": 42
         },
         "attack": {
@@ -8543,12 +9029,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 630,
           "max": 650
         },
-        "fire_attack": {
-          "label": "火傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1035
+        },
+        "dark_attack": {
+          "label": "冥傷",
           "value": 51
         },
-        "fire_prob": {
-          "label": "火傷機率",
+        "dark_prob": {
+          "label": "冥傷機率",
           "value": 43
         },
         "attack": {
@@ -8624,6 +9114,47 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1800
+        },
+        "str": {
+          "label": "力量",
+          "value": 4610
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2540
+        },
+        "mp": {
+          "label": "精力",
+          "value": 56
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 652,
+          "max": 672
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1065
+        },
+        "dark_attack": {
+          "label": "冥傷",
+          "value": 55
+        },
+        "dark_prob": {
+          "label": "冥傷機率",
+          "value": 44
+        },
+        "attack": {
+          "label": "命中",
+          "value": 3
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 2
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -8823,6 +9354,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 437,
           "max": 466
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 715
+        },
         "def": {
           "label": "物防",
           "value": 615
@@ -8938,6 +9473,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 473,
           "max": 501
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 760
         },
         "def": {
           "label": "物防",
@@ -9055,6 +9594,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 517,
           "max": 546
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 830
+        },
         "def": {
           "label": "物防",
           "value": 1250
@@ -9170,6 +9713,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 575,
           "max": 610
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 950
         },
         "def": {
           "label": "物防",
@@ -9287,6 +9834,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 605,
           "max": 640
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1050
+        },
         "def": {
           "label": "物防",
           "value": 2000
@@ -9403,6 +9954,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 654,
           "max": 684
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1140
+        },
         "def": {
           "label": "物防",
           "value": 2750
@@ -9511,6 +10066,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 556,
           "max": 572
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 875
+        },
         "lightning_attack": {
           "label": "雷傷",
           "value": 46
@@ -9607,12 +10166,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 568,
           "max": 584
         },
-        "ice_attack": {
-          "label": "冰傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 895
+        },
+        "lightning_attack": {
+          "label": "雷傷",
           "value": 48
         },
-        "ice_prob": {
-          "label": "冰傷機率",
+        "lightning_prob": {
+          "label": "雷傷機率",
           "value": 41
         },
         "attack": {
@@ -9703,12 +10266,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 585,
           "max": 601
         },
-        "ice_attack": {
-          "label": "冰傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 920
+        },
+        "lightning_attack": {
+          "label": "雷傷",
           "value": 52
         },
-        "ice_prob": {
-          "label": "冰傷機率",
+        "lightning_prob": {
+          "label": "雷傷機率",
           "value": 42
         },
         "attack": {
@@ -9799,12 +10366,16 @@ const EQUIP_COMPOUND_DATA={
           "min": 599,
           "max": 615
         },
-        "ice_attack": {
-          "label": "冰傷",
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 945
+        },
+        "lightning_attack": {
+          "label": "雷傷",
           "value": 54
         },
-        "ice_prob": {
-          "label": "冰傷機率",
+        "lightning_prob": {
+          "label": "雷傷機率",
           "value": 43
         },
         "attack": {
@@ -9878,6 +10449,43 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2630
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2505
+        },
+        "hp": {
+          "label": "生命",
+          "value": 50
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 621,
+          "max": 637
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 975
+        },
+        "lightning_attack": {
+          "label": "雷傷",
+          "value": 58
+        },
+        "lightning_prob": {
+          "label": "雷傷機率",
+          "value": 44
+        },
+        "attack": {
+          "label": "命中",
+          "value": 2
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 1
+        },
         "durability": {
           "label": "耐久",
           "value": 850
@@ -10077,6 +10685,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 402,
           "max": 440
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 695
+        },
         "m_def": {
           "label": "術防",
           "value": 795
@@ -10192,6 +10804,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 444,
           "max": 481
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 735
         },
         "m_def": {
           "label": "術防",
@@ -10309,6 +10925,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 493,
           "max": 534
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 795
+        },
         "m_def": {
           "label": "術防",
           "value": 1625
@@ -10424,6 +11044,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 550,
           "max": 593
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 910
         },
         "m_def": {
           "label": "術防",
@@ -10541,6 +11165,10 @@ const EQUIP_COMPOUND_DATA={
           "min": 572,
           "max": 618
         },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1000
+        },
         "m_def": {
           "label": "術防",
           "value": 2500
@@ -10656,6 +11284,10 @@ const EQUIP_COMPOUND_DATA={
           "label": "傷害",
           "min": 614,
           "max": 657
+        },
+        "m_attack": {
+          "label": "術法攻擊",
+          "value": 1090
         },
         "m_def": {
           "label": "術防",
@@ -10871,12 +11503,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 584,
           "max": 616
         },
-        "dark_attack": {
-          "label": "冥傷",
+        "ice_attack": {
+          "label": "冰傷",
           "value": 50
         },
-        "dark_prob": {
-          "label": "冥傷機率",
+        "ice_prob": {
+          "label": "冰傷機率",
           "value": 36
         },
         "attack": {
@@ -10973,12 +11605,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 601,
           "max": 633
         },
-        "dark_attack": {
-          "label": "冥傷",
+        "ice_attack": {
+          "label": "冰傷",
           "value": 54
         },
-        "dark_prob": {
-          "label": "冥傷機率",
+        "ice_prob": {
+          "label": "冰傷機率",
           "value": 37
         },
         "attack": {
@@ -11075,12 +11707,12 @@ const EQUIP_COMPOUND_DATA={
           "min": 615,
           "max": 647
         },
-        "dark_attack": {
-          "label": "冥傷",
+        "ice_attack": {
+          "label": "冰傷",
           "value": 56
         },
-        "dark_prob": {
-          "label": "冥傷機率",
+        "ice_prob": {
+          "label": "冰傷機率",
           "value": 38
         },
         "attack": {
@@ -11156,6 +11788,39 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2850
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2400
+        },
+        "hp": {
+          "label": "生命",
+          "value": 45
+        },
+        "damage": {
+          "label": "傷害",
+          "min": 637,
+          "max": 669
+        },
+        "ice_attack": {
+          "label": "冰傷",
+          "value": 60
+        },
+        "ice_prob": {
+          "label": "冰傷機率",
+          "value": 39
+        },
+        "attack": {
+          "label": "命中",
+          "value": 1
+        },
+        "attack_range": {
+          "label": "攻擊距離",
+          "value": 1
+        },
         "durability": {
           "label": "耐久",
           "value": 825
@@ -11913,6 +12578,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4290
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 27
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 27
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 27
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 27
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -11988,6 +12669,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4535
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 28
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 28
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 28
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 28
         },
         "durability": {
           "label": "耐久",
@@ -12065,6 +12762,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4835
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 30
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 30
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 30
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 30
+        },
         "durability": {
           "label": "耐久",
           "value": 700
@@ -12141,6 +12854,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5105
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 31
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 31
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 31
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 31
+        },
         "durability": {
           "label": "耐久",
           "value": 725
@@ -12201,6 +12930,38 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2180
+        },
+        "str": {
+          "label": "力量",
+          "value": 2285
+        },
+        "def": {
+          "label": "物防",
+          "value": 5400
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5425
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 32
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 32
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 32
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 32
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -12266,6 +13027,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 735
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -12369,6 +13146,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 1155
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 25
@@ -12466,6 +13259,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 1660
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 30
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 30
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 30
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 30
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -12572,6 +13381,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 2620
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 35
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 35
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 35
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 35
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -12683,6 +13508,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 3550
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 36
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 36
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 36
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 36
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 36
@@ -12793,6 +13634,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5150
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 38
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 38
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 38
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 38
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 38
@@ -12902,6 +13759,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 6000
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 40
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 40
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 40
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 40
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -13381,6 +14254,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2190
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2265
+        },
+        "mp": {
+          "label": "精力",
+          "value": 42
+        },
+        "def": {
+          "label": "物防",
+          "value": 5340
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5360
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 15
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 10
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 20
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 15
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -13847,6 +14756,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1495
+        },
+        "str": {
+          "label": "力量",
+          "value": 2255
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2105
+        },
+        "mp": {
+          "label": "精力",
+          "value": 41
+        },
+        "def": {
+          "label": "物防",
+          "value": 5430
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5430
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 15
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 25
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 10
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 10
+        },
         "durability": {
           "label": "耐久",
           "value": 800
@@ -14313,6 +15262,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2120
+        },
+        "int": {
+          "label": "智慧",
+          "value": 1800
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2265
+        },
+        "mp": {
+          "label": "精力",
+          "value": 43
+        },
+        "def": {
+          "label": "物防",
+          "value": 5310
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5420
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 20
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 20
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 10
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 10
+        },
         "durability": {
           "label": "耐久",
           "value": 700
@@ -14731,6 +15720,38 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "int": {
+          "label": "智慧",
+          "value": 2295
+        },
+        "mp": {
+          "label": "精力",
+          "value": 45
+        },
+        "def": {
+          "label": "物防",
+          "value": 5230
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5470
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 10
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 10
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 15
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 25
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -15173,6 +16194,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2185
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2225
+        },
+        "mp": {
+          "label": "精力",
+          "value": 44
+        },
+        "def": {
+          "label": "物防",
+          "value": 5350
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5450
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 10
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 20
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 10
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 20
+        },
         "durability": {
           "label": "耐久",
           "value": 775
@@ -15643,6 +16700,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2490
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2795
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2775
+        },
+        "mp": {
+          "label": "精力",
+          "value": 60
+        },
+        "def": {
+          "label": "物防",
+          "value": 6780
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6840
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 22
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 22
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 22
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 990
@@ -15711,6 +16808,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5625
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 11
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 11
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 11
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 11
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -15815,6 +16928,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5895
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 12
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 12
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 12
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 12
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 12
@@ -15917,6 +17046,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 6270
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 13
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 13
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 13
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 13
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -16021,6 +17166,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 6570
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 14
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 14
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 14
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 14
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 14
@@ -16104,6 +17265,58 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "int": {
+          "label": "智慧",
+          "value": 2915
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2805
+        },
+        "hp": {
+          "label": "生命",
+          "value": 60
+        },
+        "def": {
+          "label": "物防",
+          "value": 6160
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 7010
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 15
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 15
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 15
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 15
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 15
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 15
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 15
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 15
+        },
         "durability": {
           "label": "耐久",
           "value": 950
@@ -16168,6 +17381,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4235
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 19
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 19
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 19
         },
         "durability": {
           "label": "耐久",
@@ -16246,6 +17475,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4495
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 20
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 20
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 20
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -16322,6 +17567,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4865
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 21
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 21
         },
         "durability": {
           "label": "耐久",
@@ -16400,6 +17661,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5150
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 22
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 850
@@ -16461,6 +17738,38 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "int": {
+          "label": "智慧",
+          "value": 2800
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2950
+        },
+        "def": {
+          "label": "物防",
+          "value": 6720
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5595
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 23
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 23
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 23
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 23
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -16533,6 +17842,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4260
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 11
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 11
         },
         "durability": {
           "label": "耐久",
@@ -16622,6 +17947,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4495
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 12
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 12
+        },
         "durability": {
           "label": "耐久",
           "value": 700
@@ -16709,6 +18050,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4830
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 13
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 23
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 23
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 13
         },
         "durability": {
           "label": "耐久",
@@ -16798,6 +18155,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5080
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 14
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 24
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 24
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 14
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -16862,6 +18235,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1365
+        },
+        "str": {
+          "label": "力量",
+          "value": 2265
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2335
+        },
+        "hp": {
+          "label": "生命",
+          "value": 46
+        },
+        "def": {
+          "label": "物防",
+          "value": 5420
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5460
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 15
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 15
+        },
         "durability": {
           "label": "耐久",
           "value": 775
@@ -16935,6 +18348,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4300
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 11
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 11
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 21
         },
         "durability": {
           "label": "耐久",
@@ -17024,6 +18453,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4535
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 12
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 12
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -17111,6 +18556,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4870
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 13
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 23
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 13
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 23
         },
         "durability": {
           "label": "耐久",
@@ -17200,6 +18661,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5120
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 14
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 24
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 14
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 24
+        },
         "durability": {
           "label": "耐久",
           "value": 800
@@ -17264,6 +18741,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1575
+        },
+        "str": {
+          "label": "力量",
+          "value": 2295
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2215
+        },
+        "hp": {
+          "label": "生命",
+          "value": 47
+        },
+        "def": {
+          "label": "物防",
+          "value": 5510
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5500
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 15
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 15
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
+        },
         "durability": {
           "label": "耐久",
           "value": 825
@@ -17337,6 +18854,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4270
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 21
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 11
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 6
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 26
         },
         "durability": {
           "label": "耐久",
@@ -17426,6 +18959,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4505
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 22
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 12
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 7
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 27
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -17513,6 +19062,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4840
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 23
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 13
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 8
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 28
         },
         "durability": {
           "label": "耐久",
@@ -17602,6 +19167,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5090
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 24
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 14
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 9
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 29
+        },
         "durability": {
           "label": "耐久",
           "value": 700
@@ -17666,6 +19247,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1270
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2180
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2355
+        },
+        "hp": {
+          "label": "生命",
+          "value": 45
+        },
+        "def": {
+          "label": "物防",
+          "value": 5400
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5470
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 15
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 10
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 30
+        },
         "durability": {
           "label": "耐久",
           "value": 725
@@ -17735,6 +19356,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4350
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 16
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 6
         },
         "durability": {
           "label": "耐久",
@@ -17818,6 +19455,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4585
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 17
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 7
+        },
         "durability": {
           "label": "耐久",
           "value": 600
@@ -17899,6 +19552,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4920
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 18
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 23
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 23
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 8
         },
         "durability": {
           "label": "耐久",
@@ -17982,6 +19651,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5170
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 19
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 24
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 24
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 9
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -18044,6 +19729,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1220
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2245
+        },
+        "hp": {
+          "label": "生命",
+          "value": 43
+        },
+        "def": {
+          "label": "物防",
+          "value": 5360
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5550
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 20
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 10
+        },
         "durability": {
           "label": "耐久",
           "value": 675
@@ -18117,6 +19838,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4320
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 16
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 16
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 16
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 16
         },
         "durability": {
           "label": "耐久",
@@ -18206,6 +19943,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4555
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 17
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 17
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 17
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 17
+        },
         "durability": {
           "label": "耐久",
           "value": 725
@@ -18293,6 +20046,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4890
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 18
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 18
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 18
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 18
         },
         "durability": {
           "label": "耐久",
@@ -18382,6 +20151,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5140
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 19
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 19
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 19
+        },
         "durability": {
           "label": "耐久",
           "value": 775
@@ -18446,6 +20231,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1340
+        },
+        "str": {
+          "label": "力量",
+          "value": 2165
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2215
+        },
+        "hp": {
+          "label": "生命",
+          "value": 46
+        },
+        "def": {
+          "label": "物防",
+          "value": 5470
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5520
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 20
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 20
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 20
+        },
         "durability": {
           "label": "耐久",
           "value": 800
@@ -18940,6 +20765,50 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2710
+        },
+        "str": {
+          "label": "力量",
+          "value": 2740
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2680
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2730
+        },
+        "hp": {
+          "label": "生命",
+          "value": 64
+        },
+        "def": {
+          "label": "物防",
+          "value": 6890
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6855
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 23
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 23
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 23
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 23
+        },
         "durability": {
           "label": "耐久",
           "value": 990
@@ -19012,6 +20881,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5575
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 13
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 13
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 13
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 13
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -19122,6 +21007,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5845
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 14
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 14
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 14
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 14
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 14
@@ -19230,6 +21131,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 6220
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 15
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 15
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 15
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 15
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -19340,6 +21257,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 6520
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 16
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 16
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 16
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 16
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 16
@@ -19425,6 +21358,62 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2460
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2810
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2715
+        },
+        "hp": {
+          "label": "生命",
+          "value": 62
+        },
+        "def": {
+          "label": "物防",
+          "value": 6210
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6960
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 17
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 17
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 17
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 17
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 17
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 17
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 17
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 17
+        },
         "durability": {
           "label": "耐久",
           "value": 950
@@ -19501,6 +21490,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4310
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 21
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 21
         },
         "durability": {
           "label": "耐久",
@@ -19597,6 +21602,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4570
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 22
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -19691,6 +21712,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4940
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 23
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 23
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 23
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 23
         },
         "durability": {
           "label": "耐久",
@@ -19787,6 +21824,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5225
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 24
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 24
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 24
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 24
+        },
         "durability": {
           "label": "耐久",
           "value": 850
@@ -19854,6 +21907,50 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2180
+        },
+        "str": {
+          "label": "力量",
+          "value": 2750
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2935
+        },
+        "hp": {
+          "label": "生命",
+          "value": 58
+        },
+        "mp": {
+          "label": "精力",
+          "value": 60
+        },
+        "def": {
+          "label": "物防",
+          "value": 6760
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5670
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 25
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 25
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 25
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -19922,6 +22019,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4080
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 9
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 18
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 18
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 9
         },
         "durability": {
           "label": "耐久",
@@ -20005,6 +22118,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4315
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 10
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 19
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 10
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -20086,6 +22215,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4650
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 11
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 20
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 11
         },
         "durability": {
           "label": "耐久",
@@ -20169,6 +22314,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4900
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 12
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 12
+        },
         "durability": {
           "label": "耐久",
           "value": 700
@@ -20231,6 +22392,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2250
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2200
+        },
+        "hp": {
+          "label": "生命",
+          "value": 43
+        },
+        "def": {
+          "label": "物防",
+          "value": 5260
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5280
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 13
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 13
+        },
         "durability": {
           "label": "耐久",
           "value": 725
@@ -20304,6 +22501,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4080
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 9
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 18
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 9
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 18
         },
         "durability": {
           "label": "耐久",
@@ -20393,6 +22606,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4315
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 10
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 10
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 19
+        },
         "durability": {
           "label": "耐久",
           "value": 700
@@ -20480,6 +22709,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4650
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 11
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 11
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 20
         },
         "durability": {
           "label": "耐久",
@@ -20569,6 +22814,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4900
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 12
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 12
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 21
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -20633,6 +22894,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1350
+        },
+        "str": {
+          "label": "力量",
+          "value": 2255
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2155
+        },
+        "hp": {
+          "label": "生命",
+          "value": 44
+        },
+        "def": {
+          "label": "物防",
+          "value": 5280
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5280
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 13
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 13
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 775
@@ -20702,6 +23003,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4105
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 18
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 9
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 4
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 23
         },
         "durability": {
           "label": "耐久",
@@ -20785,6 +23102,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4340
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 19
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 10
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 5
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 24
+        },
         "durability": {
           "label": "耐久",
           "value": 600
@@ -20866,6 +23199,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4675
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 20
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 11
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 6
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 25
         },
         "durability": {
           "label": "耐久",
@@ -20949,6 +23298,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4925
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 21
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 12
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 7
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 26
+        },
         "durability": {
           "label": "耐久",
           "value": 650
@@ -21011,6 +23376,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2115
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2285
+        },
+        "hp": {
+          "label": "生命",
+          "value": 42
+        },
+        "def": {
+          "label": "物防",
+          "value": 5270
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5305
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 22
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 13
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 8
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 27
+        },
         "durability": {
           "label": "耐久",
           "value": 675
@@ -21076,6 +23477,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4130
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 14
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 18
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 18
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 4
         },
         "durability": {
           "label": "耐久",
@@ -21153,6 +23570,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4365
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 15
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 19
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 5
+        },
         "durability": {
           "label": "耐久",
           "value": 550
@@ -21228,6 +23661,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4700
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 16
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 20
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 6
         },
         "durability": {
           "label": "耐久",
@@ -21305,6 +23754,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4950
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 17
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 7
+        },
         "durability": {
           "label": "耐久",
           "value": 600
@@ -21365,6 +23830,38 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "int": {
+          "label": "智慧",
+          "value": 2195
+        },
+        "hp": {
+          "label": "生命",
+          "value": 41
+        },
+        "def": {
+          "label": "物防",
+          "value": 5220
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5330
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 18
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 8
+        },
         "durability": {
           "label": "耐久",
           "value": 625
@@ -21434,6 +23931,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4090
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 14
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 14
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 14
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 14
         },
         "durability": {
           "label": "耐久",
@@ -21517,6 +24030,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4325
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 15
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 15
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 15
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 15
+        },
         "durability": {
           "label": "耐久",
           "value": 675
@@ -21598,6 +24127,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 4660
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 16
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 16
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 16
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 16
         },
         "durability": {
           "label": "耐久",
@@ -21681,6 +24226,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 4910
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 17
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 17
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 17
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 17
+        },
         "durability": {
           "label": "耐久",
           "value": 725
@@ -21743,6 +24304,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2175
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2170
+        },
+        "hp": {
+          "label": "生命",
+          "value": 43
+        },
+        "def": {
+          "label": "物防",
+          "value": 5275
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5290
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 18
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 18
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 18
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 18
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -21808,6 +24405,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5310
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 19
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 19
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 19
         },
         "durability": {
           "label": "耐久",
@@ -21886,6 +24499,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5580
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 20
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 20
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 20
+        },
         "durability": {
           "label": "耐久",
           "value": 800
@@ -21962,6 +24591,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5960
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 21
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 21
         },
         "durability": {
           "label": "耐久",
@@ -22040,6 +24685,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 6270
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 22
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -22101,6 +24762,38 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 3465
+        },
+        "hp": {
+          "label": "生命",
+          "value": 62
+        },
+        "def": {
+          "label": "物防",
+          "value": 6760
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6730
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 23
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 23
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 23
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 23
+        },
         "durability": {
           "label": "耐久",
           "value": 950
@@ -22169,6 +24862,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5460
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 6
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 6
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 6
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 6
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -22273,6 +24982,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5725
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 7
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 7
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 7
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 7
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 7
@@ -22375,6 +25100,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 6090
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 8
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 8
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 8
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 8
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -22479,6 +25220,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 6380
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 9
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 9
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 9
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 9
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 9
@@ -22562,6 +25319,58 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2180
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2790
+        },
+        "mp": {
+          "label": "精力",
+          "value": 66
+        },
+        "def": {
+          "label": "物防",
+          "value": 6020
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6810
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 10
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 10
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 10
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 10
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 10
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 10
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 10
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 10
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -23007,6 +25816,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2020
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2780
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2390
+        },
+        "def": {
+          "label": "物防",
+          "value": 6650
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5640
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 23
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 23
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 23
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 23
+        },
         "durability": {
           "label": "耐久",
           "value": 850
@@ -23448,6 +26293,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2185
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2265
+        },
+        "mp": {
+          "label": "精力",
+          "value": 46
+        },
+        "def": {
+          "label": "物防",
+          "value": 5290
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5300
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 14
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 9
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 18
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 14
+        },
         "durability": {
           "label": "耐久",
           "value": 725
@@ -23914,6 +26795,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1365
+        },
+        "str": {
+          "label": "力量",
+          "value": 2185
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2205
+        },
+        "mp": {
+          "label": "精力",
+          "value": 44
+        },
+        "def": {
+          "label": "物防",
+          "value": 5310
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5310
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 14
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 23
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 9
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 9
+        },
         "durability": {
           "label": "耐久",
           "value": 775
@@ -24356,6 +27277,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "str": {
+          "label": "力量",
+          "value": 2085
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2315
+        },
+        "mp": {
+          "label": "精力",
+          "value": 45
+        },
+        "def": {
+          "label": "物防",
+          "value": 5270
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5315
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 18
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 19
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 9
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 9
+        },
         "durability": {
           "label": "耐久",
           "value": 675
@@ -24798,6 +27755,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "int": {
+          "label": "智慧",
+          "value": 2165
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 2075
+        },
+        "mp": {
+          "label": "精力",
+          "value": 47
+        },
+        "def": {
+          "label": "物防",
+          "value": 5240
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5340
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 9
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 9
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 14
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 23
+        },
         "durability": {
           "label": "耐久",
           "value": 625
@@ -25264,6 +28257,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "職業裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 1270
+        },
+        "str": {
+          "label": "力量",
+          "value": 2165
+        },
+        "int": {
+          "label": "智慧",
+          "value": 2145
+        },
+        "mp": {
+          "label": "精力",
+          "value": 46
+        },
+        "def": {
+          "label": "物防",
+          "value": 5300
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5305
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 9
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 18
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 9
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 19
+        },
         "durability": {
           "label": "耐久",
           "value": 750
@@ -25337,6 +28370,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5340
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 18
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 18
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 18
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 18
         },
         "durability": {
           "label": "耐久",
@@ -25427,6 +28476,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5610
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 19
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 19
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 19
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 19
+        },
         "durability": {
           "label": "耐久",
           "value": 800
@@ -25515,6 +28580,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5990
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 20
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 20
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 20
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 20
         },
         "durability": {
           "label": "耐久",
@@ -25605,6 +28686,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 6300
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 21
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 21
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 21
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 21
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -25670,6 +28767,46 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2440
+        },
+        "str": {
+          "label": "力量",
+          "value": 2895
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 3005
+        },
+        "mp": {
+          "label": "精力",
+          "value": 62
+        },
+        "def": {
+          "label": "物防",
+          "value": 6720
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6760
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 22
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 22
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 22
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 22
+        },
         "durability": {
           "label": "耐久",
           "value": 950
@@ -25738,6 +28875,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5420
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 6
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 6
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 6
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 6
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -25842,6 +28995,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 5685
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 7
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 7
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 7
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 7
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 7
@@ -25944,6 +29113,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 6050
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 8
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 8
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 8
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 8
         },
         "paralysis_res": {
           "label": "麻痺抗性",
@@ -26048,6 +29233,22 @@ const EQUIP_COMPOUND_DATA={
           "label": "術防",
           "value": 6340
         },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 9
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 9
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 9
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 9
+        },
         "paralysis_res": {
           "label": "麻痺抗性",
           "value": 9
@@ -26131,6 +29332,58 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "con": {
+          "label": "體魄",
+          "value": 2310
+        },
+        "dex": {
+          "label": "敏捷",
+          "value": 3050
+        },
+        "mp": {
+          "label": "精力",
+          "value": 68
+        },
+        "def": {
+          "label": "物防",
+          "value": 6060
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 6770
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 10
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 10
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 10
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 10
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 10
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 10
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 10
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 10
+        },
         "durability": {
           "label": "耐久",
           "value": 900
@@ -26576,6 +29829,42 @@ const EQUIP_COMPOUND_DATA={
       "series_group": "特仕裝",
       "series_grade": "玄宙",
       "base_stats": {
+        "dex": {
+          "label": "敏捷",
+          "value": 3380
+        },
+        "hp": {
+          "label": "生命",
+          "value": 56
+        },
+        "mp": {
+          "label": "精力",
+          "value": 60
+        },
+        "def": {
+          "label": "物防",
+          "value": 6640
+        },
+        "m_def": {
+          "label": "術防",
+          "value": 5650
+        },
+        "paralysis_res": {
+          "label": "麻痺抗性",
+          "value": 24
+        },
+        "poison_res": {
+          "label": "中毒抗性",
+          "value": 24
+        },
+        "blind_res": {
+          "label": "盲目抗性",
+          "value": 24
+        },
+        "silent_res": {
+          "label": "封咒抗性",
+          "value": 24
+        },
         "durability": {
           "label": "耐久",
           "value": 850
@@ -26816,6 +30105,22 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 5000
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 10
+        },
+        "fire_def": {
+          "label": "火抗",
+          "value": 10
+        },
+        "lightning_def": {
+          "label": "雷抗",
+          "value": 10
+        },
+        "dark_def": {
+          "label": "冥抗",
+          "value": 10
         },
         "durability": {
           "label": "耐久",
@@ -27072,6 +30377,10 @@ const EQUIP_COMPOUND_DATA={
         "m_def": {
           "label": "術防",
           "value": 3750
+        },
+        "ice_def": {
+          "label": "冰抗",
+          "value": 50
         },
         "durability": {
           "label": "耐久",
