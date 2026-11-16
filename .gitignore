@@ -1,2 +1,6 @@
 raw/latest_setting/
 tools/__pycache__/
+
+# 角色模擬建置時產生的離線版（不部署）
+tools/machine-sim/機體模擬_修練版.html
+__pycache__/

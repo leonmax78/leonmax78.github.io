@@ -390,6 +390,15 @@ const resetCharacter=el('button',panels[0][1],'全部清除');resetCharacter.onc
  location.reload();
 };
 let io=el('details',inputs);el('summary',io,'設定備份與舊版轉移');let command='copy(JSON.stringify(('+snapshot.toString()+')()))';el('p',io,'在仍開著的舊版分頁按 F12，於 Console 執行下方指令，再將複製的設定貼入此處。');el('textarea',io).value=command;let transfer=el('textarea',io);transfer.placeholder='設定 JSON';btn(io,'匯出目前設定',()=>transfer.value=JSON.stringify(snapshot()));btn(io,'載入貼上的設定',()=>{try{let s=JSON.parse(transfer.value);if(confirm('以貼上的設定取代目前配置？')){restore(s);save()}}catch{alert('無法讀取這份設定')}});
+// 分享連結：把目前配置壓縮後放在網址 # 後面（不會送到伺服器），對方開啟時確認後載入
+const b64u={enc:u=>btoa(String.fromCharCode(...u)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''),dec:t=>Uint8Array.from(atob(t.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0))};
+async function packCfg(o){const z=new Blob([JSON.stringify(o)]).stream().pipeThrough(new CompressionStream('deflate-raw'));return b64u.enc(new Uint8Array(await new Response(z).arrayBuffer()))}
+async function unpackCfg(t){const z=new Blob([b64u.dec(t)]).stream().pipeThrough(new DecompressionStream('deflate-raw'));return JSON.parse(await new Response(z).text())}
+const shareBtn=el('button',panels[0][1],'複製分享連結');shareBtn.onclick=async e=>{e.stopPropagation();try{const url=location.href.split('#')[0]+'#cfg='+await packCfg(snapshot());
+ try{await navigator.clipboard.writeText(url);shareBtn.textContent='已複製分享連結';setTimeout(()=>shareBtn.textContent='複製分享連結',2000)}catch{prompt('複製這個連結分享給別人：',url)}}catch{alert('這個瀏覽器無法產生分享連結')}};
+async function openShared(){const m=location.hash.match(/^#cfg=([\w-]+)$/);if(!m)return;
+ try{const s=await unpackCfg(m[1]);if(confirm('載入別人分享的配置？目前的配置會被取代（已儲存的方案會保留）。')){restore(s);save()}}catch{alert('這個分享連結無法讀取')}
+ history.replaceState(null,'',location.href.split('#')[0])}
 let currentStats={},plans={};const planKey='szo-machine-plans-v1';try{plans=JSON.parse(localStorage.getItem(planKey))||{}}catch{}
 let cp=section('方案比較');
 // 步驟 1：存方案；步驟 2：選一個已存方案當比較基準（下方即顯示差異）
@@ -463,4 +472,4 @@ function renderCompare(){report.replaceChildren();let base=plans[basePick.value]
   for(let [i,[a,s]] of picks.entries()){if(!changed[i])continue;let old=before.get(a.value),souls=D.soulCost[val(s)],aura=D.auraCost[val(s)*20],v=[souls,aura,Math.max(0,souls-(D.soulCost[old?.[1]]||0)),Math.max(0,aura-(old?D.auraCost[(Number(old[1])||0)*20]||0:0))];let tr=el('tr',t);el('td',tr,(i?'副':'主')+'・'+a.value+' '+val(s)+' 星');v.forEach((x,j)=>{let td=el('td',tr,nf(x));if(j>1&&x)td.className='add'});v.forEach((x,j)=>tot[j]+=x)}
   let tr=el('tr',t);tr.className='total';el('td',tr,'合計');tot.forEach(x=>el('td',tr,nf(x)));
   el('small',c4,'追加以基準方案中的同名降神為準；未列入者從零計，不扣除卸下角色。靈氣以星等×20 的培養等級計算（10 星＝200 等）。')}}
-inputs.addEventListener('input',()=>{calc();save()});inputs.addEventListener('change',()=>{calc();save()});inputs.addEventListener('click',e=>{if(e.target.tagName==='BUTTON')save()});try{let s=localStorage.getItem(key);if(s)restore(JSON.parse(s))}catch{}calc();</script></html>
+inputs.addEventListener('input',()=>{calc();save()});inputs.addEventListener('change',()=>{calc();save()});inputs.addEventListener('click',e=>{if(e.target.tagName==='BUTTON')save()});try{let s=localStorage.getItem(key);if(s)restore(JSON.parse(s))}catch{}calc();openShared();</script></html>

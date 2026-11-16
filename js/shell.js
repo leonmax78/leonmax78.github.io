@@ -75,7 +75,7 @@
     <div class="visitorCounter" aria-label="網頁瀏覽人數">
       <div class="visitorCounterTitle">網頁瀏覽人數</div>
       <span class="visitorCounterBadgeBox">
-        <img class="visitorCounterBadge" src="https://visitor-badge.laobi.icu/badge?page_id=leonmax78.test&left_text=%E2%80%8B&left_color=%23040605&right_color=%23040605&height=34&radius=999" alt="網頁瀏覽人數" loading="lazy">
+        <img class="visitorCounterBadge" onerror="this.closest('.visitorCounter').style.display='none'" data-src="https://visitor-badge.laobi.icu/badge?page_id=leonmax78.test&left_text=%E2%80%8B&left_color=%23040605&right_color=%23040605&height=34&radius=999" alt="網頁瀏覽人數" loading="lazy">
       </span>
     </div>
   </div>
@@ -593,4 +593,18 @@
     if(!ev.target?.closest?.('#globalSearchForm,#globalSuggest')) hide();
   }, true);
   document.addEventListener('submit', ev => { if(ev.target?.id === 'globalSearchForm') hide(); }, true);
+})();
+
+// 訪客計數圖來自外部網站：等頁面載完、閒置時才載入，5 秒載不到或失敗就把整塊藏起來，避免拖慢網站
+(function(){
+  function start(){
+    const img = document.querySelector('.visitorCounterBadge[data-src]');
+    if(!img) return;
+    const box = img.closest('.visitorCounter');
+    const timer = setTimeout(() => { if(!img.complete || !img.naturalWidth) box.style.display = 'none'; }, 5000);
+    img.addEventListener('load', () => { clearTimeout(timer); box.style.display = ''; }, {once:true});
+    img.src = img.dataset.src; img.removeAttribute('data-src');
+  }
+  const later = () => (window.requestIdleCallback ? requestIdleCallback(start, {timeout:3000}) : setTimeout(start, 1500));
+  if(document.readyState === 'complete') later(); else window.addEventListener('load', later, {once:true});
 })();

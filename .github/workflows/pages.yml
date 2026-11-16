@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check equipment data against game items (warnings only)
+        run: python3 tools/check_compound_vs_items.py
       - name: Build site folder
         run: python3 tools/build_pages_site.py --out _site --check
       - uses: actions/configure-pages@v5
