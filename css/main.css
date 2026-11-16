@@ -5028,3 +5028,6 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
 }
 .jsGameTxt.total input{width:8.5cqw;margin-left:.4cqw;padding:.1cqw .5cqw;font:inherit;color:#fff;background:rgba(0,0,0,.45);border:1px solid rgba(232,198,111,.55);border-radius:.4cqw;text-align:center;font-variant-numeric:tabular-nums;min-height:0;height:auto}
 .jsGameTxt.total input::-webkit-inner-spin-button{display:none}
+/* V809: 全降神總等級輸入框不撐高（手機版 input 有最小高度） */
+html body .jsGame .jsGameTxt.total{align-items:center;gap:.3cqw;margin:0!important;padding:0!important}
+html body .jsGame .jsGameTxt.total input{height:3.1cqw!important;min-height:0!important;max-height:3.1cqw!important;padding:0 .5cqw!important;margin:0 0 0 .4cqw!important;font-size:2.1cqw!important;line-height:1!important;box-sizing:border-box;appearance:textfield;-webkit-appearance:none;border-radius:.4cqw!important}
