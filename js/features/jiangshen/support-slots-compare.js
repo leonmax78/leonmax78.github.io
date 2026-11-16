@@ -416,16 +416,22 @@
       btn.addEventListener('click',()=>loadSupportSlot(Number(btn.dataset.supportLoad || 0)));
     });
   }
+  // V811: 各降神能力改成一張表（列＝能力，欄＝總能力＋每隻降神），手機上可左右滑
+  function detailTable(res){
+    const picks = res.picks.slice().sort((a,b)=>a.i-b.i);
+    const linkSum = {}; for(const st of stats()) linkSum[st] = Number(res.total[st]||0) - picks.reduce((n,p)=>n+Number(p.a?.[st]||0),0);
+    const head = picks.map(p=>`<th><span class="sdFace">${headImg(p.n,'')}</span><b>${E(p.n)}</b><small>${p.i===0?'主・100%':'副'+p.i+'・10%'}｜${p.s}★</small></th>`).join('');
+    const rows = stats().map(st=>`<tr><th>${E(window.SZO_DISPLAY.label(st))}</th><td class="sdTotal">${fmt(res.total[st])}</td>${picks.map(p=>`<td class="${Number(p.a?.[st])?'':'zero'}">${fmt(p.a?.[st]||0)}</td>`).join('')}<td class="sdLink ${Math.round(linkSum[st])?'':'zero'}">${Math.round(linkSum[st])?'+'+fmt(Math.round(linkSum[st])):'0'}</td></tr>`).join('');
+    return `<h3>能力明細</h3><div class="sdWrap"><table class="sdTable"><thead><tr><th>能力</th><th class="sdTotal"><b>總能力</b><small>含連結</small></th>${head}<th class="sdLink"><b>連結加成</b></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
   function calcSupportOnce(){
     saveCurrent();
     const res = calcPlan(readPlan('P'));
     if(!res.picks.length){ emptyMsg('請至少選擇一位降神'); return; }
     $('reader').innerHTML = `<section class="card">${supportBackBtn()}<h1>副降神試算結果</h1>
       <div class="muted">${picksText(res)}</div>
-      <h3>總能力</h3>${kvGrid(res.total)}
+      ${detailTable(res)}
       <h3>成立連結</h3>${comboTextBlock(res)}
-      <h3>各降神能力</h3>
-      ${res.picks.map(p=>`<div class="card supportChoiceCard" style="box-shadow:none"><h2>${E(p.i===0?'主降神':'副降神 '+p.i)}｜${E(p.n)}｜${p.s} 星${p.i===0?'':'｜10%'}</h2>${kvGrid(p.a)}</div>`).join('')}
     </section>`;
     scrollTop();
   }

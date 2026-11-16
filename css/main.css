@@ -5034,3 +5034,17 @@ html body .jsGame .jsGameTxt.total input{height:3.1cqw!important;min-height:0!im
 /* V810: 地圖「隱藏傳點名稱」：只留箭頭，滑鼠移上去或聚焦時才顯示名稱 */
 html.mapExitLabelsHidden .mapExit .mapExitName{display:none}
 html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .mapExit:focus-visible .mapExitName{display:inline-block}
+/* V811: 副降神試算結果 — 能力明細表 */
+.sdWrap{overflow-x:auto;border:1px solid rgba(148,163,184,.25);border-radius:12px;margin:6px 0 14px}
+.sdTable{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px;min-width:560px}
+.sdTable th,.sdTable td{padding:7px 10px;border-bottom:1px solid rgba(148,163,184,.14);text-align:right;white-space:nowrap}
+.sdTable tbody th{text-align:left;color:#cfe3ff;font-weight:600;position:sticky;left:0;background:#111c27;z-index:1}
+.sdTable thead th{vertical-align:bottom;text-align:center;font-weight:600;background:#0f1922;position:sticky;top:0}
+.sdTable thead th:first-child{position:sticky;left:0;z-index:2;text-align:left}
+.sdTable thead b{display:block;font-size:13px;color:#e6edf7}.sdTable thead small{display:block;font-size:11px;color:#9fb0c4;font-weight:500}
+.sdFace img{width:34px;height:34px;border-radius:8px;object-fit:cover;display:block;margin:0 auto 3px}
+.sdTable td.sdTotal,.sdTable th.sdTotal{color:#f3cf86;font-weight:800;background:rgba(221,168,77,.08)}
+.sdTable td.sdLink{color:#7fe3d3}.sdTable th.sdLink b{color:#7fe3d3}
+.sdTable td.zero{color:#56667c}
+.sdTable tbody tr:nth-child(even) td{background-color:rgba(255,255,255,.02)}
+@media(max-width:600px){.sdTable{font-size:12.5px}.sdTable th,.sdTable td{padding:6px 7px}}
