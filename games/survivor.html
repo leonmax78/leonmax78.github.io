@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>神州倖存者（試玩）</title>
+<meta name="robots" content="noindex">
+<style>
+:root{--gold:#dda84d;--gold2:#ffe7a3;--teal:#53ded3;--bg:#070d16;--panel:rgba(10,18,28,.94);--line:#2f4b5a;--text:#e6eef8;--muted:#9fb1c4;--red:#f0605a}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+canvas{display:block;width:100vw;height:100vh;height:100dvh}
+.hud{position:fixed;left:0;right:0;top:0;padding:calc(env(safe-area-inset-top) + 8px) 12px 0;pointer-events:none;display:grid;gap:6px}
+.xp{height:10px;border-radius:6px;background:rgba(0,0,0,.55);border:1px solid #3c5566;overflow:hidden}
+.xp i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2a8e80,#53ded3)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800;text-shadow:0 2px 4px #000}
+.row .time{font-size:22px;color:var(--gold2);letter-spacing:.05em}
+.row small{font-size:13px;color:var(--muted)}
+.slots{display:flex;gap:4px;flex-wrap:wrap}
+.slots span{position:relative;width:28px;height:28px;border-radius:6px;border:1px solid #6b5a33;background:#000 center/cover}
+.slots span b{position:absolute;right:-2px;bottom:-4px;font-size:10px;color:#fff;text-shadow:0 0 3px #000}
+.pause{pointer-events:auto;font:inherit;font-weight:800;color:var(--text);background:rgba(10,18,28,.8);border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,7,12,.72);backdrop-filter:blur(3px);overflow:auto}
+.screen.on{display:flex}
+.box{width:min(720px,100%);max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--gold);border-radius:14px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.box h1{margin:0 0 4px;font-size:28px;color:var(--gold2);letter-spacing:.08em}
+.box h2{margin:16px 0 8px;font-size:16px;color:var(--gold)}
+.box p{margin:4px 0;color:var(--muted);line-height:1.55}
+.pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.pick button,.choice button,.btn{font:inherit;color:var(--text);background:#102a36;border:1px solid #357b83;border-radius:10px;padding:10px;cursor:pointer;text-align:left}
+.pick button[aria-pressed=true]{background:#0f4f4a;border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset}
+.pick button img,.choice img{width:36px;height:36px;border-radius:6px;image-rendering:pixelated;float:left;margin-right:8px;border:1px solid #6b5a33}
+.pick b,.choice b{display:block;color:var(--gold2)}
+.pick small,.choice small{display:block;color:var(--muted);font-size:12px;line-height:1.4}
+.btn.go{display:block;width:100%;margin-top:16px;text-align:center;font-size:20px;font-weight:900;background:linear-gradient(180deg,#e2b45c,#b9822a);color:#1b1406;border-color:#ffe7a3}
+.choice{display:grid;gap:8px}
+.choice button{display:flex;gap:10px;align-items:center}
+.choice button:hover,.pick button:hover{border-color:var(--teal)}
+.choice em{font-style:normal;font-size:12px;color:var(--teal);margin-left:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.stats div{background:#0c1a24;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
+.stats b{display:block;font-size:22px;color:var(--gold2)}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+.boss{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 124px);transform:translateX(-50%);width:min(420px,80vw);pointer-events:none;display:none;text-align:center;font-weight:800;color:#ffb3a8;text-shadow:0 2px 4px #000}
+.boss i{display:block;height:8px;margin-top:3px;border-radius:4px;background:rgba(0,0,0,.6);overflow:hidden;border:1px solid #6d2c26}
+.boss i u{display:block;height:100%;background:linear-gradient(90deg,#c83a32,#f0605a)}
+.toast{position:fixed;left:50%;top:32%;transform:translate(-50%,-50%);white-space:nowrap;font-size:clamp(18px,5.5vw,28px);font-weight:900;color:var(--gold2);text-shadow:0 3px 8px #000;pointer-events:none;opacity:0;transition:opacity .4s}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud" id="hud" hidden>
+  <div class="xp"><i id="xpBar"></i></div>
+  <div class="row"><span>Lv <b id="lv">1</b> <small id="jobName"></small></span><span class="time" id="time">00:00</span><span><small>擊倒</small> <b id="kills">0</b> <button class="pause" id="pauseBtn" type="button">暫停</button></span></div>
+  <div class="slots" id="slots"></div>
+</div>
+<div class="boss" id="bossBar"><span id="bossName"></span><i><u id="bossHp"></u></i></div>
+<div class="toast" id="toast"></div>
+
+<div class="screen on" id="title"><div class="box">
+  <h1>神州倖存者</h1>
+  <p>撐過 10 分鐘的妖魔圍攻。角色會自動施放技能，你只要移動閃躲；擊倒怪物撿起經驗，升級時三選一強化。</p>
+  <h2>選擇職業</h2><div class="pick" id="jobPick"></div>
+  <h2>選擇地圖（霹靂聯動）</h2><div class="pick" id="mapPick"></div>
+  <button class="btn go" id="startBtn" type="button">出戰</button>
+  <p class="note">電腦：WASD 或方向鍵移動，空白鍵暫停。手機：在畫面任一處按住拖曳移動。試玩版，數值仍在調整。</p>
+</div></div>
+<div class="screen" id="levelUp"><div class="box"><h1>升級！</h1><p>選一項強化</p><div class="choice" id="choices"></div></div></div>
+<div class="screen" id="paused"><div class="box"><h1>暫停</h1><div id="pauseInfo"></div><button class="btn go" id="resumeBtn" type="button">繼續</button><button class="btn" id="quitBtn" type="button" style="width:100%;margin-top:8px;text-align:center">放棄，回到標題</button></div></div>
+<div class="screen" id="over"><div class="box"><h1 id="overTitle"></h1><p id="overText"></p><div class="stats" id="overStats"></div><button class="btn go" id="againBtn" type="button">再玩一次</button><button class="btn" id="titleBtn" type="button" style="width:100%;margin-top:8px;text-align:center">回到標題</button></div></div>
+
+<script src="survivor-data.js"></script>
+<script>
+'use strict';
+const D = window.SURVIVOR_DATA;
+const A = '../assets/';
+const ICON = id => A + 'test-media/skill-icons/' + id + '.png';
+const $ = id => document.getElementById(id);
+const rnd = (a, b) => a + Math.random() * (b - a);
+const pickOne = a => a[Math.floor(Math.random() * a.length)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+// ---------- images ----------
+const imgCache = new Map();
+function img(src){ let im = imgCache.get(src); if(!im){ im = new Image(); im.src = src; imgCache.set(src, im); } return im; }
+const ready = im => im && im.complete && im.naturalWidth > 0;
+
+// ---------- weapons: 技能名稱與圖示取自遊戲技能資料 ----------
+// kind: arc 揮砍 / ring 擴散震波 / orbit 環繞 / homing 追蹤飛劍 / wave 直線貫穿 / rain 天降範圍
+//       darts 多發飛鏢 / burst 全方位 / aura 身邊持續傷害 / cloud 留地毒雲 / boomer 迴旋 / ice 冰彈緩速
+const W = {
+  旋氣斬:{ic:'m0084',kind:'arc',dmg:18,cd:0.9,area:100,desc:'向前方揮出半圓刀氣'},
+  地裂波:{ic:'m0091',kind:'ring',dmg:14,cd:2.6,area:150,desc:'以自身為中心擴散震波'},
+  幻象刀:{ic:'m0090',kind:'orbit',dmg:9,cd:0,area:70,n:2,desc:'刀影環繞身邊'},
+  震衝錘:{ic:'m0085',kind:'rain',dmg:30,cd:2.4,area:70,n:1,desc:'重錘砸向附近敵人'},
+  御劍術:{ic:'m0096',kind:'homing',dmg:13,cd:0.9,n:1,desc:'飛劍追蹤最近的敵人'},
+  劍氣波:{ic:'m0095',kind:'wave',dmg:18,cd:1.6,area:28,desc:'朝移動方向射出貫穿劍氣'},
+  萬劍歸宗:{ic:'m0108',kind:'rain',dmg:22,cd:2.2,area:55,n:3,desc:'劍雨落在敵群'},
+  殘影劍:{ic:'m0089',kind:'orbit',dmg:8,cd:0,area:85,n:2,desc:'劍影繞身旋轉'},
+  雙星趕月:{ic:'m0088',kind:'darts',dmg:11,cd:0.45,n:2,desc:'連射暗器打最近的敵人'},
+  天女散花:{ic:'m0110',kind:'burst',dmg:10,cd:2.0,n:10,desc:'暗器向四面八方散射'},
+  毒煙術:{ic:'m0055',kind:'cloud',dmg:6,cd:2.8,area:70,desc:'在敵人腳下留下毒煙'},
+  雷箭術:{ic:'m0120',kind:'wave',dmg:16,cd:1.3,area:16,desc:'射出貫穿的雷箭'},
+  護身輪:{ic:'m0039',kind:'orbit',dmg:10,cd:0,area:80,n:2,desc:'法輪環繞護身'},
+  聖火輪:{ic:'m0040',kind:'boomer',dmg:16,cd:1.5,n:1,desc:'擲出會飛回的聖火輪'},
+  梵天火輪:{ic:'m0045',kind:'aura',dmg:5,cd:0.5,area:90,desc:'身邊燃起梵天火焰'},
+  佛法無邊:{ic:'m0050',kind:'ring',dmg:20,cd:3.4,area:220,desc:'佛光大範圍震退妖魔'},
+  天雷術:{ic:'m0014',kind:'rain',dmg:24,cd:1.1,area:55,n:2,desc:'天雷劈向附近的敵人'},
+  玄冰術:{ic:'m0012',kind:'ice',dmg:12,cd:1.0,n:1,desc:'冰彈命中會減速'},
+  三昧真火:{ic:'m0023',kind:'aura',dmg:6,cd:0.5,area:85,desc:'真火圍繞自身'},
+  天師隕石術:{ic:'m0139',kind:'rain',dmg:60,cd:4.5,area:110,n:1,desc:'隕石砸落造成大範圍傷害'}
+};
+const JOBS = [
+  {id:'勇士',ic:'m0084',start:'旋氣斬',pool:['地裂波','幻象刀','震衝錘'],hp:150,spd:150,armor:2,desc:'血厚防高，近身揮砍'},
+  {id:'劍俠',ic:'m0096',start:'御劍術',pool:['劍氣波','萬劍歸宗','殘影劍'],hp:115,spd:160,armor:1,desc:'飛劍追敵，攻守平均'},
+  {id:'術者',ic:'m0088',start:'雙星趕月',pool:['天女散花','毒煙術','雷箭術'],hp:95,spd:180,armor:0,desc:'身法最快，暗器連射'},
+  {id:'僧侶',ic:'m0039',start:'護身輪',pool:['聖火輪','梵天火輪','佛法無邊'],hp:120,spd:150,armor:1,regen:0.6,desc:'法輪護身，自帶回血'},
+  {id:'道人',ic:'m0014',start:'天雷術',pool:['玄冰術','三昧真火','天師隕石術'],hp:90,spd:155,armor:0,desc:'法術範圍大，身子較脆'}
+];
+const P = {
+  鐵布衫:{ic:'m0074',desc:'生命上限 +20%'},
+  疾行術:{ic:'m0061',desc:'移動速度 +10%'},
+  凝神訣:{ic:'m0073',desc:'技能冷卻 -8%'},
+  集氣心法:{ic:'m0080',desc:'技能傷害 +12%'},
+  加速回血:{ic:'m0097',desc:'每秒回復生命 +0.6'},
+  照妖術:{ic:'m0009',desc:'撿取範圍 +35%'},
+  金鐘罩:{ic:'m0036',desc:'受到傷害 -1'},
+  騰雲術:{ic:'m0117',desc:'技能範圍 +12%'}
+};
+const MAXLV = 5;
+
+// ---------- canvas ----------
+const cv = $('c'), ctx = cv.getContext('2d');
+let VW = 0, VH = 0, DPR = 1;
+function resize(){ DPR = Math.min(2, window.devicePixelRatio || 1); VW = innerWidth; VH = innerHeight; cv.width = VW * DPR; cv.height = VH * DPR; }
+addEventListener('resize', resize); resize();
+
+// ---------- input ----------
+const keys = new Set();
+addEventListener('keydown', e => { keys.add(e.key.toLowerCase()); if(e.key === ' ' || e.key === 'Escape'){ if(G && G.state === 'play') pause(); else if(G && G.state === 'pause') resume(); e.preventDefault(); } });
+addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
+const stick = {on:false, id:null, x0:0, y0:0, x:0, y:0};
+cv.addEventListener('pointerdown', e => { if(stick.on) return; stick.on = true; stick.id = e.pointerId; stick.x0 = stick.x = e.clientX; stick.y0 = stick.y = e.clientY; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointermove', e => { if(stick.on && e.pointerId === stick.id){ stick.x = e.clientX; stick.y = e.clientY; } });
+const endStick = e => { if(e.pointerId === stick.id){ stick.on = false; stick.id = null; } };
+cv.addEventListener('pointerup', endStick); cv.addEventListener('pointercancel', endStick);
+function moveDir(){
+  let x = 0, y = 0;
+  if(keys.has('a') || keys.has('arrowleft')) x--; if(keys.has('d') || keys.has('arrowright')) x++;
+  if(keys.has('w') || keys.has('arrowup')) y--; if(keys.has('s') || keys.has('arrowdown')) y++;
+  if(stick.on){ const dx = stick.x - stick.x0, dy = stick.y - stick.y0, d = Math.hypot(dx, dy); if(d > 6){ const m = Math.min(1, d / 50); x = dx / d * m; y = dy / d * m; } }
+  const d = Math.hypot(x, y); return d > 1 ? [x / d, y / d] : [x, y];
+}
+
+// ---------- game state ----------
+let G = null, jobSel = 0, mapSel = 0;
+const SCALE = 2, WIN_TIME = 600, BOSS_EVERY = 150;
+
+function newGame(){
+  const job = JOBS[jobSel], map = D.maps[mapSel];
+  const bg = img(A + 'test-media/stage-maps-webp/stage' + String(map[0]).padStart(3, '0') + '.webp');
+  G = {
+    state:'play', t:0, kills:0, job, map, bg, ww:1040 * SCALE, wh:660 * SCALE, tierBase:map[3],
+    p:{x:1040, y:660, r:16, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:90, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
+    weapons:[], passives:{}, enemies:[], shots:[], fx:[], orbs:[], nums:[], clouds:[], spawnT:0, nextBoss:BOSS_EVERY, boss:null, levelQueue:0
+  };
+  addWeapon(job.start);
+  $('jobName').textContent = job.id + '・' + map[1];
+  ['title','over','paused','levelUp'].forEach(s => $(s).classList.remove('on'));
+  $('hud').hidden = false; refreshSlots(); toast(map[1] + '　開戰');
+}
+function addWeapon(name){ G.weapons.push({name, ...W[name], lv:1, t:0, ang:0, hit:new Map()}); }
+function weaponStat(w){
+  const lv = w.lv, p = G.p;
+  return {
+    dmg:w.dmg * (1 + 0.25 * (lv - 1)) * p.dmg,
+    cd:Math.max(0.12, (w.cd || 0) * Math.pow(0.9, lv - 1) * p.cd),
+    area:(w.area || 0) * (1 + 0.1 * (lv - 1)) * p.area,
+    n:(w.n || 1) + Math.floor((lv - 1) / 2) + (w.kind === 'burst' ? (lv - 1) * 2 : 0)
+  };
+}
+
+// ---------- enemies ----------
+function tierNow(){ return clamp(G.tierBase + Math.floor(G.t / 120), 0, 5); }
+function spawnEnemy(boss){
+  const p = G.p, ang = rnd(0, Math.PI * 2), dist = Math.hypot(VW, VH) / 2 + 60;
+  const x = clamp(p.x + Math.cos(ang) * dist, 10, G.ww - 10), y = clamp(p.y + Math.sin(ang) * dist, 10, G.wh - 10);
+  const minutes = G.t / 60, hard = 1 + G.tierBase * 0.35;
+  if(boss){
+    const b = D.boss[Math.min(D.boss.length - 1, Math.floor(G.t / BOSS_EVERY) * 2 + G.tierBase * 2 + Math.floor(Math.random() * 2))];
+    const hp = (700 + minutes * 450) * hard;
+    const e = {x, y, r:42, hp, max:hp, spd:42, dmg:14 * hard, src:A + b[0].replace(/^assets\//, ''), name:b[1].replace(/[\[\]{}]/g, ''), boss:true, xp:60, hitT:0, slow:0, h:110};
+    G.enemies.push(e); G.boss = e; toast('封獸出現：' + e.name);
+    return;
+  }
+  const tier = Math.random() < 0.25 && tierNow() > 0 ? tierNow() - 1 : tierNow();
+  const m = pickOne(D.tiers[tier]);
+  const hp = (8 + minutes * 8) * (1 + tier * 0.45) * hard;
+  G.enemies.push({x, y, r:15 + tier, hp, max:hp, spd:rnd(40, 58) + tier * 2 + minutes * 1.5, dmg:(4 + tier * 1.5 + minutes * 0.7) * hard, src:A + 'test-media/monster-portraits/m' + m[0] + '.png', name:m[1], xp:1 + tier, hitT:0, slow:0, h:46 + tier * 3});
+}
+function hurt(e, dmg, kx, ky){
+  if(e.dead) return;
+  e.hp -= dmg; e.hitT = 0.12;
+  if(!e.boss && (kx || ky)){ e.x += kx; e.y += ky; }
+  G.nums.push({x:e.x + rnd(-8, 8), y:e.y - e.h * 0.6, v:Math.round(dmg), t:0.7});
+  if(e.hp <= 0){
+    e.dead = true; G.kills++;
+    G.orbs.push({x:e.x, y:e.y, v:e.xp, big:e.boss});
+    if(e.boss){ G.boss = null; for(let i = 0; i < 2; i++) G.levelQueue++; G.orbs.push({x:e.x + 20, y:e.y, heal:true}); }
+    else if(Math.random() < 0.012) G.orbs.push({x:e.x, y:e.y, heal:true});
+  }
+}
+
+// ---------- weapons fire ----------
+function nearest(x, y, n, maxD = 900){
+  return G.enemies.filter(e => !e.dead).map(e => [e, Math.hypot(e.x - x, e.y - y)]).filter(a => a[1] < maxD).sort((a, b) => a[1] - b[1]).slice(0, n).map(a => a[0]);
+}
+function fire(w, dt){
+  const p = G.p, s = weaponStat(w);
+  if(w.kind === 'orbit'){
+    w.ang += dt * (2.4 + w.lv * 0.25);
+    for(let i = 0; i < s.n; i++){
+      const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y + Math.sin(a) * s.area;
+      for(const e of G.enemies){ if(e.dead) continue; if(Math.hypot(e.x - ox, e.y - oy) < e.r + 16){ const last = w.hit.get(e) || 0; if(G.t - last > 0.45){ w.hit.set(e, G.t); hurt(e, s.dmg, Math.cos(a) * 6, Math.sin(a) * 6); } } }
+    }
+    return;
+  }
+  if(w.kind === 'aura'){
+    w.t -= dt; if(w.t > 0) return; w.t = s.cd;
+    for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - p.x, e.y - p.y) < s.area + e.r) hurt(e, s.dmg, 0, 0);
+    return;
+  }
+  w.t -= dt; if(w.t > 0) return;
+  const targets = nearest(p.x, p.y, Math.max(1, s.n), w.kind === 'rain' ? Math.max(VW, VH) * 0.6 : 900);
+  if(!targets.length && !['arc','ring','burst','wave'].includes(w.kind)) return;
+  w.t = s.cd;
+  const aim = targets[0] ? Math.atan2(targets[0].y - p.y, targets[0].x - p.x) : Math.atan2(p.face[1], p.face[0]);
+  switch(w.kind){
+    case 'arc': {
+      const a0 = targets[0] && Math.hypot(targets[0].x - p.x, targets[0].y - p.y) < s.area + 60 ? aim : Math.atan2(p.face[1], p.face[0]);
+      for(const e of G.enemies){ if(e.dead) continue; const d = Math.hypot(e.x - p.x, e.y - p.y); if(d > s.area + e.r) continue; let da = Math.abs(((Math.atan2(e.y - p.y, e.x - p.x) - a0 + Math.PI * 3) % (Math.PI * 2)) - Math.PI); if(da < Math.PI / 2 + 0.2) hurt(e, s.dmg, (e.x - p.x) / d * 14, (e.y - p.y) / d * 14); }
+      G.fx.push({kind:'arc', x:p.x, y:p.y, a:a0, r:s.area, t:0.22, T:0.22, ic:w.ic}); break;
+    }
+    case 'ring': G.fx.push({kind:'ring', x:p.x, y:p.y, r:0, R:s.area, t:0.45, T:0.45, dmg:s.dmg, hit:new Set(), ic:w.ic}); break;
+    case 'homing': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; G.shots.push({kind:'homing', x:p.x, y:p.y, vx:Math.cos(aim) * 380, vy:Math.sin(aim) * 380, tg, dmg:s.dmg, life:2.2, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, hit:new Set()}); } break;
+    case 'wave': { const a = Math.hypot(p.face[0], p.face[1]) ? Math.atan2(p.face[1], p.face[0]) : aim; G.shots.push({kind:'wave', x:p.x, y:p.y, vx:Math.cos(a) * 460, vy:Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, hit:new Set()}); if(w.lv >= 4) G.shots.push({kind:'wave', x:p.x, y:p.y, vx:-Math.cos(a) * 460, vy:-Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, hit:new Set()}); break; }
+    case 'rain': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length] || {x:p.x + rnd(-200, 200), y:p.y + rnd(-200, 200)}; G.fx.push({kind:'warn', x:tg.x + rnd(-10, 10), y:tg.y + rnd(-10, 10), r:s.area, t:0.45, T:0.45, dmg:s.dmg, ic:w.ic}); } break;
+    case 'darts': targets.forEach((tg, i) => { const a = Math.atan2(tg.y - p.y, tg.x - p.x) + (i ? rnd(-0.05, 0.05) : 0); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 560, vy:Math.sin(a) * 560, dmg:s.dmg, life:1, r:6, pierce:1 + Math.floor(w.lv / 4), ic:w.ic, hit:new Set()}); }); break;
+    case 'burst': for(let i = 0; i < s.n; i++){ const a = i * Math.PI * 2 / s.n + rnd(0, 0.3); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:0.9, r:6, pierce:2, ic:w.ic, hit:new Set()}); } break;
+    case 'cloud': { const tg = targets[0]; G.clouds.push({x:tg.x, y:tg.y, r:s.area, t:3 + w.lv * 0.4, tick:0, dmg:s.dmg, ic:w.ic}); if(w.lv >= 3 && targets[1]) G.clouds.push({x:targets[1].x, y:targets[1].y, r:s.area, t:3, tick:0, dmg:s.dmg, ic:w.ic}); break; }
+    case 'boomer': for(let i = 0; i < s.n; i++){ const a = aim + (i - (s.n - 1) / 2) * 0.5; G.shots.push({kind:'boomer', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:2.4, age:0, r:14, pierce:99, ic:w.ic, hit:new Map()}); } break;
+    case 'ice': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; const a = Math.atan2(tg.y - p.y, tg.x - p.x); G.shots.push({kind:'ice', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:1.4, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, hit:new Set()}); } break;
+  }
+}
+
+// ---------- level up ----------
+function options(){
+  const out = [];
+  for(const w of G.weapons) if(w.lv < MAXLV) out.push({type:'wup', name:w.name, ic:w.ic, text:W[w.name].desc, lv:w.lv + 1});
+  for(const n of G.job.pool) if(!G.weapons.some(w => w.name === n)) out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1});
+  for(const [n, v] of Object.entries(P)) if((G.passives[n] || 0) < MAXLV) out.push({type:'pas', name:n, ic:v.ic, text:v.desc, lv:(G.passives[n] || 0) + 1});
+  for(let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
+  // 新技能優先出現一個
+  const pickNew = out.findIndex(o => o.type === 'wnew'); if(pickNew > 2 && Math.random() < 0.6) [out[0], out[pickNew]] = [out[pickNew], out[0]];
+  const list = out.slice(0, 3);
+  if(!list.length) list.push({type:'heal', name:'療傷', ic:'m0029', text:'回復 40% 生命', lv:0});
+  return list;
+}
+function showLevelUp(){
+  G.state = 'level'; const box = $('choices'); box.replaceChildren();
+  for(const o of options()){
+    const b = document.createElement('button'); b.type = 'button';
+    b.innerHTML = `<img src="${ICON(o.ic)}" alt=""><span><b>${o.name}${o.lv ? `<em>${o.type === 'wnew' ? '新技能' : 'Lv ' + o.lv}</em>` : ''}</b><small>${o.text}${o.type === 'wup' ? '：傷害、冷卻、數量提升' : ''}</small></span>`;
+    b.onclick = () => { apply(o); $('levelUp').classList.remove('on'); G.levelQueue--; if(G.levelQueue > 0) showLevelUp(); else { G.state = 'play'; last = performance.now(); } };
+    box.appendChild(b);
+  }
+  $('levelUp').classList.add('on');
+}
+function apply(o){
+  const p = G.p;
+  if(o.type === 'wup') G.weapons.find(w => w.name === o.name).lv++;
+  else if(o.type === 'wnew') addWeapon(o.name);
+  else if(o.type === 'heal') p.hp = Math.min(p.max, p.hp + p.max * 0.4);
+  else {
+    G.passives[o.name] = (G.passives[o.name] || 0) + 1;
+    ({鐵布衫:() => { p.max *= 1.2; p.hp += p.max * 0.2 / 1.2; }, 疾行術:() => p.spd *= 1.1, 凝神訣:() => p.cd *= 0.92, 集氣心法:() => p.dmg *= 1.12, 加速回血:() => p.regen += 0.6, 照妖術:() => p.magnet *= 1.35, 金鐘罩:() => p.armor += 1, 騰雲術:() => p.area *= 1.12})[o.name]();
+  }
+  refreshSlots();
+}
+function refreshSlots(){
+  const s = $('slots'); s.replaceChildren();
+  for(const w of G.weapons){ const e = document.createElement('span'); e.style.backgroundImage = `url(${ICON(w.ic)})`; e.title = w.name; e.innerHTML = `<b>${w.lv}</b>`; s.appendChild(e); }
+  for(const [n, lv] of Object.entries(G.passives)){ const e = document.createElement('span'); e.style.backgroundImage = `url(${ICON(P[n].ic)})`; e.style.borderColor = '#357b83'; e.title = n; e.innerHTML = `<b>${lv}</b>`; s.appendChild(e); }
+}
+
+// ---------- update ----------
+function update(dt){
+  const p = G.p;
+  G.t += dt;
+  // move
+  const [mx, my] = moveDir();
+  if(mx || my){ p.face = [mx, my]; }
+  p.x = clamp(p.x + mx * p.spd * dt, p.r, G.ww - p.r); p.y = clamp(p.y + my * p.spd * dt, p.r, G.wh - p.r);
+  p.inv = Math.max(0, p.inv - dt); p.hp = Math.min(p.max, p.hp + p.regen * dt);
+  // spawn
+  const rate = 0.9 + G.t / 40 + G.tierBase * 0.4;
+  G.spawnT += dt * rate;
+  const cap = 140 + Math.floor(G.t / 3);
+  while(G.spawnT >= 1){ G.spawnT -= 1; if(G.enemies.length < cap) spawnEnemy(false); }
+  if(G.t >= G.nextBoss && G.nextBoss <= WIN_TIME){ spawnEnemy(true); G.nextBoss += BOSS_EVERY; }
+  // weapons
+  for(const w of G.weapons) fire(w, dt);
+  // enemies
+  for(const e of G.enemies){
+    if(e.dead) continue;
+    e.hitT = Math.max(0, e.hitT - dt); e.slow = Math.max(0, e.slow - dt);
+    const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1, sp = e.spd * (e.slow ? 0.45 : 1);
+    e.x += dx / d * sp * dt; e.y += dy / d * sp * dt; e.dir = dx < 0 ? -1 : 1;
+    if(d < e.r + p.r && p.inv <= 0){ const dmg = Math.max(1, e.dmg - p.armor); p.hp -= dmg; p.inv = 0.6; G.nums.push({x:p.x, y:p.y - 30, v:Math.round(dmg), t:0.7, bad:true}); }
+  }
+  // light separation so crowds spread out
+  const es = G.enemies;
+  for(let i = 0; i < es.length; i += 2){ const a = es[i], b = es[(i * 7 + 3) % es.length]; if(a === b || a.dead || b.dead) continue; const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy), m = a.r + b.r; if(d > 0 && d < m){ const k = (m - d) / d * 0.5; a.x += dx * k; a.y += dy * k; b.x -= dx * k; b.y -= dy * k; } }
+  // shots
+  for(const s of G.shots){
+    s.life -= dt;
+    if(s.kind === 'homing' && s.tg){ if(s.tg.dead) s.tg = nearest(s.x, s.y, 1)[0]; if(s.tg){ const a = Math.atan2(s.tg.y - s.y, s.tg.x - s.x), sp = 420; s.vx += (Math.cos(a) * sp - s.vx) * Math.min(1, dt * 6); s.vy += (Math.sin(a) * sp - s.vy) * Math.min(1, dt * 6); } }
+    if(s.kind === 'boomer'){ s.age += dt; if(s.age > 0.6){ const a = Math.atan2(p.y - s.y, p.x - s.x); s.vx += Math.cos(a) * 1500 * dt; s.vy += Math.sin(a) * 1500 * dt; if(s.age > 1 && Math.hypot(p.x - s.x, p.y - s.y) < 24) s.life = 0; } }
+    s.x += s.vx * dt; s.y += s.vy * dt;
+    for(const e of G.enemies){
+      if(e.dead || s.life <= 0) continue;
+      if(Math.hypot(e.x - s.x, e.y - s.y) > e.r + s.r) continue;
+      if(s.kind === 'boomer'){ const last = s.hit.get(e) || -9; if(s.age - last < 0.35) continue; s.hit.set(e, s.age); hurt(e, s.dmg, s.vx * 0.012, s.vy * 0.012); continue; }
+      if(s.hit.has(e)) continue; s.hit.add(e);
+      hurt(e, s.dmg, s.vx * 0.015, s.vy * 0.015); if(s.kind === 'ice') e.slow = 1.6;
+      if(--s.pierce <= 0) s.life = 0;
+    }
+  }
+  G.shots = G.shots.filter(s => s.life > 0);
+  // area effects
+  for(const f of G.fx){
+    f.t -= dt;
+    if(f.kind === 'ring'){ f.r = f.R * (1 - f.t / f.T); for(const e of G.enemies){ if(e.dead || f.hit.has(e)) continue; const d = Math.hypot(e.x - f.x, e.y - f.y); if(d < f.r + e.r){ f.hit.add(e); hurt(e, f.dmg, (e.x - f.x) / (d || 1) * 18, (e.y - f.y) / (d || 1) * 18); } } }
+    if(f.kind === 'warn' && f.t <= 0 && !f.done){ f.done = true; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - f.x, e.y - f.y) < f.r + e.r) hurt(e, f.dmg, 0, 0); G.fx.push({kind:'boom', x:f.x, y:f.y, r:f.r, t:0.25, T:0.25, ic:f.ic}); }
+  }
+  G.fx = G.fx.filter(f => f.t > 0);
+  for(const c of G.clouds){ c.t -= dt; c.tick -= dt; if(c.tick <= 0){ c.tick = 0.4; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - c.x, e.y - c.y) < c.r + e.r) hurt(e, c.dmg, 0, 0); } }
+  G.clouds = G.clouds.filter(c => c.t > 0);
+  G.enemies = G.enemies.filter(e => !e.dead);
+  // orbs
+  for(const o of G.orbs){
+    const d = Math.hypot(p.x - o.x, p.y - o.y);
+    if(d < p.magnet || o.pull){ o.pull = true; const sp = 380 + (300 - Math.min(300, d)); o.x += (p.x - o.x) / (d || 1) * sp * dt; o.y += (p.y - o.y) / (d || 1) * sp * dt; }
+    if(d < p.r + 6){ o.got = true; if(o.heal) p.hp = Math.min(p.max, p.hp + p.max * 0.3); else { p.xp += o.v; while(p.xp >= p.need){ p.xp -= p.need; p.lv++; p.need = Math.floor(4 + p.lv * 4 + Math.pow(p.lv, 1.5)); G.levelQueue++; } } }
+  }
+  G.orbs = G.orbs.filter(o => !o.got);
+  if(G.orbs.length > 400){ const extra = G.orbs.splice(0, G.orbs.length - 300); const sum = extra.reduce((n, o) => n + (o.v || 0), 0); G.orbs.push({x:extra[0].x, y:extra[0].y, v:sum, big:true}); }
+  for(const n of G.nums) n.t -= dt; G.nums = G.nums.filter(n => n.t > 0);
+  // end / level
+  if(p.hp <= 0){ end(false); return; }
+  if(G.t >= WIN_TIME && !G.boss){ end(true); return; }
+  if(G.levelQueue > 0) showLevelUp();
+}
+
+// ---------- draw ----------
+function draw(){
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.fillStyle = '#05080d'; ctx.fillRect(0, 0, VW, VH);
+  if(!G) return;
+  const p = G.p;
+  const cx = clamp(p.x - VW / 2, Math.min(0, G.ww - VW), Math.max(0, G.ww - VW)), cy = clamp(p.y - VH / 2, Math.min(0, G.wh - VH), Math.max(0, G.wh - VH));
+  ctx.save(); ctx.translate(-cx, -cy);
+  if(ready(G.bg)){ ctx.imageSmoothingEnabled = true; ctx.drawImage(G.bg, 0, 0, G.ww, G.wh); }
+  ctx.strokeStyle = 'rgba(221,168,77,.6)'; ctx.lineWidth = 3; ctx.strokeRect(0, 0, G.ww, G.wh);
+  ctx.imageSmoothingEnabled = false;
+  // clouds
+  for(const c of G.clouds){ ctx.fillStyle = 'rgba(120,200,90,.22)'; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(150,230,110,.5)'; ctx.lineWidth = 2; ctx.stroke(); }
+  // aura
+  for(const w of G.weapons) if(w.kind === 'aura'){ const s = weaponStat(w); const g = ctx.createRadialGradient(p.x, p.y, s.area * 0.3, p.x, p.y, s.area); g.addColorStop(0, 'rgba(255,140,40,0)'); g.addColorStop(1, 'rgba(255,110,30,.28)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, s.area, 0, 7); ctx.fill(); }
+  // orbs
+  for(const o of G.orbs){
+    if(o.heal){ ctx.fillStyle = '#f0605a'; ctx.beginPath(); ctx.arc(o.x, o.y, 8, 0, 7); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillRect(o.x - 1.5, o.y - 5, 3, 10); ctx.fillRect(o.x - 5, o.y - 1.5, 10, 3); continue; }
+    ctx.fillStyle = o.big ? '#ffd166' : o.v >= 4 ? '#ff7bd5' : o.v >= 2 ? '#53ded3' : '#6fb4ff';
+    ctx.beginPath(); ctx.moveTo(o.x, o.y - 6); ctx.lineTo(o.x + 4.5, o.y); ctx.lineTo(o.x, o.y + 6); ctx.lineTo(o.x - 4.5, o.y); ctx.closePath(); ctx.fill();
+  }
+  // warnings / booms / rings / arcs
+  for(const f of G.fx){
+    const k = f.t / f.T;
+    if(f.kind === 'warn'){ ctx.strokeStyle = 'rgba(255,230,140,' + (0.4 + 0.5 * (1 - k)) + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (1.1 - 0.1 * k), 0, 7); ctx.stroke(); }
+    if(f.kind === 'boom'){ ctx.fillStyle = 'rgba(255,220,120,' + (0.55 * k) + ')'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); const ic = img(ICON(f.ic)); if(ready(ic)){ ctx.globalAlpha = k; ctx.drawImage(ic, f.x - 20, f.y - 20, 40, 40); ctx.globalAlpha = 1; } }
+    if(f.kind === 'ring'){ ctx.strokeStyle = 'rgba(255,215,120,' + (0.9 * k) + ')'; ctx.lineWidth = 6 * k + 2; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.stroke(); }
+    if(f.kind === 'arc'){ ctx.fillStyle = 'rgba(200,240,255,' + (0.45 * k) + ')'; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.arc(f.x, f.y, f.r, f.a - Math.PI / 2, f.a + Math.PI / 2); ctx.closePath(); ctx.fill(); }
+  }
+  // enemies (sorted by y so lower ones overlap upper ones)
+  G.enemies.sort((a, b) => a.y - b.y);
+  for(const e of G.enemies){
+    const im = img(e.src);
+    ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(e.x, e.y + 4, e.r, e.r * 0.4, 0, 0, 7); ctx.fill();
+    if(ready(im)){ const h = e.h, w = h * im.naturalWidth / im.naturalHeight; ctx.save(); if(e.dir < 0){ ctx.translate(e.x, 0); ctx.scale(-1, 1); ctx.translate(-e.x, 0); } if(e.hitT > 0) ctx.filter = 'brightness(2.2)'; else if(e.slow) ctx.filter = 'hue-rotate(160deg) saturate(1.6)'; ctx.drawImage(im, e.x - w / 2, e.y - h + 6, w, h); ctx.restore(); }
+    else { ctx.fillStyle = '#7a3b3b'; ctx.beginPath(); ctx.arc(e.x, e.y - e.r, e.r, 0, 7); ctx.fill(); }
+    if(e.boss){ ctx.strokeStyle = '#f0605a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(e.x, e.y + 4, e.r + 6, (e.r + 6) * 0.4, 0, 0, 7); ctx.stroke(); }
+  }
+  // orbiting blades
+  for(const w of G.weapons) if(w.kind === 'orbit'){ const s = weaponStat(w), ic = img(ICON(w.ic)); for(let i = 0; i < s.n; i++){ const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y + Math.sin(a) * s.area; ctx.save(); ctx.translate(ox, oy); ctx.rotate(a * 2); ctx.shadowColor = '#ffe7a3'; ctx.shadowBlur = 10; if(ready(ic)) ctx.drawImage(ic, -14, -14, 28, 28); ctx.restore(); } }
+  // player
+  const pic = img(ICON(G.job.ic));
+  ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(p.x, p.y + 14, 16, 6, 0, 0, 7); ctx.fill();
+  ctx.save(); if(p.inv > 0 && Math.floor(p.inv * 20) % 2) ctx.globalAlpha = 0.5;
+  ctx.shadowColor = '#53ded3'; ctx.shadowBlur = 14; ctx.fillStyle = '#0c1a24'; ctx.beginPath(); ctx.arc(p.x, p.y, 19, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+  ctx.strokeStyle = '#dda84d'; ctx.lineWidth = 3; ctx.stroke();
+  if(ready(pic)){ ctx.save(); ctx.beginPath(); ctx.arc(p.x, p.y, 16, 0, 7); ctx.clip(); ctx.drawImage(pic, p.x - 16, p.y - 16, 32, 32); ctx.restore(); }
+  ctx.restore();
+  ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(p.x - 22, p.y + 24, 44, 5); ctx.fillStyle = p.hp / p.max > 0.35 ? '#4fd17a' : '#f0605a'; ctx.fillRect(p.x - 22, p.y + 24, 44 * Math.max(0, p.hp / p.max), 5);
+  // shots
+  for(const s of G.shots){
+    const ic = img(ICON(s.ic)), a = Math.atan2(s.vy, s.vx);
+    ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.kind === 'boomer' ? G.t * 14 : a + Math.PI / 4);
+    if(s.kind === 'wave'){ ctx.rotate(-Math.PI / 4); ctx.fillStyle = 'rgba(170,230,255,.55)'; ctx.beginPath(); ctx.ellipse(0, 0, s.r * 0.6, s.r, 0, 0, 7); ctx.fill(); }
+    if(s.kind === 'ice'){ ctx.shadowColor = '#7fd8ff'; ctx.shadowBlur = 12; }
+    const z = s.kind === 'dart' ? 18 : s.kind === 'wave' ? 26 : 24;
+    if(ready(ic)) ctx.drawImage(ic, -z / 2, -z / 2, z, z);
+    ctx.restore();
+  }
+  // numbers
+  ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
+  for(const n of G.nums){ ctx.globalAlpha = Math.min(1, n.t * 2); ctx.fillStyle = n.bad ? '#ff6b6b' : '#fff'; ctx.strokeStyle = '#000'; ctx.lineWidth = 3; const y = n.y - (0.7 - n.t) * 30; ctx.strokeText(n.v, n.x, y); ctx.fillText(n.v, n.x, y); }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+  // joystick
+  if(stick.on){ ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(stick.x0, stick.y0, 50, 0, 7); ctx.stroke(); const dx = stick.x - stick.x0, dy = stick.y - stick.y0, d = Math.min(50, Math.hypot(dx, dy)), a = Math.atan2(dy, dx); ctx.fillStyle = 'rgba(83,222,211,.55)'; ctx.beginPath(); ctx.arc(stick.x0 + Math.cos(a) * d, stick.y0 + Math.sin(a) * d, 20, 0, 7); ctx.fill(); }
+  // edge arrow toward boss when off-screen
+  if(G.boss){ const b = G.boss, sx = b.x - cx, sy = b.y - cy; if(sx < 0 || sy < 0 || sx > VW || sy > VH){ const a = Math.atan2(sy - VH / 2, sx - VW / 2), ex = VW / 2 + Math.cos(a) * (Math.min(VW, VH) / 2 - 30), ey = VH / 2 + Math.sin(a) * (Math.min(VW, VH) / 2 - 30); ctx.save(); ctx.translate(ex, ey); ctx.rotate(a); ctx.fillStyle = '#f0605a'; ctx.beginPath(); ctx.moveTo(14, 0); ctx.lineTo(-8, -9); ctx.lineTo(-8, 9); ctx.closePath(); ctx.fill(); ctx.restore(); } }
+}
+function hud(){
+  const p = G.p, m = Math.floor(G.t / 60), s = Math.floor(G.t % 60);
+  $('time').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  $('lv').textContent = p.lv; $('kills').textContent = G.kills; $('xpBar').style.width = (p.xp / p.need * 100) + '%';
+  const bb = $('bossBar'); if(G.boss){ bb.style.display = 'block'; $('bossName').textContent = '封獸　' + G.boss.name; $('bossHp').style.width = Math.max(0, G.boss.hp / G.boss.max * 100) + '%'; } else bb.style.display = 'none';
+}
+let toastT = 0;
+function toast(t){ const el = $('toast'); el.textContent = t; el.style.opacity = 1; clearTimeout(toastT); toastT = setTimeout(() => el.style.opacity = 0, 1600); }
+
+// ---------- flow ----------
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if(G && G.state === 'play'){ update(dt); if(G.state === 'play' || G.state === 'level') hud(); }
+  draw();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+function pause(){ if(!G || G.state !== 'play') return; G.state = 'pause'; $('pauseInfo').innerHTML = `<p>${G.job.id}・${G.map[1]}・Lv ${G.p.lv}</p><p>技能：${G.weapons.map(w => w.name + ' Lv' + w.lv).join('、')}</p><p>強化：${Object.entries(G.passives).map(([n, l]) => n + ' Lv' + l).join('、') || '無'}</p>`; $('paused').classList.add('on'); }
+function resume(){ if(!G || G.state !== 'pause') return; $('paused').classList.remove('on'); G.state = 'play'; last = performance.now(); }
+function end(win){
+  G.state = 'over'; $('hud').hidden = true; $('bossBar').style.display = 'none';
+  $('overTitle').textContent = win ? '撐過來了！' : '倒下了…';
+  $('overText').textContent = win ? `${G.job.id}在${G.map[1]}撐過了 10 分鐘的妖魔圍攻。` : `${G.job.id}在${G.map[1]}倒下，再接再厲！`;
+  const m = Math.floor(G.t / 60), s = Math.floor(G.t % 60);
+  $('overStats').innerHTML = `<div><b>${m}:${String(s).padStart(2, '0')}</b>存活時間</div><div><b>${G.kills}</b>擊倒</div><div><b>${G.p.lv}</b>等級</div>`;
+  try{ const k = 'szo-survivor-best', best = JSON.parse(localStorage.getItem(k) || '{}'), id = G.job.id + '|' + G.map[1]; if(!best[id] || G.t > best[id]){ best[id] = G.t; localStorage.setItem(k, JSON.stringify(best)); } }catch(e){}
+  $('over').classList.add('on');
+}
+$('pauseBtn').onclick = pause; $('resumeBtn').onclick = resume;
+$('quitBtn').onclick = () => { $('paused').classList.remove('on'); G = null; $('hud').hidden = true; $('bossBar').style.display = 'none'; $('title').classList.add('on'); };
+$('againBtn').onclick = newGame;
+$('titleBtn').onclick = () => { $('over').classList.remove('on'); G = null; $('title').classList.add('on'); };
+document.addEventListener('visibilitychange', () => { if(document.hidden) pause(); });
+
+// ---------- title ----------
+function buildTitle(){
+  const jp = $('jobPick'); jp.replaceChildren();
+  JOBS.forEach((j, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === jobSel); b.innerHTML = `<img src="${ICON(j.ic)}" alt=""><b>${j.id}</b><small>${j.desc}</small><small>起始：${j.start}</small>`; b.onclick = () => { jobSel = i; buildTitle(); }; jp.appendChild(b); });
+  const mp = $('mapPick'); mp.replaceChildren();
+  let best = {}; try{ best = JSON.parse(localStorage.getItem('szo-survivor-best') || '{}'); }catch(e){}
+  D.maps.forEach((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === mapSel); const rec = best[JOBS[jobSel].id + '|' + m[1]]; b.innerHTML = `<b>${m[1]}</b><small>難度：${m[2]}</small><small>${rec ? '最佳：' + Math.floor(rec / 60) + ' 分 ' + Math.floor(rec % 60) + ' 秒' : '尚未挑戰'}</small>`; b.onclick = () => { mapSel = i; buildTitle(); }; mp.appendChild(b); });
+}
+buildTitle();
+$('startBtn').onclick = newGame;
+// preload icons
+Object.values(W).forEach(w => img(ICON(w.ic))); Object.values(P).forEach(v => img(ICON(v.ic)));
+D.maps.forEach(m => img(A + 'test-media/stage-maps-webp/stage' + String(m[0]).padStart(3, '0') + '.webp'));
+</script>
+</body>
+</html>
