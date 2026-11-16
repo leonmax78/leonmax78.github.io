@@ -5026,3 +5026,5 @@ html body button.beastLvTab:focus-visible{outline:2px solid #56cee0;outline-offs
   .jsSticky{top:0!important}
   .jsGame,.godPanel{max-width:calc((100dvh - 16px) * 1.935);margin-inline:auto}
 }
+.jsGameTxt.total input{width:8.5cqw;margin-left:.4cqw;padding:.1cqw .5cqw;font:inherit;color:#fff;background:rgba(0,0,0,.45);border:1px solid rgba(232,198,111,.55);border-radius:.4cqw;text-align:center;font-variant-numeric:tabular-nums;min-height:0;height:auto}
+.jsGameTxt.total input::-webkit-inner-spin-button{display:none}
