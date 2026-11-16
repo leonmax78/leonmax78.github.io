@@ -75,6 +75,19 @@
   #gemPage .gemCell img{width:58%;height:auto;max-width:40px}#gemPage .gemCell>i{width:40%;aspect-ratio:1;border-radius:50%;background:var(--tint)}#gemPage .gemCell em{position:absolute;top:2px;left:4px;font-style:normal;font-size:11px;color:#ffe08a}#gemPage .gemCell small{font-size:11px;line-height:1.2;white-space:nowrap}
   #gemPage .gemCell.locked{opacity:.35;border-style:dashed;cursor:not-allowed}#gemPage .gemCell:not(.filled) small{color:var(--muted,#9fb0c4)}
   #gemPage .gemStep summary{cursor:pointer;padding:6px 0;font-weight:bold}
+  #gemPage .gemRecHead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}#gemPage .gemRecHead h2{margin:0}
+  #gemPage .gemCountBox{display:grid;gap:4px;font-size:12.5px;color:var(--muted,#9fb0c4)}#gemPage .gemCountBox input{width:120px}
+  #gemPage .gemFlow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0;padding:10px 12px;border:1px solid var(--border,#263a58);border-radius:10px;background:rgba(255,255,255,.03);font-size:13px}
+  #gemPage .gemFlow span{padding:3px 9px;border-radius:999px;background:rgba(216,181,106,.12);color:#f0d9a4}#gemPage .gemFlow b{color:var(--muted,#9fb0c4);font-weight:normal}
+  #gemPage .gemProcTabs{display:flex;gap:6px;flex-wrap:wrap}#gemPage .gemProcTabs button{padding:8px 14px;border-radius:10px;border:1px solid var(--border,#263a58);background:transparent;color:inherit;cursor:pointer}
+  #gemPage .gemProcTabs button.on{background:#d8b56a;border-color:#d8b56a;color:#1b1406;font-weight:bold}#gemPage .gemProcDesc{margin:8px 0 10px}
+  #gemPage .gemPickRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}#gemPage .gemPickRow>span{width:36px;font-size:12.5px;color:var(--muted,#9fb0c4)}
+  #gemPage .gemChip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;border:1px solid var(--border,#263a58);background:transparent;color:inherit;cursor:pointer;font-size:13px}
+  #gemPage .gemChip i{width:10px;height:10px;border-radius:50%;background:var(--tint)}#gemPage .gemChip small{color:var(--muted,#9fb0c4);font-size:11px}
+  #gemPage .gemChip.on{border-color:var(--tint,#d8b56a);background:color-mix(in srgb,var(--tint,#d8b56a) 25%,transparent)}
+  #gemPage .gemRecTable td{vertical-align:top}#gemPage .gemRecTable td:first-child b{font-size:16px;color:#f0d9a4}
+  @media (max-width:600px){#gemPage .gemRecTable th,#gemPage .gemRecTable td{padding:8px 6px}#gemPage .gemMat{white-space:normal;flex-wrap:wrap;gap:2px 6px}#gemPage .gemMat b{white-space:nowrap}#gemPage .gemRecTable td:first-child{width:28px}}
+  #gemPage .gemMat{display:flex;align-items:baseline;gap:6px;padding:2px 0;white-space:nowrap}#gemPage .gemMat button{background:none;border:0;padding:0;color:#8fd3ff;cursor:pointer;font:inherit;text-align:left}#gemPage .gemMat b{color:var(--text,#eaf2ff);font-variant-numeric:tabular-nums}
   </style><h1>神魂寶石</h1><div class="gemTabs" role="tablist">${[['calc','鑲嵌能力試算'],['recommend','推薦方案'],['plan','三星合成材料'],['recipes','加工配方與寶石粉']].map(([id,label])=>`<button role="tab" data-gem-tab="${id}" aria-selected="${tab===id}">${label}</button>`).join('')}</div><div id="gemContent"></div></section>`;
   window.szoAddSectionNav?.('gems');  // 降神區共用分頁（每次重畫都補上）
   byId('gemPage').querySelectorAll('[data-gem-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.gemTab;renderGemPage();});
@@ -130,17 +143,40 @@
    content.querySelectorAll('select').forEach(s=>s.onchange=refresh);refresh();return;
   }
   if(tab==='recipes'){
-   const rows=exchange.rows.filter(r=>r.group===220||(r.group>=221&&r.group<=226)||(r.group>=231&&r.group<=233));
-   const link=p=>`<button type="button" data-item="${esc(p.id)}">${esc(name(p.id))}</button> × ${p.count.toLocaleString()}`;
-   content.innerHTML=`<h2>敖姬加工</h2><p>京城、璇鶯鎮、龍川府</p><h3>寶石粉來源</h3><p>粗糙寶石粉：品級 1、2 寶石磨碎。尋常寶石粉：品級 3、4 寶石磨碎。細緻寶石粉：品級 5、6 寶石磨碎。</p><div class="gemTabs">${['32801','32802','32803'].map(id=>`<button data-powder="${id}">${esc(name(id))}</button>`).join('')}</div><div class="gemFilters"><label>工序<select id="gemProcess"><option value="all">全部工序</option><option value="grind">磨碎</option><option value="recreate">再造</option><option value="refine">精製</option></select></label><label>材料／產物搜尋<input id="gemRecipeSearch" type="search"></label><label>加工次數<input id="gemRecipeCount" type="number" min="1" max="99999" value="1"></label></div><p id="gemRecipeMatch"></p><div id="gemRecipeRows"></div>`;
-   const refresh=()=>{
-    const q=byId('gemRecipeSearch').value.trim().replace(/普通寶石粉/g,'尋常寶石粉'),process=byId('gemProcess').value,count=Math.max(1,Math.min(99999,Math.floor(Number(byId('gemRecipeCount').value)||1)));
-    const selected=rows.filter(r=>(process==='all'||(process==='grind'&&r.group>=221&&r.group<=226)||(process==='recreate'&&r.group===220)||(process==='refine'&&r.group>=231))&&(!q||[r.name,...r.materials.map(p=>name(p.id)),...r.rewards.map(p=>name(p.id))].join(' ').includes(q)));
-    byId('gemRecipeMatch').textContent=selected.length+' 種配方';
-    byId('gemRecipeRows').innerHTML=selected.map(r=>`<article class="gemRecipe"><h3>${r.group===220?'再造':r.group>=231?'精製':'磨碎'} · ${esc(r.name)}</h3><p>材料：${r.materials.map(p=>link({...p,count:p.count*count})).join('、')}</p><p>產物：${r.rewards.map(p=>link({...p,count:p.count*count})).join('、')}</p></article>`).join('')||'<p>沒有符合的配方。</p>';
-   };
-   ['gemProcess','gemRecipeSearch','gemRecipeCount'].forEach(id=>byId(id).addEventListener('input',refresh));
-   content.querySelectorAll('[data-powder]').forEach(b=>b.onclick=()=>{byId('gemRecipeSearch').value=name(b.dataset.powder);byId('gemProcess').value='grind';refresh();});refresh();return;
+   // V831: 依「工序 → 顏色」整理；同顏色、同品級的五種形狀材料相同，只列一次
+   const C=[['湛藍','力量','#2f6fd0'],['緋紅','敏捷','#c8434b'],['碧綠','智慧','#3f9e3a'],['玄黃','體魄','#b8902c'],['多彩','四屬','#9b59c9'],['橄欖','術攻','#7f8f2a'],['鋯褐','生命','#9a6233'],['蒼紫','精力','#6a4fb0'],['燦黑','防禦','#555d68'],['霜白','術防','#c9d3dd']];
+   const R='ⅠⅡⅢⅣⅤⅥ',SH=['圓弧','三角','四方','五稜','六緯'];
+   const isGem=id=>/(寶石|晶鑽)[ⅠⅡⅢⅣⅤⅥ]$/.test(name(id));
+   const colorIn=t=>(C.find(([c])=>t.includes(c))||[''])[0], gradeIn=t=>R.indexOf(t.slice(-1))+1;
+   const all=exchange.rows.filter(r=>r.group===220||(r.group>=221&&r.group<=226)||(r.group>=231&&r.group<=233));
+   const rs=state.rs=state.rs||{proc:'refine',color:'玄黃',shape:'圓弧',count:1};
+   const cnt=Math.max(1,Math.min(99999,Math.floor(Number(rs.count)||1)));
+   const item=(p,mul=1)=>`<span class="gemMat"><button type="button" data-item="${esc(p.id)}">${esc(name(p.id))}</button><b>× ${(p.count*mul*cnt).toLocaleString()}</b></span>`;
+   const PROCS=[['refine','精製寶石','用寶石材料做出寶石，再把 3 顆同形狀、同顏色的寶石升到下一品級'],['grind','磨碎成寶石粉','把寶石磨成寶石粉：品級Ⅰ、Ⅱ → 粗糙；Ⅲ、Ⅳ → 尋常；Ⅴ、Ⅵ → 細緻'],['recreate','再造秘藏袋','用寶石粉換神魂寶石秘藏袋']];
+   const inProc=r=>rs.proc==='recreate'?r.group===220:rs.proc==='grind'?(r.group>=221&&r.group<=226):r.group>=231;
+   let body='';
+   if(rs.proc==='recreate'){
+    const rows=all.filter(r=>r.group===220);
+    body=`<div class="tableWrap"><table class="compareTable gemRecTable"><thead><tr><th>得到</th><th>需要</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.rewards.map(p=>item(p)).join('')}</td><td>${r.materials.map(p=>item(p)).join('')}</td></tr>`).join('')}</tbody></table></div><p class="gemHint">同一個秘藏袋有兩種做法時，兩列都列出，擇一即可。</p>`;
+   }else{
+    const rows=all.filter(r=>inProc(r)&&colorIn(r.name)===rs.color&&r.name.includes(rs.shape)).sort((a,b)=>gradeIn(a.name)-gradeIn(b.name));
+    body=`<div class="gemPickRow"><span>顏色</span>${C.map(([c,stat,t])=>`<button type="button" class="gemChip${rs.color===c?' on':''}" style="--tint:${t}" data-rc-color="${c}"><i></i>${c}<small>${stat}</small></button>`).join('')}</div>
+     <div class="gemPickRow"><span>形狀</span>${SH.map(x=>`<button type="button" class="gemChip${rs.shape===x?' on':''}" data-rc-shape="${x}">${x}</button>`).join('')}<small class="gemHint">同顏色的五種形狀，加工材料都一樣</small></div>
+     <div class="tableWrap"><table class="compareTable gemRecTable"><thead><tr><th>品級</th><th>得到</th><th>需要</th></tr></thead><tbody>${rows.map(r=>{
+      const g=R[gradeIn(r.name)-1],gems=r.materials.filter(p=>isGem(p.id)),others=r.materials.filter(p=>!isGem(p.id));
+      return `<tr><td><b>${g}</b></td><td>${r.rewards.map(p=>item(p)).join('')}</td><td>${gems.map(p=>item(p)).join('')}${others.map(p=>item(p)).join('')}</td></tr>`;}).join('')||'<tr><td colspan="3">沒有這個組合的配方</td></tr>'}</tbody></table></div>`;
+   }
+   content.innerHTML=`<div class="gemRecHead"><div><h2>敖姬加工</h2><p class="gemHint">NPC 在京城、璇鶯鎮、龍川府</p></div>
+     <label class="gemCountBox">加工次數<input id="gemRecipeCount" type="number" min="1" max="99999" value="${cnt}"></label></div>
+    <div class="gemFlow"><span>寶石材料</span><b>精製 →</b><span>寶石 Ⅰ～Ⅲ</span><b>磨碎 →</b><span>寶石粉</span><b>再造 →</b><span>神魂寶石秘藏袋</span></div>
+    <div class="gemProcTabs">${PROCS.map(([id,label])=>`<button type="button" class="${rs.proc===id?'on':''}" data-rc-proc="${id}">${label}</button>`).join('')}</div>
+    <p class="gemHint gemProcDesc">${(PROCS.find(p=>p[0]===rs.proc)||[])[2]}${cnt>1?`；下表數量已乘上 ${cnt} 次`:''}</p>${body}`;
+   const redo=()=>{save();renderGemPage();};
+   content.querySelectorAll('[data-rc-proc]').forEach(b=>b.onclick=()=>{rs.proc=b.dataset.rcProc;redo();});
+   content.querySelectorAll('[data-rc-color]').forEach(b=>b.onclick=()=>{rs.color=b.dataset.rcColor;redo();});
+   content.querySelectorAll('[data-rc-shape]').forEach(b=>b.onclick=()=>{rs.shape=b.dataset.rcShape;redo();});
+   byId('gemRecipeCount').onchange=e=>{rs.count=e.target.value;redo();};
+   return;
   }
   state.level=Math.max(0,Math.min(20000,Math.floor(Number(state.level)||0)));
   const COLORS=[['湛藍','力量'],['緋紅','敏捷'],['碧綠','智慧'],['玄黃','體魄'],['多彩','四屬'],['橄欖','術攻'],['鋯褐','生命'],['蒼紫','精力'],['燦黑','防禦'],['霜白','術防']];
