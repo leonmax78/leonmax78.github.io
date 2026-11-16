@@ -369,16 +369,6 @@
     return true;
   }
   window.ensureReverseItemDataLoaded=ensureReverseItemDataLoaded;
-  function sourceItemForRow(rowName, monsterId){
-    const sameName=itemByName(rowName);
-    if(!sameName)return null;
-    const type=String(sameName.Type||sameName.type||'').toUpperCase();
-    if(type==='BONUS' || /錦囊|寶箱|福袋|寶匣|戰匣|包裹/.test(rowName)){
-      return sameName;
-    }
-    const sameId=getItemIndex()[String(monsterId||'').trim()];
-    return sameId || null;
-  }
   function formatRate(rate){
     if(rate==null)return '改版機率待確認';
     const n=Number(rate)||0;
@@ -388,7 +378,7 @@
     const m=row.monster||{};
     const name=row.monsterName || nameOfSafe(m);
     const mid=row.monsterId || m.ID || m.id || '';
-    const linkedItem=sourceItemForRow(name,mid);
+    const linkedItem=row.boxId ? {ID:row.boxId} : null;
     const rate=formatRate(row.rate);
     if(linkedItem){
       return '<div class="reverseDropCard reverseDropCardLinked">'
@@ -418,7 +408,7 @@
     await ensureReverseItemDataLoaded(itemId);
     const it=itemLiteById(itemId);
     if(!it)throw Error('找不到這個道具');
-    const rows=(getDropReverse()[itemId]||[]).slice().sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0));
+    const rows=window.szoBoxSourceRows(getDropReverse()[itemId]||[]).sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0));
     return '<h2>'+escHtml(nameOfSafe(it))+'</h2><p>取得來源｜共 '+rows.length+' 筆</p>'
       +'<div class="reverseDropList">'+(rows.map(row=>renderReverseCard(row,itemId,'reverse')).join('')||'<p>沒有掉落資料。</p>')+'</div>';
   };
@@ -434,7 +424,7 @@
       if(reader)reader.innerHTML='<section class="card"><button class="backBtn" onclick="goBackToPrevious(\''+escHtml(backView)+'\')">← 返回查詢</button><h1>找不到道具</h1><div class="empty">ID '+escHtml(itemId)+' 不在 ITEM.INI 資料內。</div></section>';
       return;
     }
-    const arr=(getDropReverse()[itemId]||[]).slice().sort(function(a,b){return (Number(b.rate)||0)-(Number(a.rate)||0)});
+    const arr=window.szoBoxSourceRows(getDropReverse()[itemId]||[]).sort(function(a,b){return (Number(b.rate)||0)-(Number(a.rate)||0)});
     window.v86LastView=backView;
     if(!skipPush)try{history.pushState({app:'detail',view:'reverse',szoReturn:returnKey,szoDetail:{kind:'reverse',id:itemId}},'',location.pathname+location.search);}catch(e){}
     let parentButton='';

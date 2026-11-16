@@ -218,9 +218,8 @@
     const [drops, locs, talk, ex, quests] = await Promise.all([safe(dropShard(id)), safe(shopLocations()), safe(json('talk')), safe(json('exchanges')), safe(json('quests'))]);
     const out = { id, name, drops: [], shops: [], gifts: [], exchanges: [], quests: [], crafts: [] };
     // 怪物掉落 (a 錦囊/福袋 "monster" is really an item you open)
-    for(const d of (drops || []).slice().sort((a, b) => (Number(b.rate) || 0) - (Number(a.rate) || 0))){
-      const box = byName.get(String(d.monsterName || '').trim());
-      out.drops.push({ mid: String(d.monsterId), name: d.monsterName, rate: d.rate, boxId: box ? itemId(box) : '' });
+    for(const d of window.szoBoxSourceRows(drops || []).sort((a, b) => (Number(b.rate) || 0) - (Number(a.rate) || 0))){
+      out.drops.push({ mid: String(d.monsterId), name: d.monsterName, rate: d.rate, boxId: d.boxId || '' });
     }
     // 商店販賣
     const seenShop = new Set();
@@ -351,12 +350,13 @@
     if(!matches.length) return null;
     const item = matches[0];
     const id = itemId(item);
-    const rows = Array.isArray(reverse[id]) ? reverse[id].slice(0, 12) : [];
+    const rows = window.szoBoxSourceRows(reverse[id] || []).slice(0, 12);
     const img = itemIcon(item);
     return `<div class="qaAnswer">
       <div class="qaTitleWithIcon">${img ? `<img src="${html(img)}" alt="">` : ''}<div><h2>${html(itemName(item))} 掉落</h2><div class="qaAnswerMeta">ID ${html(id)} / 共 ${rows.length} 筆${rows.length >= 12 ? '（先顯示前 12 筆）' : ''}</div></div></div>
       ${matches.length > 1 ? suggestionBlock('你是不是想找：', matches, itemName, 'qa-item-suggest') : ''}
       ${rows.length ? `<div class="qaList">${await Promise.all(rows.map(async drop => {
+        if(drop.boxId) return `<div class="qaRow"><strong>${html(drop.monsterName)}</strong><span>開箱取得</span><b>${html(rateText(drop.rate))}</b><div class="qaRowActions">${chip('道具資訊', `data-qa-item="${html(drop.boxId)}"`)}</div></div>`;
         const monster = byId.get(String(drop.monsterId)) || { ID:drop.monsterId, Name:drop.monsterName };
         const loc = await locationForMonster(monsterName(monster));
         const locs = String(loc || '').split(/[、,]/).map(x => x.trim()).filter(Boolean);

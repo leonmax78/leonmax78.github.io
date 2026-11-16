@@ -9,6 +9,8 @@ window.SZO_SCRIPT_GROUPS = {
     "js/pages/autodata-page.js"
   ],
   "data": [
+    "data/box-sources.js",
+    "js/box-source-rows.js",
     "data/refining-policy.js",
     "js/data/display-dictionary.js",
     "data/approved-status-descriptions.js",
