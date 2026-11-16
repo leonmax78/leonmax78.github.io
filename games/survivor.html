@@ -19,7 +19,8 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
 .slots{display:flex;gap:4px;flex-wrap:wrap}
 .slots span{position:relative;width:28px;height:28px;border-radius:6px;border:1px solid #6b5a33;background:#000 center/cover}
 .slots span b{position:absolute;right:-2px;bottom:-4px;font-size:10px;color:#fff;text-shadow:0 0 3px #000}
-.pause{pointer-events:auto;font:inherit;font-weight:800;color:var(--text);background:rgba(10,18,28,.8);border:1px solid var(--line);border-radius:8px;padding:5px 10px}
+.row{flex-wrap:nowrap;white-space:nowrap}.row>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pause{pointer-events:auto;font:inherit;font-size:13px;font-weight:800;color:var(--text);background:rgba(10,18,28,.8);border:1px solid var(--line);border-radius:8px;padding:5px 10px}
 .screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,7,12,.72);backdrop-filter:blur(3px);overflow:auto}
 .screen.on{display:flex}
 .box{width:min(720px,100%);max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--gold);border-radius:14px;padding:18px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
@@ -40,6 +41,9 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
 .choice button.pili{border-color:#c98bff;background:linear-gradient(90deg,#2a1840,#102a36)}.choice button.pili em{color:#e3b8ff}
 .pick small.piliN{color:#d6a8ff}
 .slots span.pili{border-color:#c98bff}
+.pick.sex{grid-template-columns:repeat(2,1fr)}
+.pick canvas{width:auto;height:84px;float:left;margin-right:8px;image-rendering:pixelated}
+.pick.sex button{display:flex;align-items:center;gap:6px}.pick.sex canvas{float:none;margin:0}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .stats div{background:#0c1a24;border:1px solid var(--line);border-radius:8px;padding:8px;text-align:center}
 .stats b{display:block;font-size:22px;color:var(--gold2)}
@@ -54,7 +58,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
 <canvas id="c"></canvas>
 <div class="hud" id="hud" hidden>
   <div class="xp"><i id="xpBar"></i></div>
-  <div class="row"><span>Lv <b id="lv">1</b> <small id="jobName"></small></span><span class="time" id="time">00:00</span><span><small>擊倒</small> <b id="kills">0</b> <button class="pause" id="pauseBtn" type="button">暫停</button></span></div>
+  <div class="row"><span>Lv <b id="lv">1</b> <small id="jobName"></small></span><span class="time" id="time">00:00</span><span><small>擊倒</small> <b id="kills">0</b> <button class="pause" id="muteBtn" type="button">音效</button> <button class="pause" id="pauseBtn" type="button">暫停</button></span></div>
   <div class="slots" id="slots"></div>
 </div>
 <div class="boss" id="bossBar"><span id="bossName"></span><i><u id="bossHp"></u></i></div>
@@ -64,9 +68,11 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
   <h1>神州倖存者</h1>
   <p>撐過 10 分鐘的妖魔圍攻。角色會自動施放技能，你只要移動閃躲；擊倒怪物撿起經驗，升級時三選一強化。</p>
   <h2>選擇職業</h2><div class="pick" id="jobPick"></div>
+  <h2>性別（一轉外觀）</h2><div class="pick sex" id="sexPick"></div>
   <h2>選擇地圖（霹靂聯動）</h2><div class="pick" id="mapPick"></div>
   <button class="btn go" id="startBtn" type="button">出戰</button>
   <p class="note">升到 3 級後，升級選項有機會出現紫色的「霹靂聯動」技能，只會出現該職業能學的。技能欄最多 6 個。</p>
+  <p class="note">角色、地圖、技能特效、音樂與音效皆取自遊戲原始素材；地圖為 1:1 原尺寸。</p>
   <p class="note">電腦：WASD 或方向鍵移動，空白鍵暫停。手機：在畫面任一處按住拖曳移動。試玩版，數值仍在調整。</p>
 </div></div>
 <div class="screen" id="levelUp"><div class="box"><h1>升級！</h1><p>選一項強化</p><div class="choice" id="choices"></div></div></div>
@@ -88,6 +94,37 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const imgCache = new Map();
 function img(src){ let im = imgCache.get(src); if(!im){ im = new Image(); im.src = src; imgCache.set(src, im); } return im; }
 const ready = im => im && im.complete && im.naturalWidth > 0;
+
+// ---------- 遊戲素材：一轉角色、技能特效、音效（由 tools/survivor 從遊戲檔案轉出） ----------
+const SV = 'sv/';
+let CHAR = null, FX = null, SND = null;
+const loaded = Promise.all(['char.json','fx.json','snd.json'].map(f => fetch(SV + f).then(r => r.json()))).then(([c, f, s]) => { CHAR = c; FX = f; SND = s; });
+const CHAR_DIR = {劍俠:['p1','p6'], 術者:['p2','p7'], 僧侶:['p3','p8'], 勇士:['p4','p9'], 道人:['p5','pa']};
+// 實心的特效照原樣畫；其餘是發光特效，用加亮混色
+const FX_SOLID = new Set(['天地根','大梵聖掌','玄冰術','地裂波','怒火燒盡九重天','君子風','毒煙術']);
+const FX_ROT = new Set(['劍以創生','雷箭術']);
+function fxOf(name){ const m = FX && FX[name]; if(!m) return null; if(!m.img) m.img = img(SV + 'fx/' + m.f); return ready(m.img) ? m : null; }
+function fxDir(m, ang){ const D = m.a[0].length; return ((Math.round((-ang) / (Math.PI * 2 / D)) % D) + D) % D; }  // 特效方向：1=東，逆時針
+function fxFrame(m, t, ang){ if(m.m === 'dir'){ const row = m.a[Math.floor(t) % m.a.length]; return row[fxDir(m, ang || 0)]; } return m.a[Math.floor(t) % m.a.length]; }
+function fxDraw(name, m, i, x, y, o = {}){
+  const r = m.r[i]; if(!r) return;
+  ctx.save(); ctx.translate(x, y); if(o.rot) ctx.rotate(o.rot); const sc = o.scale || 1; ctx.scale(sc, sc);
+  ctx.globalAlpha = o.alpha == null ? 1 : o.alpha; ctx.globalCompositeOperation = FX_SOLID.has(name) ? 'source-over' : 'lighter';
+  if(o.center) ctx.drawImage(m.img, r[0], r[1], r[2], r[3], -r[2] / 2, -r[3] / 2, r[2], r[3]);
+  else ctx.drawImage(m.img, r[0], r[1], r[2], r[3], -r[4], -r[5], r[2], r[3]);
+  ctx.restore();
+}
+function fxSize(m){ if(!m.sz){ let w = 1; for(const r of m.r) w = Math.max(w, r[2]); m.sz = w; } return m.sz; }
+// 音效
+let muted = false; try{ muted = localStorage.getItem('szo-survivor-mute') === '1'; }catch(e){}
+const AU = {}, bgm = new Audio(); bgm.loop = true; bgm.volume = 0.32; bgm.preload = 'none';
+function sfx(name, vol = 0.3, gap = 240){
+  if(muted || !SND || !SND[name]) return; const now = performance.now(), a = AU[name] || (AU[name] = {t:0, pool:[]});
+  if(now - a.t < gap) return; a.t = now;
+  let el = a.pool.find(x => x.paused || x.ended); if(!el){ if(a.pool.length >= 2) return; el = new Audio(SV + 'snd/' + SND[name]); a.pool.push(el); }
+  el.volume = vol; try{ el.currentTime = 0; }catch(e){} el.play().catch(() => {});
+}
+function music(on){ if(on && !muted){ if(!bgm.src) bgm.src = SV + 'snd/bgm.mp3'; bgm.play().catch(() => {}); } else bgm.pause(); }
 
 // ---------- weapons: 技能名稱與圖示取自遊戲技能資料 ----------
 // kind: arc 揮砍 / ring 擴散震波 / orbit 環繞 / homing 追蹤飛劍 / wave 直線貫穿 / rain 天降範圍
@@ -178,23 +215,24 @@ function moveDir(){
 }
 
 // ---------- game state ----------
-let G = null, jobSel = 0, mapSel = 0;
-const SCALE = 2, WIN_TIME = 600, BOSS_EVERY = 150;
+let G = null, jobSel = 0, mapSel = 0, sexSel = 0;
+const WW = 4096, WH = 3072, TILE = 512, WIN_TIME = 600, BOSS_EVERY = 150;
 
 function newGame(){
   const job = JOBS[jobSel], map = D.maps[mapSel];
-  const bg = img(A + 'test-media/stage-maps-webp/stage' + String(map[0]).padStart(3, '0') + '.webp');
+  const folder = CHAR_DIR[job.id][sexSel];
   G = {
-    state:'play', t:0, kills:0, job, map, bg, ww:1040 * SCALE, wh:660 * SCALE, tierBase:map[3],
-    p:{x:1040, y:660, r:16, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:90, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
+    state:'play', t:0, kills:0, job, map, mapDir:SV + 'map/' + map[0] + '/', ww:WW, wh:WH, tierBase:map[3],
+    char:CHAR[folder], charImg:img(SV + 'char_' + folder + '.webp'), moving:false,
+    p:{x:WW / 2, y:WH / 2, r:14, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:90, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
     weapons:[], passives:{}, enemies:[], shots:[], fx:[], orbs:[], nums:[], clouds:[], spawnT:0, nextBoss:BOSS_EVERY, boss:null, levelQueue:0
   };
   addWeapon(job.start);
-  $('jobName').textContent = job.id + '・' + map[1];
+  $('jobName').textContent = job.id + '・' + map[1]; music(true);
   ['title','over','paused','levelUp'].forEach(s => $(s).classList.remove('on'));
   $('hud').hidden = false; refreshSlots(); toast(map[1] + '　開戰');
 }
-function addWeapon(name){ G.weapons.push({name, ...W[name], lv:1, t:0, ang:0, hit:new Map()}); }
+function addWeapon(name){ G.weapons.push({name, ...W[name], lv:1, t:0, ang:0, hit:new Map()}); fxOf(name); }
 function weaponStat(w){
   const lv = w.lv, p = G.p;
   return {
@@ -214,14 +252,14 @@ function spawnEnemy(boss){
   if(boss){
     const b = D.boss[Math.min(D.boss.length - 1, Math.floor(G.t / BOSS_EVERY) * 2 + G.tierBase * 2 + Math.floor(Math.random() * 2))];
     const hp = (700 + minutes * 450) * hard;
-    const e = {x, y, r:42, hp, max:hp, spd:42, dmg:14 * hard, src:A + b[0].replace(/^assets\//, ''), name:b[1].replace(/[\[\]{}]/g, ''), boss:true, xp:60, hitT:0, slow:0, h:110};
-    G.enemies.push(e); G.boss = e; toast('封獸出現：' + e.name);
+    const e = {x, y, r:42, hp, max:hp, spd:42, dmg:14 * hard, src:A + b[0].replace(/^assets\//, ''), name:b[1].replace(/[\[\]{}]/g, ''), boss:true, xp:60, hitT:0, slow:0, h:110, sc:1.3};
+    G.enemies.push(e); G.boss = e; toast('封獸出現：' + e.name); sfx('_boss', 0.5);
     return;
   }
   const tier = Math.random() < 0.25 && tierNow() > 0 ? tierNow() - 1 : tierNow();
   const m = pickOne(D.tiers[tier]);
   const hp = (8 + minutes * 8) * (1 + tier * 0.45) * hard;
-  G.enemies.push({x, y, r:15 + tier, hp, max:hp, spd:rnd(40, 58) + tier * 2 + minutes * 1.5, dmg:(4 + tier * 1.5 + minutes * 0.7) * hard, src:A + 'test-media/monster-portraits/m' + m[0] + '.png', name:m[1], xp:1 + tier, hitT:0, slow:0, h:46 + tier * 3});
+  G.enemies.push({x, y, r:15 + tier, hp, max:hp, spd:rnd(40, 58) + tier * 2 + minutes * 1.5, dmg:(4 + tier * 1.5 + minutes * 0.7) * hard, src:A + 'test-media/monster-portraits/m' + m[0] + '.png', name:m[1], xp:1 + tier, hitT:0, slow:0, h:46 + tier * 3, sc:1});
 }
 function hurt(e, dmg, kx, ky){
   if(e.dead) return;
@@ -229,7 +267,7 @@ function hurt(e, dmg, kx, ky){
   if(!e.boss && (kx || ky)){ e.x += kx; e.y += ky; }
   G.nums.push({x:e.x + rnd(-8, 8), y:e.y - e.h * 0.6, v:Math.round(dmg), t:0.7});
   if(e.hp <= 0){
-    e.dead = true; G.kills++;
+    e.dead = true; G.kills++; sfx('_death', 0.16, 320);
     G.orbs.push({x:e.x, y:e.y, v:e.xp, big:e.boss});
     if(e.boss){ G.boss = null; for(let i = 0; i < 2; i++) G.levelQueue++; G.orbs.push({x:e.x + 20, y:e.y, heal:true}); }
     else if(Math.random() < 0.012) G.orbs.push({x:e.x, y:e.y, heal:true});
@@ -243,7 +281,7 @@ function nearest(x, y, n, maxD = 900){
 function fire(w, dt){
   const p = G.p, s = weaponStat(w);
   if(w.kind === 'orbit'){
-    w.ang += dt * (2.4 + w.lv * 0.25);
+    w.ang += dt * (2.4 + w.lv * 0.25); w.st = (w.st || 0) - dt; if(w.st <= 0){ w.st = 2.4; sfx(w.name, 0.18); }
     for(let i = 0; i < s.n; i++){
       const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y + Math.sin(a) * s.area;
       for(const e of G.enemies){ if(e.dead) continue; if(Math.hypot(e.x - ox, e.y - oy) < e.r + 16){ const last = w.hit.get(e) || 0; if(G.t - last > 0.45){ w.hit.set(e, G.t); hurt(e, s.dmg, Math.cos(a) * 6, Math.sin(a) * 6); } } }
@@ -251,30 +289,30 @@ function fire(w, dt){
     return;
   }
   if(w.kind === 'aura'){
-    w.t -= dt; if(w.t > 0) return; w.t = s.cd;
+    w.t -= dt; if(w.t > 0) return; w.t = s.cd; w.st = (w.st || 0) - s.cd; if(w.st <= 0){ w.st = 3; sfx(w.name, 0.18); }
     for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - p.x, e.y - p.y) < s.area + e.r) hurt(e, s.dmg, 0, 0);
     return;
   }
   w.t -= dt; if(w.t > 0) return;
   const targets = nearest(p.x, p.y, Math.max(1, s.n), w.kind === 'rain' ? Math.max(VW, VH) * 0.6 : 900);
   if(!targets.length && !['arc','ring','burst','wave'].includes(w.kind)) return;
-  w.t = s.cd;
+  w.t = s.cd; sfx(w.name, w.pili ? 0.4 : 0.3);
   const aim = targets[0] ? Math.atan2(targets[0].y - p.y, targets[0].x - p.x) : Math.atan2(p.face[1], p.face[0]);
   switch(w.kind){
     case 'arc': {
       const a0 = targets[0] && Math.hypot(targets[0].x - p.x, targets[0].y - p.y) < s.area + 60 ? aim : Math.atan2(p.face[1], p.face[0]);
       for(const e of G.enemies){ if(e.dead) continue; const d = Math.hypot(e.x - p.x, e.y - p.y); if(d > s.area + e.r) continue; let da = Math.abs(((Math.atan2(e.y - p.y, e.x - p.x) - a0 + Math.PI * 3) % (Math.PI * 2)) - Math.PI); if(da < Math.PI / 2 + 0.2) hurt(e, s.dmg, (e.x - p.x) / d * 14, (e.y - p.y) / d * 14); }
-      G.fx.push({kind:'arc', x:p.x, y:p.y, a:a0, r:s.area, t:0.22, T:0.22, ic:w.ic}); break;
+      G.fx.push({kind:'arc', x:p.x, y:p.y, a:a0, r:s.area, t:0.36, T:0.36, ic:w.ic, name:w.name}); break;
     }
-    case 'ring': G.fx.push({kind:'ring', x:p.x, y:p.y, r:0, R:s.area, t:0.45, T:0.45, dmg:s.dmg, hit:new Set(), ic:w.ic}); break;
-    case 'homing': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; G.shots.push({kind:'homing', x:p.x, y:p.y, vx:Math.cos(aim) * 380, vy:Math.sin(aim) * 380, tg, dmg:s.dmg, life:2.2, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, hit:new Set()}); } break;
-    case 'wave': { const a = Math.hypot(p.face[0], p.face[1]) ? Math.atan2(p.face[1], p.face[0]) : aim; G.shots.push({kind:'wave', x:p.x, y:p.y, vx:Math.cos(a) * 460, vy:Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, hit:new Set()}); if(w.lv >= 4) G.shots.push({kind:'wave', x:p.x, y:p.y, vx:-Math.cos(a) * 460, vy:-Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, hit:new Set()}); break; }
-    case 'rain': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length] || {x:p.x + rnd(-200, 200), y:p.y + rnd(-200, 200)}; G.fx.push({kind:'warn', x:tg.x + rnd(-10, 10), y:tg.y + rnd(-10, 10), r:s.area, t:0.45, T:0.45, dmg:s.dmg, ic:w.ic}); } break;
-    case 'darts': targets.forEach((tg, i) => { const a = Math.atan2(tg.y - p.y, tg.x - p.x) + (i ? rnd(-0.05, 0.05) : 0); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 560, vy:Math.sin(a) * 560, dmg:s.dmg, life:1, r:6, pierce:1 + Math.floor(w.lv / 4), ic:w.ic, hit:new Set()}); }); break;
-    case 'burst': for(let i = 0; i < s.n; i++){ const a = i * Math.PI * 2 / s.n + rnd(0, 0.3); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:0.9, r:6, pierce:2, ic:w.ic, hit:new Set()}); } break;
-    case 'cloud': { const tg = targets[0]; G.clouds.push({x:tg.x, y:tg.y, r:s.area, t:3 + w.lv * 0.4, tick:0, dmg:s.dmg, ic:w.ic}); if(w.lv >= 3 && targets[1]) G.clouds.push({x:targets[1].x, y:targets[1].y, r:s.area, t:3, tick:0, dmg:s.dmg, ic:w.ic}); break; }
-    case 'boomer': for(let i = 0; i < s.n; i++){ const a = aim + (i - (s.n - 1) / 2) * 0.5; G.shots.push({kind:'boomer', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:2.4, age:0, r:14, pierce:99, ic:w.ic, hit:new Map()}); } break;
-    case 'ice': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; const a = Math.atan2(tg.y - p.y, tg.x - p.x); G.shots.push({kind:'ice', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:1.4, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, hit:new Set()}); } break;
+    case 'ring': G.fx.push({kind:'ring', x:p.x, y:p.y, r:0, R:s.area, t:0.6, T:0.6, dmg:s.dmg, hit:new Set(), ic:w.ic, name:w.name}); break;
+    case 'homing': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; G.shots.push({kind:'homing', x:p.x, y:p.y, vx:Math.cos(aim) * 380, vy:Math.sin(aim) * 380, tg, dmg:s.dmg, life:2.2, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, name:w.name, hit:new Set()}); } break;
+    case 'wave': { const a = Math.hypot(p.face[0], p.face[1]) ? Math.atan2(p.face[1], p.face[0]) : aim; G.shots.push({kind:'wave', x:p.x, y:p.y, vx:Math.cos(a) * 460, vy:Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, name:w.name, hit:new Set()}); if(w.lv >= 4) G.shots.push({kind:'wave', x:p.x, y:p.y, vx:-Math.cos(a) * 460, vy:-Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, name:w.name, hit:new Set()}); break; }
+    case 'rain': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length] || {x:p.x + rnd(-200, 200), y:p.y + rnd(-200, 200)}; G.fx.push({kind:'warn', x:tg.x + rnd(-10, 10), y:tg.y + rnd(-10, 10), r:s.area, t:0.45, T:0.45, dmg:s.dmg, ic:w.ic, name:w.name}); } break;
+    case 'darts': targets.forEach((tg, i) => { const a = Math.atan2(tg.y - p.y, tg.x - p.x) + (i ? rnd(-0.05, 0.05) : 0); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 560, vy:Math.sin(a) * 560, dmg:s.dmg, life:1, r:6, pierce:1 + Math.floor(w.lv / 4), ic:w.ic, name:w.name, hit:new Set()}); }); break;
+    case 'burst': for(let i = 0; i < s.n; i++){ const a = i * Math.PI * 2 / s.n + rnd(0, 0.3); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:0.9, r:6, pierce:2, ic:w.ic, name:w.name, hit:new Set()}); } break;
+    case 'cloud': { const tg = targets[0]; G.clouds.push({x:tg.x, y:tg.y, r:s.area, t:3 + w.lv * 0.4, tick:0, dmg:s.dmg, ic:w.ic, name:w.name}); if(w.lv >= 3 && targets[1]) G.clouds.push({x:targets[1].x, y:targets[1].y, r:s.area, t:3, tick:0, dmg:s.dmg, ic:w.ic, name:w.name}); break; }
+    case 'boomer': for(let i = 0; i < s.n; i++){ const a = aim + (i - (s.n - 1) / 2) * 0.5; G.shots.push({kind:'boomer', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:2.4, age:0, r:14, pierce:99, ic:w.ic, name:w.name, hit:new Map()}); } break;
+    case 'ice': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; const a = Math.atan2(tg.y - p.y, tg.x - p.x); G.shots.push({kind:'ice', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:1.4, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, name:w.name, hit:new Set()}); } break;
   }
 }
 
@@ -297,7 +335,7 @@ function options(){
   return list;
 }
 function showLevelUp(){
-  G.state = 'level'; const box = $('choices'); box.replaceChildren();
+  G.state = 'level'; sfx('_level', 0.45); const box = $('choices'); box.replaceChildren();
   for(const o of options()){
     const b = document.createElement('button'); b.type = 'button';
     b.innerHTML = `<img src="${ICON(o.ic)}" alt=""><span><b>${o.name}${o.lv ? `<em>${o.pili ? '霹靂聯動' : o.type === 'wnew' ? '新技能' : 'Lv ' + o.lv}</em>` : ''}</b><small>${o.text}${o.type === 'wup' ? '：傷害、冷卻、數量提升' : ''}</small></span>`;
@@ -330,7 +368,7 @@ function update(dt){
   G.t += dt;
   // move
   const [mx, my] = moveDir();
-  if(mx || my){ p.face = [mx, my]; }
+  G.moving = !!(mx || my); if(G.moving){ p.face = [mx, my]; }
   p.x = clamp(p.x + mx * p.spd * dt, p.r, G.ww - p.r); p.y = clamp(p.y + my * p.spd * dt, p.r, G.wh - p.r);
   p.inv = Math.max(0, p.inv - dt); p.hp = Math.min(p.max, p.hp + p.regen * dt);
   // spawn
@@ -347,7 +385,7 @@ function update(dt){
     e.hitT = Math.max(0, e.hitT - dt); e.slow = Math.max(0, e.slow - dt);
     const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1, sp = e.spd * (e.slow ? 0.45 : 1);
     e.x += dx / d * sp * dt; e.y += dy / d * sp * dt; e.dir = dx < 0 ? -1 : 1;
-    if(d < e.r + p.r && p.inv <= 0){ const dmg = Math.max(1, e.dmg - p.armor); p.hp -= dmg; p.inv = 0.6; G.nums.push({x:p.x, y:p.y - 30, v:Math.round(dmg), t:0.7, bad:true}); }
+    if(d < e.r + p.r && p.inv <= 0){ const dmg = Math.max(1, e.dmg - p.armor); p.hp -= dmg; p.inv = 0.6; sfx('_hurt', 0.35); G.nums.push({x:p.x, y:p.y - 30, v:Math.round(dmg), t:0.7, bad:true}); }
   }
   // light separation so crowds spread out
   const es = G.enemies;
@@ -372,7 +410,7 @@ function update(dt){
   for(const f of G.fx){
     f.t -= dt;
     if(f.kind === 'ring'){ f.r = clamp(f.R * (1 - f.t / f.T), 0, f.R); for(const e of G.enemies){ if(e.dead || f.hit.has(e)) continue; const d = Math.hypot(e.x - f.x, e.y - f.y); if(d < f.r + e.r){ f.hit.add(e); hurt(e, f.dmg, (e.x - f.x) / (d || 1) * 18, (e.y - f.y) / (d || 1) * 18); } } }
-    if(f.kind === 'warn' && f.t <= 0 && !f.done){ f.done = true; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - f.x, e.y - f.y) < f.r + e.r) hurt(e, f.dmg, 0, 0); G.fx.push({kind:'boom', x:f.x, y:f.y, r:f.r, t:0.25, T:0.25, ic:f.ic}); }
+    if(f.kind === 'warn' && f.t <= 0 && !f.done){ f.done = true; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - f.x, e.y - f.y) < f.r + e.r) hurt(e, f.dmg, 0, 0); G.fx.push({kind:'boom', x:f.x, y:f.y, r:f.r, t:0.55, T:0.55, ic:f.ic, name:f.name}); }
   }
   G.fx = G.fx.filter(f => f.t > 0);
   for(const c of G.clouds){ c.t -= dt; c.tick -= dt; if(c.tick <= 0){ c.tick = 0.4; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - c.x, e.y - c.y) < c.r + e.r) hurt(e, c.dmg, 0, 0); } }
@@ -401,13 +439,21 @@ function draw(){
   const p = G.p;
   const cx = clamp(p.x - VW / 2, Math.min(0, G.ww - VW), Math.max(0, G.ww - VW)), cy = clamp(p.y - VH / 2, Math.min(0, G.wh - VH), Math.max(0, G.wh - VH));
   ctx.save(); ctx.translate(-cx, -cy);
-  if(ready(G.bg)){ ctx.imageSmoothingEnabled = true; ctx.drawImage(G.bg, 0, 0, G.ww, G.wh); }
+  // 1:1 地圖：只畫鏡頭內的 512px 圖塊，還沒載完的先用縮圖墊著
+  ctx.imageSmoothingEnabled = true;
+  const mini = img(G.mapDir + 'mini.webp');
+  for(let ty = Math.max(0, Math.floor(cy / TILE)); ty <= Math.min(WH / TILE - 1, Math.floor((cy + VH) / TILE)); ty++)
+    for(let tx = Math.max(0, Math.floor(cx / TILE)); tx <= Math.min(WW / TILE - 1, Math.floor((cx + VW) / TILE)); tx++){
+      const t = img(G.mapDir + tx + '_' + ty + '.webp');
+      if(ready(t)) ctx.drawImage(t, tx * TILE, ty * TILE, TILE + 0.5, TILE + 0.5);
+      else if(ready(mini)) ctx.drawImage(mini, tx * TILE / 16, ty * TILE / 16, TILE / 16, TILE / 16, tx * TILE, ty * TILE, TILE, TILE);
+    }
   ctx.strokeStyle = 'rgba(221,168,77,.6)'; ctx.lineWidth = 3; ctx.strokeRect(0, 0, G.ww, G.wh);
-  ctx.imageSmoothingEnabled = false;
   // clouds
-  for(const c of G.clouds){ ctx.fillStyle = 'rgba(120,200,90,.22)'; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(150,230,110,.5)'; ctx.lineWidth = 2; ctx.stroke(); }
+  for(const c of G.clouds){ const m = fxOf(c.name); ctx.fillStyle = 'rgba(120,200,90,.14)'; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 7); ctx.fill(); if(m) fxDraw(c.name, m, fxFrame(m, G.t * 9), c.x, c.y, {center:true, scale:c.r * 2 / fxSize(m), alpha:Math.min(1, c.t)}); }
   // aura
-  for(const w of G.weapons) if(w.kind === 'aura'){ const s = weaponStat(w); const g = ctx.createRadialGradient(p.x, p.y, s.area * 0.3, p.x, p.y, s.area); g.addColorStop(0, 'rgba(255,140,40,0)'); g.addColorStop(1, 'rgba(255,110,30,.28)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, s.area, 0, 7); ctx.fill(); }
+  for(const w of G.weapons) if(w.kind === 'aura'){ const s = weaponStat(w), m = fxOf(w.name); const g = ctx.createRadialGradient(p.x, p.y, s.area * 0.3, p.x, p.y, s.area); g.addColorStop(0, 'rgba(255,140,40,0)'); g.addColorStop(1, 'rgba(255,110,30,.16)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, s.area, 0, 7); ctx.fill();
+    if(m){ const n = 6; for(let i = 0; i < n; i++){ const a = G.t * 0.9 + i * Math.PI * 2 / n; fxDraw(w.name, m, fxFrame(m, G.t * 10 + i * 2), p.x + Math.cos(a) * s.area * 0.72, p.y - 20 + Math.sin(a) * s.area * 0.72, {center:w.name !== '三昧真火', scale:w.name === '三昧真火' ? 0.6 : 0.8}); } } }
   // orbs
   for(const o of G.orbs){
     if(o.heal){ ctx.fillStyle = '#f0605a'; ctx.beginPath(); ctx.arc(o.x, o.y, 8, 0, 7); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillRect(o.x - 1.5, o.y - 5, 3, 10); ctx.fillRect(o.x - 5, o.y - 1.5, 10, 3); continue; }
@@ -418,34 +464,52 @@ function draw(){
   for(const f of G.fx){
     const k = f.t / f.T;
     if(f.kind === 'warn'){ ctx.strokeStyle = 'rgba(255,230,140,' + (0.4 + 0.5 * (1 - k)) + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(f.x, f.y, Math.max(0, f.r * (1.1 - 0.1 * k)), 0, 7); ctx.stroke(); }
-    if(f.kind === 'boom'){ ctx.fillStyle = 'rgba(255,220,120,' + (0.55 * k) + ')'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); const ic = img(ICON(f.ic)); if(ready(ic)){ ctx.globalAlpha = k; ctx.drawImage(ic, f.x - 20, f.y - 20, 40, 40); ctx.globalAlpha = 1; } }
-    if(f.kind === 'ring'){ ctx.strokeStyle = 'rgba(255,215,120,' + (0.9 * k) + ')'; ctx.lineWidth = Math.max(1, 6 * k + 2); ctx.beginPath(); ctx.arc(f.x, f.y, Math.max(0, f.r || 0), 0, 7); ctx.stroke(); }
-    if(f.kind === 'arc'){ ctx.fillStyle = 'rgba(200,240,255,' + (0.45 * k) + ')'; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.arc(f.x, f.y, f.r, f.a - Math.PI / 2, f.a + Math.PI / 2); ctx.closePath(); ctx.fill(); }
+    const m = fxOf(f.name), prog = 1 - k;
+    if(f.kind === 'boom'){
+      if(m && m.m === 'seq'){ const i = m.a[Math.min(m.a.length - 1, Math.floor(prog * m.a.length))]; fxDraw(f.name, m, i, f.x, f.y, {scale:clamp(f.r * 2 / fxSize(m), 0.7, 2.2), alpha:Math.min(1, k * 4)}); }
+      else { ctx.fillStyle = 'rgba(255,220,120,' + (0.55 * k) + ')'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); }
+    }
+    if(f.kind === 'ring'){
+      ctx.strokeStyle = 'rgba(255,215,120,' + (0.5 * k) + ')'; ctx.lineWidth = Math.max(1, 4 * k + 1); ctx.beginPath(); ctx.arc(f.x, f.y, Math.max(0, f.r || 0), 0, 7); ctx.stroke();
+      if(m && m.m === 'dir'){ const D = m.a[0].length; for(let d = 0; d < D; d++){ const a = -d * Math.PI * 2 / D; fxDraw(f.name, m, m.a[0][d], f.x + Math.cos(a) * f.r * 0.8, f.y + Math.sin(a) * f.r * 0.8, {center:true, scale:1.2, alpha:Math.min(1, k * 3)}); } }
+      else if(m){ const i = m.a[Math.min(m.a.length - 1, Math.floor(prog * m.a.length))]; fxDraw(f.name, m, i, f.x, f.y, {scale:clamp(f.R * 1.6 / fxSize(m), 0.8, 3), alpha:Math.min(1, k * 4)}); }
+    }
+    if(f.kind === 'arc'){
+      ctx.fillStyle = 'rgba(200,240,255,' + (0.22 * k) + ')'; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.arc(f.x, f.y, f.r, f.a - Math.PI / 2, f.a + Math.PI / 2); ctx.closePath(); ctx.fill();
+      if(m && m.m === 'dir'){ for(let j = -2; j <= 2; j++){ const a = f.a + j * 0.42 + (prog - 0.5) * 0.5; fxDraw(f.name, m, fxFrame(m, G.t * 14, a), f.x + Math.cos(a) * f.r * (0.35 + 0.6 * prog), f.y - 30 + Math.sin(a) * f.r * (0.35 + 0.6 * prog), {center:true, scale:1.3, alpha:Math.min(1, k * 3)}); } }
+      else if(m){ const i = m.a[Math.min(m.a.length - 1, Math.floor(prog * m.a.length))]; fxDraw(f.name, m, i, f.x + Math.cos(f.a) * f.r * 0.5, f.y - 30 + Math.sin(f.a) * f.r * 0.5, {center:true, scale:clamp(f.r * 1.8 / fxSize(m), 0.8, 2.4)}); }
+    }
   }
   // enemies (sorted by y so lower ones overlap upper ones)
   G.enemies.sort((a, b) => a.y - b.y);
   for(const e of G.enemies){
     const im = img(e.src);
     ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(e.x, e.y + 4, e.r, e.r * 0.4, 0, 0, 7); ctx.fill();
-    if(ready(im)){ const h = e.h, w = h * im.naturalWidth / im.naturalHeight; ctx.save(); if(e.dir < 0){ ctx.translate(e.x, 0); ctx.scale(-1, 1); ctx.translate(-e.x, 0); } if(e.hitT > 0) ctx.filter = 'brightness(2.2)'; else if(e.slow) ctx.filter = 'hue-rotate(160deg) saturate(1.6)'; ctx.drawImage(im, e.x - w / 2, e.y - h + 6, w, h); ctx.restore(); }
+    if(ready(im)){ const h = im.naturalHeight * e.sc, w = im.naturalWidth * e.sc; e.h = h; if(!e.boss) e.r = clamp(w * 0.3, 12, 34); ctx.save(); if(e.dir < 0){ ctx.translate(e.x, 0); ctx.scale(-1, 1); ctx.translate(-e.x, 0); } if(e.hitT > 0) ctx.filter = 'brightness(2.2)'; else if(e.slow) ctx.filter = 'hue-rotate(160deg) saturate(1.6)'; ctx.drawImage(im, e.x - w / 2, e.y - h + 6, w, h); ctx.restore(); }
     else { ctx.fillStyle = '#7a3b3b'; ctx.beginPath(); ctx.arc(e.x, e.y - e.r, e.r, 0, 7); ctx.fill(); }
     if(e.boss){ ctx.strokeStyle = '#f0605a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(e.x, e.y + 4, e.r + 6, (e.r + 6) * 0.4, 0, 0, 7); ctx.stroke(); }
   }
   // orbiting blades
-  for(const w of G.weapons) if(w.kind === 'orbit'){ const s = weaponStat(w), ic = img(ICON(w.ic)); for(let i = 0; i < s.n; i++){ const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y + Math.sin(a) * s.area; ctx.save(); ctx.translate(ox, oy); ctx.rotate(a * 2); ctx.shadowColor = '#ffe7a3'; ctx.shadowBlur = 10; if(ready(ic)) ctx.drawImage(ic, -14, -14, 28, 28); ctx.restore(); } }
+  for(const w of G.weapons) if(w.kind === 'orbit'){ const s = weaponStat(w), ic = img(ICON(w.ic)), m = fxOf(w.name); for(let i = 0; i < s.n; i++){ const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y - 30 + Math.sin(a) * s.area;
+    if(m){ fxDraw(w.name, m, fxFrame(m, G.t * 10 + i * 3, a + Math.PI / 2), ox, oy, {center:true, scale:w.name === '般若懺' ? 0.5 : 1.25}); continue; }
+    ctx.save(); ctx.translate(ox, oy); ctx.rotate(a * 2); if(ready(ic)) ctx.drawImage(ic, -14, -14, 28, 28); ctx.restore(); } }
   // player
-  const pic = img(ICON(G.job.ic));
-  ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(p.x, p.y + 14, 16, 6, 0, 0, 7); ctx.fill();
+  // 玩家：一轉角色，方向 1=西、順時針共 8 向；走路 8 格、待機 7 格
+  ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(p.x, p.y, 17, 7, 0, 0, 7); ctx.fill();
   ctx.save(); if(p.inv > 0 && Math.floor(p.inv * 20) % 2) ctx.globalAlpha = 0.5;
-  ctx.shadowColor = '#53ded3'; ctx.shadowBlur = 14; ctx.fillStyle = '#0c1a24'; ctx.beginPath(); ctx.arc(p.x, p.y, 19, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
-  ctx.strokeStyle = '#dda84d'; ctx.lineWidth = 3; ctx.stroke();
-  if(ready(pic)){ ctx.save(); ctx.beginPath(); ctx.arc(p.x, p.y, 16, 0, 7); ctx.clip(); ctx.drawImage(pic, p.x - 16, p.y - 16, 32, 32); ctx.restore(); }
+  if(ready(G.charImg)){
+    const dir = ((Math.round((Math.atan2(p.face[1], p.face[0]) - Math.PI) / (Math.PI / 4)) % 8) + 8) % 8;
+    const seq = G.char.a[G.moving ? 'walk' : 'wait'][dir], r = G.char.r[seq[Math.floor(G.t * (G.moving ? 12 : 5)) % seq.length]];
+    ctx.imageSmoothingEnabled = false; ctx.drawImage(G.charImg, r[0], r[1], r[2], r[3], Math.round(p.x - r[4]), Math.round(p.y - r[5]), r[2], r[3]); ctx.imageSmoothingEnabled = true;
+  } else { ctx.fillStyle = '#dda84d'; ctx.beginPath(); ctx.arc(p.x, p.y - 30, 16, 0, 7); ctx.fill(); }
   ctx.restore();
-  ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(p.x - 22, p.y + 24, 44, 5); ctx.fillStyle = p.hp / p.max > 0.35 ? '#4fd17a' : '#f0605a'; ctx.fillRect(p.x - 22, p.y + 24, 44 * Math.max(0, p.hp / p.max), 5);
+  ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(p.x - 22, p.y + 10, 44, 5); ctx.fillStyle = p.hp / p.max > 0.35 ? '#4fd17a' : '#f0605a'; ctx.fillRect(p.x - 22, p.y + 10, 44 * Math.max(0, p.hp / p.max), 5);
   // shots
   for(const s of G.shots){
-    const ic = img(ICON(s.ic)), a = Math.atan2(s.vy, s.vx);
-    ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.kind === 'boomer' ? G.t * 14 : a + Math.PI / 4);
+    const ic = img(ICON(s.ic)), a = Math.atan2(s.vy, s.vx), m = fxOf(s.name);
+    if(m){ const big = s.kind === 'wave' ? clamp(s.r * 3.2 / fxSize(m), 0.9, 2) : s.kind === 'dart' ? 1 : 1.15;
+      fxDraw(s.name, m, fxFrame(m, G.t * 14, a), s.x, s.y - 30, {center:true, scale:m.m === 'seq' && fxSize(m) > 120 ? 0.45 : big, rot:m.m === 'seq' ? (s.kind === 'boomer' ? G.t * 10 : FX_ROT.has(s.name) ? a : 0) : 0}); continue; }
+    ctx.save(); ctx.translate(s.x, s.y - 30); ctx.rotate(s.kind === 'boomer' ? G.t * 14 : a + Math.PI / 4);
     if(s.kind === 'wave'){ ctx.rotate(-Math.PI / 4); ctx.fillStyle = 'rgba(170,230,255,.55)'; ctx.beginPath(); ctx.ellipse(0, 0, s.r * 0.6, s.r, 0, 0, 7); ctx.fill(); }
     if(s.kind === 'ice'){ ctx.shadowColor = '#7fd8ff'; ctx.shadowBlur = 12; }
     const z = s.kind === 'dart' ? 18 : s.kind === 'wave' ? 26 : 24;
@@ -492,24 +556,33 @@ function end(win){
   $('over').classList.add('on');
 }
 $('pauseBtn').onclick = pause; $('resumeBtn').onclick = resume;
-$('quitBtn').onclick = () => { $('paused').classList.remove('on'); G = null; $('hud').hidden = true; $('bossBar').style.display = 'none'; $('title').classList.add('on'); };
+$('quitBtn').onclick = () => { $('paused').classList.remove('on'); music(false); G = null; $('hud').hidden = true; $('bossBar').style.display = 'none'; $('title').classList.add('on'); };
 $('againBtn').onclick = newGame;
-$('titleBtn').onclick = () => { $('over').classList.remove('on'); G = null; $('title').classList.add('on'); };
-document.addEventListener('visibilitychange', () => { if(document.hidden) pause(); });
+$('titleBtn').onclick = () => { $('over').classList.remove('on'); music(false); G = null; $('title').classList.add('on'); };
+document.addEventListener('visibilitychange', () => { if(document.hidden){ pause(); music(false); } else if(G && G.state !== 'over') music(true); });
 
 // ---------- title ----------
 function buildTitle(){
   const jp = $('jobPick'); jp.replaceChildren();
-  JOBS.forEach((j, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === jobSel); b.innerHTML = `<img src="${ICON(j.ic)}" alt=""><b>${j.id}</b><small>${j.desc}</small><small>起始：${j.start}</small><small class="piliN">霹靂聯動技能 ${Object.values(PILI).filter(v => v.cl.includes(j.id)).length} 種</small>`; b.onclick = () => { jobSel = i; buildTitle(); }; jp.appendChild(b); });
+  JOBS.forEach((j, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === jobSel); b.innerHTML = `<canvas data-ch="${CHAR_DIR[j.id][sexSel]}" width="70" height="90"></canvas><b>${j.id}</b><small>${j.desc}</small><small>起始：${j.start}</small><small class="piliN">霹靂聯動技能 ${Object.values(PILI).filter(v => v.cl.includes(j.id)).length} 種</small>`; b.onclick = () => { jobSel = i; buildTitle(); }; jp.appendChild(b); });
+  const sp = $('sexPick'); sp.replaceChildren();
+  ['男', '女'].forEach((t, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === sexSel); b.innerHTML = `<canvas data-ch="${CHAR_DIR[JOBS[jobSel].id][i]}" width="70" height="90"></canvas><b>${t}${JOBS[jobSel].id}</b>`; b.onclick = () => { sexSel = i; buildTitle(); }; sp.appendChild(b); });
+  // 用角色圖集裡「面向正面的待機圖」當預覽
+  document.querySelectorAll('canvas[data-ch]').forEach(c => { const f = c.dataset.ch, im = img(SV + 'char_' + f + '.webp'), paint = () => { if(!CHAR) return; const r = CHAR[f].r[CHAR[f].a.wait[6][0]], g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.clearRect(0, 0, 70, 90); g.drawImage(im, r[0], r[1], r[2], r[3], Math.round(35 - r[2] / 2), 88 - r[3], r[2], r[3]); }; if(ready(im) && CHAR) paint(); else { im.addEventListener('load', paint); loaded.then(() => ready(im) && paint()); } });
   const mp = $('mapPick'); mp.replaceChildren();
   let best = {}; try{ best = JSON.parse(localStorage.getItem('szo-survivor-best') || '{}'); }catch(e){}
   D.maps.forEach((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', i === mapSel); const rec = best[JOBS[jobSel].id + '|' + m[1]]; b.innerHTML = `<b>${m[1]}</b><small>難度：${m[2]}</small><small>${rec ? '最佳：' + Math.floor(rec / 60) + ' 分 ' + Math.floor(rec % 60) + ' 秒' : '尚未挑戰'}</small>`; b.onclick = () => { mapSel = i; buildTitle(); }; mp.appendChild(b); });
 }
 buildTitle();
-$('startBtn').onclick = newGame;
+$('startBtn').disabled = true; $('startBtn').textContent = '素材載入中…';
+loaded.then(() => { $('startBtn').disabled = false; $('startBtn').textContent = '出戰'; buildTitle(); }, () => { $('startBtn').textContent = '素材載入失敗，請重新整理'; });
+$('startBtn').onclick = () => { if(CHAR) newGame(); };
+const paintMute = () => { $('muteBtn').textContent = muted ? '🔇' : '🔊'; $('muteBtn').setAttribute('aria-label', muted ? '開啟音效' : '靜音'); };
+$('muteBtn').onclick = () => { muted = !muted; try{ localStorage.setItem('szo-survivor-mute', muted ? '1' : '0'); }catch(e){} paintMute(); music(G && G.state === 'play'); };
+paintMute();
 // preload icons
 Object.values(W).forEach(w => img(ICON(w.ic))); Object.values(P).forEach(v => img(ICON(v.ic)));
-D.maps.forEach(m => img(A + 'test-media/stage-maps-webp/stage' + String(m[0]).padStart(3, '0') + '.webp'));
+D.maps.forEach(m => img(SV + 'map/' + m[0] + '/mini.webp'));
 </script>
 </body>
 </html>
