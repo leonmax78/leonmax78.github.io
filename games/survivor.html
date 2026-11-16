@@ -71,7 +71,7 @@ canvas{display:block;width:100vw;height:100vh;height:100dvh}
   <h2>性別（一轉外觀）</h2><div class="pick sex" id="sexPick"></div>
   <h2>選擇地圖（霹靂聯動）</h2><div class="pick" id="mapPick"></div>
   <button class="btn go" id="startBtn" type="button">出戰</button>
-  <p class="note">升到 3 級後，升級選項有機會出現紫色的「霹靂聯動」技能，只會出現該職業能學的。技能欄最多 6 個。</p>
+  <p class="note">升級選項只會出現該職業能學的技能，輔助技能也一樣。升到 5 級後，有機會出現紫色的「霹靂聯動」技能。技能欄最多 6 個。每 75 秒妖群會從四面包圍。</p>
   <p class="note">只能走在遊戲裡原本能走的地方，懸崖、水池、建築和欄杆都過不去；怪物也會沿著路繞過來。</p>
   <p class="note">角色、地圖、技能特效、音樂與音效皆取自遊戲原始素材；地圖為 1:1 原尺寸。</p>
   <p class="note">電腦：WASD 或方向鍵移動，空白鍵暫停。手機：在畫面任一處按住拖曳移動。試玩版，數值仍在調整。</p>
@@ -129,11 +129,14 @@ function flowStep(e, sp, dt){
 function nudge(e, kx, ky){ if(canWalk(e.x + kx, e.y + ky)){ e.x += kx; e.y += ky; } }
 const CHAR_DIR = {劍俠:['p1','p6'], 術者:['p2','p7'], 僧侶:['p3','p8'], 勇士:['p4','p9'], 道人:['p5','pa']};
 // 實心的特效照原樣畫；其餘是發光特效，用加亮混色
-const FX_SOLID = new Set(['天地根','大梵聖掌','玄冰術','地裂波','怒火燒盡九重天','君子風','毒煙術']);
+const FX_SOLID = new Set(['天地根','大梵聖掌','玄冰術','地裂波','君子風','毒煙術']);
 const FX_ROT = new Set(['劍以創生','雷箭術']);
 function fxOf(name){ const m = FX && FX[name]; if(!m) return null; if(!m.img) m.img = img(SV + 'fx/' + m.f); return ready(m.img) ? m : null; }
-function fxDir(m, ang){ const D = m.a[0].length; return ((Math.round((-ang) / (Math.PI * 2 / D)) % D) + D) % D; }  // 特效方向：1=東，逆時針
-function fxFrame(m, t, ang){ if(m.m === 'dir'){ const row = m.a[Math.floor(t) % m.a.length]; return row[fxDir(m, ang || 0)]; } return m.a[Math.floor(t) % m.a.length]; }
+// 特效分兩層：主體（m.a）與命中／爆炸（m.h），影格延遲照 EFFECT.OBD 的 #n（d，遊戲 tick）
+const TICK = 1 / 30;
+function fxDir(L, ang){ const D = L.a[0].length; return ((Math.round((-ang) / (Math.PI * 2 / D)) % D) + D) % D; }  // 特效方向：1=東，逆時針
+function fxDur(L){ return L.a.length * (L.d || 3) * TICK; }
+function fxFrame(L, sec, ang, once){ const n = L.a.length; let k = Math.floor(Math.max(0, sec) / ((L.d || 3) * TICK)); k = once ? Math.min(n - 1, k) : k % n; const f = L.a[k]; return L.m === 'dir' ? f[fxDir(L, ang || 0)] : f; }
 function fxDraw(name, m, i, x, y, o = {}){
   const r = m.r[i]; if(!r) return;
   ctx.save(); ctx.translate(x, y); if(o.rot) ctx.rotate(o.rot); const sc = o.scale || 1; ctx.scale(sc, sc);
@@ -142,7 +145,10 @@ function fxDraw(name, m, i, x, y, o = {}){
   else ctx.drawImage(m.img, r[0], r[1], r[2], r[3], -r[4], -r[5], r[2], r[3]);
   ctx.restore();
 }
-function fxSize(m){ if(!m.sz){ let w = 1; for(const r of m.r) w = Math.max(w, r[2]); m.sz = w; } return m.sz; }
+function fxSize(m, L = m){ if(!L.sz){ let w = 1; for(const i of L.a.flat()) if(m.r[i]) w = Math.max(w, m.r[i][2]); L.sz = w; } return L.sz; }
+// 命中特效：打中敵人時在敵人身上播一次；地面型（ground）照錨點畫在地上
+function hitFx(name, x, y, o = {}){ const m = FX && FX[name]; if(!m || !m.h || G.hits.length > 70) return; G.hits.push({name, x, y, t0:G.t, ang:o.ang || 0, sc:o.sc || 0, ground:!!o.ground}); }
+const FX_FALL = new Set(['萬劍歸宗']);
 // 音效
 let muted = false; try{ muted = localStorage.getItem('szo-survivor-mute') === '1'; }catch(e){}
 const AU = {}, bgm = new Audio(); bgm.loop = true; bgm.volume = 0.32; bgm.preload = 'none';
@@ -199,7 +205,7 @@ const PILI = {
   劍以創生:{ic:'m0253',kind:'wave',dmg:34,cd:1.6,area:26,cl:['劍俠','勇士','道人'],desc:'創生之劍直線貫穿'},
   刀以毀滅:{ic:'m0254',kind:'arc',dmg:48,cd:1.6,area:150,cl:['劍俠','勇士'],desc:'毀滅之刀大範圍劈砍'}
 };
-for(const [n, v] of Object.entries(PILI)) W[n] = {...v, pili:true};
+for(const [n, v] of Object.entries(PILI)) W[n] = {...v, dmg:Math.round(v.dmg * 0.8), pili:true};
 const MAX_WEAPONS = 6;
 const JOBS = [
   {id:'勇士',ic:'m0084',start:'旋氣斬',pool:['地裂波','幻象刀','震衝錘'],hp:150,spd:150,armor:2,desc:'血厚防高，近身揮砍'},
@@ -208,15 +214,23 @@ const JOBS = [
   {id:'僧侶',ic:'m0039',start:'護身輪',pool:['聖火輪','梵天火輪','佛法無邊'],hp:120,spd:150,armor:1,regen:0.6,desc:'法輪護身，自帶回血'},
   {id:'道人',ic:'m0014',start:'天雷術',pool:['玄冰術','三昧真火','天師隕石術'],hp:90,spd:155,armor:0,desc:'法術範圍大，身子較脆'}
 ];
-const P = {
-  鐵布衫:{ic:'m0074',desc:'生命上限 +20%'},
-  疾行術:{ic:'m0061',desc:'移動速度 +10%'},
-  凝神訣:{ic:'m0073',desc:'技能冷卻 -8%'},
-  集氣心法:{ic:'m0080',desc:'技能傷害 +12%'},
-  加速回血:{ic:'m0097',desc:'每秒回復生命 +0.6'},
-  照妖術:{ic:'m0009',desc:'撿取範圍 +35%'},
-  金鐘罩:{ic:'m0036',desc:'受到傷害 -1'},
-  騰雲術:{ic:'m0117',desc:'技能範圍 +12%'}
+// 被動：每個職業只出現自己能學的輔助技能（名稱與圖示取自遊戲技能資料）
+const PE = {
+  hp:{t:'生命上限 +20%', f:p => { p.max *= 1.2; p.hp += p.max * 0.2 / 1.2; }},
+  spd:{t:'移動速度 +10%', f:p => p.spd *= 1.1},
+  cd:{t:'技能冷卻 -8%', f:p => p.cd *= 0.92},
+  dmg:{t:'技能傷害 +12%', f:p => p.dmg *= 1.12},
+  regen:{t:'每秒回復生命 +0.5', f:p => p.regen += 0.5},
+  magnet:{t:'撿取範圍 +35%', f:p => p.magnet *= 1.35},
+  armor:{t:'受到傷害 -1', f:p => p.armor += 1},
+  area:{t:'技能範圍 +12%', f:p => p.area *= 1.12}
+};
+const JOB_PAS = {
+  勇士:{基本盾防:['m0105','armor'], 狂暴氣勁:['m0134','dmg'], 防禦氣勁:['m0135','hp'], 武神氣勁:['m0136','cd'], 疾速回血:['m0098','regen'], 夜視術:['m0051','magnet']},
+  劍俠:{鐵布衫:['m0074','hp'], 集氣心法:['m0080','dmg'], 凝神訣:['m0073','cd'], 療傷氣勁:['m0111','regen'], 歸元真氣:['m0077','armor'], 混元霸勁:['m0079','area'], 天禪眼:['m0034','magnet']},
+  術者:{疾行術:['m0061','spd'], 騰雲術:['m0117','area'], 吸血術:['m0059','regen'], 隱遁術:['m0063','armor'], 夜視術:['m0051','magnet'], 刑天霸訣:['m0150','dmg'], 凝神訣:['m0073','cd']},
+  僧侶:{金鐘罩:['m0036','armor'], 地藏印:['m0035','hp'], 萬佛咒:['m0126','dmg'], 索羅咒:['m0127','cd'], 風火輪:['m0049','spd'], 無相咒:['m0041','area'], 天禪眼:['m0034','magnet']},
+  道人:{神行術:['m0011','spd'], 照妖術:['m0009','magnet'], 淨心術:['m0122','cd'], 蝶舞術:['m0016','dmg'], 加速回血:['m0097','regen'], 遁天術:['m0017','armor']}
 };
 const MAXLV = 5;
 
@@ -255,8 +269,8 @@ function newGame(){
     char:CHAR[folder], charImg:img(SV + 'char_' + folder + '.webp'), moving:false,
     gw:WALK[map[0]].w, gh:WALK[map[0]].h, grid:Uint8Array.from(WALK[map[0]].bits, c => c === '1' ? 1 : 0), flowT:0,
     dist:new Int16Array(WALK[map[0]].w * WALK[map[0]].h), queue:new Int32Array(WALK[map[0]].w * WALK[map[0]].h),
-    p:{x:WALK[map[0]].start[0] * CELL + 16, y:WALK[map[0]].start[1] * CELL + 16, r:14, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:90, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
-    weapons:[], passives:{}, enemies:[], shots:[], fx:[], orbs:[], nums:[], clouds:[], spawnT:0, nextBoss:BOSS_EVERY, boss:null, levelQueue:0
+    p:{x:WALK[map[0]].start[0] * CELL + 16, y:WALK[map[0]].start[1] * CELL + 16, r:14, hp:job.hp, max:job.hp, spd:job.spd, armor:job.armor, regen:job.regen || 0, magnet:70, dmg:1, cd:1, area:1, inv:0, face:[1,0], lv:1, xp:0, need:5},
+    weapons:[], passives:{}, enemies:[], shots:[], fx:[], hits:[], orbs:[], nums:[], clouds:[], spawnT:0, nextBoss:BOSS_EVERY, nextRing:75, boss:null, levelQueue:0
   };
   buildFlow(); addWeapon(job.start);
   $('jobName').textContent = job.id + '・' + map[1]; music(true);
@@ -275,25 +289,25 @@ function weaponStat(w){
 }
 
 // ---------- enemies ----------
-function tierNow(){ return clamp(G.tierBase + Math.floor(G.t / 120), 0, 5); }
-function spawnEnemy(boss){
+function tierNow(){ return clamp(G.tierBase + Math.floor(G.t / 100), 0, 5); }
+function spawnEnemy(boss, at){
   const p = G.p, far = Math.hypot(VW, VH) / 2 + 40;
-  let x = 0, y = 0, ok = false;
+  let x = at ? at[0] : 0, y = at ? at[1] : 0, ok = !!at;
   for(let i = 0; i < 40 && !ok; i++){ const ang = rnd(0, Math.PI * 2), dd = far + rnd(0, 160) - i * 6; x = p.x + Math.cos(ang) * dd; y = p.y + Math.sin(ang) * dd; ok = dd > 220 && canWalk(x, y) && G.dist[cellOf(Math.floor(x), Math.floor(y))] > 0; }
   if(!ok){ for(let i = 0; i < 200 && !ok; i++){ const c = Math.floor(Math.random() * G.grid.length); if(G.dist[c] > 9){ x = (c % G.gw) * CELL + 16; y = Math.floor(c / G.gw) * CELL + 16; ok = true; } } }
   if(!ok) return;
-  const minutes = G.t / 60, hard = 1 + G.tierBase * 0.35;
+  const minutes = G.t / 60, hard = 1 + G.tierBase * 0.45;
   if(boss){
     const b = D.boss[Math.min(D.boss.length - 1, Math.floor(G.t / BOSS_EVERY) * 2 + G.tierBase * 2 + Math.floor(Math.random() * 2))];
-    const hp = (700 + minutes * 450) * hard;
-    const e = {x, y, r:42, hp, max:hp, spd:42, dmg:14 * hard, src:A + b[0].replace(/^assets\//, ''), name:b[1].replace(/[\[\]{}]/g, ''), boss:true, xp:60, hitT:0, slow:0, h:110, sc:1.3};
+    const hp = (1100 + minutes * 700) * hard;
+    const e = {x, y, r:42, hp, max:hp, spd:52, dmg:22 * hard, src:A + b[0].replace(/^assets\//, ''), name:b[1].replace(/[\[\]{}]/g, ''), boss:true, xp:60, hitT:0, slow:0, h:110, sc:1.3};
     G.enemies.push(e); G.boss = e; toast('封獸出現：' + e.name); sfx('_boss', 0.5);
     return;
   }
   const tier = Math.random() < 0.25 && tierNow() > 0 ? tierNow() - 1 : tierNow();
   const m = pickOne(D.tiers[tier]);
-  const hp = (8 + minutes * 8) * (1 + tier * 0.45) * hard;
-  G.enemies.push({x, y, r:15 + tier, hp, max:hp, spd:rnd(40, 58) + tier * 2 + minutes * 1.5, dmg:(4 + tier * 1.5 + minutes * 0.7) * hard, src:A + 'test-media/monster-portraits/m' + m[0] + '.png', name:m[1], xp:1 + tier, hitT:0, slow:0, h:46 + tier * 3, sc:1});
+  const hp = (11 + minutes * 12) * (1 + tier * 0.5) * hard;
+  G.enemies.push({x, y, r:15 + tier, hp, max:hp, spd:rnd(48, 66) + tier * 3 + minutes * 2.2, dmg:(6 + tier * 2 + minutes * 1.1) * hard, src:A + 'test-media/monster-portraits/m' + m[0] + '.png', name:m[1], xp:1 + tier, hitT:0, slow:0, h:46 + tier * 3, sc:1});
 }
 function hurt(e, dmg, kx, ky){
   if(e.dead) return;
@@ -304,7 +318,7 @@ function hurt(e, dmg, kx, ky){
     e.dead = true; G.kills++; sfx('_death', 0.16, 320);
     G.orbs.push({x:e.x, y:e.y, v:e.xp, big:e.boss});
     if(e.boss){ G.boss = null; for(let i = 0; i < 2; i++) G.levelQueue++; G.orbs.push({x:e.x + 20, y:e.y, heal:true}); }
-    else if(Math.random() < 0.012) G.orbs.push({x:e.x, y:e.y, heal:true});
+    else if(Math.random() < 0.007) G.orbs.push({x:e.x, y:e.y, heal:true});
   }
 }
 
@@ -318,13 +332,13 @@ function fire(w, dt){
     w.ang += dt * (2.4 + w.lv * 0.25); w.st = (w.st || 0) - dt; if(w.st <= 0){ w.st = 2.4; sfx(w.name, 0.18); }
     for(let i = 0; i < s.n; i++){
       const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y + Math.sin(a) * s.area;
-      for(const e of G.enemies){ if(e.dead) continue; if(Math.hypot(e.x - ox, e.y - oy) < e.r + 16){ const last = w.hit.get(e) || 0; if(G.t - last > 0.45){ w.hit.set(e, G.t); hurt(e, s.dmg, Math.cos(a) * 6, Math.sin(a) * 6); } } }
+      for(const e of G.enemies){ if(e.dead) continue; if(Math.hypot(e.x - ox, e.y - oy) < e.r + 16){ const last = w.hit.get(e) || 0; if(G.t - last > 0.45){ w.hit.set(e, G.t); hurt(e, s.dmg, Math.cos(a) * 6, Math.sin(a) * 6); hitFx(w.name, e.x, e.y - e.h * 0.45, {ang:a}); } } }
     }
     return;
   }
   if(w.kind === 'aura'){
     w.t -= dt; if(w.t > 0) return; w.t = s.cd; w.st = (w.st || 0) - s.cd; if(w.st <= 0){ w.st = 3; sfx(w.name, 0.18); }
-    for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - p.x, e.y - p.y) < s.area + e.r) hurt(e, s.dmg, 0, 0);
+    let nh = 0; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - p.x, e.y - p.y) < s.area + e.r){ hurt(e, s.dmg, 0, 0); if(nh++ < 3) hitFx(w.name, e.x, e.y - e.h * 0.45); }
     return;
   }
   w.t -= dt; if(w.t > 0) return;
@@ -335,16 +349,16 @@ function fire(w, dt){
   switch(w.kind){
     case 'arc': {
       const a0 = targets[0] && Math.hypot(targets[0].x - p.x, targets[0].y - p.y) < s.area + 60 ? aim : Math.atan2(p.face[1], p.face[0]);
-      for(const e of G.enemies){ if(e.dead) continue; const d = Math.hypot(e.x - p.x, e.y - p.y); if(d > s.area + e.r) continue; let da = Math.abs(((Math.atan2(e.y - p.y, e.x - p.x) - a0 + Math.PI * 3) % (Math.PI * 2)) - Math.PI); if(da < Math.PI / 2 + 0.2) hurt(e, s.dmg, (e.x - p.x) / d * 14, (e.y - p.y) / d * 14); }
+      for(const e of G.enemies){ if(e.dead) continue; const d = Math.hypot(e.x - p.x, e.y - p.y); if(d > s.area + e.r) continue; let da = Math.abs(((Math.atan2(e.y - p.y, e.x - p.x) - a0 + Math.PI * 3) % (Math.PI * 2)) - Math.PI); if(da < Math.PI / 2 + 0.2){ hurt(e, s.dmg, (e.x - p.x) / d * 14, (e.y - p.y) / d * 14); hitFx(w.name, e.x, e.y - e.h * 0.45, {ang:a0}); } }
       G.fx.push({kind:'arc', x:p.x, y:p.y, a:a0, r:s.area, t:0.36, T:0.36, ic:w.ic, name:w.name}); break;
     }
     case 'ring': G.fx.push({kind:'ring', x:p.x, y:p.y, r:0, R:s.area, t:0.6, T:0.6, dmg:s.dmg, hit:new Set(), ic:w.ic, name:w.name}); break;
     case 'homing': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; G.shots.push({kind:'homing', x:p.x, y:p.y, vx:Math.cos(aim) * 380, vy:Math.sin(aim) * 380, tg, dmg:s.dmg, life:2.2, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, name:w.name, hit:new Set()}); } break;
     case 'wave': { const a = Math.hypot(p.face[0], p.face[1]) ? Math.atan2(p.face[1], p.face[0]) : aim; G.shots.push({kind:'wave', x:p.x, y:p.y, vx:Math.cos(a) * 460, vy:Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, name:w.name, hit:new Set()}); if(w.lv >= 4) G.shots.push({kind:'wave', x:p.x, y:p.y, vx:-Math.cos(a) * 460, vy:-Math.sin(a) * 460, dmg:s.dmg, life:1.1, r:s.area, pierce:99, ic:w.ic, name:w.name, hit:new Set()}); break; }
-    case 'rain': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length] || {x:p.x + rnd(-200, 200), y:p.y + rnd(-200, 200)}; G.fx.push({kind:'warn', x:tg.x + rnd(-10, 10), y:tg.y + rnd(-10, 10), r:s.area, t:0.45, T:0.45, dmg:s.dmg, ic:w.ic, name:w.name}); } break;
+    case 'rain': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length] || {x:p.x + rnd(-200, 200), y:p.y + rnd(-200, 200)}; G.fx.push({kind:'warn', x:tg.x + rnd(-10, 10), y:tg.y + rnd(-10, 10), a:Math.atan2(tg.y - p.y, tg.x - p.x), r:s.area, t:0.45, T:0.45, dmg:s.dmg, ic:w.ic, name:w.name}); } break;
     case 'darts': targets.forEach((tg, i) => { const a = Math.atan2(tg.y - p.y, tg.x - p.x) + (i ? rnd(-0.05, 0.05) : 0); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 560, vy:Math.sin(a) * 560, dmg:s.dmg, life:1, r:6, pierce:1 + Math.floor(w.lv / 4), ic:w.ic, name:w.name, hit:new Set()}); }); break;
     case 'burst': for(let i = 0; i < s.n; i++){ const a = i * Math.PI * 2 / s.n + rnd(0, 0.3); G.shots.push({kind:'dart', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:0.9, r:6, pierce:2, ic:w.ic, name:w.name, hit:new Set()}); } break;
-    case 'cloud': { const tg = targets[0]; G.clouds.push({x:tg.x, y:tg.y, r:s.area, t:3 + w.lv * 0.4, tick:0, dmg:s.dmg, ic:w.ic, name:w.name}); if(w.lv >= 3 && targets[1]) G.clouds.push({x:targets[1].x, y:targets[1].y, r:s.area, t:3, tick:0, dmg:s.dmg, ic:w.ic, name:w.name}); break; }
+    case 'cloud': { const cl = [targets[0]]; if(w.lv >= 3 && targets[1]) cl.push(targets[1]); for(const tg of cl){ G.clouds.push({x:tg.x, y:tg.y, r:s.area, t:3 + w.lv * 0.4, tick:0, dmg:s.dmg, ic:w.ic, name:w.name}); hitFx(w.name, tg.x, tg.y, {ground:true, sc:s.area * 2 / 120}); } break; }
     case 'boomer': for(let i = 0; i < s.n; i++){ const a = aim + (i - (s.n - 1) / 2) * 0.5; G.shots.push({kind:'boomer', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:2.4, age:0, r:14, pierce:99, ic:w.ic, name:w.name, hit:new Map()}); } break;
     case 'ice': for(let i = 0; i < s.n; i++){ const tg = targets[i % targets.length]; const a = Math.atan2(tg.y - p.y, tg.x - p.x); G.shots.push({kind:'ice', x:p.x, y:p.y, vx:Math.cos(a) * 420, vy:Math.sin(a) * 420, dmg:s.dmg, life:1.4, r:9, pierce:1 + Math.floor(w.lv / 3), ic:w.ic, name:w.name, hit:new Set()}); } break;
   }
@@ -358,8 +372,8 @@ function options(){
   if(room) for(const n of G.job.pool) if(!G.weapons.some(w => w.name === n)) out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1});
   // 霹靂聯動技能：只出現本職業可學的，每次升級最多抽一個
   const pili = room ? Object.keys(PILI).filter(n => PILI[n].cl.includes(G.job.id) && !G.weapons.some(w => w.name === n)) : [];
-  if(pili.length && G.p.lv >= 3 && Math.random() < 0.45){ const n = pickOne(pili); out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1, pili:true}); }
-  for(const [n, v] of Object.entries(P)) if((G.passives[n] || 0) < MAXLV) out.push({type:'pas', name:n, ic:v.ic, text:v.desc, lv:(G.passives[n] || 0) + 1});
+  if(pili.length && G.p.lv >= 5 && Math.random() < 0.3){ const n = pickOne(pili); out.push({type:'wnew', name:n, ic:W[n].ic, text:W[n].desc, lv:1, pili:true}); }
+  for(const [n, [ic, k]] of Object.entries(JOB_PAS[G.job.id])) if((G.passives[n] || 0) < MAXLV) out.push({type:'pas', name:n, ic, text:PE[k].t, lv:(G.passives[n] || 0) + 1});
   for(let i = out.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
   // 新技能優先出現一個
   const pickNew = out.findIndex(o => o.type === 'wnew'); if(pickNew > 2 && Math.random() < 0.6) [out[0], out[pickNew]] = [out[pickNew], out[0]];
@@ -386,14 +400,14 @@ function apply(o){
   else if(o.type === 'heal') p.hp = Math.min(p.max, p.hp + p.max * 0.4);
   else {
     G.passives[o.name] = (G.passives[o.name] || 0) + 1;
-    ({鐵布衫:() => { p.max *= 1.2; p.hp += p.max * 0.2 / 1.2; }, 疾行術:() => p.spd *= 1.1, 凝神訣:() => p.cd *= 0.92, 集氣心法:() => p.dmg *= 1.12, 加速回血:() => p.regen += 0.6, 照妖術:() => p.magnet *= 1.35, 金鐘罩:() => p.armor += 1, 騰雲術:() => p.area *= 1.12})[o.name]();
+    PE[JOB_PAS[G.job.id][o.name][1]].f(p);
   }
   refreshSlots();
 }
 function refreshSlots(){
   const s = $('slots'); s.replaceChildren();
   for(const w of G.weapons){ const e = document.createElement('span'); if(w.pili) e.classList.add('pili'); e.style.backgroundImage = `url(${ICON(w.ic)})`; e.title = w.name; e.innerHTML = `<b>${w.lv}</b>`; s.appendChild(e); }
-  for(const [n, lv] of Object.entries(G.passives)){ const e = document.createElement('span'); e.style.backgroundImage = `url(${ICON(P[n].ic)})`; e.style.borderColor = '#357b83'; e.title = n; e.innerHTML = `<b>${lv}</b>`; s.appendChild(e); }
+  for(const [n, lv] of Object.entries(G.passives)){ const e = document.createElement('span'); e.style.backgroundImage = `url(${ICON(JOB_PAS[G.job.id][n][0])})`; e.style.borderColor = '#357b83'; e.title = n; e.innerHTML = `<b>${lv}</b>`; s.appendChild(e); }
 }
 
 // ---------- update ----------
@@ -408,10 +422,14 @@ function update(dt){
   G.flowT -= dt; if(G.flowT <= 0){ G.flowT = 0.25; buildFlow(); }
   p.inv = Math.max(0, p.inv - dt); p.hp = Math.min(p.max, p.hp + p.regen * dt);
   // spawn
-  const rate = 0.9 + G.t / 40 + G.tierBase * 0.4;
+  const rate = 1.4 + G.t / 26 + G.tierBase * 0.6;
   G.spawnT += dt * rate;
-  const cap = 140 + Math.floor(G.t / 3);
+  const cap = 180 + Math.floor(G.t / 2.5);
   while(G.spawnT >= 1){ G.spawnT -= 1; if(G.enemies.length < cap) spawnEnemy(false); }
+  // 妖群包圍：每 75 秒在玩家四周圍一圈
+  if(G.t >= G.nextRing){ G.nextRing += 75; const n = 18 + tierNow() * 4 + Math.floor(G.t / 60) * 2; let k = 0;
+    for(let i = 0; i < n; i++){ const a = i * Math.PI * 2 / n, x = p.x + Math.cos(a) * 380, y = p.y + Math.sin(a) * 300; if(canWalk(x, y) && G.dist[cellOf(Math.floor(x), Math.floor(y))] > 0){ spawnEnemy(false, [x, y]); k++; } }
+    if(k) toast('妖群包圍！'); }
   if(G.t >= G.nextBoss && G.nextBoss <= WIN_TIME){ spawnEnemy(true); G.nextBoss += BOSS_EVERY; }
   // weapons
   for(const w of G.weapons) fire(w, dt);
@@ -421,7 +439,7 @@ function update(dt){
     e.hitT = Math.max(0, e.hitT - dt); e.slow = Math.max(0, e.slow - dt);
     const dx = p.x - e.x, dy = p.y - e.y, d = Math.hypot(dx, dy) || 1, sp = e.spd * (e.slow ? 0.45 : 1);
     flowStep(e, sp, dt);
-    if(d < e.r + p.r && p.inv <= 0){ const dmg = Math.max(1, e.dmg - p.armor); p.hp -= dmg; p.inv = 0.6; sfx('_hurt', 0.35); G.nums.push({x:p.x, y:p.y - 30, v:Math.round(dmg), t:0.7, bad:true}); }
+    if(d < e.r + p.r && p.inv <= 0){ const dmg = Math.max(1, e.dmg - p.armor); p.hp -= dmg; p.inv = 0.5; sfx('_hurt', 0.35); G.nums.push({x:p.x, y:p.y - 30, v:Math.round(dmg), t:0.7, bad:true}); }
   }
   // light separation so crowds spread out
   const es = G.enemies;
@@ -437,7 +455,7 @@ function update(dt){
       if(Math.hypot(e.x - s.x, e.y - s.y) > e.r + s.r) continue;
       if(s.kind === 'boomer'){ const last = s.hit.get(e) || -9; if(s.age - last < 0.35) continue; s.hit.set(e, s.age); hurt(e, s.dmg, s.vx * 0.012, s.vy * 0.012); continue; }
       if(s.hit.has(e)) continue; s.hit.add(e);
-      hurt(e, s.dmg, s.vx * 0.015, s.vy * 0.015); if(s.kind === 'ice') e.slow = 1.6;
+      hurt(e, s.dmg, s.vx * 0.015, s.vy * 0.015); if(s.kind === 'ice') e.slow = 1.6; if(s.hit.size <= 3) hitFx(s.name, e.x, e.y - e.h * 0.45, {ang:Math.atan2(s.vy, s.vx)});
       if(--s.pierce <= 0) s.life = 0;
     }
   }
@@ -445,10 +463,12 @@ function update(dt){
   // area effects
   for(const f of G.fx){
     f.t -= dt;
-    if(f.kind === 'ring'){ f.r = clamp(f.R * (1 - f.t / f.T), 0, f.R); for(const e of G.enemies){ if(e.dead || f.hit.has(e)) continue; const d = Math.hypot(e.x - f.x, e.y - f.y); if(d < f.r + e.r){ f.hit.add(e); hurt(e, f.dmg, (e.x - f.x) / (d || 1) * 18, (e.y - f.y) / (d || 1) * 18); } } }
-    if(f.kind === 'warn' && f.t <= 0 && !f.done){ f.done = true; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - f.x, e.y - f.y) < f.r + e.r) hurt(e, f.dmg, 0, 0); G.fx.push({kind:'boom', x:f.x, y:f.y, r:f.r, t:0.55, T:0.55, ic:f.ic, name:f.name}); }
+    if(f.kind === 'ring'){ f.r = clamp(f.R * (1 - f.t / f.T), 0, f.R); for(const e of G.enemies){ if(e.dead || f.hit.has(e)) continue; const d = Math.hypot(e.x - f.x, e.y - f.y); if(d < f.r + e.r){ f.hit.add(e); hurt(e, f.dmg, (e.x - f.x) / (d || 1) * 18, (e.y - f.y) / (d || 1) * 18); if(f.hit.size <= 6) hitFx(f.name, e.x, e.y - e.h * 0.45); } } }
+    if(f.kind === 'warn' && f.t <= 0 && !f.done){ f.done = true; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - f.x, e.y - f.y) < f.r + e.r) hurt(e, f.dmg, 0, 0); const M = FX && FX[f.name], T = M ? clamp(fxDur(M), 0.25, 1.3) : 0.55; G.fx.push({kind:'boom', x:f.x, y:f.y, a:f.a, r:f.r, t:T, T, ic:f.ic, name:f.name}); }
+    if(f.kind === 'boom' && f.t <= 0 && !f.done){ f.done = true; const M = FX && FX[f.name]; if(M && M.h) hitFx(f.name, f.x, f.y, {ground:true, sc:clamp(f.r * 2 / fxSize(M, M.h), 0.6, 2), ang:f.a}); }
   }
   G.fx = G.fx.filter(f => f.t > 0);
+  G.hits = G.hits.filter(h => { const L = FX[h.name].h; return G.t - h.t0 < fxDur(L); });
   for(const c of G.clouds){ c.t -= dt; c.tick -= dt; if(c.tick <= 0){ c.tick = 0.4; for(const e of G.enemies) if(!e.dead && Math.hypot(e.x - c.x, e.y - c.y) < c.r + e.r) hurt(e, c.dmg, 0, 0); } }
   G.clouds = G.clouds.filter(c => c.t > 0);
   G.enemies = G.enemies.filter(e => !e.dead);
@@ -456,7 +476,7 @@ function update(dt){
   for(const o of G.orbs){
     const d = Math.hypot(p.x - o.x, p.y - o.y);
     if(d < p.magnet || o.pull){ o.pull = true; const sp = 380 + (300 - Math.min(300, d)); o.x += (p.x - o.x) / (d || 1) * sp * dt; o.y += (p.y - o.y) / (d || 1) * sp * dt; }
-    if(d < p.r + 6){ o.got = true; if(o.heal) p.hp = Math.min(p.max, p.hp + p.max * 0.3); else { p.xp += o.v; while(p.xp >= p.need){ p.xp -= p.need; p.lv++; p.need = Math.floor(4 + p.lv * 4 + Math.pow(p.lv, 1.5)); G.levelQueue++; } } }
+    if(d < p.r + 6){ o.got = true; if(o.heal) p.hp = Math.min(p.max, p.hp + p.max * 0.3); else { p.xp += o.v; while(p.xp >= p.need){ p.xp -= p.need; p.lv++; p.need = Math.floor(5 + p.lv * 5 + Math.pow(p.lv, 1.65)); G.levelQueue++; } } }
   }
   G.orbs = G.orbs.filter(o => !o.got);
   if(G.orbs.length > 400){ const extra = G.orbs.splice(0, G.orbs.length - 300); const sum = extra.reduce((n, o) => n + (o.v || 0), 0); G.orbs.push({x:extra[0].x, y:extra[0].y, v:sum, big:true}); }
@@ -486,10 +506,10 @@ function draw(){
     }
   ctx.strokeStyle = 'rgba(221,168,77,.6)'; ctx.lineWidth = 3; ctx.strokeRect(0, 0, G.ww, G.wh);
   // clouds
-  for(const c of G.clouds){ const m = fxOf(c.name); ctx.fillStyle = 'rgba(120,200,90,.14)'; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 7); ctx.fill(); if(m) fxDraw(c.name, m, fxFrame(m, G.t * 9), c.x, c.y, {center:true, scale:c.r * 2 / fxSize(m), alpha:Math.min(1, c.t)}); }
+  for(const c of G.clouds){ const m = fxOf(c.name); ctx.fillStyle = 'rgba(120,200,90,.14)'; ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 7); ctx.fill(); if(m) fxDraw(c.name, m, fxFrame(m, G.t), c.x, c.y, {center:true, scale:c.r * 2 / fxSize(m), alpha:Math.min(1, c.t)}); }
   // aura
   for(const w of G.weapons) if(w.kind === 'aura'){ const s = weaponStat(w), m = fxOf(w.name); const g = ctx.createRadialGradient(p.x, p.y, s.area * 0.3, p.x, p.y, s.area); g.addColorStop(0, 'rgba(255,140,40,0)'); g.addColorStop(1, 'rgba(255,110,30,.16)'); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, s.area, 0, 7); ctx.fill();
-    if(m){ const n = 6; for(let i = 0; i < n; i++){ const a = G.t * 0.9 + i * Math.PI * 2 / n; fxDraw(w.name, m, fxFrame(m, G.t * 10 + i * 2), p.x + Math.cos(a) * s.area * 0.72, p.y - 20 + Math.sin(a) * s.area * 0.72, {center:w.name !== '三昧真火', scale:w.name === '三昧真火' ? 0.6 : 0.8}); } } }
+    if(m){ const n = 6; for(let i = 0; i < n; i++){ const a = G.t * 0.9 + i * Math.PI * 2 / n; fxDraw(w.name, m, fxFrame(m, G.t + i * 0.1), p.x + Math.cos(a) * s.area * 0.72, p.y - 20 + Math.sin(a) * s.area * 0.72, {center:w.name !== '三昧真火', scale:w.name === '三昧真火' ? 0.6 : 0.8}); } } }
   // orbs
   for(const o of G.orbs){
     if(o.heal){ ctx.fillStyle = '#f0605a'; ctx.beginPath(); ctx.arc(o.x, o.y, 8, 0, 7); ctx.fill(); ctx.fillStyle = '#fff'; ctx.fillRect(o.x - 1.5, o.y - 5, 3, 10); ctx.fillRect(o.x - 5, o.y - 1.5, 10, 3); continue; }
@@ -502,7 +522,9 @@ function draw(){
     if(f.kind === 'warn'){ ctx.strokeStyle = 'rgba(255,230,140,' + (0.4 + 0.5 * (1 - k)) + ')'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(f.x, f.y, Math.max(0, f.r * (1.1 - 0.1 * k)), 0, 7); ctx.stroke(); }
     const m = fxOf(f.name), prog = 1 - k;
     if(f.kind === 'boom'){
-      if(m && m.m === 'seq'){ const i = m.a[Math.min(m.a.length - 1, Math.floor(prog * m.a.length))]; fxDraw(f.name, m, i, f.x, f.y, {scale:clamp(f.r * 2 / fxSize(m), 0.7, 2.2), alpha:Math.min(1, k * 4)}); }
+      const el = f.T - f.t;
+      if(m && m.m === 'seq') fxDraw(f.name, m, fxFrame(m, el, 0, true), f.x, f.y, {scale:clamp(f.r * 2 / fxSize(m), 0.7, 2.2), alpha:Math.min(1, k * 4)});
+      else if(m){ const fall = FX_FALL.has(f.name), ang = fall ? Math.PI / 2 : f.a || 0; fxDraw(f.name, m, fxFrame(m, el, ang, true), f.x, f.y - (fall ? 170 * k : 30), {center:true, scale:1.4, alpha:Math.min(1, k * 4 + 0.3)}); }
       else { ctx.fillStyle = 'rgba(255,220,120,' + (0.55 * k) + ')'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill(); }
     }
     if(f.kind === 'ring'){
@@ -512,7 +534,7 @@ function draw(){
     }
     if(f.kind === 'arc'){
       ctx.fillStyle = 'rgba(200,240,255,' + (0.22 * k) + ')'; ctx.beginPath(); ctx.moveTo(f.x, f.y); ctx.arc(f.x, f.y, f.r, f.a - Math.PI / 2, f.a + Math.PI / 2); ctx.closePath(); ctx.fill();
-      if(m && m.m === 'dir'){ for(let j = -2; j <= 2; j++){ const a = f.a + j * 0.42 + (prog - 0.5) * 0.5; fxDraw(f.name, m, fxFrame(m, G.t * 14, a), f.x + Math.cos(a) * f.r * (0.35 + 0.6 * prog), f.y - 30 + Math.sin(a) * f.r * (0.35 + 0.6 * prog), {center:true, scale:1.3, alpha:Math.min(1, k * 3)}); } }
+      if(m && m.m === 'dir'){ for(let j = -2; j <= 2; j++){ const a = f.a + j * 0.42 + (prog - 0.5) * 0.5; fxDraw(f.name, m, fxFrame(m, f.T - f.t, a, true), f.x + Math.cos(a) * f.r * (0.35 + 0.6 * prog), f.y - 30 + Math.sin(a) * f.r * (0.35 + 0.6 * prog), {center:true, scale:1.3, alpha:Math.min(1, k * 3)}); } }
       else if(m){ const i = m.a[Math.min(m.a.length - 1, Math.floor(prog * m.a.length))]; fxDraw(f.name, m, i, f.x + Math.cos(f.a) * f.r * 0.5, f.y - 30 + Math.sin(f.a) * f.r * 0.5, {center:true, scale:clamp(f.r * 1.8 / fxSize(m), 0.8, 2.4)}); }
     }
   }
@@ -527,7 +549,7 @@ function draw(){
   }
   // orbiting blades
   for(const w of G.weapons) if(w.kind === 'orbit'){ const s = weaponStat(w), ic = img(ICON(w.ic)), m = fxOf(w.name); for(let i = 0; i < s.n; i++){ const a = w.ang + i * Math.PI * 2 / s.n, ox = p.x + Math.cos(a) * s.area, oy = p.y - 30 + Math.sin(a) * s.area;
-    if(m){ fxDraw(w.name, m, fxFrame(m, G.t * 10 + i * 3, a + Math.PI / 2), ox, oy, {center:true, scale:w.name === '般若懺' ? 0.5 : 1.25}); continue; }
+    if(m){ fxDraw(w.name, m, fxFrame(m, G.t + i * 0.13, a + Math.PI / 2), ox, oy, {center:true, scale:w.name === '般若懺' ? 0.5 : 1.25}); continue; }
     ctx.save(); ctx.translate(ox, oy); ctx.rotate(a * 2); if(ready(ic)) ctx.drawImage(ic, -14, -14, 28, 28); ctx.restore(); } }
   // player
   // 玩家：一轉角色，方向 1=西、順時針共 8 向；走路 8 格、待機 7 格
@@ -544,7 +566,7 @@ function draw(){
   for(const s of G.shots){
     const ic = img(ICON(s.ic)), a = Math.atan2(s.vy, s.vx), m = fxOf(s.name);
     if(m){ const big = s.kind === 'wave' ? clamp(s.r * 3.2 / fxSize(m), 0.9, 2) : s.kind === 'dart' ? 1 : 1.15;
-      fxDraw(s.name, m, fxFrame(m, G.t * 14, a), s.x, s.y - 30, {center:true, scale:m.m === 'seq' && fxSize(m) > 120 ? 0.45 : big, rot:m.m === 'seq' ? (s.kind === 'boomer' ? G.t * 10 : FX_ROT.has(s.name) ? a : 0) : 0}); continue; }
+      fxDraw(s.name, m, fxFrame(m, G.t, a), s.x, s.y - 30, {center:true, scale:m.m === 'seq' && fxSize(m) > 120 ? 0.45 : big, rot:m.m === 'seq' ? (s.kind === 'boomer' ? G.t * 10 : FX_ROT.has(s.name) ? a : 0) : 0}); continue; }
     ctx.save(); ctx.translate(s.x, s.y - 30); ctx.rotate(s.kind === 'boomer' ? G.t * 14 : a + Math.PI / 4);
     if(s.kind === 'wave'){ ctx.rotate(-Math.PI / 4); ctx.fillStyle = 'rgba(170,230,255,.55)'; ctx.beginPath(); ctx.ellipse(0, 0, s.r * 0.6, s.r, 0, 0, 7); ctx.fill(); }
     if(s.kind === 'ice'){ ctx.shadowColor = '#7fd8ff'; ctx.shadowBlur = 12; }
@@ -552,6 +574,9 @@ function draw(){
     if(ready(ic)) ctx.drawImage(ic, -z / 2, -z / 2, z, z);
     ctx.restore();
   }
+  // 命中／爆炸特效
+  for(const h of G.hits){ const m = fxOf(h.name); if(!m) continue; const L = m.h, el = G.t - h.t0, sz = fxSize(m, L), sc = h.sc || Math.min(1, 130 / sz), left = fxDur(L) - el;
+    fxDraw(h.name, m, fxFrame(L, el, h.ang, true), h.x, h.y, {center:!h.ground, scale:sc, alpha:Math.min(1, left / 0.15)}); }
   // numbers
   ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
   for(const n of G.nums){ ctx.globalAlpha = Math.min(1, n.t * 2); ctx.fillStyle = n.bad ? '#ff6b6b' : '#fff'; ctx.strokeStyle = '#000'; ctx.lineWidth = 3; const y = n.y - (0.7 - n.t) * 30; ctx.strokeText(n.v, n.x, y); ctx.fillText(n.v, n.x, y); }
@@ -617,7 +642,7 @@ const paintMute = () => { $('muteBtn').textContent = muted ? '🔇' : '🔊'; $(
 $('muteBtn').onclick = () => { muted = !muted; try{ localStorage.setItem('szo-survivor-mute', muted ? '1' : '0'); }catch(e){} paintMute(); music(G && G.state === 'play'); };
 paintMute();
 // preload icons
-Object.values(W).forEach(w => img(ICON(w.ic))); Object.values(P).forEach(v => img(ICON(v.ic)));
+Object.values(W).forEach(w => img(ICON(w.ic))); Object.values(JOB_PAS).forEach(o => Object.values(o).forEach(v => img(ICON(v[0]))));
 D.maps.forEach(m => img(SV + 'map/' + m[0] + '/mini.webp'));
 </script>
 </body>
