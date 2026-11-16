@@ -144,7 +144,7 @@ aside{position:sticky;top:12px;display:grid;gap:14px;max-height:calc(100vh - 24p
 html.embedded header{display:none}
 html.embedded main{padding-top:4px}
 html.embedded nav{padding-top:6px}
-html.embedded aside{top:6px;max-height:calc(100vh - 12px)}
+@media(min-width:861px){html.embedded aside{top:6px;max-height:calc(100vh - 12px)}}
 </style>
 <script>
 if(window.top!==window)document.documentElement.classList.add('embedded');
