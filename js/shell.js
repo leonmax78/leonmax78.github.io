@@ -48,15 +48,14 @@
         <button class="navBtn sub" data-view="shop">商店販賣資訊 <span>›</span></button>
       </div>
       <!-- The editor stays separate from item search and loads only when opened. -->
-      <button class="navBtn major" data-view="jiang">降神、經驗、修練、寶石、武魂試算 <span>›</span></button>
+      <button class="navBtn major" data-view="jiang">角色養成試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
-        <div class="subMenuNote">降神、經驗、修練、寶石、武魂相關功能</div>
-        <button class="navBtn sub" data-jiang="support">副降神試算、推薦、存檔比較 <span>›</span></button>
+        <div class="subMenuNote">降神、經驗、修練、寶石、武魂與機體試算</div>
+        <button class="navBtn sub" data-jiang="support">降神模擬（含推薦、星等／靈氣、存檔比較） <span>›</span></button>
         <button class="navBtn sub" data-jiang="compare">主降神比較 <span>›</span></button>
         <button class="navBtn sub" data-jiang="stars">降神20星能力總表 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="starAura">星等/靈氣試算 <span>›</span></button>
         <button class="navBtn sub" data-jiang="expPill">等級/經驗丹試算 <span>›</span></button>
-        <button class="navBtn sub" data-jiang="training">修練機制試算 <span>›</span></button>
+        <button class="navBtn sub" data-jiang="training">修練進度 <span>›</span></button>
         <button class="navBtn sub" data-view="gems">寶石試算、加工配方 <span>›</span></button>
         <button class="navBtn sub" data-view="soul">武魂能力試算 <span>›</span></button>
         <button class="navBtn sub" data-view="machine">角色機體模擬 <span>›</span></button>
