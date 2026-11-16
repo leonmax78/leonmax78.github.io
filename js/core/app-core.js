@@ -394,7 +394,7 @@ function openJiangMenuOnly(){
  renderJiangHome();
 }
 // V803: 降神區所有功能共用一排分頁（降神 6 項＋寶石、武魂、角色機體）
-const SZO_JS_SECTIONS=[['support','降神模擬',['support','recommend','starAura','supportCompare']],['compare','主降神比較',['compare']],['stars','20星能力總表',['stars']],['expPill','等級／經驗丹',['expPill']],['training','修練進度',['training']],['gems','寶石試算',['gems'],1],['soul','武魂試算',['soul'],1],['machine','角色機體模擬',['machine'],1]];
+const SZO_JS_SECTIONS=[['support','降神模擬',['support','recommend','compare','stars','starAura','supportCompare']],['expPill','等級／經驗丹',['expPill']],['training','修練進度',['training']],['gems','寶石試算',['gems'],1],['soul','武魂試算',['soul'],1],['machine','角色機體模擬',['machine'],1]];
 window.SZO_JIANG_NAV=kind=>`<nav class="jsNav" aria-label="降神、寶石、武魂試算">${SZO_JS_SECTIONS.map(([k,l,g,isView])=>`<button type="button" class="${g.includes(kind)?'active':''}" ${isView?`data-view="${k}"`:`data-js-nav="${k}"`}>${l}</button>`).join('')}</nav>`;
 function szoAddSectionNav(kind){
  const sec=document.querySelector('#reader > section, #reader section.card, #reader .machineWrap');
@@ -412,12 +412,12 @@ function szoAddSubTabs(kind,nav){
 window.szoAddSubTabs=szoAddSubTabs;
 window.szoAddSectionNav=szoAddSectionNav;
 // V813: 降神模擬底下的子分頁（星等／靈氣併入；存檔比較移到降神模擬頁最下方）
-const SZO_JS_SUBS=[['support','降神模擬'],['recommend','組合推薦方案'],['starAura','星等／靈氣']];
+const SZO_JS_SUBS=[['support','降神模擬'],['recommend','組合推薦方案'],['compare','主降神比較'],['stars','20星能力總表'],['starAura','星等／靈氣']];
 window.SZO_JIANG_SUBTABS=active=>SZO_JS_SUBS.some(x=>x[0]===active)?`<div class="jsTabs jsSubTabs">${SZO_JS_SUBS.map(([k,l])=>`<button type="button" ${k===active?'aria-selected="true"':`data-js-nav="${k}"`}>${l}</button>`).join('')}</div>`:'';
 // V806: 分頁一出現就能點（不必等降神功能檔載入）
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-js-nav]');if(!b)return;e.preventDefault();(window.setJiang||setJiang)(b.dataset.jsNav);});
 async function setView(view){
- document.querySelectorAll('body > .jsPickModal').forEach(x=>x.remove());
+ document.querySelectorAll('body > .jsPickModal, body > .jsSticky').forEach(x=>x.remove());
  if(view!=='home') document.body.classList.remove('isHomeView');
  currentView=view;
  if(typeof window.SZO_SET_GLOBAL_TOP_VISIBLE === 'function') window.SZO_SET_GLOBAL_TOP_VISIBLE(view !== 'home');
