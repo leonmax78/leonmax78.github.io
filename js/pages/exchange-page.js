@@ -203,7 +203,7 @@
     if(!iconLoad && typeof window.ensureItemDataLoaded === 'function') iconLoad = window.ensureItemDataLoaded().catch(() => {});
     iconLoad && iconLoad.then(() => paint());
   }
-  async function renderExchangePage(){
+  async function renderExchangePage(editingInput){
     const reader = document.getElementById('reader');
     if(!reader) return;
     let data;
@@ -234,13 +234,14 @@
       chips = [...npcCount].map(([p, n]) => `<button type="button" class="${String(p) === String(state.pick) ? 'active' : ''}" data-ex-pick="${p}">${esc(data.npcs[p].n)}<b>${n}</b></button>`).join('');
       body = blocksHTML(data, rows.filter(r => String(r.p) === String(state.pick)), false);
     }
-    reader.innerHTML = `<section class="questPage exPage">
+    if(editingInput?.id === 'exSearch' && !reader.contains(editingInput)) return;
+    if(editingInput?.id !== 'exSearch') reader.innerHTML = `<section class="questPage exPage">
       <div class="questHero"><h1>兌換、拆解、升階查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
-      ${q ? '' : `<div class="questTabs exTabs" role="tablist">${tabs.map(t => `<button type="button" role="tab" class="${t === state.tab ? 'active' : ''}" data-ex-tab="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      <div data-ex-results></div></section>`;
+    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="questTabs exTabs" role="tablist">${tabs.map(t => `<button type="button" role="tab" class="${t === state.tab ? 'active' : ''}" data-ex-tab="${esc(t)}">${esc(t)}</button>`).join('')}</div>
       <div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">${state.tab === MATS_TAB ? '材料' : 'NPC'}</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}
-      <div class="exList">${body}</div>
-    </section>`;
+      <div class="exList">${body}</div>`;
     fillExIcons(reader);
   }
   window.renderExchangePage = renderExchangePage;
@@ -248,17 +249,22 @@
   window.openExchangeSearch = async q => { state.query = String(q || '').trim(); state.more = 0; if(typeof setView === 'function') await setView('exchange'); else await renderExchangePage(); };
 
   let timer = 0;
-  document.addEventListener('input', ev => {
+  const composing = new WeakSet();
+  document.addEventListener('compositionstart', ev => {
+    if(ev.target?.id === 'exSearch'){ clearTimeout(timer); composing.add(ev.target); }
+  });
+  function scheduleSearch(ev){
     if(ev.target?.id !== 'exSearch') return;
     clearTimeout(timer);
-    timer = setTimeout(async () => {
+    if(ev.isComposing || composing.has(ev.target)) return;
+    timer = setTimeout(() => {
+      if(!ev.target.isConnected) return;
       state.query = ev.target.value.trim(); state.more = 0;
-      const pos = ev.target.selectionStart;
-      await renderExchangePage();
-      const input = document.getElementById('exSearch');
-      if(input){ input.focus(); try{ input.setSelectionRange(pos, pos); }catch(e){} }
+      renderExchangePage(ev.target);
     }, 250);
-  });
+  }
+  document.addEventListener('input', scheduleSearch);
+  document.addEventListener('compositionend', ev => { composing.delete(ev.target); scheduleSearch(ev); });
   document.addEventListener('click', ev => {
     const t = ev.target;
     if(!t.closest?.('.exPage')) return;
