@@ -552,11 +552,11 @@ function draw(){
     if(m){ fxDraw(w.name, m, fxFrame(m, G.t + i * 0.13, a + Math.PI / 2), ox, oy, {center:true, scale:w.name === '般若懺' ? 0.5 : 1.25}); continue; }
     ctx.save(); ctx.translate(ox, oy); ctx.rotate(a * 2); if(ready(ic)) ctx.drawImage(ic, -14, -14, 28, 28); ctx.restore(); } }
   // player
-  // 玩家：一轉角色，方向 1=西、順時針共 8 向；走路 8 格、待機 7 格
+  // 玩家：一轉角色，方向 1=東、逆時針共 8 向（與技能特效相同）；走路 8 格、待機 7 格
   ctx.fillStyle = 'rgba(0,0,0,.4)'; ctx.beginPath(); ctx.ellipse(p.x, p.y, 17, 7, 0, 0, 7); ctx.fill();
   ctx.save(); if(p.inv > 0 && Math.floor(p.inv * 20) % 2) ctx.globalAlpha = 0.5;
   if(ready(G.charImg)){
-    const dir = ((Math.round((Math.atan2(p.face[1], p.face[0]) - Math.PI) / (Math.PI / 4)) % 8) + 8) % 8;
+    const dir = ((Math.round(-Math.atan2(p.face[1], p.face[0]) / (Math.PI / 4)) % 8) + 8) % 8;
     const seq = G.char.a[G.moving ? 'walk' : 'wait'][dir], r = G.char.r[seq[Math.floor(G.t * (G.moving ? 12 : 5)) % seq.length]];
     ctx.imageSmoothingEnabled = false; ctx.drawImage(G.charImg, r[0], r[1], r[2], r[3], Math.round(p.x - r[4]), Math.round(p.y - r[5]), r[2], r[3]); ctx.imageSmoothingEnabled = true;
   } else { ctx.fillStyle = '#dda84d'; ctx.beginPath(); ctx.arc(p.x, p.y - 30, 16, 0, 7); ctx.fill(); }
