@@ -773,7 +773,7 @@
       ${JS_TABS('recommend')}
       <div class="muted" style="margin-bottom:10px">設定主降神與 4 個副降神的星等，依物理、術法、防禦方向推薦前 5 個組合；副降神以 10% 計入，並含成立連結的加成。</div>
       <div class="jsRecForm">
-        <label><span>主降神</span><select id="recMain" data-hero-search><option value="">自動推薦主降神</option>${names().map(n=>`<option value="${E(n)}">${E(n)}</option>`).join('')}</select></label>
+        <div class="jsRecMainField"><span>主降神</span><input type="hidden" id="recMain" value="${E(recMainSel)}"><button type="button" class="jsRecMainBtn" id="recMainBtn" title="點這裡選主降神">${recMainFace()}</button></div>
         <label><span>推薦方向</span><select id="recMetric">${REC_METRICS.map(m=>`<option value="${E(m.kind)}">${E(m.title)}</option>`).join('')}</select></label>
         ${REC_SLOTS.map((label,i)=>`<label><span>${E(label)}星等</span><select id="recStar${i}">${recommendStarOptions(stars[i], i > 0)}</select></label>`).join('')}
       </div>
@@ -781,6 +781,44 @@
       <div id="jiangRecommendResults"><div class="empty">設定好星等與推薦方向後，按「產生推薦方案」。</div></div>
     </section>`;
     $('runJiangRecommend').onclick = renderRecommendResults;
+    $('recMainBtn').onclick = () => { recPick.open = true; renderRecMainPicker(); };
+  }
+  // V830: 組合推薦方案的主降神改用選取視窗（同降神模擬／主降神比較）
+  let recMainSel = '';
+  const recPick = {open:false, q:'', series:''};
+  function recMainFace(){
+    const n = recMainSel;
+    return n ? `${headImg(n,'jsHeroFace')}<span><b>${E(n)}</b><small>${E((HERO_INFO[n]||[])[1]||'')}</small></span><em>點這裡換</em>`
+             : `<span class="jsHeroFace none"></span><span><b>自動推薦主降神</b><small>不指定時會一併推薦主降神</small></span><em>點這裡指定</em>`;
+  }
+  function renderRecMainPicker(){
+    document.querySelectorAll('body > .jsPickModal').forEach(x => x.remove());
+    if(!recPick.open) return;
+    const q = recPick.q.trim(), order = n => (HERO_INFO[n] ? HERO_INFO[n][2] : 999), shown = n => HERO_INFO[n] && !HERO_INFO[n][3];
+    const list = names().filter(n => shown(n) && (!q || n.includes(q)) && (!recPick.series || HERO_INFO[n][1]===recPick.series)).sort((a,b)=>order(b)-order(a));
+    const cnt = k => names().filter(n => shown(n) && HERO_INFO[n][1]===k).length;
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div class="jsPickModal jsPage" id="jsPickModal"><div class="jsPickBox" role="dialog" aria-modal="true" aria-label="選擇主降神"><div class="jsPickTop"><b>選擇主降神</b><span class="jsPickCur">${recMainSel ? '目前：' + E(recMainSel) : '目前：自動推薦'}</span><button type="button" class="jsPickDone" id="jsPickDone">關閉</button></div>
+      <aside class="jsSide">
+        <input id="recMainSearch" type="search" placeholder="搜尋降神名稱" value="${E(recPick.q)}">
+        <div class="jsSeries">${['', ...SERIES].map(k => `<button type="button" class="${recPick.series===k?'active':''}" data-rec-series="${E(k)}">${k ? E(k) + `<small>${cnt(k)}</small>` : '全部'}</button>`).join('')}</div>
+        <div class="jsHeroList">${['', ...list].map(n => `<button type="button" class="${recMainSel===n ? 'active' : ''} ${n ? '' : 'clear'}" data-rec-hero="${E(n)}">${n ? headImg(n,'jsHeroFace') + `<span>${E(n)}</span>` : '<span>自動推薦主降神</span>'}</button>`).join('')}${list.length ? '' : '<small class="muted">沒有符合的降神</small>'}</div>
+      </aside></div></div>`;
+    const modal = wrap.firstElementChild; document.body.appendChild(modal);
+    const close = () => { recPick.open = false; renderRecMainPicker(); };
+    modal.onclick = e => { if(e.target === modal) close(); };
+    modal.querySelector('#jsPickDone').onclick = close;
+    modal.querySelectorAll('[data-rec-series]').forEach(b => b.onclick = () => { recPick.series = b.dataset.recSeries; renderRecMainPicker(); });
+    modal.querySelectorAll('[data-rec-hero]').forEach(b => b.onclick = () => {
+      recMainSel = b.dataset.recHero; recPick.open = false;
+      if($('recMain')) $('recMain').value = recMainSel;
+      if($('recMainBtn')) $('recMainBtn').innerHTML = recMainFace();
+      renderRecMainPicker();
+    });
+    const s = modal.querySelector('#recMainSearch');
+    s.oninput = () => { recPick.q = s.value; const pos = s.selectionStart; renderRecMainPicker(); const s2 = $('recMainSearch'); if(s2){ s2.focus(); try{ s2.setSelectionRange(pos,pos); }catch(e){} } };
+    const h = e => { if(e.key === 'Escape'){ document.removeEventListener('keydown', h); if(recPick.open) close(); } };
+    document.addEventListener('keydown', h);
   }
 
   window.renderSupportSlotsPage = function(){ renderSupport(); closeMenu(); scrollTop(); };
