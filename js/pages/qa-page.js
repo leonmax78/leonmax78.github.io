@@ -551,14 +551,25 @@
     const top = rows.slice(0, 10);
     const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔'], ['inst', '副本（不重生）']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
     const mapName = r => r.s.n.replace(/\s*\d+樓$/, '');
-    const where = r => r.spot.a.map(a => { const c = xy(r.s, a.c); return c ? `<button type="button" class="qaChip" data-qa-map="${html(mapName(r))}" data-qa-map-query="" data-qa-map-x="${c[0]}" data-qa-map-y="${c[1]}">(${c[0]}, ${c[1]})</button>` : ''; }).join(r.spot.a.length > 1 ? '<i>⇄</i>' : '');
+    const LBL = ['A', 'B'];
+    const where = r => r.spot.a.map((a, i) => { const c = xy(r.s, a.c); return c ? `<button type="button" class="qaChip" data-qa-map="${html(mapName(r))}" data-qa-map-query="" data-qa-map-x="${c[0]}" data-qa-map-y="${c[1]}">${r.spot.a.length > 1 ? `<b class="qaSpotLbl">${LBL[i]}</b> ` : ''}(${c[0]}, ${c[1]})</button>` : ''; }).join(r.spot.a.length > 1 ? '<i>⇄</i>' : '');
+    // 小地圖：圈出掛機範圍（約 2 個畫面寬），範圍內的出生點標成金點，其他出生點灰點
+    const miniMap = r => {
+      const s = r.s; if(!s.img || !s.bb) return '';
+      const [x0, y0, x1, y1] = s.bb, bw = x1 - x0, bh = y1 - y0, sw = s.sw || 100;
+      const inSet = new Set(r.spot.mem.map(p => p.x + ',' + p.y));
+      const dots = (s.p || []).map(([, x, y]) => `<circle cx="${x}" cy="${y}" r="${inSet.has(x + ',' + y) ? 5 : 3.5}" class="${inSet.has(x + ',' + y) ? 'on' : 'off'}"/>`).join('');
+      const rings = r.spot.a.map((a, i) => `<ellipse cx="${a.c.x}" cy="${a.c.y}" rx="${sw}" ry="${sw * 3 / 4}"/>${r.spot.a.length > 1 ? `<text x="${a.c.x}" y="${a.c.y - sw * 3 / 4 - 8}">${LBL[i]}</text>` : ''}`).join('');
+      const line = r.spot.a.length > 1 ? `<line x1="${r.spot.a[0].c.x}" y1="${r.spot.a[0].c.y}" x2="${r.spot.a[1].c.x}" y2="${r.spot.a[1].c.y}"/>` : '';
+      return `<div class="qaMiniMap" style="aspect-ratio:${bw}/${bh}"><img loading="lazy" decoding="async" alt="" src="${html(s.img)}" style="width:${(s.W / bw * 100).toFixed(3)}%;left:${(-x0 / bw * 100).toFixed(3)}%;top:${(-y0 / bh * 100).toFixed(3)}%"><svg viewBox="${x0} ${y0} ${bw} ${bh}" preserveAspectRatio="none">${line}${rings}${dots}</svg></div>`;
+    };
     const stats = r => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
       : `<span>定點每分鐘最多 <b>${fmt(r.spot.v)}</b> 經驗</span><span>範圍內 <b>${r.spot.mem.length}</b> 個出生點・每分鐘最多重生 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
     const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong>${tags(r)}${chip('看地圖', `data-qa-map="${html(mapName(r))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
       <div class="qaTrainStats">${stats(r)}</div>
-      ${inst ? '' : `<div class="qaTrainWhere"><span>${r.spot.a.length > 1 ? '兩個掛點傳送來回' : '掛點'}</span>${where(r)}</div>`}
+      ${inst ? '' : `${miniMap(r)}<div class="qaTrainWhere"><span>${r.spot.a.length > 1 ? '兩個掛點傳送來回' : '掛點'}</span>${where(r)}</div>`}
       <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻・${m[4] > 0 ? sec(m[4]) + '重生' : '不重生'}</small></span>`).join('')}</div></div>`;
     const intro = inst
       ? `這些地圖的怪物打死後不會自動重生（副本、挑戰類），依「打完一輪的總經驗」排序。`
