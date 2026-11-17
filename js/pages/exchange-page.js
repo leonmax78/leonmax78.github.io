@@ -186,7 +186,15 @@
       const groups = new Map();
       for(const r of choices(list)){ if(shown >= limit) break; const g = r.h || ''; if(!groups.has(g)) groups.set(g, []); groups.get(g).push(r); shown += r.n || 1; }
       out += `<section class="exNpc"><header><h3>${esc(npc.n)}</h3>${showVer ? `<span class="exVer">${esc(list[0].v)}</span>` : ''}<div class="exPlaces">${placesHTML(npc)}</div></header>
-        ${[...groups].map(([g, rs]) => { const list = highFirst || KEEP.has(p) ? collapse(rs) : fewFirst(collapse(rs)); const head = !!g; return `${head ? `<h4>${esc(g)}</h4>` : ''}<ul class="exRows">${list.map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`; }).join('')}</section>`;
+        ${[...groups].map(([g, rs]) => { const sort = x => highFirst || KEEP.has(p) ? collapse(x) : fewFirst(collapse(x)); const head = !!g; const ul = x => `<ul class="exRows">${sort(x).map(r => r.many ? manyHTML(r) : rowHTML(r)).join('')}</ul>`;
+          // V842: 項目很多時照遊戲 NPC 選單的分類收合（例：上師藥班禪「淬煉身上持有之珍貴符咒」）
+          const cats = new Map(); for(const r of rs){ const c = r.g || ''; if(!cats.has(c)) cats.set(c, []); cats.get(c).push(r); }
+          const shown = [...cats.values()].reduce((t, x) => t + sort(x).length, 0);  // 合併「任一件」之後實際顯示的列數
+          if(shown > 12 && cats.size >= 2 && cats.size <= 10 && cats.size * 3 <= shown && !cats.has('')){
+            const label = c => c.replace(/^淬煉身上持有之/, '').replace(/[！!]$/, '');
+            return `${head ? `<h4>${esc(g)}</h4>` : ''}${[...cats].map(([c, x]) => `<details class="exCat"${sort(x).length <= 2 ? ' open' : ''}><summary><span>${esc(label(c))}</span><b>${sort(x).length}</b></summary>${ul(x)}</details>`).join('')}`;
+          }
+          return `${head ? `<h4>${esc(g)}</h4>` : ''}${ul(rs)}`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
