@@ -48,6 +48,8 @@
   // common tail of the item names, e.g. 圓弧霜白寶石Ⅰ / 三角橄欖寶石Ⅰ → 寶石Ⅰ
   const head = names => { let t = names[0] || ''; for(const n of names) while(t && !n.startsWith(t)) t = t.slice(0, -1); return t; };
   let IV = {}, KEEP = new Set();
+  // V843: 四轉第四重 → 4-4、四轉第一~三重 → 4-1~3（與其他四轉武器寫法一致）
+  const fourX = t => String(t || '').replace(/四轉第([一二三四五六七八九十]+)(?:[~～]([一二三四五六七八九十]+))?重/g, (_, a, b) => `4-${zhNum(a)}${b ? '~' + zhNum(b) : ''}`);
   // 新星之驚雷劍、新星之火魄刀… → 新星武器；same level → 222級武器
   // 冠聖鑽 under the heading 聖鑽 → 聖鑽 (宇以太核 → 以太)
   const shortHead = (label, h) => h && !/[・]|月服|免服/.test(h) && label.includes(h) && !/第.+階|星|級/.test(label) ? h : label;
@@ -90,7 +92,7 @@
       const many = x.set.map(r => r.m[0]);
       const t = tail(many.map(m => m[0]));
       if(x.step) return [{ ...x.set[0], many, rest: x.set[0].m.slice(1), label: `第${x.step[1]}階`, same: true, stepN: tier(`第${x.step[1]}階`), r: [[`第${x.step[2]}階（同款）`, x.set[0].r[0][1], 0]] }];
-      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: shortHead(setName(many, x.set[0].g, !!x.set[0].h), x.set[0].h) };
+      const row = { ...x.set[0], many, rest: x.set[0].m.slice(1), label: fourX(shortHead(setName(many, x.set[0].g, !!x.set[0].h), x.set[0].h)) };
       const r0 = x.set[0];
       if(r0.r.length === 1 && r0.m[0][0].slice(0, -1) === r0.r[0][0].slice(0, -1)){
         const rt = tail(x.set.map(r => r.r[0][0]));
@@ -191,10 +193,10 @@
           const cats = new Map(); for(const r of rs){ const c = r.g || ''; if(!cats.has(c)) cats.set(c, []); cats.get(c).push(r); }
           const shown = [...cats.values()].reduce((t, x) => t + sort(x).length, 0);  // 合併「任一件」之後實際顯示的列數
           if(shown > 12 && cats.size >= 2 && cats.size <= 10 && cats.size * 3 <= shown && !cats.has('')){
-            const label = c => c.replace(/^淬煉身上持有之/, '').replace(/[！!]$/, '');
-            return `${head ? `<h4>${esc(g)}</h4>` : ''}${[...cats].map(([c, x]) => `<details class="exCat"${sort(x).length <= 2 ? ' open' : ''}><summary><span>${esc(label(c))}</span><b>${sort(x).length}</b></summary>${ul(x)}</details>`).join('')}`;
+            const label = c => fourX(c.replace(/^淬煉身上持有之/, '').replace(/[！!]$/, ''));
+            return `${head ? `<h4>${esc(fourX(g))}</h4>` : ''}${[...cats].map(([c, x]) => `<details class="exCat"${sort(x).length <= 2 ? ' open' : ''}><summary><span>${esc(label(c))}</span><b>${sort(x).length}</b></summary>${ul(x)}</details>`).join('')}`;
           }
-          return `${head ? `<h4>${esc(g)}</h4>` : ''}${ul(rs)}`; }).join('')}</section>`;
+          return `${head ? `<h4>${esc(fourX(g))}</h4>` : ''}${ul(rs)}`; }).join('')}</section>`;
     }
     if(rows.length > limit) out += `<button type="button" class="ghost exMore" data-ex-more>顯示更多（還有 ${rows.length - limit} 筆）</button>`;
     return out || '<div class="empty">沒有符合的兌換。</div>';
