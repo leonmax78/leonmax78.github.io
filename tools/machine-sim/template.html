@@ -251,21 +251,19 @@ function equip(slotKey){const slot=slotOf(slotKey)||{k:'extra',n:'其他',types:
  r.options=options;q.oninput=options;for(let [,s] of filters)s.onchange=options;options();
  let acts=el('div',box);btn(acts,'＋ 加入合成配方',()=>r.append());btn(acts,'卸下',()=>{pick.value='';rs.replaceChildren();r.recipes=[];options()});r.summary=el('p',box);r.summary.className='summary';let h1=el('h4',box,'合成'),h2=el('h4',box,'更換裝備');box.append(cur,h1,acts,rs,r.summary,h2,tools,list);
  // 安定值 99（限時追加）是同一件裝備所有配方共用的次數：一般 49 次、仙器 29 次；正在調整的那列優先，其他列由後往前扣
- r.fix99=(changed)=>{const e=D.eq[pick.value];if(!e)return;const cap=e.type_codes.includes('UNDER_BOOT')?29:49,rows=r.recipes.filter(p=>p.stage.value==='stable_99'&&p[0].value!==''),v=p=>Math.max(0,Math.trunc(+p[1].value||0));
-  for(const p of rows)p[1].value=Math.min(v(p),cap);let over=rows.reduce((t,p)=>t+v(p),0)-cap;
-  for(const p of [...rows].reverse()){if(over<=0)break;if(p===changed)continue;const cut=Math.min(v(p),over);p[1].value=v(p)-cut;over-=cut}
-  const used=rows.reduce((t,p)=>t+v(p),0);for(const p of rows){p[1].min=0;p[1].max=cap-used+v(p);p.redraw()}
-  for(const p of r.recipes)if(p.note)p.note.textContent=p.stage.value==='stable_99'?'安定值 99 每件共用 '+cap+' 次，剩餘 '+(cap-used)+' 次':''};
+ // 次數不再鎖上限（玩家可能跳過前面的安定值階段直接用後面的配方）；預設值照舊：安定值 N 預設 N 次，安定值 99 預設 49 次（仙器 29 次）
+ r.fix99=()=>{const used=r.recipes.filter(p=>p.stage.value==='stable_99'&&p[0].value!=='').reduce((t,p)=>t+Math.max(0,Math.trunc(+p[1].value||0)),0);
+  for(const p of r.recipes)if(p.note)p.note.textContent=p[0].value===''?'':'預設 '+p.def+' 次，可自行修改'+(p.stage.value==='stable_99'?'；安定值 99 合計 '+used+' 次':'')};
  r.append=(saved)=>{if(pick.value==='')return;let e=D.eq[pick.value],under=e.type_codes.includes('UNDER_BOOT'),row=el('div',rs),eligible=D.recipes.map((v,i)=>[i,v]).filter(([,v])=>v.effects?.length&&(under?v.group==='stable_70':['stable_1','stable_12','stable_50'].includes(v.group))&&v.type_codes.some(t=>e.type_codes.includes(t)||(['HIDDEN_WEAPON','HIDDEN_WEAPON2'].includes(t)&&e.display_type==='暗器')));
  const promo=v=>[571,572,573,574,580,581,582,583,584,585,586,587,588,589,590,591].includes(+v.id);
  let levels=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>eligible.some(([,v])=>v.group===g||(g==='stable_99'&&promo(v))));
  let stage=sel(row,levels.map(g=>[g,'安定值 '+g.slice(7)+(g==='stable_99'?'（限時追加）':'')])),a=sel(row,[]),n=num(row,'次數',1,1,1),note=el('small',row),details=el('div',row),pair=[a,n];r.recipes.push(pair);pair.stage=stage;pair.inputs=[];pair.note=note;note.className='stableNote';
  function choices(){a.replaceChildren(new Option('選擇配方',''));for(let [i,v] of eligible)if(stage.value===v.group||(stage.value==='stable_99'&&promo(v)))a.add(new Option(v.name,i));configure()}
- function configure(){let rec=D.recipes[a.value];n.min=1;n.max=stage.value==='stable_99'?(under?29:49):Number(stage.value.slice(7))||1;n.value=rec?(stage.value==='stable_99'?n.max:Math.min(+n.max,rec.default_use_count||1)):1;if(stage.value==='stable_99')r.fix99(null);else r.fix99();effects()}
+ function configure(){let rec=D.recipes[a.value];const def=stage.value==='stable_99'?(under?29:49):Number(stage.value.slice(7))||1;n.min=1;n.max=9999;pair.def=rec?(stage.value==='stable_99'?def:Math.min(def,rec.default_use_count||1)):1;n.value=pair.def;r.fix99();effects()}
  function effects(overrides={}){details.replaceChildren();pair.inputs=[];let rec=D.recipes[a.value];if(!rec)return;rec.effects.forEach((v,i)=>{let times=v.stackable===false?1:val(n),lo=(v.min??v.value)*times,hi=(v.max??v.value)*times;if(!Number.isFinite(lo+hi))return;let avg=(lo+hi)/2;if(lo===hi){el('span',details,v.label+' +'+lo+'　');return}let field=num(details,v.label,lo,hi,avg);field.step='any';field.title='預設平均值，可輸入實際合成總值';if(overrides[i]!=null&&Number.isFinite(+overrides[i]))field.value=Math.max(lo,Math.min(hi,+overrides[i]));field.onchange=()=>field.value=field.value===''?avg:Math.max(lo,Math.min(hi,+field.value));el('small',details,'（'+lo+'～'+hi+'）　');pair.inputs[i]=field})}
- pair.redraw=()=>effects(Object.fromEntries(pair.inputs.map((f,i)=>[i,f?.value]).filter(([,x])=>x!=null)));stage.onchange=choices;a.onchange=configure;n.oninput=()=>{if(stage.value==='stable_99')r.fix99(pair);effects()};n.onchange=()=>{if(stage.value==='stable_99')r.fix99(pair);n.value=val(n);effects()};choices();
+ pair.redraw=()=>effects(Object.fromEntries(pair.inputs.map((f,i)=>[i,f?.value]).filter(([,x])=>x!=null)));stage.onchange=choices;a.onchange=configure;n.oninput=()=>{r.fix99();effects()};n.onchange=()=>{n.value=val(n);r.fix99();effects()};choices();
  if(saved){stage.value=saved[2]||D.recipes[saved[0]]?.group||stage.value;choices();a.value=saved[0];configure();n.value=saved[1];n.value=val(n);effects(saved[3]||{})}
- if(saved&&stage.value==='stable_99')r.fix99(pair);
+ if(saved)r.fix99();
  btn(row,'移除',()=>{r.recipes=r.recipes.filter(x=>x!==pair);row.remove();r.fix99();calc();save()})}}
 for(const s of SLOTS){let b=el('button',gp);b.type='button';b.className='gpSlot';Object.assign(b.style,{left:s.x/2.23+'%',top:s.y/3.11+'%',width:32/2.23+'%',height:32/3.11+'%'});b.setAttribute('aria-label',s.n);b.onclick=()=>{panels.find(([,sec])=>sec===equipBox)[0].click();openSlot(s.k);equipBox.scrollIntoView({behavior:'smooth',block:'start'})};gpSlots.set(s.k,b)}
 for(const s of SLOTS)equip(s.k);
