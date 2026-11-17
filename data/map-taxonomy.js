@@ -1103,6 +1103,10 @@ window.SZO_MAP_TAXONOMY = {
       "section": "一般地圖",
       "group": "勝者為王"
     },
+    "274": {
+      "section": "特殊地圖",
+      "group": "七寶"
+    },
     "275": {
       "section": "一般地圖",
       "group": "唯我頂天"
