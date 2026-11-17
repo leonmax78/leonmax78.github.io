@@ -163,8 +163,8 @@ let nav=el('nav',inputs),panels=[];nav.setAttribute('aria-label','能力加成�
 function section(title){let b=el('button',nav,title),s=el('section',inputs);panels.push([b,s]);el('h2',s,title);b.onclick=()=>panels.forEach(([tab,panel])=>{panel.hidden=tab!==b;tab.setAttribute('aria-pressed',String(tab===b))});s.hidden=panels.length>1;b.setAttribute('aria-pressed',String(!s.hidden));return s}
 function sel(p,rows){let s=el('select',p);for(let [v,n] of rows)s.add(new Option(n,v));return s}
 function num(p,title,min,max,v){let l=el('label',p,title),n=el('input',l);Object.assign(n,{type:'number',min,max,value:v});return n}
-// 配方選單後面簡要列出會加的屬性，例如「昂鎮配方（+體魄 +物防）」
-function recipeBrief(v){const l=[...new Set((v.effects||[]).map(e=>e.label).filter(Boolean))];return l.length?'（'+l.map(x=>'+'+x).join(' ')+'）':''}
+// 配方選單後面列出每次加的屬性與數值，寫法同合成模擬頁，例如「昴鎮配方｜體魄+4~10、物防+10~15」
+function recipeBrief(v){if(v.effect_summary)return'｜'+v.effect_summary;const l=(v.effects||[]).filter(e=>e.label).map(e=>e.label+(e.min!=null?'+'+(e.min===e.max?e.min:e.min+'~'+e.max):e.value!=null?' '+e.value+(e.unit||''):''));return l.length?'｜'+l.join('、'):''}
 function val(n){return Math.min(+n.max,Math.max(+n.min,Math.trunc(+n.value||0)))}
 function btn(p,t,f){el('button',p,t).onclick=()=>{f();calc()}}
 let p=section('角色'),job=sel(p,Object.entries({CLASS_WARRIOR:'勇士',CLASS_SWORDMAN:'劍俠',CLASS_TAOIST:'道人',CLASS_PRIEST:'僧侶',CLASS_ASSASSIN:'術者'})),lv=num(p,'角色等級',1,2000,1);
