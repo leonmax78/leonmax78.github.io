@@ -514,7 +514,9 @@
     for(const s of data.spots || []){
       if(trainState.filter === 'normal' && s.sec !== '一般地圖') continue;
       if(trainState.filter === 'tower' && s.g !== '終末之塔') continue;
-      const ms = s.m.filter(m => m[1] >= lv && m[1] <= hi);
+      // 同名、同等級、同經驗的不同怪物 ID 合併成一行
+      const ms = [];
+      for(const m of s.m){ if(m[1] < lv || m[1] > hi) continue; const o = ms.find(x => x[0] === m[0] && x[1] === m[1] && x[2] === m[2]); if(o) o[3] += m[3]; else ms.push(m.slice()); }
       if(!ms.length) continue;
       const n = ms.reduce((t, m) => t + m[3], 0), exp = ms.reduce((t, m) => t + m[2] * m[3], 0);
       rows.push({ s, ms, n, exp, score: exp / s.a, dens: n / s.a });
@@ -523,10 +525,10 @@
     const top = rows.slice(0, 10);
     const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong><span class="qaTrainTag">${html(r.s.g)}</span>${chip('看地圖', `data-qa-map="${html(r.s.n.replace(/\s*\d+樓$/, ''))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
-      <div class="qaTrainStats"><span>可打怪物 <b>${r.n}</b> 隻</span><span>約每畫面 <b>${r.dens.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span></div>
+      <div class="qaTrainStats"><span>每畫面約 <b>${fmt(r.score)}</b> 經驗</span><span>可打怪物 <b>${r.n}</b> 隻</span><span>約每畫面 <b>${r.dens.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span></div>
       <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻</small></span>`).join('')}</div></div>`;
     return `<section class="qaGroup qaTraining"><h3>${lv} 等練功推薦</h3>
-      <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。以下依「這個範圍內的怪物經驗 × 數量 ÷ 地圖大小」排序，越上面越好練（經驗多、怪物密）。魔王不列入。</p>
+      <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。以下依「每畫面約多少經驗」排序（範圍內怪物經驗 × 數量 ÷ 地圖大小），越上面越好練：怪物經驗高但分散的地方，可能輸給經驗稍低但很密集的地方。魔王不列入。</p>
       <div class="qaTrainTabs">${tabs}</div>
       ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
       <p class="muted qaTrainNote">怪物數量是地圖上的出生點，實際重生速度、經驗加成與活動倍率不列入；終末之塔按樓層計算。</p></section>`;
