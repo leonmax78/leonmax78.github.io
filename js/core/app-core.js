@@ -617,7 +617,10 @@ function renderHome(){
   <div class="homeRow"><span class="homeRowTitle">常用功能</span>${HOME_TOOLS.map(btn).join('')}</div>
  </div></section>`;
  fitHomePanel();
+ window.scrollTo(0,0);  // V837: 回首頁一律從最上面開始（手機版首頁可以往下捲）
 }
+// V837: 重新整理時不要還原上次捲到的位置，搜尋列才不會被捲走
+try{if('scrollRestoration' in history)history.scrollRestoration='manual';}catch(e){}
 // the cover art shrinks to leave room for the panel underneath, so nothing covers the artwork or signature
 function fitHomePanel(){
  const home=document.querySelector('.homeBlank'),panel=home&&home.querySelector('.homePanel');
