@@ -14,8 +14,23 @@
   function load(){
     if(!dataPromise){
       const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+      // V856: 活動限定兌換另放在 data/exchanges_limited.json（手動整理自官方公告），活動結束後自動不顯示
+      const limited = fetch('data/exchanges_limited.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
       dataPromise = fetch('data/exchanges.json?v=' + v, { cache: 'force-cache' })
         .then(r => { if(!r.ok) throw Error('兌換資料載入失敗'); return r.json(); })
+        .then(async d => {
+          const L = await limited;
+          const today = new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);  // 台灣日期
+          if(L && L.ver && (!L.to || today <= L.to)){
+            const base = d.npcs.length;
+            d.npcs = d.npcs.concat(L.npcs || []);
+            d.rows = d.rows.concat((L.rows || []).map(r => ({ ...r, v: L.ver, p: base + r.p })));
+            d.vers = [L.ver, ...d.vers.filter(x => x !== L.ver)];
+            d.keep = (d.keep || []).concat((L.npcs || []).map((_, i) => base + i));  // 照公告順序列，不重排
+            d.limited = L;
+          }
+          return d;
+        })
         .catch(e => { dataPromise = null; throw e; });
     }
     return dataPromise;
@@ -69,6 +84,7 @@
   function collapse(rs){
     const out = [], byKey = new Map();
     for(const r of rs){
+      if(r.x){ out.push(r); continue; }  // 活動限定：每一列照公告分開列
       // same rewards and same other materials, only the first material differs
       // …or an upgrade of the same piece (騰陽威冕Ⅰ → 騰陽威冕Ⅱ, 圓弧霜白寶石Ⅰ → 圓弧霜白寶石Ⅱ)
       const up = r.m.length && r.r.length === 1 && r.m[0][0].length > 1 && r.m[0][0].slice(0, -1) === r.r[0][0].slice(0, -1);
@@ -234,6 +250,9 @@
       if(!matCounts.some(([m]) => m === state.pick)) state.pick = matCounts[0]?.[0] || '';
       const rows = data.rows.filter(r => r.r.some(x => x[0] === state.pick));
       body = `<p class="muted exHint">想要「${esc(state.pick)}」：拿左邊的東西去找 NPC 換。</p>${blocksHTML(data, rows, true, true)}`;
+    }else if(data.limited && state.tab === data.limited.ver){
+      // 活動限定只有幾個 NPC：全部一起列，照公告順序（直接購買 → 材料兌換 → 寶石兌換）
+      body = blocksHTML(data, data.rows.filter(r => r.v === state.tab), false);
     }else{
       const rows = data.rows.filter(r => r.v === state.tab);
       const mapCount = new Map();
@@ -252,9 +271,9 @@
       <div class="questHero"><h1>兌換、拆解、升階查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
       <div data-ex-results></div></section>`;
-    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="exTop"><label class="exVerPick${state.tab === MATS_TAB ? ' active' : ''}"><span>${esc(MATS_TAB)}</span><select id="exMatSel" aria-label="選擇材料"><option value="">選擇材料…</option>${matCounts.map(([m, n]) => `<option value="${esc(m)}" ${state.tab === MATS_TAB && m === state.pick ? 'selected' : ''}>${esc(m)}（${n}）</option>`).join('')}</select></label><label class="exVerPick${state.tab !== MATS_TAB ? ' active' : ''}"><span>依資料片</span><select id="exVerSel" aria-label="選擇資料片"><option value="">選擇資料片…</option>${data.vers.map(v => `<option value="${esc(v)}" ${v === state.tab ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label></div>
-      ${state.tab === MATS_TAB ? '' : `<div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">NPC</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}`}
-      <div class="exList">${body}</div>`;
+    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="exTop"><label class="exVerPick${state.tab === MATS_TAB ? ' active' : ''}"><span>${esc(MATS_TAB)}</span><select id="exMatSel" aria-label="選擇材料"><option value="">選擇材料…</option>${matCounts.map(([m, n]) => `<option value="${esc(m)}" ${state.tab === MATS_TAB && m === state.pick ? 'selected' : ''}>${esc(m)}（${n}）</option>`).join('')}</select></label>${data.limited ? `<button type="button" class="exLimitBtn${state.tab === data.limited.ver ? ' active' : ''}" data-ex-limited>${esc(data.limited.ver)}</button>` : ''}<label class="exVerPick${state.tab !== MATS_TAB ? ' active' : ''}"><span>依資料片</span><select id="exVerSel" aria-label="選擇資料片"><option value="">選擇資料片…</option>${data.vers.map(v => `<option value="${esc(v)}" ${v === state.tab ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label></div>
+      ${state.tab === MATS_TAB || (data.limited && state.tab === data.limited.ver) ? '' : `<div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">NPC</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}`}
+      ${!q && data.limited && state.tab === data.limited.ver ? `<p class="exLimitNote">${esc(data.limited.note || '')}</p>` : ''}<div class="exList">${body}</div>`;
     fillExIcons(reader);
   }
   window.renderExchangePage = renderExchangePage;
@@ -278,6 +297,7 @@
   }
   document.addEventListener('input', scheduleSearch);
   // V838: 資料片改用下拉選單，畫面只留「常用拆解」與一個選單
+  document.addEventListener('click', ev => { if(!ev.target.closest?.('[data-ex-limited]')) return; load().then(d => { if(!d.limited) return; state.tab = d.limited.ver; state.map = ''; state.pick = ''; state.more = 0; renderExchangePage(); }); });
   document.addEventListener('change', ev => { if(ev.target?.id === 'exMatSel'){ if(!ev.target.value) return; state.tab = MATS_TAB; state.pick = ev.target.value; state.map = ''; state.more = 0; renderExchangePage(); return; } if(ev.target?.id !== 'exVerSel') return; state.tab = ev.target.value || MATS_TAB; state.map = ''; state.pick = ''; state.more = 0; renderExchangePage(); });
   document.addEventListener('compositionend', ev => { composing.delete(ev.target); scheduleSearch(ev); });
   document.addEventListener('click', ev => {
