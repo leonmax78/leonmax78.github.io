@@ -5119,3 +5119,10 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .exVerPick select option{color:#111}
 .exVerPick>span{white-space:nowrap}
 @media(max-width:820px){.exPage .exNpcChips{gap:6px}.exPage .exNpcChips button{padding:5px 10px;font-size:13px;min-height:0}.exPage .exNpcChips button b{font-size:11px}.exTopBtn{padding:7px 14px}}
+/* V842: 兌換頁分類收合 */
+.exCat{margin:6px 0;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
+.exCat>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:10px 12px;font-weight:700}
+.exCat>summary::-webkit-details-marker{display:none}
+.exCat>summary::before{content:'▸';color:#d8b56a;transition:transform .15s}.exCat[open]>summary::before{transform:rotate(90deg)}
+.exCat>summary b{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+.exCat>.exRows{padding:0 10px 8px}
