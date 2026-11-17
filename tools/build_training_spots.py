@@ -9,6 +9,8 @@
 定點：SETTING/STAGE.INI 的 STAGE_FLAG_NOMARK＝不能記錄定點（傳送大法、傳情等），
 只能在一小塊範圍掛；STAGE_FLAG_ForbidAutoPlay＝禁止自動掛機。每個出生點另存位置（p），
 網頁依角色等級即時找出最好的掛機範圍。
+障礙物：MPC 地圖格（32×32 原始像素＝圖上 4×4）第 4 個位元組非 0＝不能走（樹、水、建築、牆）。
+另輸出 data/training_walk.json（8×8 圖上單位的粗格，網頁用它算走路距離，打不到牆後的怪、傳送後沿真的能走的路打回掛點）。
 
 用法：python3 tools/build_training_spots.py [遊戲資料夾（含 data1.pak、update.pak）]
 """
@@ -49,20 +51,23 @@ def respawns(game):
         if i:
             f = f.group(1) if f else ''
             flags[int(i.group(1))] = ('STAGE_FLAG_NOMARK' in f) * 1 + ('STAGE_FLAG_ForbidAutoPlay' in f) * 2
-    out = {}
+    out, walk = {}, {}
     import struct
+    import numpy as np
     for sid, data in files.items():
         h = struct.unpack_from('<16I', data)
+        W, H = h[1], h[2]
+        walk[sid] = np.frombuffer(data[64:64 + W * H * 8], dtype=np.uint8).reshape(H, W, 8)[:, :, 3] == 0
         for p in range(h[6], h[8], 38):
             o = struct.unpack_from('<19H', data, p)
             if o[7] == 7001:
                 out[(sid, o[9], o[1], o[2])] = o[11] / 10
-    return out, flags
+    return out, flags, walk
 
 
 def main():
     game = sys.argv[1] if len(sys.argv) > 1 else '/mnt/user-data/uploads/神州Online'
-    resp, flags = respawns(game)
+    resp, flags, walk = respawns(game)
     mons = {num(m['ID']): m for m in json.loads((ROOT / 'data/monsters.json').read_text(encoding='utf-8'))}
     st = json.loads((ROOT / 'data/stage_maps.json').read_text(encoding='utf-8'))
     st = st['stages'] if isinstance(st, dict) else st
@@ -108,6 +113,27 @@ def main():
                 'img': s['image'], 'bb': [round(max(0, x0)), round(max(0, y0)), round(min(s['width'], x1)), round(min(s['height'], y1))], 'W': s['width'], 'H': s['height'],
                 'm': [[mons[i]['Name'], num(mons[i]['Level']), num(mons[i]['DropExp']), cnt[(i, r)], r] for i, r in keys],
                 'p': [[ki[k], x, y] for k, x, y in pts]})
+    import numpy as np
+    # 粗格（8×8 圖上單位）：2×2 細格中至少 2 格可走就算可走；以連續長度編碼（36 進位，從不可走開始）
+    used = {sp['s'] for sp in spots}
+    wj = {}
+    for sid in sorted(used):
+        g = walk.get(sid)
+        if g is None:
+            continue
+        H2, W2 = g.shape[0] // 2, g.shape[1] // 2
+        c = g[:H2 * 2, :W2 * 2].reshape(H2, 2, W2, 2).sum(axis=(1, 3)) >= 2
+        runs, cur, n = [], False, 0
+        for v in c.ravel():
+            if v == cur:
+                n += 1
+            else:
+                runs.append(n); cur = v; n = 1
+        runs.append(n)
+        wj[str(sid)] = [int(W2), int(H2), ','.join(np.base_repr(r, 36).lower() for r in runs)]
+    wp = ROOT / 'data/training_walk.json'
+    wp.write_text(json.dumps(wj, separators=(',', ':')), encoding='utf-8')
+    print('walk', len(wj), 'bytes', wp.stat().st_size)
     out = ROOT / 'data/training_spots.json'
     out.write_text(json.dumps({'note': '角色等級 L 可從 L～L+300 等的怪物拿到經驗；g／sec＝地圖分類；a＝地圖約幾個畫面大；m＝[怪物, 等級, 經驗, 數量, 重生秒數（0＝不重生，-1＝不明）]；p＝出生點 [m 的索引, 圖上x, 圖上y]；sw＝一個畫面寬（圖上單位）；xy＝圖上→遊戲座標 [ax,bx,cx,ay,by,cy]；f＝1 不能定點、2 禁止自動掛機；img＝地圖圖片（W×H 與圖上單位相同），bb＝這個練功點在圖上的範圍', 'spots': spots}, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print('spots', len(spots), 'bytes', out.stat().st_size)
