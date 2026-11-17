@@ -469,7 +469,7 @@ async function setView(view){
   document.querySelectorAll('.navBtn[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view==='machine'));
   document.querySelectorAll('.formBox').forEach(f=>f.classList.remove('active'));
   keepNavGroupOpen('machine');
-  const v=encodeURIComponent(document.body?.dataset?.version||'');
+  const v=encodeURIComponent(document.body?.dataset?.machineVersion||document.body?.dataset?.version||'');  // V833: 用模擬器頁面本身的雜湊，改版就換網址
   byId('reader').innerHTML=`<div class="machineWrap"><iframe class="machineFrame" src="sim/machine.html?v=${v}" title="角色機體模擬"></iframe><p class="machineNote">設定存在這台電腦的瀏覽器，和離線版不共用。<a href="sim/machine.html?v=${v}" target="_blank" rel="noopener">在新分頁開啟</a></p></div>`;
   szoAddSectionNav('machine');
   closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
