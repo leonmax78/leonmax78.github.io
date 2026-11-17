@@ -5104,5 +5104,8 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 @media(max-width:820px){
   html body .homeBlank{height:auto!important;min-height:0!important;padding-bottom:0!important;background-size:0 0!important}
   html body .homeBlank::before{content:'';display:block;height:calc(100dvh - 158px - env(safe-area-inset-top) - 16px);background-image:inherit;background-size:contain;background-position:center top;background-repeat:no-repeat}
-  html body .homePanel{position:static;transform:none;width:auto;margin:6px 12px 18px}
+  html body .homePanel{position:static;transform:none;width:auto;margin:6px 12px calc(28px + env(safe-area-inset-bottom))}
+  /* 首頁原本鎖住捲動，手機版要能往下捲到功能面板 */
+  html body.isHomeView{overflow:auto!important;overflow-x:hidden!important}
+  html body.isHomeView .app,html body.isHomeView .content,html body.isHomeView .reader{overflow:visible!important;height:auto!important;max-height:none!important}
 }
