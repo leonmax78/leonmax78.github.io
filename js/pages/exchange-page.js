@@ -212,13 +212,12 @@
     if(!tabs.includes(state.tab)) state.tab = MATS_TAB;
     const q = norm(state.query);
     let chips = '', mapChips = '', body = '';
+    const matCounts = data.mats.map(([m]) => [m, data.rows.filter(r => r.r.some(x => x[0] === m)).length]).filter(([, n]) => n);
     if(q){
       const hit = data.rows.filter(r => r.m.some(x => norm(x[0]).includes(q)) || r.r.some(x => norm(x[0]).includes(q)) || norm(data.npcs[r.p].n).includes(q));
       body = `<p class="questCount">「${esc(state.query)}」找到 ${hit.length} 筆 <button type="button" class="ghost" data-ex-clear>清除搜尋</button></p>${blocksHTML(data, hit, true)}`;
     }else if(state.tab === MATS_TAB){
-      const counts = data.mats.map(([m]) => [m, data.rows.filter(r => r.r.some(x => x[0] === m)).length]).filter(([, n]) => n);
-      if(!counts.some(([m]) => m === state.pick)) state.pick = counts[0]?.[0] || '';
-      chips = counts.map(([m, n]) => `<button type="button" class="${m === state.pick ? 'active' : ''}" data-ex-pick="${esc(m)}">${esc(m)}<b>${n}</b></button>`).join('');
+      if(!matCounts.some(([m]) => m === state.pick)) state.pick = matCounts[0]?.[0] || '';
       const rows = data.rows.filter(r => r.r.some(x => x[0] === state.pick));
       body = `<p class="muted exHint">想要「${esc(state.pick)}」：拿左邊的東西去找 NPC 換。</p>${blocksHTML(data, rows, true, true)}`;
     }else{
@@ -239,8 +238,8 @@
       <div class="questHero"><h1>兌換、拆解、升階查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
       <div data-ex-results></div></section>`;
-    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="exTop"><button type="button" class="exTopBtn${state.tab === MATS_TAB ? ' active' : ''}" data-ex-tab="${esc(MATS_TAB)}">${esc(MATS_TAB)}</button><label class="exVerPick${state.tab !== MATS_TAB ? ' active' : ''}"><span>依資料片</span><select id="exVerSel" aria-label="選擇資料片"><option value="">選擇資料片…</option>${data.vers.map(v => `<option value="${esc(v)}" ${v === state.tab ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label></div>
-      <div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">${state.tab === MATS_TAB ? '材料' : 'NPC'}</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}
+    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="exTop"><label class="exVerPick${state.tab === MATS_TAB ? ' active' : ''}"><span>${esc(MATS_TAB)}</span><select id="exMatSel" aria-label="選擇材料"><option value="">選擇材料…</option>${matCounts.map(([m, n]) => `<option value="${esc(m)}" ${state.tab === MATS_TAB && m === state.pick ? 'selected' : ''}>${esc(m)}（${n}）</option>`).join('')}</select></label><label class="exVerPick${state.tab !== MATS_TAB ? ' active' : ''}"><span>依資料片</span><select id="exVerSel" aria-label="選擇資料片"><option value="">選擇資料片…</option>${data.vers.map(v => `<option value="${esc(v)}" ${v === state.tab ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label></div>
+      ${state.tab === MATS_TAB ? '' : `<div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">NPC</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}`}
       <div class="exList">${body}</div>`;
     fillExIcons(reader);
   }
@@ -265,7 +264,7 @@
   }
   document.addEventListener('input', scheduleSearch);
   // V838: 資料片改用下拉選單，畫面只留「常用拆解」與一個選單
-  document.addEventListener('change', ev => { if(ev.target?.id !== 'exVerSel') return; state.tab = ev.target.value || MATS_TAB; state.map = ''; state.pick = ''; state.more = 0; renderExchangePage(); });
+  document.addEventListener('change', ev => { if(ev.target?.id === 'exMatSel'){ if(!ev.target.value) return; state.tab = MATS_TAB; state.pick = ev.target.value; state.map = ''; state.more = 0; renderExchangePage(); return; } if(ev.target?.id !== 'exVerSel') return; state.tab = ev.target.value || MATS_TAB; state.map = ''; state.pick = ''; state.more = 0; renderExchangePage(); });
   document.addEventListener('compositionend', ev => { composing.delete(ev.target); scheduleSearch(ev); });
   document.addEventListener('click', ev => {
     const t = ev.target;
