@@ -220,7 +220,9 @@ function paintGods(){slotBtns.forEach((b,i)=>{let n=picks[i][0].value;b.textCont
 
 p=section('修練進度');let groups=new Map(),freePools=new Map(),trains=D.train.map(t=>{if(!groups.has(t.group)){let box=el('details',p);box.open=!groups.size;el('summary',box,t.group);let grid=el('div',box);grid.className='practice';groups.set(t.group,grid)}let grid=groups.get(t.group),row=el('div',grid),n=num(row,t.name+'（最高 '+t.maxLevel+' 階）',0,t.maxLevel,0);n.oninput=()=>{if(n.value!=='')n.value=val(n)};if(t.effectStats.includes('自由分配能力值')){let group=el('fieldset',row),label=el('legend',group,'自由分配'),fields=attrs.map(k=>num(group,k,0,0,0));freePools.set(t.id,{fields,label});}return n});
 let diamonds=groups.get('聖鑽');for(let key of ['同花大聖鑽','五鑽連貫心']){let g=groups.get(key),box=g.parentNode;diamonds.append(...g.children);box.remove()}let deriveDiamonds=()=>{for(let [i,t] of D.train.entries())if(t.deriveRule?.type==='minCurrentLevel'){trains[i].disabled=true;trains[i].title='自動取五鑽最低階';trains[i].value=Math.min(...t.deriveRule.sourceIds.map(id=>val(trains[D.train.findIndex(x=>x.id===id)])))}};
-const conversion=new Map();for(const group of ['靈丹','聖靈煉金','真元','聖鑽','以太核']){let grid=groups.get(group),label=document.createElement('label');grid.before(label);label.append('化功後屬性 ');conversion.set(group,sel(label,[['','保留原屬性'],...attrs.map(k=>[k,'集中到'+k])]));}conversion.get('聖靈煉金').value='智慧';
+const conversion=new Map();for(const group of ['靈丹','聖靈煉金','真元','聖鑽','以太核','六宇聚變核']){let grid=groups.get(group),label=document.createElement('label');grid.before(label);label.append('化功後屬性 ');conversion.set(group,sel(label,[['','保留原屬性'],...attrs.map(k=>[k,'集中到'+k])]));}conversion.get('聖靈煉金').value='智慧';
+// 同花大聖鑽、五鑽連貫心元放在聖鑽區，跟著聖鑽的化功設定
+const CONV_OF={'同花大聖鑽':'聖鑽','五鑽連貫心':'聖鑽'};const convOf=g=>conversion.get(CONV_OF[g]||g);
 // 裝備：與遊戲「物品欄」相同的 9 格（setting/wnd01.ini 的 26～33、160）
 const WEAPONS=['SWORD','BLADE','HIDDEN_WEAPON','HIDDEN_WEAPON2','WHISK','STAFF','ROD','SPEAR','HAMMER','AXE'];
 // 雙手武器（槍、暗器、拂塵、杖、棍）只放右手格，裝上時左手卸下
@@ -294,7 +296,7 @@ function calc(){let parts={},source='職業等級';function add(k,a,b=a){if(!Num
  D.levels[job.value][val(lv)-1].forEach((v,i)=>add(['體魄','力量','智慧','靈敏'][i],v));let c=D.crown.filter(r=>r.Value<=val(score)).at(-1);source=c?.Name||'武冠';for(let k of ['Con','Str','Int','Dex','Def','MDef','MaxHP','MaxMP'])add(k,c?.[k]);
  const names=picks.map(([a])=>a.value);picks.forEach(([a,n],i)=>{for(let opt of a.options)opt.disabled=!!opt.value&&opt.value!==a.value&&names.includes(opt.value);source=(i?'副降神 '+i:'主降神')+'・'+a.value;for(let [k,v] of Object.entries(D.gods[a.value]||{}))add(k,Math.ceil(v*D.stars[k][val(n)]*(i?0.1:1)))});
  for(let [name,members] of Object.entries(D.comboMembers)){if(members.length&&members.every(m=>names.includes(m)||names.includes(D.aliases[m]))){source='降神連結・'+name;for(let [k,v] of Object.entries(D.comboBonuses[name]||{}))add(k,v)}}
- deriveDiamonds(); source='修練';trains.forEach((n,i)=>{let t=D.train[i],effects=t.effectsByLevel[val(n)]||{};for(let [k,v] of Object.entries(effects))if(k!=='自由分配能力值')add(attrs.includes(k)?(conversion.get(t.group)?.value||k):k,v);let pool=freePools.get(t.id);if(!pool)return;let limit=effects['自由分配能力值']||0,left=limit;
+ deriveDiamonds(); source='修練';trains.forEach((n,i)=>{let t=D.train[i],effects=t.effectsByLevel[val(n)]||{};for(let [k,v] of Object.entries(effects))if(k!=='自由分配能力值')add(attrs.includes(k)?(convOf(t.group)?.value||k):k,v);let pool=freePools.get(t.id);if(!pool)return;let limit=effects['自由分配能力值']||0,left=limit;
  for(let f of pool.fields){f.max=limit;let use=Math.min(left,val(f));if(f.value!==''&&Number(f.value)!==use)f.value=use;left-=use}
  pool.fields.forEach((f,j)=>{f.max=left+Number(f.value);f.disabled=!limit;add(attrs[j],Number(f.value))});pool.label.textContent='可分配 '+limit+' 點，剩餘 '+left+' 點'});
  const hands=[];
