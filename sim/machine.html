@@ -191,6 +191,8 @@ let nav=el('nav',inputs),panels=[];nav.setAttribute('aria-label','能力加成�
 function section(title){let b=el('button',nav,title),s=el('section',inputs);panels.push([b,s]);el('h2',s,title);b.onclick=()=>panels.forEach(([tab,panel])=>{panel.hidden=tab!==b;tab.setAttribute('aria-pressed',String(tab===b))});s.hidden=panels.length>1;b.setAttribute('aria-pressed',String(!s.hidden));return s}
 function sel(p,rows){let s=el('select',p);for(let [v,n] of rows)s.add(new Option(n,v));return s}
 function num(p,title,min,max,v){let l=el('label',p,title),n=el('input',l);Object.assign(n,{type:'number',min,max,value:v});return n}
+// 配方選單後面簡要列出會加的屬性，例如「昂鎮配方（+體魄 +物防）」
+function recipeBrief(v){const l=[...new Set((v.effects||[]).map(e=>e.label).filter(Boolean))];return l.length?'（'+l.map(x=>'+'+x).join(' ')+'）':''}
 function val(n){return Math.min(+n.max,Math.max(+n.min,Math.trunc(+n.value||0)))}
 function btn(p,t,f){el('button',p,t).onclick=()=>{f();calc()}}
 let p=section('角色'),job=sel(p,Object.entries({CLASS_WARRIOR:'勇士',CLASS_SWORDMAN:'劍俠',CLASS_TAOIST:'道人',CLASS_PRIEST:'僧侶',CLASS_ASSASSIN:'術者'})),lv=num(p,'角色等級',1,2000,1);
@@ -286,7 +288,7 @@ function equip(slotKey){const slot=slotOf(slotKey)||{k:'extra',n:'其他',types:
  const promo=v=>[571,572,573,574,580,581,582,583,584,585,586,587,588,589,590,591].includes(+v.id);
  let levels=['stable_1','stable_12','stable_50','stable_70','stable_99'].filter(g=>eligible.some(([,v])=>v.group===g||(g==='stable_99'&&promo(v))));
  let stage=sel(row,levels.map(g=>[g,'安定值 '+g.slice(7)+(g==='stable_99'?'（限時追加）':'')])),a=sel(row,[]),n=num(row,'次數',1,1,1),note=el('small',row),details=el('div',row),pair=[a,n];r.recipes.push(pair);pair.stage=stage;pair.inputs=[];pair.note=note;note.className='stableNote';
- function choices(){a.replaceChildren(new Option('選擇配方',''));for(let [i,v] of eligible)if(stage.value===v.group||(stage.value==='stable_99'&&promo(v)))a.add(new Option(v.name,i));configure()}
+ function choices(){a.replaceChildren(new Option('選擇配方',''));for(let [i,v] of eligible)if(stage.value===v.group||(stage.value==='stable_99'&&promo(v)))a.add(new Option(v.name+recipeBrief(v),i));configure()}
  function configure(){let rec=D.recipes[a.value];const def=stage.value==='stable_99'?(under?29:49):Number(stage.value.slice(7))||1;n.min=1;n.max=9999;pair.def=rec?(stage.value==='stable_99'?def:Math.min(def,rec.default_use_count||1)):1;n.value=pair.def;r.fix99();effects()}
  function effects(overrides={}){details.replaceChildren();pair.inputs=[];let rec=D.recipes[a.value];if(!rec)return;rec.effects.forEach((v,i)=>{let times=v.stackable===false?1:val(n),lo=(v.min??v.value)*times,hi=(v.max??v.value)*times;if(!Number.isFinite(lo+hi))return;let avg=(lo+hi)/2;if(lo===hi){el('span',details,v.label+' +'+lo+'　');return}let field=num(details,v.label,lo,hi,avg);field.step='any';field.title='預設平均值，可輸入實際合成總值';if(overrides[i]!=null&&Number.isFinite(+overrides[i]))field.value=Math.max(lo,Math.min(hi,+overrides[i]));field.onchange=()=>field.value=field.value===''?avg:Math.max(lo,Math.min(hi,+field.value));el('small',details,'（'+lo+'～'+hi+'）　');pair.inputs[i]=field})}
  pair.redraw=()=>effects(Object.fromEntries(pair.inputs.map((f,i)=>[i,f?.value]).filter(([,x])=>x!=null)));stage.onchange=choices;a.onchange=configure;n.oninput=()=>{r.fix99();effects()};n.onchange=()=>{n.value=val(n);r.fix99();effects()};choices();
