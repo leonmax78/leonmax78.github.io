@@ -5140,3 +5140,6 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .questGiver{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin:0 0 10px;padding:8px 10px;border:1px solid rgba(216,181,106,.45);border-radius:10px;background:rgba(216,181,106,.08)}
 .questGiver>span{font-size:12px;font-weight:700;color:#1b1406;background:#d8b56a;border-radius:6px;padding:2px 8px}
 .questGiver .questNpc,.questGiver .questPlace{font-size:15px}
+/* V848: 練功推薦定點掛點 */
+.qaTrainTag.warn{color:#f3b26b;border-color:rgba(243,178,107,.5)}
+.qaTrainWhere{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin:2px 0 6px;font-size:13px}.qaTrainWhere>span{color:var(--muted)}.qaTrainWhere i{color:var(--muted);font-style:normal}
