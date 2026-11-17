@@ -653,19 +653,20 @@
     const stats = r => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
       : `<span>每分鐘約 <b>${fmt(r.spot.v)}</b> 經驗</span><span>打得到 <b>${r.spot.mem.length}</b> 個出生點・每分鐘約 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
-    // 終末之塔怎麼上去：31～60 樓斷線重登在 31 樓、61 樓以上在 61 樓（玩家回報，更高樓層未確認）；
+    // 終末之塔怎麼上去：斷線重登位置（玩家提供的遊戲說明）1～30 樓回虛空渦心、31～60→31、61～100→61、101～130→101、131～180→131；
     // 玩家用終末速行令（39、49…）飛上去後重登，再從重登樓層往上爬。途中有可能出現守關妖將的樓層會擋路。
     const guardFloors = (data.spots || []).filter(x => x.g === '終末之塔' && (x.f & 4)).map(x => +(x.n.match(/(\d+)樓$/) || [])[1]).filter(Boolean);
     const access = r => {
       if(r.s.g !== '終末之塔') return '';
       const N = +(r.s.n.match(/(\d+)樓$/) || [])[1]; if(!N) return '';
-      const R = N >= 31 && N <= 60 ? 31 : N >= 61 && N <= 90 ? 61 : 0;
+      const R = N <= 30 ? 0 : N <= 60 ? 31 : N <= 100 ? 61 : N <= 130 ? 101 : N <= 180 ? 131 : 0;
       const tok = (data.tok || []).filter(t => t <= N).pop();
       const parts = [];
       if(R){
         const g = guardFloors.filter(f => f > R && f < N);
         parts.push(N === R ? `斷線重登就在 ${R} 樓` : `斷線重登在 ${R} 樓，要往上爬 ${N - R} 層${g.length ? `（途經 ${g.join('、')} 樓可能出現守關妖將，出現時上不去）` : ''}`);
-      } else if(N > 90) parts.push('斷線重登樓層未確認');
+      } else if(N <= 30) parts.push('斷線會被送回虛空渦心中央');
+      else parts.push('斷線重登樓層未確認');
       if(tok && (!R || tok > R)) parts.push(`終末速行令最近可直達 ${tok} 樓${tok < N ? `，再往上 ${N - tok} 層` : ''}`);
       return parts.length ? `<div class="qaTrainAccess"><span>怎麼上去</span>${html(parts.join('；'))}</div>` : '';
     };
