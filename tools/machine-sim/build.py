@@ -189,4 +189,13 @@ if site_dir:
         '__GEMART__':json.dumps({f.stem:'img/gem/'+f.name for f in gem_files}),
         '__ICONBASE__':'../assets/test-media/item-icons/i',
         '<!--__SITE__-->':(here/'site_embed.html').read_text('utf8')}),encoding='utf8')
+    # 網站以 iframe 載入 sim/machine.html；把頁面內容雜湊寫進 index.html 的 data-machine-version，
+    # 頁面一改網址就跟著變，手機瀏覽器不會繼續用快取的舊版
+    import re
+    mver=hashlib.sha1((out/'machine.html').read_bytes()).hexdigest()[:10]
+    idx=out.parent/'index.html'
+    if idx.exists():
+        h=idx.read_text('utf8')
+        h2=re.sub(r' data-machine-version="[^"]*"','',h,count=1).replace('<body ',f'<body data-machine-version="{mver}" ',1)
+        if h2!=h: idx.write_text(h2,encoding='utf8')
     print('site',out)
