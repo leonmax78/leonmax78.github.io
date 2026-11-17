@@ -507,31 +507,47 @@
     return lv >= 1 && lv <= 3000 && /(練|經驗|升級|適合|去哪|哪裡|推薦|打怪|等|級)/.test(q) ? lv : 0;
   }
   const trainState = { filter: 'all' };
+  // V847: 加入重生速度——每個出生點的重生秒數取自遊戲地圖檔（m[4]；0＝不重生，副本類）。
+  // 一般排序看「每畫面每分鐘最多重生多少經驗」；不重生的地圖另列在「副本」，看打一輪的總經驗。
   async function answerTraining(lv){
     const data = await json('training');
     const hi = lv + 300, fmt = n => Math.round(n).toLocaleString();
+    const inst = trainState.filter === 'inst';
+    const sec = r => r >= 60 ? `${+(r / 60).toFixed(1)} 分鐘` : `${+r.toFixed(1)} 秒`;
     const rows = [];
     for(const s of data.spots || []){
       if(trainState.filter === 'normal' && s.sec !== '一般地圖') continue;
       if(trainState.filter === 'tower' && s.g !== '終末之塔') continue;
-      // 同名、同等級、同經驗的不同怪物 ID 合併成一行
+      // 只取範圍內、且符合分類（會重生／不重生）的怪；同名同等級同經驗同重生的合併成一行
       const ms = [];
-      for(const m of s.m){ if(m[1] < lv || m[1] > hi) continue; const o = ms.find(x => x[0] === m[0] && x[1] === m[1] && x[2] === m[2]); if(o) o[3] += m[3]; else ms.push(m.slice()); }
+      for(const m of s.m){
+        if(m[1] < lv || m[1] > hi || (inst ? m[4] !== 0 : !(m[4] > 0))) continue;
+        const o = ms.find(x => x[0] === m[0] && x[1] === m[1] && x[2] === m[2] && x[4] === m[4]);
+        if(o) o[3] += m[3]; else ms.push(m.slice());
+      }
       if(!ms.length) continue;
       const n = ms.reduce((t, m) => t + m[3], 0), exp = ms.reduce((t, m) => t + m[2] * m[3], 0);
-      rows.push({ s, ms, n, exp, score: exp / s.a, dens: n / s.a });
+      const perMin = inst ? 0 : ms.reduce((t, m) => t + m[3] * 60 / m[4], 0);
+      const expMin = inst ? 0 : ms.reduce((t, m) => t + m[2] * m[3] * 60 / m[4], 0);
+      rows.push({ s, ms, n, exp, perMin, expMin, score: inst ? exp : expMin / s.a, dens: n / s.a });
     }
     rows.sort((a, b) => b.score - a.score);
     const top = rows.slice(0, 10);
-    const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
+    const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔'], ['inst', '副本（不重生）']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
+    const stats = r => inst
+      ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
+      : `<span>每畫面每分鐘最多 <b>${fmt(r.score)}</b> 經驗</span><span>約每畫面 <b>${r.dens.toFixed(1)}</b> 隻</span><span>全圖 <b>${r.n}</b> 個出生點・每分鐘最多重生 <b>${+r.perMin.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong><span class="qaTrainTag">${html(r.s.g)}</span>${chip('看地圖', `data-qa-map="${html(r.s.n.replace(/\s*\d+樓$/, ''))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
-      <div class="qaTrainStats"><span>每畫面約 <b>${fmt(r.score)}</b> 經驗</span><span>可打怪物 <b>${r.n}</b> 隻</span><span>約每畫面 <b>${r.dens.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span></div>
-      <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻</small></span>`).join('')}</div></div>`;
+      <div class="qaTrainStats">${stats(r)}</div>
+      <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻・${m[4] > 0 ? sec(m[4]) + '重生' : '不重生'}</small></span>`).join('')}</div></div>`;
+    const intro = inst
+      ? `這些地圖的怪物打死後不會自動重生（副本、挑戰類），依「打完一輪的總經驗」排序。`
+      : `依「每畫面每分鐘最多重生多少經驗」排序：怪物經驗 × 數量 × 重生速度 ÷ 地圖大小。在固定範圍掛機時，越上面同樣大小的範圍能拿到越多經驗。`;
     return `<section class="qaGroup qaTraining"><h3>${lv} 等練功推薦</h3>
-      <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。以下依「每畫面約多少經驗」排序（範圍內怪物經驗 × 數量 ÷ 地圖大小），越上面越好練：怪物經驗高但分散的地方，可能輸給經驗稍低但很密集的地方。魔王不列入。</p>
+      <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。${intro}魔王不列入。</p>
       <div class="qaTrainTabs">${tabs}</div>
       ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
-      <p class="muted qaTrainNote">怪物數量是地圖上的出生點，實際重生速度、經驗加成與活動倍率不列入；終末之塔按樓層計算。</p></section>`;
+      <p class="muted qaTrainNote">重生時間取自遊戲地圖檔的出生點設定（例如齊襄道 30 秒，已和實際遊戲對過）；「最多」是每隻一重生就打掉的上限。免服經驗 ×0.75、經驗符與活動倍率對每張地圖都一樣，不影響排名，所以沒有算進去；終末之塔按樓層計算。</p></section>`;
   }
   async function answerGlobal(query){
     const tlv = trainingLevel(query);
