@@ -646,7 +646,7 @@
         const pl = sp.path.map(c => { const x = c % sp.W, y = (c - x) / sp.W; return `${x * 8 + 4},${y * 8 + 4}`; }).join(' ');
         body = `<polyline points="${pl}"/>${dots}${pin(sp.a, 'A')}${pin(sp.b, 'B')}`;
       } else body = `<ellipse cx="${sp.a.x}" cy="${sp.a.y}" rx="${TR.stand}" ry="${TR.stand * 3 / 4}"/>${dots}`;
-      return `<div class="qaMiniMap" style="aspect-ratio:${bw}/${bh}"><img loading="lazy" decoding="async" alt="" src="${html(s.img)}" style="width:${(s.W / bw * 100).toFixed(3)}%;left:${(-x0 / bw * 100).toFixed(3)}%;top:${(-y0 / bh * 100).toFixed(3)}%"><svg viewBox="${x0} ${y0} ${bw} ${bh}" preserveAspectRatio="none">${body}</svg></div>`;
+      return `<div class="qaMiniMap" style="aspect-ratio:${bw}/${bh};background-image:url('${html(s.img)}');background-size:${(s.W / bw * 100).toFixed(3)}% auto;background-position:${s.W > bw ? (x0 / (s.W - bw) * 100).toFixed(3) : 0}% ${s.H > bh ? (y0 / (s.H - bh) * 100).toFixed(3) : 0}%"><svg viewBox="${x0} ${y0} ${bw} ${bh}" preserveAspectRatio="none">${body}</svg></div>`;
     };
     const stats = r => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
