@@ -651,7 +651,7 @@
     const stats = r => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
       : `<span>每分鐘約 <b>${fmt(r.spot.v)}</b> 經驗</span><span>打得到 <b>${r.spot.mem.length}</b> 個出生點・每分鐘約 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
-    const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
+    const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : '', r.s.f & 4 ? '可能出現守關妖將' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong>${tags(r)}${chip('看地圖', `data-qa-map="${html(mapName(r))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
       <div class="qaTrainStats">${stats(r)}</div>
       ${inst ? '' : `${miniMap(r)}<div class="qaTrainWhere">${where(r)}</div>`}
@@ -663,7 +663,7 @@
       <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。${intro}魔王不列入。</p>
       <div class="qaTrainTabs">${tabs}</div>
       ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
-      <p class="muted qaTrainNote"><b>推薦練功位置僅供參考。</b>重生時間、出生點位置、障礙物與能否定點、能否自動掛機取自遊戲地圖檔與地圖設定；跑速與打怪時間是大概值（每隻約 1 秒秒殺），實際會依職業、裝備與技能不同。免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。點座標可在地圖上看位置。</p></section>`;
+      <p class="muted qaTrainNote"><b>推薦練功位置僅供參考。</b>標「可能出現守關妖將」的終末之塔樓層，守關妖將會隨機出現，出現後約 1 小時不能掛，實際經驗會比顯示的少。重生時間、出生點位置、障礙物與能否定點、能否自動掛機取自遊戲地圖檔與地圖設定；跑速與打怪時間是大概值（每隻約 1 秒秒殺），實際會依職業、裝備與技能不同。免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。點座標可在地圖上看位置。</p></section>`;
   }
   async function answerGlobal(query){
     const tlv = trainingLevel(query);
