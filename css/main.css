@@ -5153,3 +5153,6 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .qaMiniMap circle.off{fill:rgba(255,255,255,.55);stroke:rgba(0,0,0,.6);stroke-width:1;vector-effect:non-scaling-stroke}
 .qaMiniMap text{fill:#ffd76a;font:700 34px sans-serif;text-anchor:middle;paint-order:stroke;stroke:#1b1406;stroke-width:6px}
 .qaSpotLbl{color:#ffd76a}
+/* V850: 掛機路線 */
+.qaMiniMap polyline{fill:none;stroke:#ffd76a;stroke-width:3;stroke-dasharray:7 5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.qaMiniMap circle.pin{fill:#ff6b3d;stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}

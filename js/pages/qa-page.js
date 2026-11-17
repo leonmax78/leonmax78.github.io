@@ -9,7 +9,8 @@
     quests: 'data/quests.json',
     exchanges: 'data/exchanges.json',
     talk: 'data/npc_item_talk.json',
-    training: 'data/training_spots.json'
+    training: 'data/training_spots.json',
+    walk: 'data/training_walk.json'
   };
   const cache = {};
   const state = { query: '', mode: 'auto', exactItem: '' };
@@ -507,28 +508,106 @@
     return lv >= 1 && lv <= 3000 && /(練|經驗|升級|適合|去哪|哪裡|推薦|打怪|等|級)/.test(q) ? lv : 0;
   }
   const trainState = { filter: 'all' };
-  // V848: 定點掛機。每個出生點的重生秒數與位置取自遊戲地圖檔（m[4]、p）；0＝不重生（副本類）。
-  // 掛機範圍＝以某個出生點為中心、約 2 個畫面寬的範圍；可定點的地圖（傳送大法、傳情）可在兩個範圍間
-  // 傳送來回，STAGE_FLAG_NOMARK 的地圖（f&1）只能待在一個範圍。依這樣能吃到的「每分鐘最多經驗」排序。
-  function bestSpot(s, ok){
-    const sw = s.sw || 100, pts = [];
-    for(const [mi, x, y] of s.p || []){ const m = s.m[mi]; if(ok(m)) pts.push({ x, y, v: m[2] * 60 / m[4], k: 60 / m[4] }); }
-    if(!pts.length) return null;
-    const inR = (c, p) => Math.hypot(p.x - c.x, (p.y - c.y) * 4 / 3) <= sw;
-    const areas = pts.map(c => { const mem = pts.filter(p => inR(c, p)); return { c, mem, v: mem.reduce((t, p) => t + p.v, 0) }; }).sort((a, b) => b.v - a.v);
-    let best = { a: [areas[0]], v: areas[0].v, mem: areas[0].mem };
-    if(!(s.f & 1)){
-      const top = areas.slice(0, 20);
-      for(let i = 0; i < top.length; i++) for(let j = i + 1; j < top.length; j++){
-        const mem = [...new Set([...top[i].mem, ...top[j].mem])], v = mem.reduce((t, p) => t + p.v, 0);
-        if(v > best.v) best = { a: [top[i], top[j]], v, mem };
+  // V850: 掛機路線。出生點位置、重生秒數取自遊戲地圖檔；data/training_walk.json 是地圖可走格
+  // （8×8 圖上單位一格，樹、水、建築、牆都不能走），所有距離都照真的走得到的路算，牆後的怪打不到。
+  // 角色跑速與秒殺時間用大概值：跑速每秒約 9 圖上單位（約 2.3 個遊戲座標，依玩家在齊襄道的實際掛機推回），
+  // 每隻 1 秒。站樁＝走路一個畫面內打得到的怪；可定點的地圖再算「掛在 A、傳送大法定點在 B、每 60 秒
+  // 傳送一次、從 B 沿路打回 A」。
+  const TR = { speed: 9, kill: 1, cycle: 60, stand: 100, reach: 45 };
+  const walkCache = new Map();
+  function walkGrid(walk, sid){
+    if(walkCache.has(sid)) return walkCache.get(sid);
+    const w = walk && walk[sid]; let g = null;
+    if(w){
+      const [W, H, rle] = w, a = new Uint8Array(W * H); let i = 0, v = 0;
+      for(const t of rle.split(',')){ const n = parseInt(t, 36); if(v) a.fill(1, i, i + n); i += n; v ^= 1; }
+      g = { W, H, a };
+    }
+    walkCache.set(sid, g);
+    return g;
+  }
+  // 從一格出發的走路距離（圖上單位，8 方向），超過 max 就停；回傳距離與來源格（畫路線用）
+  function walkFrom(g, start, max){
+    const N = g.W * g.H, dist = new Float32Array(N).fill(Infinity), prev = new Int32Array(N).fill(-1);
+    const step = [[1, 0, 8], [-1, 0, 8], [0, 1, 8], [0, -1, 8], [1, 1, 11.3], [1, -1, 11.3], [-1, 1, 11.3], [-1, -1, 11.3]];
+    const buckets = []; dist[start] = 0; buckets[0] = [start];
+    for(let b = 0; b < buckets.length; b++){
+      const list = buckets[b]; if(!list) continue;
+      for(const c of list){
+        const d = dist[c]; if(Math.floor(d) !== b) continue;
+        const x = c % g.W, y = (c - x) / g.W;
+        for(const [dx, dy, w] of step){
+          const nx = x + dx, ny = y + dy; if(nx < 0 || ny < 0 || nx >= g.W || ny >= g.H) continue;
+          const n = ny * g.W + nx; if(!g.a[n]) continue;
+          if(dx && dy && (!g.a[y * g.W + nx] || !g.a[ny * g.W + x])) continue; // 不切牆角
+          const nd = d + w; if(nd > max || nd >= dist[n]) continue;
+          dist[n] = nd; prev[n] = c; (buckets[Math.floor(nd)] ||= []).push(n);
+        }
       }
     }
-    best.kpm = best.mem.reduce((t, p) => t + p.k, 0);
+    return { dist, prev };
+  }
+  function bestSpot(s, ok, walk){
+    const g = walkGrid(walk, s.s), pts = [];
+    for(const [mi, x, y] of s.p || []){
+      const m = s.m[mi]; if(!ok(m)) continue;
+      let cell = -1;
+      if(g){ // 出生點的格子；落在障礙邊上就找最近的可走格
+        const cx = Math.min(g.W - 1, Math.floor(x / 8)), cy = Math.min(g.H - 1, Math.floor(y / 8));
+        let bd = Infinity;
+        for(let dy = -2; dy <= 2; dy++) for(let dx = -2; dx <= 2; dx++){
+          const nx = cx + dx, ny = cy + dy; if(nx < 0 || ny < 0 || nx >= g.W || ny >= g.H || !g.a[ny * g.W + nx]) continue;
+          if(dx * dx + dy * dy < bd){ bd = dx * dx + dy * dy; cell = ny * g.W + nx; }
+        }
+      }
+      pts.push({ x, y, cell, exp: m[2], r: m[4] });
+    }
+    if(!pts.length) return null;
+    const cap = TR.cycle / TR.kill; // 每分鐘最多秒殺幾隻
+    const standOf = c => {
+      let mem;
+      if(g && c.cell >= 0){ const { dist } = walkFrom(g, c.cell, TR.stand); mem = pts.filter(p => p.cell >= 0 && dist[p.cell] <= TR.stand); }
+      else mem = pts.filter(p => Math.hypot(p.x - c.x, (p.y - c.y) * 4 / 3) <= TR.stand);
+      let kpm = mem.reduce((t, p) => t + 60 / p.r, 0), v = mem.reduce((t, p) => t + p.exp * 60 / p.r, 0);
+      if(kpm > cap){ v *= cap / kpm; kpm = cap; }
+      return { mode: 'stand', a: c, mem, v, kpm };
+    };
+    const stands = pts.map(standOf).sort((x, y) => y.v - x.v);
+    let best = stands[0];
+    if(g && !(s.f & 1)){
+      const maxWalk = TR.cycle * TR.speed;
+      for(const A of stands.slice(0, 6)){
+        if(A.a.cell < 0) continue;
+        const { dist, prev } = walkFrom(g, A.a.cell, maxWalk);
+        const Bs = pts.filter(p => p.cell >= 0 && dist[p.cell] > TR.stand && dist[p.cell] <= maxWalk).sort((x, y) => dist[y.cell] - dist[x.cell]);
+        for(const B of Bs.filter((_, i) => i % Math.max(1, Math.ceil(Bs.length / 16)) === 0)){
+          const path = []; for(let c = B.cell; c >= 0; c = prev[c]) path.push(c);
+          const onPath = new Map(path.map(c => [c, dist[c]]));
+          const R = Math.ceil(TR.reach / 8);
+          const mem = pts.filter(p => {
+            if(p.cell < 0) return false;
+            const px = p.cell % g.W, py = (p.cell - px) / g.W;
+            for(let dy = -R; dy <= R; dy++) for(let dx = -R; dx <= R; dx++){
+              const d = onPath.get((py + dy) * g.W + px + dx);
+              if(d !== undefined && Math.hypot(dx, dy) * 8 <= TR.reach && dist[p.cell] <= d + TR.reach * 1.5) return true;
+            }
+            return false;
+          });
+          const t = dist[B.cell] / TR.speed + mem.length * TR.kill;
+          if(t > TR.cycle) continue;
+          // 回到 A 之後待到下次傳送，A 附近重生好的再打一次
+          const rest = TR.cycle - t, inMem = new Set(mem);
+          let v = mem.reduce((s2, p) => s2 + p.exp, 0), kpm = mem.length;
+          for(const p of A.mem){ const k = Math.min(Math.floor(rest / p.r), inMem.has(p) ? Math.floor(rest / p.r) : 1 + Math.floor(rest / p.r)); v += k * p.exp; kpm += k; }
+          if(kpm > cap){ v *= cap / kpm; kpm = cap; }
+          if(v > best.v) best = { mode: 'route', a: A.a, b: B, mem: [...new Set([...mem, ...A.mem])], v, kpm, path, t, W: g.W };
+        }
+      }
+    }
     return best;
   }
   async function answerTraining(lv){
-    const data = await json('training');
+    const [data, walk] = await Promise.all([json('training'), json('walk').catch(() => null)]);
     const hi = lv + 300, fmt = n => Math.round(n).toLocaleString();
     const inst = trainState.filter === 'inst';
     const sec = r => r >= 60 ? `${+(r / 60).toFixed(1)} 分鐘` : `${+r.toFixed(1)} 秒`;
@@ -543,7 +622,7 @@
       for(const m of s.m){ if(!ok(m)) continue; const o = ms.find(x => x[0] === m[0] && x[1] === m[1] && x[2] === m[2] && x[4] === m[4]); if(o) o[3] += m[3]; else ms.push(m.slice()); }
       if(!ms.length) continue;
       const n = ms.reduce((t, m) => t + m[3], 0), exp = ms.reduce((t, m) => t + m[2] * m[3], 0);
-      const spot = inst ? null : bestSpot(s, ok);
+      const spot = inst ? null : bestSpot(s, ok, walk);
       if(!inst && !spot) continue;
       rows.push({ s, ms, n, exp, spot, score: inst ? exp : spot.v });
     }
@@ -551,34 +630,40 @@
     const top = rows.slice(0, 10);
     const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔'], ['inst', '副本（不重生）']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
     const mapName = r => r.s.n.replace(/\s*\d+樓$/, '');
-    const LBL = ['A', 'B'];
-    const where = r => r.spot.a.map((a, i) => { const c = xy(r.s, a.c); return c ? `<button type="button" class="qaChip" data-qa-map="${html(mapName(r))}" data-qa-map-query="" data-qa-map-x="${c[0]}" data-qa-map-y="${c[1]}">${r.spot.a.length > 1 ? `<b class="qaSpotLbl">${LBL[i]}</b> ` : ''}(${c[0]}, ${c[1]})</button>` : ''; }).join(r.spot.a.length > 1 ? '<i>⇄</i>' : '');
-    // 小地圖：圈出掛機範圍（約 2 個畫面寬），範圍內的出生點標成金點，其他出生點灰點
+    const coordBtn = (r, c, label) => { const g = xy(r.s, c); return g ? `<button type="button" class="qaChip" data-qa-map="${html(mapName(r))}" data-qa-map-query="" data-qa-map-x="${g[0]}" data-qa-map-y="${g[1]}">${label ? `<b class="qaSpotLbl">${label}</b> ` : ''}(${g[0]}, ${g[1]})</button>` : ''; };
+    const where = r => r.spot.mode === 'route'
+      ? `<span>掛在</span>${coordBtn(r, r.spot.a, 'A')}<span>傳送大法定點在</span>${coordBtn(r, r.spot.b, 'B')}<span>每 60 秒傳送一次，從 B 沿路打回 A（約 ${Math.round(r.spot.t)} 秒）</span>`
+      : `<span>站在</span>${coordBtn(r, r.spot.a, '')}<span>附近掛機</span>`;
+    // 小地圖：路線（B→A，沿可走的路）、掛點、打得到的出生點（金點），其他出生點灰點
     const miniMap = r => {
       const s = r.s; if(!s.img || !s.bb) return '';
-      const [x0, y0, x1, y1] = s.bb, bw = x1 - x0, bh = y1 - y0, sw = s.sw || 100;
-      const inSet = new Set(r.spot.mem.map(p => p.x + ',' + p.y));
+      const [x0, y0, x1, y1] = s.bb, bw = x1 - x0, bh = y1 - y0, sp = r.spot;
+      const inSet = new Set(sp.mem.map(p => p.x + ',' + p.y));
       const dots = (s.p || []).map(([, x, y]) => `<circle cx="${x}" cy="${y}" r="${inSet.has(x + ',' + y) ? 5 : 3.5}" class="${inSet.has(x + ',' + y) ? 'on' : 'off'}"/>`).join('');
-      const rings = r.spot.a.map((a, i) => `<ellipse cx="${a.c.x}" cy="${a.c.y}" rx="${sw}" ry="${sw * 3 / 4}"/>${r.spot.a.length > 1 ? `<text x="${a.c.x}" y="${a.c.y - sw * 3 / 4 - 8}">${LBL[i]}</text>` : ''}`).join('');
-      const line = r.spot.a.length > 1 ? `<line x1="${r.spot.a[0].c.x}" y1="${r.spot.a[0].c.y}" x2="${r.spot.a[1].c.x}" y2="${r.spot.a[1].c.y}"/>` : '';
-      return `<div class="qaMiniMap" style="aspect-ratio:${bw}/${bh}"><img loading="lazy" decoding="async" alt="" src="${html(s.img)}" style="width:${(s.W / bw * 100).toFixed(3)}%;left:${(-x0 / bw * 100).toFixed(3)}%;top:${(-y0 / bh * 100).toFixed(3)}%"><svg viewBox="${x0} ${y0} ${bw} ${bh}" preserveAspectRatio="none">${line}${rings}${dots}</svg></div>`;
+      const pin = (c, t) => `<circle cx="${c.x}" cy="${c.y}" r="9" class="pin"/><text x="${c.x}" y="${c.y - 16}">${t}</text>`;
+      let body;
+      if(sp.mode === 'route'){
+        const pl = sp.path.map(c => { const x = c % sp.W, y = (c - x) / sp.W; return `${x * 8 + 4},${y * 8 + 4}`; }).join(' ');
+        body = `<polyline points="${pl}"/>${dots}${pin(sp.a, 'A')}${pin(sp.b, 'B')}`;
+      } else body = `<ellipse cx="${sp.a.x}" cy="${sp.a.y}" rx="${TR.stand}" ry="${TR.stand * 3 / 4}"/>${dots}`;
+      return `<div class="qaMiniMap" style="aspect-ratio:${bw}/${bh}"><img loading="lazy" decoding="async" alt="" src="${html(s.img)}" style="width:${(s.W / bw * 100).toFixed(3)}%;left:${(-x0 / bw * 100).toFixed(3)}%;top:${(-y0 / bh * 100).toFixed(3)}%"><svg viewBox="${x0} ${y0} ${bw} ${bh}" preserveAspectRatio="none">${body}</svg></div>`;
     };
     const stats = r => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
-      : `<span>定點每分鐘最多 <b>${fmt(r.spot.v)}</b> 經驗</span><span>範圍內 <b>${r.spot.mem.length}</b> 個出生點・每分鐘最多重生 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
+      : `<span>每分鐘約 <b>${fmt(r.spot.v)}</b> 經驗</span><span>打得到 <b>${r.spot.mem.length}</b> 個出生點・每分鐘約 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
     const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong>${tags(r)}${chip('看地圖', `data-qa-map="${html(mapName(r))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
       <div class="qaTrainStats">${stats(r)}</div>
-      ${inst ? '' : `${miniMap(r)}<div class="qaTrainWhere"><span>${r.spot.a.length > 1 ? '兩個掛點傳送來回' : '掛點'}</span>${where(r)}</div>`}
+      ${inst ? '' : `${miniMap(r)}<div class="qaTrainWhere">${where(r)}</div>`}
       <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻・${m[4] > 0 ? sec(m[4]) + '重生' : '不重生'}</small></span>`).join('')}</div></div>`;
     const intro = inst
       ? `這些地圖的怪物打死後不會自動重生（副本、挑戰類），依「打完一輪的總經驗」排序。`
-      : `依「定點掛機每分鐘最多經驗」排序：以約 2 個畫面寬的範圍計算，範圍內每隻怪一重生就打掉的上限（經驗 × 60 ÷ 重生秒數）。可定點的地圖（傳送大法、傳情）算兩個掛點傳送來回；標「不能定點」的只能待在一個範圍。`;
+      : `依「每分鐘大約能拿多少經驗」排序。可定點的地圖算「掛在 A、傳送大法定點在 B、每 60 秒傳送一次、從 B 沿路打回 A」；標「不能定點」的只算站在一處、走路一個畫面內打得到的怪。路線與範圍都照地圖上真的能走的路算，不會穿過樹、水、建築或牆。`;
     return `<section class="qaGroup qaTraining"><h3>${lv} 等練功推薦</h3>
       <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。${intro}魔王不列入。</p>
       <div class="qaTrainTabs">${tabs}</div>
       ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
-      <p class="muted qaTrainNote">重生時間、出生點位置與能否定點、能否自動掛機，都取自遊戲地圖檔與地圖設定（例如齊襄道 30 秒，已和實際遊戲對過）。點座標可在地圖上看掛點。殺怪速度、免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。</p></section>`;
+      <p class="muted qaTrainNote"><b>推薦練功位置僅供參考。</b>重生時間、出生點位置、障礙物與能否定點、能否自動掛機取自遊戲地圖檔與地圖設定；跑速與打怪時間是大概值（每隻約 1 秒秒殺），實際會依職業、裝備與技能不同。免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。點座標可在地圖上看位置。</p></section>`;
   }
   async function answerGlobal(query){
     const tlv = trainingLevel(query);
