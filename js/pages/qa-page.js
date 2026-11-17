@@ -8,7 +8,8 @@
     maps: 'data/stage_maps.json',
     quests: 'data/quests.json',
     exchanges: 'data/exchanges.json',
-    talk: 'data/npc_item_talk.json'
+    talk: 'data/npc_item_talk.json',
+    training: 'data/training_spots.json'
   };
   const cache = {};
   const state = { query: '', mode: 'auto', exactItem: '' };
@@ -129,7 +130,7 @@
     if(target) target.innerHTML = '<div class="qaLoading">資料讀取中...</div>';
   }
   function quickExamples(){
-    const examples = ['大山犬', '短劍', '天鐵', '老虎皮', '神效靈藥配方錦囊'];
+    const examples = ['我 300 等去哪練', '大山犬', '短劍', '天鐵', '神效靈藥配方錦囊'];
     return `<div class="qaExamples">${examples.map(x => `<button type="button" data-qa-example="${html(x)}">${html(x)}</button>`).join('')}</div>`;
   }
   function renderQaPage(){
@@ -142,9 +143,9 @@
     window.v86LastView = 'qa';
     reader.innerHTML = `<section class="card qaPage">
       <h1>全站搜尋</h1>
-      <p class="muted">一次搜尋道具、怪物、商店商品、NPC 與地圖。</p>
+      <p class="muted">一次搜尋道具、怪物、商店商品、NPC 與地圖；也可以直接問「我 300 等去哪練」。</p>
       <form id="qaForm" class="qaForm">
-        <input id="qaInput" value="${html(state.query)}" placeholder="例如：大山犬、短劍、天鐵、老虎皮">
+        <input id="qaInput" value="${html(state.query)}" placeholder="例如：我 300 等去哪練、大山犬、天鐵哪裡掉">
         <button type="button" class="primary" data-qa-search onclick="window.SZO_QA_RUN && window.SZO_QA_RUN()">搜尋</button>
         <button type="button" class="ghost" id="qaClear">清空</button>
       </form>
@@ -497,7 +498,42 @@
     }
     return '<div class="empty">目前找不到符合的資料，可以換完整名稱或加上「哪裡掉 / 哪裡買 / 在哪」。</div>';
   }
+  // V844: 練功推薦——「我 300 等去哪練」：角色等級 L 只能從 L～L+300 等的怪物拿經驗，
+  // 依「範圍內怪物的經驗 × 數量 ÷ 地圖面積」排出經驗最多、怪物最密集的地方（data/training_spots.json）
+  function trainingLevel(raw){
+    const q = String(raw || '');
+    const m = q.match(/(\d{1,4})\s*(等|級|lv)/i) || (/(練|經驗|升級|適合|去哪)/.test(q) ? q.match(/(\d{1,4})/) : null);
+    const lv = m ? Number(m[1]) : 0;
+    return lv >= 1 && lv <= 3000 && /(練|經驗|升級|適合|去哪|哪裡|推薦|打怪|等|級)/.test(q) ? lv : 0;
+  }
+  const trainState = { filter: 'all' };
+  async function answerTraining(lv){
+    const data = await json('training');
+    const hi = lv + 300, fmt = n => Math.round(n).toLocaleString();
+    const rows = [];
+    for(const s of data.spots || []){
+      if(trainState.filter === 'normal' && s.sec !== '一般地圖') continue;
+      if(trainState.filter === 'tower' && s.g !== '終末之塔') continue;
+      const ms = s.m.filter(m => m[1] >= lv && m[1] <= hi);
+      if(!ms.length) continue;
+      const n = ms.reduce((t, m) => t + m[3], 0), exp = ms.reduce((t, m) => t + m[2] * m[3], 0);
+      rows.push({ s, ms, n, exp, score: exp / s.a, dens: n / s.a });
+    }
+    rows.sort((a, b) => b.score - a.score);
+    const top = rows.slice(0, 10);
+    const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
+    const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong><span class="qaTrainTag">${html(r.s.g)}</span>${chip('看地圖', `data-qa-map="${html(r.s.n.replace(/\s*\d+樓$/, ''))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
+      <div class="qaTrainStats"><span>可打怪物 <b>${r.n}</b> 隻</span><span>約每畫面 <b>${r.dens.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span></div>
+      <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻</small></span>`).join('')}</div></div>`;
+    return `<section class="qaGroup qaTraining"><h3>${lv} 等練功推薦</h3>
+      <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。以下依「這個範圍內的怪物經驗 × 數量 ÷ 地圖大小」排序，越上面越好練（經驗多、怪物密）。魔王不列入。</p>
+      <div class="qaTrainTabs">${tabs}</div>
+      ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
+      <p class="muted qaTrainNote">怪物數量是地圖上的出生點，實際重生速度、經驗加成與活動倍率不列入；終末之塔按樓層計算。</p></section>`;
+  }
   async function answerGlobal(query){
+    const tlv = trainingLevel(query);
+    if(tlv) return answerTraining(tlv);
     const term = searchTerm(query);
     const [items, monsters, maps] = await Promise.all([json('items'), json('monsters'), json('maps')]);
     const itemMatches = findByName(items, itemName, term, 12);
@@ -675,6 +711,8 @@
     if(shopItem){ state.exactItem = shopItem.dataset.qaShopItem || ''; const target = by('qaResults'); if(target){ resultLoading(); target.innerHTML = await answerShop(state.exactItem); } return; }
     const monsterSuggest = ev.target.closest?.('[data-qa-monster-suggest]');
     if(monsterSuggest){ const q = monsterSuggest.dataset.qaMonsterSuggest || ''; const input = by('qaInput'); if(input) input.value = `${q} 在哪`; runQuestion(`${q} 在哪`); return; }
+    const tf = ev.target.closest?.('[data-qa-train-filter]');
+    if(tf){ trainState.filter = tf.dataset.qaTrainFilter; const target = by('qaResults'); if(target) target.innerHTML = await answerTraining(Number(tf.dataset.qaTrainLv)); return; }
     const map = ev.target.closest?.('[data-qa-map]');
     if(map){
       const mapName = map.dataset.qaMap || '';
