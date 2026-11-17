@@ -152,7 +152,10 @@ def main():
     wp.write_text(json.dumps(wj, separators=(',', ':')), encoding='utf-8')
     print('walk', len(wj), 'bytes', wp.stat().st_size)
     out = ROOT / 'data/training_spots.json'
-    out.write_text(json.dumps({'note': '角色等級 L 可從 L～L+300 等的怪物拿到經驗；g／sec＝地圖分類；a＝地圖約幾個畫面大；m＝[怪物, 等級, 經驗, 數量, 重生秒數（0＝不重生，-1＝不明）, 會不會掉錢（1／0）]；p＝出生點 [m 的索引, 圖上x, 圖上y]；sw＝一個畫面寬（圖上單位）；xy＝圖上→遊戲座標 [ax,bx,cx,ay,by,cy]；f＝1 不能定點、2 禁止自動掛機、4 可能出現守關妖將、8 有怪在王打死後不再出現（這些怪的重生記為 0）；img＝地圖圖片（W×H 與圖上單位相同），bb＝這個練功點在圖上的範圍', 'spots': spots}, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    # 終末速行令：在塔底法陣使用後 15 分鐘內可直達的樓層（道具說明「直接前往終末之塔第 NN 層樓」）
+    tok = sorted({int(m.group(1)) for it in json.loads((ROOT / 'data/items.json').read_text(encoding='utf-8'))
+                  if str(it.get('Name', '')).startswith('終末速行令') for m in [re.search(r'前往終末之塔第\s*(\d+)\s*層', str(it.get('Help', '')))] if m})
+    out.write_text(json.dumps({'tok': tok, 'note': '角色等級 L 可從 L～L+300 等的怪物拿到經驗；g／sec＝地圖分類；a＝地圖約幾個畫面大；m＝[怪物, 等級, 經驗, 數量, 重生秒數（0＝不重生，-1＝不明）, 會不會掉錢（1／0）]；p＝出生點 [m 的索引, 圖上x, 圖上y]；sw＝一個畫面寬（圖上單位）；xy＝圖上→遊戲座標 [ax,bx,cx,ay,by,cy]；f＝1 不能定點、2 禁止自動掛機、4 可能出現守關妖將、8 有怪在王打死後不再出現（這些怪的重生記為 0）；img＝地圖圖片（W×H 與圖上單位相同），bb＝這個練功點在圖上的範圍', 'spots': spots}, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print('spots', len(spots), 'bytes', out.stat().st_size)
 
 
