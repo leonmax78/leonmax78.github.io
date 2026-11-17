@@ -12,8 +12,9 @@
   function loadQuests(){
     if(!dataPromise){
       const v = encodeURIComponent(document.body?.dataset?.version || 'dev');
+      const starts = fetch('data/quest_starts.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
       dataPromise = fetch('data/quests.json?v=' + v, { cache: 'force-cache' }).then(r => { if(!r.ok) throw Error('任務資料載入失敗'); return r.json(); })
-        .then(d => { d.byId = new Map(d.quests.map(q => [q.i, q])); return d; })
+        .then(async d => { d.byId = new Map(d.quests.map(q => [q.i, q])); d.starts = await starts; return d; })
         .catch(e => { dataPromise = null; throw e; });
     }
     return dataPromise;
@@ -118,9 +119,33 @@
     return out;
   }
 
+  // V845: 接任務的 NPC 與位置——任務敘述的第一個 NPC 連結；沒有就用 NPC 對話找到的接任務者
+  // （data/quest_starts.json，tools/build_quest_starts.py）；再沒有就用敘述裡指定的地點。
+  function questGiver(q, data){
+    const d = String(q.d || '');
+    let m = d.match(/⟦(\d+),([1-9]\d*),(\d+),(\d+),([^⟧]+)⟧/);
+    if(m) return { st: m[1], id: m[2], x: m[3], y: m[4], name: m[5] };
+    const f = data.starts && data.starts[q.i];
+    if(f) return { st: String(f[0]), id: String(f[1]), x: String(f[2]), y: String(f[3]), name: f[4] };
+    m = d.match(/⟦(\d+),0,(\d+),(\d+),([^⟧]+)⟧/);
+    if(m && (Number(m[2]) || Number(m[3]))) return { st: m[1], id: '', x: m[2], y: m[3], name: m[4] };
+    return null;
+  }
+  function questGiverHTML(q, data){
+    const g = questGiver(q, data);
+    if(!g) return '';
+    const sn = data.stages[g.st] || '';
+    const who = g.id
+      ? `<button type="button" class="questNpc" title="點擊看對話與地圖位置" data-quest-npc="${esc(g.st)}:${esc(g.id)}">${esc(g.name)}</button>`
+      : `<b class="questPlace">${esc(g.name)}</b>`;
+    const map = sn ? `<button type="button" class="questMapLink questGiverMap" title="在地圖上標出位置" data-quest-map="${esc(sn)}" data-quest-map-name="${esc(g.name)}" data-quest-map-npc="${esc(g.id)}"${g.id ? '' : ` data-quest-map-x="${esc(g.x)}" data-quest-map-y="${esc(g.y)}"`}>${esc(sn)}</button>` : '';
+    return `<div class="questGiver"><span>接任務</span>${who}${map}<b class="questSpotXY">(${esc(g.x)}, ${esc(g.y)})</b></div>`;
+  }
+
   function questBodyHTML(q, data){
     const items = (q.it || []).map(([id, name]) => id ? `<button type="button" class="questItem" data-quest-item="${esc(id)}">${esc(name)}</button>` : `<span class="questItem">${esc(name)}</span>`).join('');
     return `<div class="questBody">
+      ${questGiverHTML(q, data)}
       ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data, q)}</p>` : ''}
       ${q.s.length ? `<ol class="questSteps">${q.s.map((s, i) => { const tg = (q.tg || []).find(t => t[0] === i); const pts = (q.pt || []).filter(t => t[0] === i); return `<li>${richText(s, data, q)}${pts.length ? `<div class="questSpots"><span>地點</span>${pts.map(([, st, x, y, msg]) => `<div class="questSpot"><button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="觸發點" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(data.stages[st] || '')}</button><b class="questSpotXY">(${esc(x)}, ${esc(y)})</b>${msg ? `<small>「${esc(msg)}」</small>` : ''}</div>`).join('')}</div>` : ''}${tg ? `<div class="questTargets"><span>對象</span>${tg[1].map(([st, id, nm]) => `<button type="button" class="questNpc" title="${esc(`${data.stages[st] || ''}・點擊看對話與地圖位置`)}" data-quest-npc="${esc(st)}:${esc(id)}">${esc(nm)}</button>`).join('<i>、</i>')}</div>` : ''}</li>`; }).join('')}</ol>` : ''}
       ${(q.ho || []).length ? `<div class="questMeta"><b>繳交道具與數量</b><ul class="questHandins">${q.ho.map(([id, n, qty, who]) => `<li>${id ? `<button type="button" class="questItemLink" data-quest-item="${esc(id)}">${esc(n)}</button>` : esc(n)} <span>${esc(qty).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</span>${who ? ` <small>${esc(who)}</small>` : ''}</li>`).join('')}</ul></div>` : ''}
@@ -132,8 +157,9 @@
 
   // V780: the closed card already tells level, where it starts, how long it is and what it pays
   function questFactsHTML(q, data){
-    const start = (String(q.d || '').match(/⟦\d+,\d+,\d+,\d+,([^⟧]+)⟧/) || [])[1];
-    const where = data && data.stages ? data.stages[q.m] : '';
+    const g = data && data.stages ? questGiver(q, data) : null;
+    const start = g ? g.name : (String(q.d || '').match(/⟦\d+,\d+,\d+,\d+,([^⟧]+)⟧/) || [])[1];
+    const where = data && data.stages ? (g && data.stages[g.st]) || data.stages[q.m] : '';
     const reward = (q.r || []).join('、').replace(/（(月服|免服)）/g, '');
     const facts = [
       q.lv ? `<span class="qfLv">Lv.${esc(q.lv)}</span>` : '',
