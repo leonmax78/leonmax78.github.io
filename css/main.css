@@ -5100,3 +5100,9 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .trainSticky{display:block}.trainSticky details>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
 .trainSticky details>summary::-webkit-details-marker{display:none}.trainSticky summary span{color:var(--muted);font-size:12.5px}
 .trainStickyList{margin-top:8px;max-height:40vh;overflow:auto;line-height:1.7}
+/* V834: 手機版首頁——封面圖保持一個螢幕高，常用功能面板放在圖下方（往下捲看到），不再壓縮封面 */
+@media(max-width:820px){
+  html body .homeBlank{height:auto!important;min-height:0!important;padding-bottom:0!important;background-size:0 0!important}
+  html body .homeBlank::before{content:'';display:block;height:calc(100dvh - 158px - env(safe-area-inset-top) - 16px);background-image:inherit;background-size:contain;background-position:center top;background-repeat:no-repeat}
+  html body .homePanel{position:static;transform:none;width:auto;margin:6px 12px 18px}
+}
