@@ -653,9 +653,25 @@
     const stats = r => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
       : `<span>每分鐘約 <b>${fmt(r.spot.v)}</b> 經驗</span><span>打得到 <b>${r.spot.mem.length}</b> 個出生點・每分鐘約 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
+    // 終末之塔怎麼上去：31～60 樓斷線重登在 31 樓、61 樓以上在 61 樓（玩家回報，更高樓層未確認）；
+    // 玩家用終末速行令（39、49…）飛上去後重登，再從重登樓層往上爬。途中有可能出現守關妖將的樓層會擋路。
+    const guardFloors = (data.spots || []).filter(x => x.g === '終末之塔' && (x.f & 4)).map(x => +(x.n.match(/(\d+)樓$/) || [])[1]).filter(Boolean);
+    const access = r => {
+      if(r.s.g !== '終末之塔') return '';
+      const N = +(r.s.n.match(/(\d+)樓$/) || [])[1]; if(!N) return '';
+      const R = N >= 31 && N <= 60 ? 31 : N >= 61 && N <= 90 ? 61 : 0;
+      const tok = (data.tok || []).filter(t => t <= N).pop();
+      const parts = [];
+      if(R){
+        const g = guardFloors.filter(f => f > R && f < N);
+        parts.push(N === R ? `斷線重登就在 ${R} 樓` : `斷線重登在 ${R} 樓，要往上爬 ${N - R} 層${g.length ? `（途經 ${g.join('、')} 樓可能出現守關妖將，出現時上不去）` : ''}`);
+      } else if(N > 90) parts.push('斷線重登樓層未確認');
+      if(tok && (!R || tok > R)) parts.push(`終末速行令最近可直達 ${tok} 樓${tok < N ? `，再往上 ${N - tok} 層` : ''}`);
+      return parts.length ? `<div class="qaTrainAccess"><span>怎麼上去</span>${html(parts.join('；'))}</div>` : '';
+    };
     const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : '', r.s.f & 4 ? '可能出現守關妖將' : '', r.s.f & 8 ? '有怪王死後消失' : '', r.noMoney ? '怪物不掉錢' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong>${tags(r)}${chip('看地圖', `data-qa-map="${html(mapName(r))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
-      <div class="qaTrainStats">${stats(r)}</div>
+      <div class="qaTrainStats">${stats(r)}</div>${access(r)}
       ${inst ? '' : `${miniMap(r)}<div class="qaTrainWhere">${where(r)}</div>`}
       <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻・${m[4] > 0 ? sec(m[4]) + '重生' : '不重生'}</small></span>`).join('')}</div></div>`;
     const intro = inst

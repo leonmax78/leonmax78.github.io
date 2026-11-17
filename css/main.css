@@ -5156,3 +5156,5 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 /* V850: 掛機路線 */
 .qaMiniMap polyline{fill:none;stroke:#ffd76a;stroke-width:3;stroke-dasharray:7 5;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .qaMiniMap circle.pin{fill:#ff6b3d;stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}
+/* V854: 終末之塔怎麼上去 */
+.qaTrainAccess{font-size:13px;color:var(--muted);margin:2px 0 4px}.qaTrainAccess>span{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:rgba(216,181,106,.16);color:#f0d9a4;font-weight:700}
