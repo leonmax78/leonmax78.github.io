@@ -5109,3 +5109,13 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
   html body.isHomeView{overflow:auto!important;overflow-x:hidden!important}
   html body.isHomeView .app,html body.isHomeView .content,html body.isHomeView .reader{overflow:visible!important;height:auto!important;max-height:none!important}
 }
+/* V838: 兌換頁上方精簡成「常用拆解」＋資料片下拉選單 */
+.exTop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 10px}
+.exTopBtn{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
+.exTopBtn.active{background:#d8b56a;border-color:#d8b56a;color:#1b1406}
+.exVerPick{display:flex;align-items:center;gap:8px;padding:2px 4px 2px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--muted)}
+.exVerPick.active{border-color:#d8b56a;color:#f0d9a4}
+.exVerPick select{border:0;background:transparent;color:var(--text,#e8eef7);font:inherit;font-weight:700;padding:6px 8px;min-height:0;max-width:52vw}
+.exVerPick select option{color:#111}
+.exVerPick>span{white-space:nowrap}
+@media(max-width:820px){.exPage .exNpcChips{gap:6px}.exPage .exNpcChips button{padding:5px 10px;font-size:13px;min-height:0}.exPage .exNpcChips button b{font-size:11px}.exTopBtn{padding:7px 14px}}

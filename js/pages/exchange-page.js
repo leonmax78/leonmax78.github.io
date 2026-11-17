@@ -239,7 +239,7 @@
       <div class="questHero"><h1>兌換、拆解、升階查詢</h1><p class="muted">什麼東西找誰換什麼。點道具看資料，點地點看 NPC 對話與地圖位置。</p>
         <input id="exSearch" class="questSearch" type="search" placeholder="搜尋道具或 NPC（例如：皇龍虹鉻、藥煉之菁、敖姬）" value="${esc(state.query)}"></div>
       <div data-ex-results></div></section>`;
-    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="questTabs exTabs" role="tablist">${tabs.map(t => `<button type="button" role="tab" class="${t === state.tab ? 'active' : ''}" data-ex-tab="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+    reader.querySelector('[data-ex-results]').innerHTML = `${q ? '' : `<div class="exTop"><button type="button" class="exTopBtn${state.tab === MATS_TAB ? ' active' : ''}" data-ex-tab="${esc(MATS_TAB)}">${esc(MATS_TAB)}</button><label class="exVerPick${state.tab !== MATS_TAB ? ' active' : ''}"><span>依資料片</span><select id="exVerSel" aria-label="選擇資料片"><option value="">選擇資料片…</option>${data.vers.map(v => `<option value="${esc(v)}" ${v === state.tab ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select></label></div>
       <div class="exChips">${mapChips}<div class="exChipRow"><span class="exChipLabel">${state.tab === MATS_TAB ? '材料' : 'NPC'}</span><div class="questGroups exNpcChips">${chips}</div></div></div>`}
       <div class="exList">${body}</div>`;
     fillExIcons(reader);
@@ -264,6 +264,8 @@
     }, 250);
   }
   document.addEventListener('input', scheduleSearch);
+  // V838: 資料片改用下拉選單，畫面只留「常用拆解」與一個選單
+  document.addEventListener('change', ev => { if(ev.target?.id !== 'exVerSel') return; state.tab = ev.target.value || MATS_TAB; state.map = ''; state.pick = ''; state.more = 0; renderExchangePage(); });
   document.addEventListener('compositionend', ev => { composing.delete(ev.target); scheduleSearch(ev); });
   document.addEventListener('click', ev => {
     const t = ev.target;

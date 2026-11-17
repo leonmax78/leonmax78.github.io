@@ -184,7 +184,7 @@ def _move_after(a,b):
     last=max(i for i,r in enumerate(rest) if npcs[r['p']]['n']==b)
     rows[:]=rest[:last+1]+moving+rest[last+1:]
 _move_after('義軍資深專員','義軍補給員')
-MATS=['皇龍虹鉻','皇龍純金','皇龍星銀','皇龍至鋼','鋼粹之心','天鋼之心','藥煉之菁','天藥之菁','寂滅淨元','同花大聖鑽']
+MATS=['皇龍虹鉻','皇龍純金','皇龍星銀','皇龍至鋼','鋼粹之心','天鋼之心','藥煉之菁','天藥之菁','寂滅淨元','同花大聖鑽','星煌碧岩','終末星質','無敵恆金']
 vers=[v for v in ORDER+['中原（常駐）','節慶活動','不確定'] if any(r['v']==v for r in rows)]
 vers=[v for v in ['中原（常駐）'] if v in vers]+[v for v in vers if v!='中原（常駐）']
 WEAPON={'SWORD','BLADE','HIDDEN_WEAPON','WHISK','STAFF','ROD','SPEAR','HAMMER','AXE','SHIELD'}
