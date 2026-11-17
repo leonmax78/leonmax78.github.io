@@ -41,7 +41,9 @@
     const kind = ['特仕', '神兵', '稀有防具', '防具飾品', '防具、飾品', '防具', '飾品'].find(k => head.includes(k)) || head.slice(series.length).replace(/裝備$/, '');
     let m = (rest + head).match(/第([一二三四五六七八九十\d]+)階/);
     const lv = m ? `第${ZHN[Number(m[1])] || m[1]}階` : ((m = (rest + head).match(/(\d+)星級/)) ? `${m[1]}星` : '');
-    return lv ? series + kind + lv : head.replace(/(拆解|升級|升階|兌換|晉升)$/, '');
+    // V840: 無限流的「稀有防具」就是無限流特仕
+    const kindShown = series === '無限流' && kind === '稀有防具' ? '特仕' : kind;
+    return lv ? series + kindShown + lv : head.replace(/(拆解|升級|升階|兌換|晉升)$/, '');
   }
   // common tail of the item names, e.g. 圓弧霜白寶石Ⅰ / 三角橄欖寶石Ⅰ → 寶石Ⅰ
   const head = names => { let t = names[0] || ''; for(const n of names) while(t && !n.startsWith(t)) t = t.slice(0, -1); return t; };
@@ -171,7 +173,9 @@
     if(highFirst){
       // newest expansion first (中原 last), then the higher tier first inside each NPC
       const rank = v => v === '中原（常駐）' ? 999 : Math.max(0, data.vers.indexOf(v));
-      rows = rows.slice().sort((a, b) => rank(a.v) - rank(b.v) || a.p - b.p || tier(b.g) - tier(a.g) || tier(b.m[0]?.[0]) - tier(a.m[0]?.[0]));
+      // V840: 同一個 NPC 內，換到的材料數量由多到少
+      const amt = r => (r.r.find(x => x[0] === state.pick) || [])[1] || 0;
+      rows = rows.slice().sort((a, b) => rank(a.v) - rank(b.v) || a.p - b.p || amt(b) - amt(a) || tier(b.g) - tier(a.g) || tier(b.m[0]?.[0]) - tier(a.m[0]?.[0]));
     }
     const byNpc = new Map();
     for(const r of rows){ if(!byNpc.has(r.p)) byNpc.set(r.p, []); byNpc.get(r.p).push(r); }
