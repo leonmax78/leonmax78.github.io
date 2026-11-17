@@ -51,23 +51,37 @@ def respawns(game):
         if i:
             f = f.group(1) if f else ''
             flags[int(i.group(1))] = ('STAGE_FLAG_NOMARK' in f) * 1 + ('STAGE_FLAG_ForbidAutoPlay' in f) * 2
-    out, walk = {}, {}
+    out, walk, gone = {}, {}, set()
     import struct
     import numpy as np
     for sid, data in files.items():
         h = struct.unpack_from('<16I', data)
         W, H = h[1], h[2]
         walk[sid] = np.frombuffer(data[64:64 + W * H * 8], dtype=np.uint8).reshape(H, W, 8)[:, :, 3] == 0
-        for p in range(h[6], h[8], 38):
-            o = struct.unpack_from('<19H', data, p)
+        # 物件第 6 個欄位＝群組；某隻怪死亡觸發的事件裡有「隱藏群組」（動作 47），而整張圖沒有任何事件
+        # 會再「顯示」這個群組（動作 48）＝王打死後這群怪就不再出現（例如終末之塔 36 樓）
+        import tempfile, os
+        with tempfile.NamedTemporaryFile(suffix='.mpc', delete=False) as tf:
+            tf.write(data)
+        try:
+            objs, ev = env['parse_mpc'](tf.name)
+        finally:
+            os.unlink(tf.name)
+        shown = {a[3] for br in ev.values() for b in br for a in b['act'] if a[0] == 48}
+        hidden = {a[3] for o in objs if o[7] == 7001 and o[8] in ev for b in ev[o[8]] for a in b['act'] if a[0] == 47}
+        for o in objs:
             if o[7] == 7001:
-                out[(sid, o[9], o[1], o[2])] = o[11] / 10
-    return out, flags, walk
+                k = (sid, o[9], o[1], o[2])
+                out[k] = o[11] / 10
+                if o[5] in hidden and o[5] not in shown and o[11]:
+                    out[k] = 0
+                    gone.add(k)
+    return out, flags, walk, gone
 
 
 def main():
     game = sys.argv[1] if len(sys.argv) > 1 else '/mnt/user-data/uploads/神州Online'
-    resp, flags, walk = respawns(game)
+    resp, flags, walk, gone = respawns(game)
     mons = {num(m['ID']): m for m in json.loads((ROOT / 'data/monsters.json').read_text(encoding='utf-8'))}
     st = json.loads((ROOT / 'data/stage_maps.json').read_text(encoding='utf-8'))
     st = st['stages'] if isinstance(st, dict) else st
@@ -104,6 +118,7 @@ def main():
             if not cnt:
                 continue
             # 終末之塔：地圖檔在這層放了守關妖將（9029）＝會隨機出現，出現後約 1 小時不能掛
+            gone_here = any((s['stageId'], m['id'], m.get('rawX'), m.get('rawY')) in gone and x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1 for m in ms)
             guard = any(m['id'] in SKIP_IDS and x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1 for m in ms) if s.get('mapCategory') == 'tower' else False
             screens = max(1.0, (x1 - x0) * (y1 - y0) * raw * raw / SCREEN)
             keys = sorted(cnt, key=lambda x: (num(mons[x[0]]['Level']), x[1]))
@@ -111,7 +126,7 @@ def main():
             spots.append({
                 's': s['stageId'], 'n': name, 'g': (tx.get(str(s['stageId'])) or {}).get('group', '其他'), 'sec': (tx.get(str(s['stageId'])) or {}).get('section', '其他'),
                 'a': round(screens, 2),
-                'f': flags.get(s['stageId'], 0) | (4 if guard else 0), 'sw': round(800 / raw, 2), 'xy': aff,
+                'f': flags.get(s['stageId'], 0) | (4 if guard else 0) | (8 if gone_here else 0), 'sw': round(800 / raw, 2), 'xy': aff,
                 'img': s['image'], 'bb': [round(max(0, x0)), round(max(0, y0)), round(min(s['width'], x1)), round(min(s['height'], y1))], 'W': s['width'], 'H': s['height'],
                 'm': [[mons[i]['Name'], num(mons[i]['Level']), num(mons[i]['DropExp']), cnt[(i, r)], r] for i, r in keys],
                 'p': [[ki[k], x, y] for k, x, y in pts]})
@@ -137,7 +152,7 @@ def main():
     wp.write_text(json.dumps(wj, separators=(',', ':')), encoding='utf-8')
     print('walk', len(wj), 'bytes', wp.stat().st_size)
     out = ROOT / 'data/training_spots.json'
-    out.write_text(json.dumps({'note': '角色等級 L 可從 L～L+300 等的怪物拿到經驗；g／sec＝地圖分類；a＝地圖約幾個畫面大；m＝[怪物, 等級, 經驗, 數量, 重生秒數（0＝不重生，-1＝不明）]；p＝出生點 [m 的索引, 圖上x, 圖上y]；sw＝一個畫面寬（圖上單位）；xy＝圖上→遊戲座標 [ax,bx,cx,ay,by,cy]；f＝1 不能定點、2 禁止自動掛機、4 可能出現守關妖將；img＝地圖圖片（W×H 與圖上單位相同），bb＝這個練功點在圖上的範圍', 'spots': spots}, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    out.write_text(json.dumps({'note': '角色等級 L 可從 L～L+300 等的怪物拿到經驗；g／sec＝地圖分類；a＝地圖約幾個畫面大；m＝[怪物, 等級, 經驗, 數量, 重生秒數（0＝不重生，-1＝不明）]；p＝出生點 [m 的索引, 圖上x, 圖上y]；sw＝一個畫面寬（圖上單位）；xy＝圖上→遊戲座標 [ax,bx,cx,ay,by,cy]；f＝1 不能定點、2 禁止自動掛機、4 可能出現守關妖將、8 有怪在王打死後不再出現（這些怪的重生記為 0）；img＝地圖圖片（W×H 與圖上單位相同），bb＝這個練功點在圖上的範圍', 'spots': spots}, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     print('spots', len(spots), 'bytes', out.stat().st_size)
 
 
