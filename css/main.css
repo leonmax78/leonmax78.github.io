@@ -5158,3 +5158,7 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .qaMiniMap circle.pin{fill:#ff6b3d;stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}
 /* V854: 終末之塔怎麼上去 */
 .qaTrainAccess{font-size:13px;color:var(--muted);margin:2px 0 4px}.qaTrainAccess>span{display:inline-block;margin-right:6px;padding:0 7px;border-radius:6px;background:rgba(216,181,106,.16);color:#f0d9a4;font-weight:700}
+/* V856: 兌換頁活動限定 */
+.exLimitBtn{align-self:end;border:1px solid #e0a84a;background:rgba(224,168,74,.14);color:#ffd98a;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}
+.exLimitBtn.active{background:#e0a84a;color:#1b1406}
+.exLimitNote{margin:8px 0 4px;font-size:13px;color:#f3c77a}
