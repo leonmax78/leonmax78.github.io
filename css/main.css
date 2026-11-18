@@ -4939,7 +4939,7 @@ html body button.questMat:hover{border-color:#facc15}
 @media(max-width:600px){.questMatList{grid-template-columns:repeat(2,minmax(0,1fr))}.questMat b{white-space:normal;text-align:right;font-size:13px}}
 .questMats{min-width:0;max-width:100%;box-sizing:border-box}
 .questMatList>.questMat{min-width:0;box-sizing:border-box}
-.questPage>.questMats{width:auto}
+.questPage .questMats{width:auto}
 @media(max-width:600px){.questMat b{max-width:52%;overflow-wrap:anywhere}}
 .questPage{grid-template-columns:minmax(0,1fr)}
 .questList{min-width:0}.questCard{min-width:0;max-width:100%;box-sizing:border-box}.questCard summary{min-width:0}.questFacts{min-width:0;overflow-wrap:anywhere}
@@ -5162,3 +5162,5 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .exLimitBtn{align-self:end;border:1px solid #e0a84a;background:rgba(224,168,74,.14);color:#ffd98a;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}
 .exLimitBtn.active{background:#e0a84a;color:#1b1406}
 .exLimitNote{margin:8px 0 4px;font-size:13px;color:#f3c77a}
+/* V858: 任務搜尋結果容器不影響原本版面 */
+.questPage>[data-quest-results]{display:contents}
