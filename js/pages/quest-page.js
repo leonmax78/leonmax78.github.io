@@ -197,7 +197,8 @@
   function filtered(data){
     const q = norm(state.query);
     if(q){
-      return data.quests.filter(x => norm(x.n).includes(q) || norm(plain(x.d) + plain(x.s.join(''))).includes(q) || (x.it || []).some(([, n]) => norm(n).includes(q)));
+      // 搜尋用文字只算一次（每打一個字都重算任務敘述會讓手機輸入變慢）
+      return data.quests.filter(x => (x._q ||= norm(x.n + '\n' + plain(x.d) + plain((x.s || []).join('')) + '\n' + (x.it || []).map(([, n]) => n).join('\n'))).includes(q));
     }
     return data.quests.filter(x => inCat(x, data) && (!state.group || x.g === state.group));
   }
@@ -223,7 +224,8 @@
       <div class="questMatList">${rows.map(([id, name, qty]) => `<button type="button" class="questMat${/^\d+$/.test(qty) ? '' : ' questMatLong'}" data-item="${esc(id)}">${icon(id)}<span>${esc(name)}</span><b>×${esc(qty)}</b></button>`).join('')}</div></section>`;
   }
   const catsInOrder = cats => cats.slice().sort((a, b) => (CAT_ORDER.indexOf(a) + 1 || 99) - (CAT_ORDER.indexOf(b) + 1 || 99));
-  async function renderQuestPage(){
+  // V858: 打字時只更新搜尋結果，不重畫輸入框；注音／倉頡等輸入法組字中不搜尋（以前整頁重畫會把正在打的字吃掉、像卡住）
+  async function renderQuestPage(editingInput){
     const reader = document.getElementById('reader');
     if(!reader) return;
     let data;
@@ -236,16 +238,18 @@
     const list = filtered(data);
     // a small group opens its quests right away instead of leaving one closed bar
     if(!state.query && list.length <= 3) list.forEach(q => state.open.add(q.i));
-    reader.innerHTML = `<section class="questPage">
+    if(editingInput && !reader.contains(editingInput)) return;
+    if(!editingInput) reader.innerHTML = `<section class="questPage">
       <div class="questHero"><h1>任務查詢</h1><p class="muted">資料取自遊戲任務檔，點 NPC 名稱看對話，點怪物或地點名稱直接在地圖上顯示位置。</p>
         <input id="questSearch" class="questSearch" type="search" placeholder="搜尋任務、NPC 或任務道具（例如：黑狗血）" value="${esc(state.query)}"></div>
+      <div data-quest-results></div></section>`;
+    reader.querySelector('[data-quest-results]').innerHTML = `
       ${state.query ? `<p class="questCount">「${esc(state.query)}」找到 ${list.length} 個任務 <button type="button" class="ghost" data-quest-clear>清除搜尋</button></p>` : `
       <div class="questTabs" role="tablist">${catsInOrder(data.cats).map(c => `<button type="button" role="tab" class="${c === state.cat ? 'active' : ''}" data-quest-cat="${esc(c)}">${esc(c)}</button>`).join('')}</div>
       ${classRow}<div class="questGroups">${groups.map(g => `<button type="button" class="${g === state.group ? 'active' : ''}" data-quest-group="${esc(g)}">${esc(g)}<b>${data.quests.filter(x => inCat(x, data) && x.g === g).length}</b></button>`).join('')}</div>`}
       ${!state.query && state.cat === '資料片任務' ? mainMatsHTML(state.group, mats) : ''}
       <div class="questList">${list.slice(0, 200).map(q => `<details class="questCard${q.tag === '主線任務' ? ' questMain' : ''}" data-quest-id="${q.i}"${state.open.has(q.i) ? ' open' : ''}><summary>${questHeadHTML(q, data)}${state.query ? `<small>${esc(q.c)}・${esc(q.g)}</small>` : ''}</summary>${state.open.has(q.i) ? questBodyHTML(q, data) : ''}</details>`).join('') || '<div class="empty">沒有符合的任務。</div>'}</div>
-      ${list.length > 200 ? `<p class="muted">只顯示前 200 筆，請輸入更精確的關鍵字。</p>` : ''}
-    </section>`;
+      ${list.length > 200 ? `<p class="muted">只顯示前 200 筆，請輸入更精確的關鍵字。</p>` : ''}`;
   }
   window.renderQuestPage = renderQuestPage;
   window.openQuestPage = async function(query){
@@ -254,17 +258,23 @@
   };
 
   let searchTimer = 0;
-  document.addEventListener('input', ev => {
+  const composing = new WeakSet();
+  document.addEventListener('compositionstart', ev => { if(ev.target?.id === 'questSearch'){ clearTimeout(searchTimer); composing.add(ev.target); } });
+  function scheduleQuestSearch(ev){
     if(ev.target?.id !== 'questSearch') return;
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(async () => {
-      state.query = ev.target.value.trim();
-      const pos = ev.target.selectionStart;
-      await renderQuestPage();
-      const input = document.getElementById('questSearch');
-      if(input){ input.focus(); try{ input.setSelectionRange(pos, pos); }catch(e){} }
+    if(ev.isComposing || composing.has(ev.target)) return;
+    const input = ev.target;
+    searchTimer = setTimeout(() => {
+      if(!input.isConnected) return;
+      const q = input.value.trim();
+      if(q === state.query) return;
+      state.query = q;
+      renderQuestPage(input);
     }, 250);
-  });
+  }
+  document.addEventListener('input', scheduleQuestSearch);
+  document.addEventListener('compositionend', ev => { if(ev.target?.id !== 'questSearch') return; composing.delete(ev.target); scheduleQuestSearch(ev); });
   document.addEventListener('toggle', async ev => {
     const card = ev.target;
     if(!card?.matches?.('.questCard')) return;
