@@ -1563,6 +1563,11 @@ window.SZO_MAP_TAXONOMY = {
       "group": "聯動",
       "series": "絕代"
     },
+    "396": {
+      "section": "特殊地圖",
+      "group": "聯動",
+      "series": "絕代"
+    },
     "400": {
       "section": "一般地圖",
       "group": "深淵"
