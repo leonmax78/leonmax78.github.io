@@ -1,5 +1,5 @@
 {
-  "version": "shop-1112",
+  "version": "shop-1119",
   "description": "All SHOP.INI entries joined with data/items.json values. Percent 100 means 100% of item Value.",
   "shops": [
     {

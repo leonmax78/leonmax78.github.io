@@ -1,51 +1,23 @@
 [
   {
     "kind": "weapon",
-    "itemId": "21093",
-    "name": "幽靈劍",
-    "before": 11,
-    "after": 11
-  },
-  {
-    "kind": "weapon",
-    "itemId": "23936",
-    "name": "乾坤無限　天劍",
-    "before": 4,
-    "after": 4
-  },
-  {
-    "kind": "weapon",
-    "itemId": "21085",
-    "name": "末日刀",
-    "before": 13,
-    "after": 13
-  },
-  {
-    "kind": "weapon",
-    "itemId": "23937",
-    "name": "乾坤無限　地刃",
-    "before": 5,
-    "after": 5
-  },
-  {
-    "kind": "weapon",
-    "itemId": "21456",
-    "name": "百鎖連環",
-    "before": 7,
-    "after": 7
-  },
-  {
-    "kind": "weapon",
-    "itemId": "21311",
-    "name": "金翅拂塵",
+    "itemId": "30969",
+    "name": "九鼎太清經",
     "before": 6,
+    "after": 8
+  },
+  {
+    "kind": "weapon",
+    "itemId": "30970",
+    "name": "南華題命譜",
+    "before": 5,
     "after": 6
   },
   {
     "kind": "weapon",
-    "itemId": "21135",
-    "name": "玉佛寶杖",
-    "before": 9,
-    "after": 9
+    "itemId": "31575",
+    "name": "低溫防護罩",
+    "before": 6,
+    "after": 7
   }
 ]

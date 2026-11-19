@@ -29,7 +29,7 @@
     "updatedAt": "2026-09-17",
     "officialScoreTotal": 35704,
     "dropSource": "data/drop_reverse.json",
-    "dropSourceSha256": "04ba75787b874a4ebaf874df7138c0e3a39eac97a45786cb8790a185b5a22e65"
+    "dropSourceSha256": "1f4add6da74839d6a8aad54e96ad3a576929a38bcdabafb120a405ab78a7bdb1"
   },
   "weapon": [
     {
@@ -223566,10 +223566,24 @@
           "level": "1",
           "rate": 0.0004,
           "locations": []
+        },
+        {
+          "monsterId": "18355",
+          "monster": "絕代燕南天寶箱",
+          "level": "1",
+          "rate": 0.0004,
+          "locations": []
+        },
+        {
+          "monsterId": "18357",
+          "monster": "絕代小魔星寶箱",
+          "level": "1",
+          "rate": 0.0004,
+          "locations": []
         }
       ],
-      "reverseDropCount": 6,
-      "searchText": "九鼎太清經 30969 飾品 10    侯氏兵甲福袋2024 幻三太陰錦囊 麻辣黑潮錦囊 極大秘境寶箱 幻三太陰奇寶箱 幻三太陰奇寶箱 30969 九鼎太清經",
+      "reverseDropCount": 8,
+      "searchText": "九鼎太清經 30969 飾品 10 侯氏兵甲福袋2024 幻三太陰錦囊 麻辣黑潮錦囊 極大秘境寶箱 幻三太陰奇寶箱 幻三太陰奇寶箱 絕代燕南天寶箱 絕代小魔星寶箱",
       "collectOrder": 3925
     },
     {
@@ -223622,10 +223636,17 @@
           "level": "1",
           "rate": 0.0004,
           "locations": []
+        },
+        {
+          "monsterId": "18356",
+          "monster": "絕代明月孤星寶箱",
+          "level": "1",
+          "rate": 0.0004,
+          "locations": []
         }
       ],
-      "reverseDropCount": 5,
-      "searchText": "南華題命譜 30970 飾品 10 侯氏兵甲福袋2024 麻辣熱浪錦囊 幻三魔黃錦囊 幻三魔黃奇寶箱 幻三魔黃奇寶箱",
+      "reverseDropCount": 6,
+      "searchText": "南華題命譜 30970 飾品 10 侯氏兵甲福袋2024 麻辣熱浪錦囊 幻三魔黃錦囊 幻三魔黃奇寶箱 幻三魔黃奇寶箱 絕代明月孤星寶箱",
       "collectOrder": 3926
     },
     {
@@ -228732,10 +228753,17 @@
           "level": "1",
           "rate": 0.0005,
           "locations": []
+        },
+        {
+          "monsterId": "18349",
+          "monster": "絕代江小魚寶箱",
+          "level": "1",
+          "rate": 0.0005,
+          "locations": []
         }
       ],
-      "reverseDropCount": 6,
-      "searchText": "低溫防護罩 31575 仙器 10 龍川仙器錦囊 焰騰麻辣錦囊 幻三蘇童顏錦囊 極大秘境寶箱 幻三蘇童顏寶箱 幻三蘇童顏寶箱 31575 低溫防護罩",
+      "reverseDropCount": 7,
+      "searchText": "低溫防護罩 31575 仙器 10 龍川仙器錦囊 焰騰麻辣錦囊 幻三蘇童顏錦囊 極大秘境寶箱 幻三蘇童顏寶箱 幻三蘇童顏寶箱 絕代江小魚寶箱",
       "collectOrder": 4051
     },
     {

@@ -12,7 +12,7 @@
 障礙物：MPC 地圖格（32×32 原始像素＝圖上 4×4）第 4 個位元組非 0＝不能走（樹、水、建築、牆）。
 另輸出 data/training_walk.json（8×8 圖上單位的粗格，網頁用它算走路距離，打不到牆後的怪、傳送後沿真的能走的路打回掛點）。
 
-用法：python3 tools/build_training_spots.py [遊戲資料夾（含 data1.pak、update.pak）]
+用法：python3 tools/build_training_spots.py [遊戲資料夾（含 data1.pak、update.pak）] [--overlay=本週解包資料夾]
 """
 import json, re, statistics, sys
 from pathlib import Path
@@ -30,7 +30,7 @@ def num(v):
         return 0
 
 
-def respawns(game):
+def respawns(game, overlay=None):
     """{(stageId, 怪物ID, rawX, rawY): 重生秒數}；update.pak 蓋過 data1.pak。"""
     src = (ROOT / 'tools/npc_shop_dialogs.py').read_text(encoding='utf-8')
     env = {'__file__': str(ROOT / 'tools/npc_shop_dialogs.py')}
@@ -44,6 +44,12 @@ def respawns(game):
                 files[int(n[9:12])] = env['extract'](data, r)
             elif n == 'setting/stage.ini':
                 stage_ini = env['extract'](data, r).decode('cp950', 'replace')
+    if overlay:  # an extracted weekly update (MAP/, SETTING/) laid over the install
+        for f in (Path(overlay) / 'MAP').glob('*.MPC'):
+            if f.stem[5:].isdigit():
+                files[int(f.stem[5:])] = f.read_bytes()
+        if (Path(overlay) / 'SETTING/STAGE.INI').exists():
+            stage_ini = (Path(overlay) / 'SETTING/STAGE.INI').read_bytes().decode('cp950', 'replace')
     flags = {}
     for b in re.split(r'\n(?=\[)', stage_ini):
         i = re.search(r'^ID\s*=\s*(\d+)', b, re.M)
@@ -80,8 +86,10 @@ def respawns(game):
 
 
 def main():
-    game = sys.argv[1] if len(sys.argv) > 1 else '/mnt/user-data/uploads/神州Online'
-    resp, flags, walk, gone = respawns(game)
+    args = [a for a in sys.argv[1:] if not a.startswith('--overlay')]
+    overlay = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--overlay=')), None)
+    game = args[0] if args else '/mnt/user-data/uploads/神州Online'
+    resp, flags, walk, gone = respawns(game, overlay)
     mons = {num(m['ID']): m for m in json.loads((ROOT / 'data/monsters.json').read_text(encoding='utf-8'))}
     st = json.loads((ROOT / 'data/stage_maps.json').read_text(encoding='utf-8'))
     st = st['stages'] if isinstance(st, dict) else st

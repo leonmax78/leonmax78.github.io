@@ -1,11 +1,12 @@
 """Read NPC shop links from the game install: which shop each merchant's dialogue actually opens.
 
-Usage: python tools/npc_shop_dialogs.py "C:/UserJoy/神州Online" [out.json]
+Usage: python tools/npc_shop_dialogs.py "C:/UserJoy/神州Online" [out.json] [--overlay <extracted update folder>]
 Reads data1.pak + update.pak (OD archives), walks every MAP/*.MPC for NPC placements, follows each
 NPC's Talk tree in MSG*/STGMSG* and collects TRADE (5) / TRADE2 (60) actions. Shop id 0 means the
 NPC.INI default shop. Condition 85 (EVENT_COND_IS_FREE_SET) splits 免服 / 月服.
 Then run tools/apply_npc_shop_dialogs.py with the output.
 """
+import shutil
 import re, glob, json, os, sys, collections, struct, zlib, tempfile
 from pathlib import Path
 SITE = str(Path(__file__).resolve().parents[1])
@@ -70,6 +71,15 @@ def _reach(msgs, t):
 if __name__ == '__main__':
     tmp = tempfile.mkdtemp()
     extract_install(sys.argv[1], tmp)
+    # --overlay <dir>: an extracted weekly update (SETTING/, MAP/) laid over the install, e.g. 拆包與歷史資料/1029深淵/1119
+    if '--overlay' in sys.argv:
+        ov = sys.argv[sys.argv.index('--overlay') + 1]
+        for sub in ('SETTING', 'MAP'):
+            for f in glob.glob(os.path.join(ov, sub, '*')):
+                if os.path.isfile(f):
+                    os.makedirs(os.path.join(tmp, sub), exist_ok=True)
+                    shutil.copyfile(f, os.path.join(tmp, sub, os.path.basename(f).upper()))
+        sys.argv[2:] = [a for i, a in enumerate(sys.argv[2:], 2) if a != '--overlay' and sys.argv[i - 1] != '--overlay']
     CUR = tmp
 
     def blocks(path,tag):
