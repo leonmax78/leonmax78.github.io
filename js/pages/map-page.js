@@ -862,7 +862,7 @@
     const target = stage || currentStage();
     const surface = document.querySelector('.mapZoomSurface');
     const imageStage = document.querySelector('.mapImageStage');
-    const label = document.querySelector('.mapZoomBar span');
+    const label = document.querySelector('[data-map-zoom-label]');
     if(target && surface){
       surface.style.width = `${Math.round((Number(target.width) || 1) * z)}px`;
       surface.style.height = `${Math.round((Number(target.height) || 1) * z)}px`;
@@ -1120,7 +1120,7 @@
             <label>縮放
               <input id="mapZoomInput" type="range" min="${MIN_ZOOM}" max="${MAX_ZOOM}" step="0.01" value="${zoomValue()}">
             </label>
-            <span>${zoomValue() >= MAX_ZOOM ? '1:1' : Math.round(zoomValue() * 100) + '%'}</span>
+            <span data-map-zoom-label>${zoomValue() >= MAX_ZOOM ? '1:1' : Math.round(zoomValue() * 100) + '%'}</span>
           </div>
           <div class="mapLoading" id="mapImageLoading">地圖載入中</div>
           <div class="mapZoomSurface" style="width:${Math.round((Number(stage.width)||1)*zoomValue())}px;height:${Math.round((Number(stage.height)||1)*zoomValue())}px;">
