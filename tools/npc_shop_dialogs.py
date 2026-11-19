@@ -328,8 +328,9 @@ if __name__ == '__main__':
         if code == 93: return '延長期限'
         if code == 95: return '擴充倉庫'
         return None
+    pending=[]
     def walk(mid,depth):
-        if mid in msgs or mid<=0 or depth>14: return
+        if mid in msgs or mid<=0: return
         d=ALL.get(mid) or legacy.get(mid)
         if not d: return
         e={'m':d.get('Msg',[''])[0].replace('\\n','\n')}
@@ -374,8 +375,8 @@ if __name__ == '__main__':
         if nxt: e['n']=list(dict.fromkeys(nxt))
         if shops: e['s']=sorted(set(shops))
         msgs[mid]=e
-        for _,j in opts: walk(j,depth+1)
-        for j in nxt: walk(j,depth+1)
+        pending.extend(j for _,j in opts)
+        pending.extend(nxt)
     for i in ids:
         d=npcs.get(i)
         if not d: continue
@@ -385,6 +386,8 @@ if __name__ == '__main__':
         walk(t,0)
 
 
+    while pending:
+        walk(pending.pop(),0)
     talk_dir = Path(SITE) / 'data/npc-talk'
     talk_dir.mkdir(parents=True, exist_ok=True)
     for old in talk_dir.glob('n*.json'):
