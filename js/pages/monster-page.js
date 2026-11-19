@@ -280,6 +280,24 @@ function renderBeastResults(){
 function selectBeastStars(star){window.v88BeastStars=Number(star);document.querySelectorAll('.beastStarBtn').forEach(btn=>btn.classList.toggle('active',btn.textContent===`${star}星甕`));renderBeastResults()}
 function setMonsterQueryMode(mode){window.v88MonsterMode=mode==='beast'?'beast':'monster';renderMonsterPage()}
 
+const heroSummonEvent = {
+ start:'2026-11-26T12:00:00+08:00', end:'2026-12-17T11:00:00+08:00',
+ rows:[
+  ['火雲洞府','花無缺','邀月．參'],
+  ['蠱毒洞府','邀月','邀月．參'],
+  ['怒雪洞府','蘇櫻','邀月．參'],
+  ['古北大營','張菁','燕南天．前傳'],
+  ['統萬大營','憐星','燕南天．前傳'],
+  ['蒼狼大營','江小魚','燕南天．前傳']
+ ]
+};
+function heroSummonEventHTML(){
+ const now=Date.now(),status=now<Date.parse(heroSummonEvent.start)?'即將開始':now<Date.parse(heroSummonEvent.end)?'活動進行中':'活動已結束';
+ return `<details class="heroSummonEvent" open><summary>《新絕代雙驕》絕代英雄高峰決 · ${status}</summary>
+ <p>2026/11/26（四）12:00 ～ 2026/12/17（四）11:00（台灣時間）</p>
+ <div class="heroSummonScroll"><table><caption>各據地召喚 BOSS 機率</caption><thead><tr><th>據地</th><th>80%</th><th>14%</th><th>6%</th></tr></thead>
+ <tbody>${heroSummonEvent.rows.map(([place,common,rare])=>`<tr><th scope="row">${esc(place)}</th><td>${esc(common)}</td><td>${esc(rare)}</td><td>江小魚．壹</td></tr>`).join('')}</tbody></table></div></details>`;
+}
 function renderMonsterPage(){
  restoreMonsterSearchState();
  const q=window.v88MonsterQ||'',min=window.v88MonsterMin||'',max=window.v88MonsterMax||'',race=window.v88MonsterRace||'',subtype=window.v88MonsterSubtype||'',beastMode=window.v88MonsterMode==='beast';
@@ -289,6 +307,7 @@ function renderMonsterPage(){
   return;
  }
  byId('reader').innerHTML=`<section class="card monsterSearchPage latestSearchPage"><h1>${beastMode?'查詢封獸':'查詢怪物'}</h1>
+  ${beastMode?'':heroSummonEventHTML()}
   ${beastMode?`<div class="beastStarPicker" aria-label="封甕星級">${beastStarsHTML(window.v88BeastStars||2)}</div>`:''}
   <div class="latestQueryLayout">
     <div class="latestMainPane">
