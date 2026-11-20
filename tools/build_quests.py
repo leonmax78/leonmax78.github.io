@@ -309,6 +309,8 @@ def main(ini):
         else:
             cat, sub = '一般任務', sname or '活動與其他'
         ov = overrides.get(str(mid), {})
+        for step_number, step_text in ov.get('steps', {}).items():
+            steps[int(step_number) - 1] = step_text
         if ov.get('hide'):
             continue
         if ov.get('c'):
