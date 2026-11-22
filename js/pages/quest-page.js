@@ -85,7 +85,7 @@
       out += link(text.slice(last, at));
       last = at + m.length;
       let stageName = data.stages[st] || '';
-      if(!Number(id) && Object.values(data.stages).includes(name)){
+      if(!Number(id) && !(Number(x) || Number(y)) && Object.values(data.stages).includes(name)){
         // The link names a map itself: one chip that opens that map.
         out += `<button type="button" class="questMapLink" title="點擊開啟地圖" data-quest-map="${esc(name)}" data-quest-map-name="" data-quest-map-npc="">${esc(name)}</button>`;
         return m;
