@@ -15,7 +15,7 @@
       const starts = fetch('data/quest_starts.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
       const simple = fetch('data/quest_simple.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
       dataPromise = fetch('data/quests.json?v=' + v, { cache: 'force-cache' }).then(r => { if(!r.ok) throw Error('任務資料載入失敗'); return r.json(); })
-        .then(async d => { d.byId = new Map(d.quests.map(q => [q.i, q])); d.starts = await starts; d.simple = await simple; return d; })
+        .then(async d => { d.byId = new Map(d.quests.map(q => [q.i, q])); d.starts = await starts; const sj = await simple; d.simple = sj.s || sj; d.simpleMo = sj.mo || {}; return d; })
         .catch(e => { dataPromise = null; throw e; });
     }
     return dataPromise;
@@ -125,10 +125,17 @@
       }
       return false;
     };
-    for(const t of toks) if(!t.name || !swap(t.name, t.tok)) if(t.name && Number(t.tok.split(',')[1])) rest.push(t.tok);
+    for(const t of toks){
+      if(!t.name) continue;
+      const outside = text.split(/⟦[^⟧]*⟧/).some(part => part.includes(t.name));
+      if(outside) swap(t.name, t.tok);
+      else if(!text.includes(t.name) && Number(t.tok.split(',')[1])) rest.push(t.tok);
+    }
     for(const n of names) if(text.includes(n)) swap(n, `⟦${stageIds.get(n)},0,0,0,${n}⟧`);
     const extra = [...new Set(rest)].map(t => richText(t, data, q)).join('<i>、</i>');
-    return `<span class="questSimple">${richText(text, data, q)}</span>${extra ? `<span class="questSimpleNpc">${extra}</span>` : ''}<details class="questOrig"><summary>原文</summary><div>${richText(orig, data, q)}</div></details>`;
+    const extraMo = data.simpleMo && data.simpleMo[q.i];
+    const qs = extraMo ? Object.assign({}, q, { mo: [...(q.mo || []), ...extraMo] }) : q;
+    return `<span class="questSimple">${richText(text, data, qs)}</span>${extra ? `<span class="questSimpleNpc">${extra}</span>` : ''}<details class="questOrig"><summary>原文</summary><div>${richText(orig, data, q)}</div></details>`;
   }
 
   function limits(q){
