@@ -77,6 +77,7 @@ def swap(text, name, tok):
 
 
 out_s, out_mo = {}, {}
+ABBR = []
 for x in q['quests']:
     n = len(x.get('s') or [])
     keys = [f"{x['i']}-{k}" for k in range(n)]
@@ -106,6 +107,17 @@ for x in q['quests']:
             if outside_tokens(text, name) and not any(g != name and name in g and g in text for g in ALL_NPC):
                 st, p = npcs[name]
                 text = swap(text, name, f"⟦{st},{p['id']},{p.get('coordX', 0)},{p.get('coordY', 0)},{name}⟧")
+        # 簡稱換成當地怪物全名（七王爺→報喪七王爺）：簡稱是全名的結尾、至少 3 字、前面是「打／、／和」
+        local = sorted({m['name'] for st in cand for m in sm[st].get('monsters', [])}, key=len, reverse=True)
+        for full in local:
+            if full in TOK.sub('', text): continue
+            for n in range(len(full) - 1, 2, -1):
+                short = full[-n:]
+                hit = re.search(r'(?<=[打、和與及])' + re.escape(short) + r'(?=[、，。和與及（）]|$)', text)
+                if hit and not any(o != full and o.endswith(short) and o in local for o in local):
+                    text = text[:hit.start()] + full + text[hit.end():]
+                    ABBR.append((key, short, full))
+                    break
         # monsters standing in the sentence
         plain = TOK.sub('', text)
         found = []
@@ -133,4 +145,5 @@ for x in q['quests']:
 
 with open(os.path.join(ROOT, 'data/quest_simple.json'), 'w', encoding='utf-8') as f:
     json.dump({'s': out_s, 'mo': out_mo}, f, ensure_ascii=False, separators=(',', ':'))
+print('abbreviations', *ABBR, sep='\n  ')
 print('quests', len(out_s), 'steps', sum(map(len, out_s.values())), 'extra monster links', sum(map(len, out_mo.values())))
