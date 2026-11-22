@@ -198,6 +198,7 @@ def main(ini):
                         rewards_of.setdefault(q, {}).setdefault((str(node['m']), srv), []).append((who, rw))
     trig_path = os.path.join(ROOT, 'tools/data/quest_triggers.json')
     trigger_spots = json.load(open(trig_path, encoding='utf-8')) if os.path.exists(trig_path) else {}
+    TRIGGER_SKIP = {'平地劫．扶正氣': (0,)}
     ALTERNATIVES = set()
     def exp_of(parts):
         tot = 0
@@ -389,7 +390,10 @@ def main(ini):
         if mons: row['mo'] = [[k, v] for k, v in mons.items()]
         # Map trigger spots (search points, gates, flags…) per step, in-game coordinates.
         spots, seen_spot = [], set()
-        for t in sorted(trigger_spots.get(name, []), key=lambda t: t['step']):
+        # V875: lines that are not a step's goal (森羅閻殿入口 step 0 is 閻羅's taunt for giving up);
+        # the spot then shows at the step it belongs to.
+        skip = TRIGGER_SKIP.get(name, ())
+        for t in sorted((t for t in trigger_spots.get(name, []) if t['step'] not in skip), key=lambda t: t['step']):
             key = (t['stage'], t['x'], t['y'])
             if key in seen_spot or t['step'] >= max(len(steps), 1): continue
             seen_spot.add(key)
