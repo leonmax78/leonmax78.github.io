@@ -1744,7 +1744,7 @@
     state.npcs.clear();
     const norm = value => String(value || '').replace(/\s+/g, '').trim();
     const needle = norm(targetMap);
-    const queryNeedle = norm(targetQuery);
+    const queryNeedle = norm(targetQuery.split('、')[0]);
     const stages = mapData.stages || [];
     const stageByQuery = queryNeedle ? stages.find(s => (s.monsters || []).some(m => norm(m.name || '').includes(queryNeedle) || queryNeedle.includes(norm(m.name || '')))
       || (s.npcs || []).some(n => norm(n.name || '').includes(queryNeedle) || queryNeedle.includes(norm(n.name || '')))) : null;
@@ -1753,6 +1753,16 @@
       || stages.find(s => `${String(s.stageId).padStart(3, '0')} ${s.stageName || ''}`.includes(targetMap))
       || stageByQuery;
     if(stage) state.stageId = Number(stage.stageId);
+    // V876: 「A、B、C」 = several monsters (quest step 「可打」); mark all of them on that map.
+    const many = targetQuery.includes('、') ? targetQuery.split('、').map(norm).filter(Boolean) : null;
+    if(many && stage){
+      state.npcTarget = null;
+      state.query = stage.stageName || targetMap;
+      state.monsters.clear(); state.npcs.clear();
+      [...monsterGroups(stage), ...monsterGroups(stage, 'chests')].forEach(group => { if(many.includes(norm(group.name))) state.monsters.add(markerKey(group)); });
+      await renderStageMapPage();
+      return;
+    }
     if(point && stage && (Number(point.x) || Number(point.y))){
       state.pointTarget = { stageId: stage.stageId, gx: Number(point.x), gy: Number(point.y), name: targetQuery };
       state.query = targetMap;   // nothing on the map is named after the place; show the whole map
