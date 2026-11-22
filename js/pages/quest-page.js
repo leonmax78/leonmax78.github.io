@@ -15,7 +15,7 @@
       const starts = fetch('data/quest_starts.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
       const simple = fetch('data/quest_simple.json?v=' + v, { cache: 'force-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({}));
       dataPromise = fetch('data/quests.json?v=' + v, { cache: 'force-cache' }).then(r => { if(!r.ok) throw Error('任務資料載入失敗'); return r.json(); })
-        .then(async d => { d.byId = new Map(d.quests.map(q => [q.i, q])); d.starts = await starts; const sj = await simple; d.simple = sj.s || sj; d.simpleMo = sj.mo || {}; return d; })
+        .then(async d => { d.byId = new Map(d.quests.map(q => [q.i, q])); d.starts = await starts; const sj = await simple; d.simple = sj.s || sj; d.simpleMo = sj.mo || {}; d.simpleAll = sj.all || {}; return d; })
         .catch(e => { dataPromise = null; throw e; });
     }
     return dataPromise;
@@ -111,7 +111,7 @@
   // V872: 白話步驟（data/quest_simple.json，依任務 ID 對應每個步驟）。原文裡的 NPC／地點連結
   // 名稱若出現在白話句中就原地換成同一個連結；句中出現的地圖名稱也變成可開地圖的連結；
   // 對不上的 NPC 連結放在句子後面。原文收在「原文」裡。
-  function simpleStepHTML(simple, orig, data, q){
+  function simpleStepHTML(simple, orig, data, q, step){
     const toks = [...String(orig || '').matchAll(LINK)].map(m => ({ tok: m[0], name: m[5] }));
     const stageIds = data.stageIdByName || (data.stageIdByName = new Map(Object.entries(data.stages).map(([id, n]) => [n, id])));
     const names = data.stageNamesLong || (data.stageNamesLong = [...stageIds.keys()].filter(n => n && n.length >= 2).sort((a, b) => b.length - a.length));
@@ -135,7 +135,10 @@
     const extra = [...new Set(rest)].map(t => richText(t, data, q)).join('<i>、</i>');
     const extraMo = data.simpleMo && data.simpleMo[q.i];
     const qs = extraMo ? Object.assign({}, q, { mo: [...(q.mo || []), ...extraMo] }) : q;
-    return `<span class="questSimple">${richText(text, data, qs)}</span>${extra ? `<span class="questSimpleNpc">${extra}</span>` : ''}<details class="questOrig"><summary>原文</summary><div>${richText(orig, data, q)}</div></details>`;
+    // 同一張地圖點名兩隻以上的怪：一個按鈕把它們全標在地圖上（data/quest_simple.json 的 all）
+    const groups = (data.simpleAll && data.simpleAll[q.i] && data.simpleAll[q.i][step]) || [];
+    const allBtn = groups.filter(([st]) => data.stages[st]).map(([st, l]) => `<button type="button" class="questMonAll" title="${esc(l.join('、'))}" data-quest-map="${esc(data.stages[st])}" data-quest-map-name="${esc(l.join('、'))}" data-quest-map-npc="">全部標在地圖${groups.length > 1 ? `・${esc(data.stages[st])}` : ''}</button>`).join('');
+    return `<span class="questSimple">${richText(text, data, qs)}</span>${allBtn}${extra ? `<span class="questSimpleNpc">${extra}</span>` : ''}<details class="questOrig"><summary>原文</summary><div>${richText(orig, data, q)}</div></details>`;
   }
 
   function limits(q){
@@ -178,7 +181,7 @@
     return `<div class="questBody">
       ${questGiverHTML(q, data)}
       ${q.d ? `<p class="questStart"><span>開始</span>${richText(q.d, data, q)}</p>` : ''}
-      ${q.s.length ? `<ol class="questSteps">${q.s.map((s, i) => { const sim = data.simple && data.simple[q.i] && data.simple[q.i][i]; const tg = (q.tg || []).find(t => t[0] === i); const pts = (q.pt || []).filter(t => t[0] === i); return `<li>${sim ? simpleStepHTML(sim, s, data, q) : richText(s, data, q)}${pts.length ? `<div class="questSpots"><span>地點</span>${pts.map(([, st, x, y, msg]) => `<div class="questSpot"><button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="觸發點" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(data.stages[st] || '')}</button><b class="questSpotXY">(${esc(x)}, ${esc(y)})</b>${msg ? `<small>「${esc(msg)}」</small>` : ''}</div>`).join('')}</div>` : ''}${tg ? `<div class="questTargets"><span>對象</span>${tg[1].map(([st, id, nm]) => `<button type="button" class="questNpc" title="${esc(`${data.stages[st] || ''}・點擊看對話與地圖位置`)}" data-quest-npc="${esc(st)}:${esc(id)}">${esc(nm)}</button>`).join('<i>、</i>')}</div>` : ''}</li>`; }).join('')}</ol>` : ''}
+      ${q.s.length ? `<ol class="questSteps">${q.s.map((s, i) => { const sim = data.simple && data.simple[q.i] && data.simple[q.i][i]; const tg = (q.tg || []).find(t => t[0] === i); const pts = (q.pt || []).filter(t => t[0] === i); return `<li>${sim ? simpleStepHTML(sim, s, data, q, i) : richText(s, data, q)}${pts.length ? `<div class="questSpots"><span>地點</span>${pts.map(([, st, x, y, msg]) => `<div class="questSpot"><button type="button" class="questCoord" title="在地圖上標出位置" data-quest-map="${esc(data.stages[st] || '')}" data-quest-map-name="觸發點" data-quest-map-npc="" data-quest-map-x="${esc(x)}" data-quest-map-y="${esc(y)}">${esc(data.stages[st] || '')}</button><b class="questSpotXY">(${esc(x)}, ${esc(y)})</b>${msg ? `<small>「${esc(msg)}」</small>` : ''}</div>`).join('')}</div>` : ''}${tg ? `<div class="questTargets"><span>對象</span>${tg[1].map(([st, id, nm]) => `<button type="button" class="questNpc" title="${esc(`${data.stages[st] || ''}・點擊看對話與地圖位置`)}" data-quest-npc="${esc(st)}:${esc(id)}">${esc(nm)}</button>`).join('<i>、</i>')}</div>` : ''}</li>`; }).join('')}</ol>` : ''}
       ${(q.ho || []).length ? `<div class="questMeta"><b>繳交道具與數量</b><ul class="questHandins">${q.ho.map(([id, n, qty, who]) => `<li>${id ? `<button type="button" class="questItemLink" data-quest-item="${esc(id)}">${esc(n)}</button>` : esc(n)} <span>${esc(qty).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</span>${who ? ` <small>${esc(who)}</small>` : ''}</li>`).join('')}</ul></div>` : ''}
       ${items ? `<div class="questMeta"><b>任務道具</b><div class="questItems">${items}</div></div>` : ''}
       ${q.r ? `<div class="questMeta"><b>獎勵${q.rx ? '<small class="questRewardNote">依選擇或結果不同，以下擇一</small>' : ''}</b><ul class="questRewards">${q.r.map(r => `<li>${itemLinker(q.ri)(r).replace(/（(月服|免服)）/g, '<em class="questSrv" data-srv="$1">$1</em>')}</li>`).join('')}</ul></div>` : ''}

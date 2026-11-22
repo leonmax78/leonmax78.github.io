@@ -76,7 +76,7 @@ def swap(text, name, tok):
     return text
 
 
-out_s, out_mo = {}, {}
+out_s, out_mo, all_ = {}, {}, {}
 ABBR = []
 for x in q['quests']:
     n = len(x.get('s') or [])
@@ -139,11 +139,19 @@ for x in q['quests']:
                     if name in qmo or any(name == e[0] for e in extra): continue
                     at = [st for st in cand if st in MON_AT.get(name, [])] or MON_AT.get(name) or [st0]
                     extra.append([name, at[0]])
+                found = list(names)
+        # 同一步、同一張地圖兩隻以上的怪 → 「全部標在地圖」按鈕（依怪物實際所在地圖分組）
+        groups = {}
+        for name in found:
+            at = [st for st in cand if st in MON_AT.get(name, [])] or MON_AT.get(name, [])[:1]
+            if at: groups.setdefault(at[0], []).append(name)
+        groups = [[st, l] for st, l in groups.items() if len(l) >= 2]
+        if groups: all_.setdefault(str(x['i']), {})[str(k)] = groups
         steps.append(text)
     out_s[str(x['i'])] = steps
     if extra: out_mo[str(x['i'])] = extra
 
 with open(os.path.join(ROOT, 'data/quest_simple.json'), 'w', encoding='utf-8') as f:
-    json.dump({'s': out_s, 'mo': out_mo}, f, ensure_ascii=False, separators=(',', ':'))
+    json.dump({'s': out_s, 'mo': out_mo, 'all': all_}, f, ensure_ascii=False, separators=(',', ':'))
 print('abbreviations', *ABBR, sep='\n  ')
 print('quests', len(out_s), 'steps', sum(map(len, out_s.values())), 'extra monster links', sum(map(len, out_mo.values())))
