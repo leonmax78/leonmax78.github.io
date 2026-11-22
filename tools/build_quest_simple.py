@@ -33,7 +33,7 @@ for k, v in stages.items():
     if v and v not in stage_id: stage_id[v] = k
 stage_names = sorted((n for n in stage_id if len(n) >= 2), key=len, reverse=True)
 TOK = re.compile(r'⟦(-?\d+),(\d+),(-?\d+),(-?\d+),([^⟧]*)⟧')
-GENERIC = re.compile(r'打怪|的怪|任一(?:怪|敵人|鬼界敵人|亡邪)|打(?:\S{0,8})(?:敵人|敵軍)|類(?:怪|敵人)|系怪|元素怪物|虛空怪|虛空魔物|怪物|精怪')
+GENERIC = re.compile(r'黑教人士|黑教教眾|打怪|的怪|任一(?:怪|敵人|鬼界敵人|亡邪)|打(?:\S{0,8})(?:敵人|敵軍|敵兵)|類(?:怪|敵人)|系怪|元素怪物|虛空怪|虛空魔物|怪物|精怪')
 SKIP = re.compile(r'中原|商店|商家')
 # 有限定種類的（元素怪物、女性敵人、東瀛敵軍…）沒有手動提示就不列整張地圖的怪
 QUAL = re.compile(r'類|系|陣營|男女|東瀛|太極|鬼界|亡邪|元素|虛空怪|女性|植物|各層|艾濟|惡魔|人、神、魔')
@@ -76,6 +76,31 @@ def swap(text, name, tok):
     return text
 
 
+# 任務步驟要打的怪與座標（tools/data/quest_ref_monsters.txt：任務名|地圖|座標|怪物）
+NORM = lambda t: re.sub(r'[\s‧．·.]', '', t or '')
+REF = {}
+ref_path = os.path.join(ROOT, 'tools/data/quest_ref_monsters.txt')
+if os.path.exists(ref_path):
+    for line in open(ref_path, encoding='utf-8'):
+        if not line.strip() or line.startswith('#'): continue
+        qn, mp, xy, ms = (line.rstrip('\n').split('|') + ['', '', ''])[:4]
+        xy = [int(v) for v in xy.split(',')] if re.fullmatch(r'\d+,\d+', xy.strip()) else None
+        REF.setdefault(NORM(qn), []).append({'map': NORM(mp), 'xy': xy, 'mons': [m for m in ms.split('、') if m]})
+FIGHT = re.compile(r'打|擊|殺|清掉|消滅|收集')
+REFUSED = []
+
+
+def real_names(names, cand):
+    """keep names that are monsters in the game; a short name becomes the local full name (隱鏢手→黑教隱鏢手)"""
+    local = {m['name'] for st in cand for m in sm[st].get('monsters', [])}
+    out = []
+    for n in names:
+        if n in MON_AT: out.append(n); continue
+        full = [m for m in local if m.endswith(n)]
+        if len(full) == 1: out.append(full[0])
+    return list(dict.fromkeys(out))
+
+
 out_s, out_mo, all_ = {}, {}, {}
 ABBR = []
 for x in q['quests']:
@@ -86,6 +111,7 @@ for x in q['quests']:
     giver = [int(m.group(1)) for m in TOK.finditer(x.get('d') or '') if int(m.group(2))]
     extra = []
     steps = []
+    refs, ref_at = REF.get(NORM(x['n']), []), 0
     for k, key in enumerate(keys):
         text, orig = src[key], x['s'][k]
         named = [s for s in stage_names if s in text]
@@ -128,9 +154,20 @@ for x in q['quests']:
             if name in qmo or any(name == e[0] for e in extra): continue
             at = [st for st in cand if st in MON_AT[name]] or MON_AT[name]
             extra.append([name, at[0]])
+        # 參考攻略：同一張地圖、依序對上的那一行（怪名、打怪座標）
+        ref = None
+        if refs and FIGHT.search(TOK.sub('', text)):
+            maps = {NORM(n) for n in named}
+            same = lambda a: any(a == m or a.startswith(m) or m.startswith(a) for m in maps)
+            for j in range(ref_at, len(refs)):
+                r = refs[j]
+                if same(r['map']) and not ('任一' in text and len(r['mons']) == 1) and (not found or not r['mons'] or set(found) & set(real_names(r['mons'], cand))):
+                    ref, ref_at = r, j + 1
+                    break
+        ref_names = real_names(ref['mons'], cand) if ref else []
         # 只寫「打怪」：把可打的怪寫出來
         if not found and GENERIC.search(text) and not SKIP.search(text):
-            names = hints.get(key) or (map_mons(stage_id[named[0]]) if named and not QUAL.search(text) else [])
+            names = ref_names or (map_mons(stage_id[named[0]]) if named and '任一' in text and not QUAL.search(text) else []) or hints.get(key) or (map_mons(stage_id[named[0]]) if named and not QUAL.search(text) else [])
             names = names[:8]
             if names:
                 text = re.sub(r'(，|$)', lambda m: f"（可打：{'、'.join(names)}）" + m.group(1), text, count=1)
@@ -147,6 +184,11 @@ for x in q['quests']:
             if at: groups.setdefault(at[0], []).append(name)
         groups = [[st, l] for st, l in groups.items() if len(l) >= 2]
         if groups: all_.setdefault(str(x['i']), {})[str(k)] = groups
+        # 打怪地點座標放到地圖連結上
+        if ref and ref['xy']:
+            mp = next((n for n in named if NORM(n) == ref['map']), None) or next((n for n in named if ref['map'].startswith(NORM(n)) or NORM(n).startswith(ref['map'])), None)
+            if mp and outside_tokens(text, mp):
+                text = swap(text, mp, f"⟦{stage_id[mp]},0,{ref['xy'][0]},{ref['xy'][1]},{mp}⟧")
         steps.append(text)
     out_s[str(x['i'])] = steps
     if extra: out_mo[str(x['i'])] = extra
