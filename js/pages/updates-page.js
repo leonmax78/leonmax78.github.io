@@ -2,7 +2,8 @@
 // 道具、怪物、技能、狀態的新增與數值變更，怪物掉落率變化，以及站長補充的重點說明。
 (function(){
   'use strict';
-  const state = { week: '', query: '', open: new Set(['notes', 'drops']) };
+  const state = { week: '', query: '', cat: 'all', open: new Set(['notes', 'drops']) };
+  const OFFICIAL_LIST = 'https://szo.uj.com.tw/news.php?c=5';
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/\s+/g, ''); };
   const ver = () => encodeURIComponent(document.body?.dataset?.version || 'dev');
@@ -22,6 +23,9 @@
     ['magic+', '新技能'], ['magic~', '技能變更'], ['status+', '新狀態'], ['status~', '狀態變更']
   ];
   const KIND = { items: 'item', monsters: 'monster' };
+  // 週內分類：每週資料會越來越多，用分類切換只看需要的部分
+  const CATS = [['all', '全部'], ['notes', '重點說明', ['notes']], ['drops', '掉落', ['drops']], ['items', '道具', ['items+', 'items~']], ['monsters', '怪物', ['monsters+', 'monsters~']], ['skills', '技能・狀態', ['magic+', 'magic~', 'status+', 'status~']]];
+  const monthOf = d => `${d.slice(0, 4)} 年 ${Number(d.slice(5, 7))} 月`;
 
   function link(sec, id, name){
     const kind = KIND[sec];
@@ -55,23 +59,34 @@
     let w;
     try{ w = await get(`data/updates/${state.week}.json`); }catch(e){ reader.innerHTML = `<section class="card"><div class="empty">${esc(e.message)}</div></section>`; return; }
     const q = norm(state.query);
-    const tabs = index.map(x => `<button type="button" class="qaChip${x.d === state.week ? ' active' : ''}" data-up-week="${esc(x.d)}">${day(x.d)}${x.v ? `<small class="upVer">${esc(x.v)}</small>` : ''}</button>`).join('');
-    const blocks = SECTIONS.map(([k, title]) => {
-      const rows = rowsFor(k, w, q); if(!rows.length) return '';
+    // 週次：最近 4 週直接點；全部週次放在依月份分組的下拉選單；上一週／下一週
+    const at = index.findIndex(x => x.d === state.week);
+    const weekBtn = x => `<button type="button" class="upWeek${x.d === state.week ? ' active' : ''}" data-up-week="${esc(x.d)}"><b>${day(x.d)}</b>${x.v ? `<small>${esc(x.v)}</small>` : ''}</button>`;
+    const months = [...new Set(index.map(x => monthOf(x.d)))];
+    const select = `<select id="upWeekSelect" aria-label="選擇週次">${months.map(m => `<optgroup label="${esc(m)}">${index.filter(x => monthOf(x.d) === m).map(x => `<option value="${esc(x.d)}"${x.d === state.week ? ' selected' : ''}>${esc(x.d.replace(/-/g, '/'))}${x.v ? '　' + esc(x.v) : ''}</option>`).join('')}</optgroup>`).join('')}</select>`;
+    const prev = index[at + 1], next = index[at - 1];
+    const nav = `<div class="upWeekBar"><div class="upWeekRecent">${index.slice(0, 4).map(weekBtn).join('')}</div><div class="upWeekPick">${index.length > 4 ? `<label>全部週次 ${select}</label>` : ''}<button type="button" class="upStep" ${prev ? `data-up-week="${esc(prev.d)}"` : 'disabled'}>‹ 上一週</button><button type="button" class="upStep" ${next ? `data-up-week="${esc(next.d)}"` : 'disabled'}>下一週 ›</button></div></div>`;
+    // 週內分類與各區塊
+    const secRows = Object.fromEntries(SECTIONS.map(([k]) => [k, rowsFor(k, w, q)]));
+    const catCount = c => (c[2] || SECTIONS.map(x => x[0])).reduce((n, k) => n + (secRows[k]?.length || 0), 0);
+    if(state.cat !== 'all' && !catCount(CATS.find(c => c[0] === state.cat) || CATS[0])) state.cat = 'all';
+    const cat = CATS.find(c => c[0] === state.cat) || CATS[0];
+    const catTabs = CATS.map(c => { const n = catCount(c); return n || c[0] === 'all' ? `<button type="button" class="qaNavChip${c[0] === state.cat ? ' active' : ''}" data-up-cat="${c[0]}">${c[1]}<b>${n}</b></button>` : ''; }).join('');
+    const blocks = SECTIONS.filter(([k]) => !cat[2] || cat[2].includes(k)).map(([k, title]) => {
+      const rows = secRows[k]; if(!rows.length) return '';
       const art = k.endsWith('~') && !q ? (w[k.slice(0, -1)]?.art || 0) : 0;
-      const open = q || state.open.has(k) || rows.length <= 12;
+      const open = q || cat[2] || state.open.has(k) || rows.length <= 12;
       return `<details class="upSec" data-up-sec="${k}"${open ? ' open' : ''}><summary>${title}<b>${rows.length}</b>${art ? `<small>另有 ${art} 筆圖示／音效更換未列出</small>` : ''}</summary><ul class="upList${k.endsWith('+') ? ' chips' : ''}">${rows.join('')}</ul></details>`;
     }).join('');
-    const chips = SECTIONS.map(([k, title]) => { const n = rowsFor(k, w, q).length; return n ? `<button type="button" class="qaNavChip" data-up-jump="${k}">${title}<b>${n}</b></button>` : ''; }).join('');
+    const official = (w.links || []).map(l => `<a class="upOfficialLink" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">📢 ${esc(l.t || '官方公告')} ↗</a>`).join('');
     reader.innerHTML = `<section class="card updatesPage">
-      <h1>每週更新歷程</h1>
-      <p class="muted">每週遊戲更新後，拆包比對新舊資料的差異：新道具、新怪物、數值與說明變更、掉落率變化。重點說明整理自官方更新公告與站長補充（兌換、活動、地圖等資料比對看不出來的部分），每週附上官方公告原文連結。</p>
-      <div class="upWeeks">${tabs}<a class="qaChip upOfficial" href="https://szo.uj.com.tw/news.php?c=5" target="_blank" rel="noopener noreferrer">📢 官方更新公告列表</a></div>
-      <div class="upSearch"><input id="upQuery" type="search" placeholder="在這週的變更裡找：道具、怪物、欄位名稱…" value="${esc(state.query)}"></div>
-      <h2 class="upTitle">${esc(state.week.replace(/-/g, '/'))} 更新${w.v ? `<span class="upVerTitle">版本 ${esc(w.v)}</span>` : ''}</h2>
-      ${(w.links || []).length ? `<div class="upLinks">${w.links.map(l => `<a class="qaChip upOfficial" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">📢 ${esc(l.t || '官方公告')}</a>`).join('')}</div>` : ''}
-      <nav class="qaNav">${chips}</nav>
-      ${blocks || '<div class="empty">沒有符合的變更。</div>'}
+      <header class="upHeader"><div><h1>每週更新歷程</h1><p class="muted">每週遊戲更新後拆包比對的資料差異，加上整理自官方公告的重點說明。</p></div><a class="upOfficialAll" href="${OFFICIAL_LIST}" target="_blank" rel="noopener noreferrer">官方更新公告列表 ↗</a></header>
+      ${nav}
+      <article class="upWeekBox">
+        <header class="upWeekHead"><h2>${esc(state.week.replace(/-/g, '/'))} 更新${w.v ? `<span class="upVerTitle">版本 ${esc(w.v)}</span>` : ''}</h2>${official ? `<div class="upOfficialBox">${official}</div>` : ''}</header>
+        <div class="upTools"><nav class="qaNav upCats">${catTabs}</nav><input id="upQuery" type="search" placeholder="在這週裡找：道具、怪物、欄位…" value="${esc(state.query)}"></div>
+        ${blocks || '<div class="empty">沒有符合的變更。</div>'}
+      </article>
     </section>`;
     if(typeof window.szoSetRoute === 'function') window.szoSetRoute('updates');
   }
@@ -83,12 +98,13 @@
     clearTimeout(timer);
     timer = setTimeout(async () => { state.query = ev.target.value; await renderUpdatesPage(); const el = document.getElementById('upQuery'); if(el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 300);
   });
+  document.addEventListener('change', ev => { if(ev.target?.id === 'upWeekSelect'){ state.week = ev.target.value; state.query = ''; renderUpdatesPage(); } });
   document.addEventListener('compositionend', ev => { if(ev.target?.id === 'upQuery') ev.target.dispatchEvent(new Event('input', { bubbles: true })); });
   document.addEventListener('click', ev => {
     const wk = ev.target.closest?.('[data-up-week]');
     if(wk){ state.week = wk.dataset.upWeek; state.query = ''; renderUpdatesPage(); return; }
-    const jump = ev.target.closest?.('[data-up-jump]');
-    if(jump){ const sec = document.querySelector(`[data-up-sec="${jump.dataset.upJump}"]`); if(sec){ sec.open = true; sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } return; }
+    const cat = ev.target.closest?.('[data-up-cat]');
+    if(cat){ state.cat = cat.dataset.upCat; renderUpdatesPage(); return; }
     const op = ev.target.closest?.('[data-up-open]');
     if(op){ ev.preventDefault(); ev.stopPropagation(); window.SZO_PREVIEW?.open(op.dataset.upOpen, op.dataset.upId); }
   }, true);
