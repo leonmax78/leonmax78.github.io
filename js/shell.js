@@ -41,13 +41,13 @@
       </div>
       <button class="navBtn major" data-view="skill">技能查詢 <span>›</span></button>
       <button class="navBtn major" data-view="exchange">兌換、拆解、升階查詢 <span>›</span></button>
-      <button class="navBtn major" data-view="updates">改版紀錄 <span>›</span></button>
       <button class="navBtn major" data-view="mapMenu">地圖、商店查詢 <span>›</span></button>
       <div class="formBox" id="mapForm">
         <div class="subMenuNote">地圖與商店相關功能</div>
         <button class="navBtn sub" data-view="map">地圖查詢 <span>›</span></button>
         <button class="navBtn sub" data-view="shop">商店販賣資訊 <span>›</span></button>
       </div>
+      <button class="navBtn major" data-view="updates">改版紀錄 <span>›</span></button>
       <!-- The editor stays separate from item search and loads only when opened. -->
       <button class="navBtn major" data-view="jiang">角色養成試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
