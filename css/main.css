@@ -5260,3 +5260,31 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .updatesPage a.upOfficial{text-decoration:none;border-color:#f59e0b;color:#fcd34d;background:rgba(245,158,11,.12)}
 .updatesPage .upVer{margin-left:6px;font-size:11px;opacity:.75;font-weight:500}
 .updatesPage .upVerTitle{margin-left:10px;font-size:13px;font-weight:600;padding:1px 8px;border-radius:7px;background:rgba(148,163,184,.18);vertical-align:2px}
+/* V886 每週更新歷程版面：標題列（官方公告列表）、週次列、每週區塊（官方公告、分類、搜尋） */
+.updatesPage .upHeader{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.updatesPage .upHeader h1{margin-bottom:2px}
+.updatesPage .upHeader p{margin:0}
+.updatesPage .upOfficialAll{flex:none;font-size:13px;color:#fcd34d;text-decoration:none;border:1px solid rgba(245,158,11,.55);border-radius:8px;padding:4px 10px;margin-top:4px}
+.updatesPage .upOfficialAll:hover{background:rgba(245,158,11,.12)}
+.updatesPage .upWeekBar{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;margin:14px 0 12px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.updatesPage .upWeekRecent{display:flex;gap:6px;flex-wrap:wrap}
+.updatesPage .upWeek{display:flex;flex-direction:column;align-items:center;min-width:72px;padding:5px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;line-height:1.25;min-height:0}
+.updatesPage .upWeek b{font-size:15px}
+.updatesPage .upWeek small{font-size:11px;opacity:.7}
+.updatesPage .upWeek.active{border-color:var(--accent,#71d5ef);background:rgba(113,213,239,.14)}
+.updatesPage .upWeekPick{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px}
+.updatesPage .upWeekPick select{max-width:200px}
+.updatesPage .upStep{padding:4px 10px;border-radius:8px;min-height:0;font-size:13px}
+.updatesPage .upStep[disabled]{opacity:.35;cursor:default}
+.updatesPage .upWeekBox{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:rgba(15,23,42,.35)}
+.updatesPage .upWeekHead{display:flex;justify-content:space-between;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-bottom:8px}
+.updatesPage .upWeekHead h2{margin:0}
+.updatesPage .upOfficialBox{display:flex;gap:6px;flex-wrap:wrap}
+.updatesPage .upOfficialLink{font-size:13px;color:#fcd34d;text-decoration:none;padding:4px 10px;border-radius:8px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.45)}
+.updatesPage .upTools{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-bottom:4px}
+.updatesPage .upTools .upCats{margin:0}
+.updatesPage .upTools input{flex:1 1 220px;max-width:320px;margin:0}
+.updatesPage .qaNavChip.active{border-color:var(--accent,#71d5ef);background:rgba(113,213,239,.16)}
+@media(max-width:640px){.updatesPage .upWeekPick{width:100%}.updatesPage .upTools input{max-width:none}}
+.updatesPage .upStep{border:1px solid var(--line)!important;background:var(--panel2)!important;color:var(--text)!important;box-shadow:none!important}
+.updatesPage .upStep[disabled]{opacity:.4!important}
