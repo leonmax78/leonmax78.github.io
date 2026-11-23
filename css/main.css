@@ -5232,3 +5232,27 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .qaNpcInfo small{margin-left:3px;opacity:.75;font-size:11px}
 .questSteps>li.questStepHl{background:rgba(245,158,11,.14);outline:1px solid rgba(245,158,11,.55);border-radius:8px;padding:4px 8px}
 .itemTradeCond,.qaSellCond{margin-left:4px;font-size:10.5px;padding:0 5px;border-radius:5px;background:rgba(148,163,184,.18);color:#cbd5e1;white-space:nowrap}
+/* V881 改版紀錄 */
+.updatesPage .upWeeks{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.updatesPage .upSearch input{width:100%;max-width:520px;margin:4px 0 8px}
+.updatesPage .upTitle{margin:10px 0 6px}
+.upSec{border-top:1px solid var(--line);padding:6px 0}
+.upSec>summary{cursor:pointer;font-weight:700;padding:6px 0;font-size:15px}
+.upSec>summary b{margin-left:6px;font-size:12px;padding:0 7px;border-radius:9px;background:rgba(148,163,184,.2)}
+.upSec>summary small{margin-left:8px;font-weight:400;opacity:.65;font-size:12px}
+.upList{list-style:none;margin:4px 0 8px;padding:0;display:flex;flex-direction:column;gap:6px}
+.upList.chips{flex-direction:row;flex-wrap:wrap}
+.upList>li{padding:6px 10px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);min-width:0;overflow-wrap:anywhere;line-height:1.6}
+.upList.chips>li{padding:3px 10px}
+.upHead{display:flex;align-items:baseline;gap:8px;font-weight:700}
+.upHead small{font-weight:400;opacity:.6;font-size:11.5px}
+.upLink{border:0;background:none;padding:0;margin:0;min-height:0;font:inherit;color:var(--accent,#71d5ef);cursor:pointer;border-bottom:1px dashed currentColor;border-radius:0;box-shadow:none}
+.upChanges,.upDrops{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;margin-top:2px}
+.upChg .upField,.upLong .upField{opacity:.7;margin-right:5px}
+.upChg.up b{color:#86efac}.upChg.down b{color:#fca5a5}
+.upLong{flex-basis:100%;font-size:13px}
+.upOld{opacity:.6;text-decoration:line-through;margin:2px 0}
+.upNew{color:#e2e8f0}
+.upDrop em{font-style:normal;font-size:11px;padding:0 5px;border-radius:5px;margin:0 3px;background:rgba(148,163,184,.2)}
+.upDrop.add em{background:rgba(34,197,94,.22);color:#86efac}.upDrop.del em{background:rgba(239,68,68,.22);color:#fca5a5}
+.upField{font-weight:600}
