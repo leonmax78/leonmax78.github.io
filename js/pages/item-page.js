@@ -524,7 +524,7 @@ function itemContentsHTML(it){
 }
 // V878: 內容物卡片下方：最高收購價與收購 NPC（只列地圖上找得到的 NPC）、可拆解成什麼（data/item-trade.js）
 function itemTradeMoney(n){n=Number(n)||0;return n>=10000?(Math.round(n/100)/100).toString().replace(/\.?0+$/,'')+'萬':n.toLocaleString('en-US');}
-function itemTradeNpc(r){return `<button type="button" class="itemTradeNpc" data-trade-map="${esc(r[1])}" data-trade-npc="${esc(r[2])}" data-trade-name="${esc(r[0])}">${esc(r[0])}＠${esc(r[1])}</button>`;}
+function itemTradeNpc(r){return `<button type="button" class="itemTradeNpc" data-trade-map="${esc(r[1])}" data-trade-npc="${esc(r[2])}" data-trade-name="${esc(r[0])}">${esc(r[0])}＠${esc(r[1])}</button>${r[5]?`<small class="itemTradeCond">${esc(r[5])}</small>`:''}${r[6]?`<small class="itemTradeCond">${esc(r[6])}</small>`:''}`;}
 function itemTradeHTML(t){
  if(!t)return '<div class="itemTrade"><span class="itemTradeNone">無 NPC 收購</span></div>';
  let h='';
