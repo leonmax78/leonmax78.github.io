@@ -47,7 +47,7 @@
         <button class="navBtn sub" data-view="map">地圖查詢 <span>›</span></button>
         <button class="navBtn sub" data-view="shop">商店販賣資訊 <span>›</span></button>
       </div>
-      <button class="navBtn major" data-view="updates">改版紀錄 <span>›</span></button>
+      <button class="navBtn major" data-view="updates">每週更新歷程 <span>›</span></button>
       <!-- The editor stays separate from item search and loads only when opened. -->
       <button class="navBtn major" data-view="jiang">角色養成試算 <span>›</span></button>
       <div class="formBox" id="jiangForm">
