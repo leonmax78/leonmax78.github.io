@@ -134,6 +134,9 @@ window.SZO_SCRIPT_GROUPS = {
   "page_exchange": [
     "js/pages/exchange-page.js"
   ],
+  "page_updates": [
+    "js/pages/updates-page.js"
+  ],
   "page_qa": [
     "js/pages/qa-page.js"
   ],
