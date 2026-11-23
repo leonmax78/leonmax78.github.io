@@ -10,7 +10,9 @@
     exchanges: 'data/exchanges.json',
     talk: 'data/npc_item_talk.json',
     training: 'data/training_spots.json',
-    walk: 'data/training_walk.json'
+    walk: 'data/training_walk.json',
+    trade: 'data/item_trade.json',
+    alias: 'data/search_alias.json'
   };
   const cache = {};
   const state = { query: '', mode: 'auto', exactItem: '' };
@@ -120,6 +122,7 @@
     let text = String(raw || '').trim();
     text = text.replace(/(請問|幫我|幫忙|查詢|搜尋|查一下|我想問|想問|可以|嗎|呢|啊|喔|謝謝)/g, '');
     text = text.replace(/(在哪裡|在哪|哪裡|哪邊|什麼地方|位置|地圖|出現|座標)/g, '');
+    text = text.replace(/(怎麼拿|怎麼取得|如何取得|怎麼得到|哪裡拿|取得方式|拿來做什麼|做什麼用|有什麼用|可以做什麼|用途|最貴|多少錢)/g, '');
     text = text.replace(/(誰會掉|誰掉|哪隻掉|哪裡掉|掉落|掉|出處|反查|來源)/g, '');
     text = text.replace(/(哪裡買|哪裡賣|哪邊買|哪邊賣|買得到|買|購買|商店|販售|販賣|售價|價格|回收|賣)/g, '');
     text = text.replace(/[？?！!。．,，、:：;；]/g, ' ');
@@ -697,13 +700,43 @@
       ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
       <p class="muted qaTrainNote"><b>推薦練功位置僅供參考。</b>標「可能出現守關妖將」的終末之塔樓層，守關妖將會隨機出現，出現後約 1 小時不能掛，實際經驗會比顯示的少。有些地圖的怪在王被打死後就不再出現（例如終末之塔 36、63 樓），這些怪已從練功計算中排除，改列在「副本（不重生）」；標「有怪王死後消失」的地圖表示有部分怪是這樣。標「怪物不掉錢」的地點不能用修裝助手、難以長期掛機，排在其他地點後面。重生時間、出生點位置、障礙物與能否定點、能否自動掛機取自遊戲地圖檔與地圖設定；跑速與打怪時間是大概值（每隻約 1 秒秒殺），實際會依職業、裝備與技能不同。免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。點座標可在地圖上看位置；推薦點有人在掛時，可切到「同張地圖其他點」的備選點。</p></section>`;
   }
+  // V880: 收購價（data/item_trade.json：最高收購價與收購 NPC，只列地圖上找得到的 NPC）
+  function tradeMoney(n){ n = Number(n) || 0; return n >= 10000 ? (Math.round(n / 100) / 100).toString().replace(/\.?0+$/, '') + '萬' : n.toLocaleString(); }
+  function tradeNpcBtn(r){ return `<button type="button" class="qaLink" data-qa-map="${html(r[1])}" data-qa-map-query="${html(r[0])}">${html(r[0])}＠${html(r[1])}</button>${r[5] ? `<small class="qaSellCond">${html(r[5])}</small>` : ''}${r[6] ? `<small class="qaSellCond">${html(r[6])}</small>` : ''}`; }
+  function sellLine(t){
+    if(!t || !t.s) return '';
+    const [price, where] = t.s;
+    return `<div class="qaSell">💰 NPC 最高收購 <b>${tradeMoney(price)}</b>｜${tradeNpcBtn(where[0])}${where.length > 1 ? `<details class="qaMore qaSellMore"><summary>等 ${where.length} 處</summary>${where.slice(1).map(tradeNpcBtn).join('、')}</details>` : ''}</div>`;
+  }
+  // 編輯距離 ≤ 1（少打、多打或打錯一個字）
+  function nearOne(a, b){
+    if(a === b) return true;
+    const la = a.length, lb = b.length; if(Math.abs(la - lb) > 1) return false;
+    let i = 0, j = 0, d = 0;
+    while(i < la && j < lb){
+      if(a[i] === b[j]){ i++; j++; continue; }
+      if(++d > 1) return false;
+      if(la > lb) i++; else if(lb > la) j++; else { i++; j++; }
+    }
+    return d + (la - i) + (lb - j) <= 1;
+  }
+  const TOKEN = /⟦(-?\d+),(\d+),(-?\d+),(-?\d+),([^⟧]*)⟧/g;
+  const plainQuest = t => String(t || '').replace(TOKEN, '$5');
   async function answerGlobal(query){
     const tlv = trainingLevel(query);
     if(tlv) return answerTraining(tlv);
     const term = searchTerm(query);
-    const [items, monsters, maps] = await Promise.all([json('items'), json('monsters'), json('maps')]);
+    const [items, monsters, maps, aliasData, trade] = await Promise.all([json('items'), json('monsters'), json('maps'), json('alias').catch(() => ({})), json('trade').catch(() => ({}))]);
     const itemMatches = findByName(items, itemName, term, 12);
-    const monsterMatches = findByName(monsters, monsterName, term, 12);
+    let monsterMatches = findByName(monsters, monsterName, term, 12);
+    // 別名、合稱、常見錯字（黑白無常、牛馬魔將…）→ 正式怪名
+    const aliasHit = Object.entries(aliasData.alias || {}).find(([k]) => norm(k) === norm(term));
+    if(aliasHit){
+      const extra = aliasHit[1].flatMap(n => findByName(monsters, monsterName, n, 3).filter(m => norm(monsterName(m)) === norm(n)));
+      const seenM = new Set(monsterMatches.map(monsterId));
+      monsterMatches = [...extra.filter(m => !seenM.has(monsterId(m)) && seenM.add(monsterId(m))), ...monsterMatches].slice(0, 14);
+    }
+    const aliasNote = aliasHit ? `<div class="qaAlias">「${html(aliasHit[0])}」指的是：${aliasHit[1].map(n => chip(n, `data-qa-search="${html(n)}"`)).join('')}</div>` : '';
     const mapMatches = (maps.stages || []).filter(stage => norm(stage.stageName).includes(norm(term))).slice(0, 10);
     const shopHtml = await answerShop(term);
     const shopHasResult = !shopHtml.includes('data-qa-shop-empty="all"');
@@ -714,6 +747,7 @@
         <span>${img ? `<img src="${html(img)}" alt="">` : ''}${item.Type ? `${html(typeLabel(item.Type))} / ` : ''}ID ${html(itemId(item))}</span>
         <b></b>
         <div class="qaRowActions">${chip('道具資訊', `data-qa-item="${html(itemId(item))}"`)}${chip('掉落反查', `data-qa-reverse="${html(itemId(item))}"`)}${chip('找商店', `data-qa-shop-item="${html(itemName(item))}"`)}</div>
+        ${sellLine(trade[itemId(item)])}
       </div>`;
     }).join('')}</div></div>` : '';
     const monsterSection = monsterMatches.length ? `<div class="qaAnswer" id="qaSecMonster"><h2>怪物</h2><div class="qaList">${await Promise.all(monsterMatches.map(async monster => {
@@ -738,11 +772,33 @@
       }
     }
     npcRows.sort((a,b) => (b.shop ? 1 : 0) - (a.shop ? 1 : 0) || (norm(a.npc.name) === norm(term) ? -1 : 0) || a.stage.stageId - b.stage.stageId);
-    const npcSection = npcRows.length ? `<div class="qaAnswer" id="qaSecNpc"><h2>NPC</h2><div class="qaList">${npcRows.slice(0, 12).map(({ stage, npc, shop }) => `<div class="qaRow qaShopRow">
+    // NPC 能兌換什麼、跟哪些任務有關
+    const [exAll, questAll] = npcRows.length ? await Promise.all([json('exchanges').catch(() => null), json('quests').catch(() => null)]) : [null, null];
+    for(const row of npcRows.slice(0, 12)){
+      const idx = (exAll?.npcs || []).map((n, i) => (n.p || []).some(p => String(p[0]) === String(row.stage.stageId) && String(p[1]) === String(row.npc.id)) ? i : -1).filter(i => i >= 0);
+      const gets = [];
+      for(const r of exAll?.rows || []) if(idx.includes(r.p)) for(const x of r.r || []) if(!gets.some(g => g[2] === x[2])) gets.push(x);
+      row.gets = gets;
+      row.quests = [];
+      for(const q of questAll?.quests || []){
+        const text = (q.d || '') + (q.s || []).join('');
+        if(!text.includes(',' + row.npc.id + ',')) continue;
+        let step = (q.s || []).findIndex(t => [...String(t).matchAll(TOKEN)].some(m => m[2] === String(row.npc.id)));
+        row.quests.push({ id: q.i, name: q.n, step });
+      }
+    }
+    const npcExtra = row => {
+      const parts = [];
+      if(row.gets?.length) parts.push(`<div class="qaNpcInfo"><span>可兌換</span>${row.gets.slice(0, 6).map(x => `<button type="button" class="qaLink" data-qa-preview-item="${html(x[2])}">${html(x[0])}</button>`).join('、')}${row.gets.length > 6 ? ` 等 ${row.gets.length} 種` : ''}</div>`);
+      if(row.quests?.length) parts.push(`<div class="qaNpcInfo"><span>相關任務</span>${row.quests.slice(0, 6).map(q => `<button type="button" class="qaLink" data-qa-quest="${html(q.id)}${q.step >= 0 ? '@' + q.step : ''}">${html(q.name)}${q.step >= 0 ? `<small>第 ${q.step + 1} 步</small>` : ''}</button>`).join('、')}${row.quests.length > 6 ? ` 等 ${row.quests.length} 個` : ''}</div>`);
+      return parts.join('');
+    };
+    const npcSection = npcRows.length ? `<div class="qaAnswer" id="qaSecNpc"><h2>NPC</h2><div class="qaList">${npcRows.slice(0, 12).map((row, _i, _a, { stage, npc, shop } = row) => `<div class="qaRow qaShopRow">
         <strong>${html(npc.name)}</strong>
         <span>${html(stage.stageName)}${shop ? '・商店' : ''}</span>
         <b></b>
-        <div class="qaRowActions">${shop ? chip('看商品', `data-qa-npc-shop="${html(stage.stageId)}:${html(npc.id)}"`) : ''}${mapChip(stage.stageName, npc.name)}</div>
+        <div class="qaRowActions">${shop ? chip('看商品', `data-qa-npc-shop="${html(stage.stageId)}:${html(npc.id)}"`) : ''}${chip('對話', `data-qa-npc-talk="${html(stage.stageId)}:${html(npc.id)}"`)}${mapChip(stage.stageName, npc.name)}</div>
+        ${npcExtra(row)}
       </div>`).join('')}</div></div>` : '';
     if(typeof window.ensureQuestPageLoaded === 'function') await window.ensureQuestPageLoaded().catch(() => null);
     const questRows = typeof window.szoQuestRows === 'function' ? await window.szoQuestRows(term, 30).catch(() => []) : [];
@@ -774,12 +830,28 @@
       }
     }
     const exLine = r => { const place = r.npc?.p?.[0]; return `<div class="qaLine"><span class="qaLineMain"><strong>${html(r.kind || '兌換')}</strong><small>交 ${html(r.item)}${r.qty > 1 ? ' ×' + html(r.qty) : ''}</small></span><span class="qaLineGet">${r.pick ? '擇一 ' : '換得 '}${r.rewards.slice(0, 3).map(x => `<button type="button" class="qaLink" data-qa-preview-item="${html(x[2])}">${html(x[0])}</button>${x[1] > 1 ? '×' + html(x[1]) : ''}`).join('、')}${r.rewards.length > 3 ? '…' : ''}</span><span class="qaLineActs">${place ? `<button type="button" class="qaMini" data-qa-npc-talk="${html(place[0])}:${html(place[1])}">${html(r.npc.n)}</button>` : ''}</span></div>`; };
-    const useHtml = perItem(name => block('可製作（配方・兌換加工）', recipeRows.filter(r => r.material === name), recipeLine)
+    // 任務要交（quests.json 的 ho）、NPC 收購
+    const idByName = new Map(itemMatches.map(it => [itemName(it), itemId(it)]));
+    const questUse = [];
+    const qData = itemOrder.length ? await json('quests').catch(() => null) : null;
+    for(const name of itemOrder){
+      const id = idByName.get(name); if(!id || !qData) continue;
+      for(const q of qData.quests || []){
+        const h = (q.ho || []).find(x => String(x[0]) === id); if(!h) continue;
+        const step = (q.s || []).findIndex(t => plainQuest(t).includes(name));
+        questUse.push({ item: name, id: q.i, name: q.n, qty: h[2] || '', step, cat: q.c === '資料片任務' ? q.g : q.c });
+      }
+    }
+    const questUseLine = r => `<div class="qaLine"><span class="qaLineMain"><button type="button" class="qaLink" data-qa-quest="${html(r.id)}${r.step >= 0 ? '@' + r.step : ''}">${html(r.name)}</button><small>${html(r.cat || '')}${r.step >= 0 ? `・第 ${r.step + 1} 步` : ''}</small></span><span class="qaLineGet">要交 ${html(r.qty || '')}</span></div>`;
+    const sellUse = name => { const t = trade[idByName.get(name)]; return t && t.s ? `<div class="qaGroup"><h3>賣給 NPC</h3><div class="qaLines">${sellLine(t)}</div></div>` : ''; };
+    const useHtml = perItem(name => block('任務要交', questUse.filter(r => r.item === name), questUseLine)
+      + block('可製作（配方・兌換加工）', recipeRows.filter(r => r.material === name), recipeLine)
       + block('兌換・拆解・升階材料', exUse.filter(r => r.item === name), exLine)
       + block('交給 NPC 兌換', talkRows.filter(r => r.item === name && r.rel === 't'), npcLine)
-      + block('對話需要持有', talkRows.filter(r => r.item === name && r.rel === 'h'), npcLine));
+      + block('對話需要持有', talkRows.filter(r => r.item === name && r.rel === 'h'), npcLine)
+      + sellUse(name));
     const getCount = srcList.reduce((n, src) => n + srcTotal(src), 0);
-    const useCount = talkRows.filter(r => r.rel !== 'g').length + recipeRows.length + exUse.length;
+    const useCount = talkRows.filter(r => r.rel !== 'g').length + recipeRows.length + exUse.length + questUse.length + itemOrder.filter(n => trade[idByName.get(n)]?.s).length;
     // 技能
     let skillRows = [];
     try{
@@ -793,10 +865,20 @@
     const useSection = useHtml ? `<div class="qaAnswer" id="qaSecUse"><h2>用途</h2>${useHtml}</div>` : '';
     const mapSection = mapMatches.length ? `<div class="qaAnswer" id="qaSecMap"><h2>地圖</h2><div class="qaMapChips">${mapMatches.map(stage => mapChip(stage.stageName, '')).join('')}</div></div>` : '';
     const hasAny = itemMatches.length || monsterMatches.length || mapMatches.length || npcRows.length || getCount || useCount || questRows.length || shopHasResult || skillRows.length;
-    if(!hasAny) return '<div class="empty">目前找不到符合的資料，可以換更短或更完整的關鍵字。</div>';
+    if(!hasAny){
+      // 打錯、少打或多打一個字：列出名稱最接近的道具、怪物、NPC、地圖
+      const q = norm(term), near = [];
+      if(q.length >= 2){
+        const add = n => { if(n && !near.includes(n) && nearOne(q, norm(n))) near.push(n); };
+        for(const it of items) add(itemName(it));
+        for(const m of monsters) add(monsterName(m));
+        for(const st of maps.stages || []){ add(st.stageName); for(const n of st.npcs || []) add(n.name); }
+      }
+      return near.length ? `<div class="empty">找不到「${html(term)}」。</div><div class="qaAlias">你是不是要找：${near.slice(0, 12).map(n => chip(n, `data-qa-search="${html(n)}"`)).join('')}</div>` : '<div class="empty">目前找不到符合的資料，可以換更短或更完整的關鍵字。</div>';
+    }
     const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecUse','用途',useCount],['qaSecGet','取得方式',getCount],['qaSecQuest','任務',questRows.length],['qaSecSkill','技能',skillRows.length],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
       .filter(x => x[2]).map(([id, label, n]) => `<button type="button" class="qaNavChip" data-qa-jump="${id}">${label}<b>${n}</b></button>`).join('');
-    return `<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${useSection}${getSection}${questSection}${skillSection}${npcSection}${mapSection}`;
+    return `${aliasNote}<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${useSection}${getSection}${questSection}${skillSection}${npcSection}${mapSection}`;
   }
   async function runQuestion(query){
     state.query = String(query || '').trim();
@@ -875,6 +957,8 @@
     if(itemSuggest){ const q = itemSuggest.dataset.qaItemSuggest || ''; const input = by('qaInput'); if(input) input.value = `${q} 哪裡掉`; runQuestion(`${q} 哪裡掉`); return; }
     const shopItem = ev.target.closest?.('[data-qa-shop-item]');
     if(shopItem){ state.exactItem = shopItem.dataset.qaShopItem || ''; const target = by('qaResults'); if(target){ resultLoading(); target.innerHTML = await answerShop(state.exactItem); } return; }
+    const qs = ev.target.closest?.('[data-qa-search]');
+    if(qs){ const q = qs.dataset.qaSearch || ''; const input = by('qaInput'); if(input) input.value = q; runQuestion(q); return; }
     const monsterSuggest = ev.target.closest?.('[data-qa-monster-suggest]');
     if(monsterSuggest){ const q = monsterSuggest.dataset.qaMonsterSuggest || ''; const input = by('qaInput'); if(input) input.value = `${q} 在哪`; runQuestion(`${q} 在哪`); return; }
     const alt = ev.target.closest?.('[data-qa-train-alt]');

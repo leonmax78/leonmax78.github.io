@@ -209,9 +209,22 @@
 
   window.renderQuestPreviewHTML = async function(id){
     const data = await loadQuests();
-    const q = data.byId.get(Number(id));
+    // 「任務ID@步驟」：全站搜尋點進來時標出那一步
+    const [qid, stepRaw] = String(id).split('@');
+    const q = data.byId.get(Number(qid));
     if(!q) throw Error('找不到這個任務');
-    return `<div class="itemGroupedDetail questPreview"><h1>${esc(q.n)}</h1><div class="questTags">${[q.c + '・' + q.g, ...limits(q)].map(t => `<em${t === '主線任務' ? ' class="questMainTag"' : ''}>${esc(t)}</em>`).join('')}</div>${questBodyHTML(q, data)}</div>`;
+    let body = questBodyHTML(q, data);
+    const step = stepRaw === undefined ? -1 : Number(stepRaw);
+    if(step >= 0){
+      const at = body.indexOf('<ol class="questSteps">');
+      if(at >= 0){
+        let pos = at, n = -1;
+        while(n < step && (pos = body.indexOf('<li>', pos + 1)) >= 0) n++;
+        if(pos >= 0) body = body.slice(0, pos) + '<li class="questStepHl" id="questStepHl">' + body.slice(pos + 4);
+      }
+    }
+    setTimeout(() => document.getElementById('questStepHl')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 120);
+    return `<div class="itemGroupedDetail questPreview"><h1>${esc(q.n)}</h1><div class="questTags">${[q.c + '・' + q.g, ...limits(q)].map(t => `<em${t === '主線任務' ? ' class="questMainTag"' : ''}>${esc(t)}</em>`).join('')}</div>${body}</div>`;
   };
 
   // Items → quests that use or mention them (search).
@@ -219,7 +232,9 @@
     const q = norm(raw); if(q.length < 2) return [];
     const data = await loadQuests();
     const out = [], seen = new Set();
-    const push = (quest, why) => { if(seen.has(quest.i)) return; seen.add(quest.i); out.push({ kind: 'quest', id: quest.i, label: quest.n, sub: `${why}${quest.lv ? '・Lv.' + quest.lv : ''}・${quest.c === '資料片任務' ? quest.g : (data.stages[quest.m] || quest.g)}` }); };
+    // 對到的是哪一步（任務道具名稱或文字出現在步驟裡）
+    const stepOf = quest => (quest.s || []).findIndex(t => norm(plain(t)).includes(q));
+    const push = (quest, why) => { if(seen.has(quest.i)) return; seen.add(quest.i); const st = norm(quest.n) === q ? -1 : stepOf(quest); out.push({ kind: 'quest', id: st >= 0 ? quest.i + '@' + st : quest.i, label: quest.n, sub: `${why}${st >= 0 ? `・第 ${st + 1} 步` : ''}${quest.lv ? '・Lv.' + quest.lv : ''}・${quest.c === '資料片任務' ? quest.g : (data.stages[quest.m] || quest.g)}` }); };
     for(const quest of data.quests) if(norm(quest.n) === q) push(quest, quest.c);
     for(const quest of data.quests) if((quest.it || []).some(([, n]) => norm(n) === q)) push(quest, `需要／取得「${raw.trim()}」`);
     for(const quest of data.quests) if(norm(quest.n).includes(q)) push(quest, quest.c);
