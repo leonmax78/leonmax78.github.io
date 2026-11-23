@@ -453,7 +453,7 @@ async function setView(view){
  else if(view==='map'){showPageLoading(viewLoadingLabel(view),'地圖載入中，請稍候。'); await ensureMapPageLoaded(); if(typeof renderStageMapPage==='function')renderStageMapPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='quest'){showPageLoading('任務查詢'); await ensureQuestPageLoaded(); await renderQuestPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='skill'){showPageLoading('技能查詢'); await ensureSkillPageLoaded(); await renderSkillPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
- else if(view==='updates'){showPageLoading('改版紀錄'); await ensureUpdatesPageLoaded(); await renderUpdatesPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
+ else if(view==='updates'){showPageLoading('每週更新歷程'); await ensureUpdatesPageLoaded(); await renderUpdatesPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='exchange'){showPageLoading('兌換、拆解、升階查詢'); await ensureExchangePageLoaded(); await renderExchangePage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='qa'){showPageLoading(viewLoadingLabel(view)); await ensureQaPageLoaded(); if(typeof renderQaPage==='function')renderQaPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
  else if(view==='downloads'){showPageLoading(viewLoadingLabel(view)); await ensureDownloadsPageLoaded(); if(typeof renderDownloadsPage==='function')renderDownloadsPage(); closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});}
@@ -590,7 +590,7 @@ const HOME_TOOLS=[
  ['data-view="map"','地圖查詢'],['data-view="exchange"','兌換、拆解、升階'],['data-jiang="support"','降神模擬'],
  ['data-view="gems"','寶石試算'],['data-view="skill"','技能查詢']
 ];
-const RECENT_LABELS={'data-view="machine"':'角色機體模擬','data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="updates"':'改版紀錄','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'降神模擬','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練進度'};
+const RECENT_LABELS={'data-view="machine"':'角色機體模擬','data-view="quest"':'任務查詢','data-item-open="item"':'道具查詢','data-item-open="reverse"':'掉落反查','data-item-open="compound"':'常用配方合成模擬','data-view="collect"':'武冠收錄資料','data-view="monsterQuery"':'查詢怪物','data-view="beastQuery"':'查詢封獸','data-view="skill"':'技能查詢','data-view="exchange"':'兌換、拆解、升階','data-view="updates"':'每週更新歷程','data-view="map"':'地圖查詢','data-view="shop"':'商店販賣資訊','data-view="gems"':'寶石試算','data-view="soul"':'武魂能力試算','data-view="trade"':'玩家交易區','data-view="autodata"':'離線內掛物品編輯','data-view="downloads"':'工具下載','data-jiang="support"':'降神模擬','data-jiang="compare"':'主降神比較','data-jiang="stars"':'降神20星能力總表','data-jiang="starAura"':'星等／靈氣試算','data-jiang="expPill"':'等級／經驗丹試算','data-jiang="training"':'修練進度'};
 function szoSetRoute(route){try{history.replaceState(history.state,'',location.pathname+location.search+(route?'#/'+route:''));}catch(e){}}
 window.szoSetRoute=szoSetRoute;
 async function szoOpenRoute(){

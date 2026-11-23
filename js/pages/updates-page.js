@@ -1,4 +1,4 @@
-// 改版紀錄：每週遊戲更新的資料差異（data/updates/，tools/build_update_log.py 產生）。
+// 每週更新歷程：每週遊戲更新的資料差異（data/updates/，tools/build_update_log.py 產生）。
 // 道具、怪物、技能、狀態的新增與數值變更，怪物掉落率變化，以及站長補充的重點說明。
 (function(){
   'use strict';
@@ -7,7 +7,7 @@
   const norm = v => { v = String(v ?? ''); if(window.SZO_LANGUAGE) v = window.SZO_LANGUAGE.toSimple(v); return v.toLowerCase().replace(/\s+/g, ''); };
   const ver = () => encodeURIComponent(document.body?.dataset?.version || 'dev');
   const cache = new Map();
-  const get = url => { if(!cache.has(url)) cache.set(url, fetch(url + '?v=' + ver(), { cache: 'force-cache' }).then(r => { if(!r.ok) throw Error('改版紀錄載入失敗'); return r.json(); }).catch(e => { cache.delete(url); throw e; })); return cache.get(url); };
+  const get = url => { if(!cache.has(url)) cache.set(url, fetch(url + '?v=' + ver(), { cache: 'force-cache' }).then(r => { if(!r.ok) throw Error('每週更新歷程載入失敗'); return r.json(); }).catch(e => { cache.delete(url); throw e; })); return cache.get(url); };
   const D = () => window.SZO_DISPLAY;
   const EXTRA_LABEL = { Stun: '暈眩值', HitTime: '命中時間', Mana: '耗精力', TriggerType: '觸發類型', TriggerParm1: '觸發參數' };
   let STATUS = {};
@@ -64,11 +64,12 @@
     }).join('');
     const chips = SECTIONS.map(([k, title]) => { const n = rowsFor(k, w, q).length; return n ? `<button type="button" class="qaNavChip" data-up-jump="${k}">${title}<b>${n}</b></button>` : ''; }).join('');
     reader.innerHTML = `<section class="card updatesPage">
-      <h1>改版紀錄</h1>
-      <p class="muted">每週遊戲更新後，拆包比對新舊資料的差異：新道具、新怪物、數值與說明變更、掉落率變化。重點說明由站長補充（兌換、地圖等資料比對看不出來的部分）。</p>
+      <h1>每週更新歷程</h1>
+      <p class="muted">每週遊戲更新後，拆包比對新舊資料的差異：新道具、新怪物、數值與說明變更、掉落率變化。重點說明由站長補充（兌換、地圖等資料比對看不出來的部分）；有官方公告的週次附上連結。</p>
       <div class="upWeeks">${tabs}</div>
       <div class="upSearch"><input id="upQuery" type="search" placeholder="在這週的變更裡找：道具、怪物、欄位名稱…" value="${esc(state.query)}"></div>
       <h2 class="upTitle">${esc(state.week.replace(/-/g, '/'))} 更新</h2>
+      ${(w.links || []).length ? `<div class="upLinks">${w.links.map(l => `<a class="qaChip upOfficial" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">📢 ${esc(l.t || '官方公告')}</a>`).join('')}</div>` : ''}
       <nav class="qaNav">${chips}</nav>
       ${blocks || '<div class="empty">沒有符合的變更。</div>'}
     </section>`;

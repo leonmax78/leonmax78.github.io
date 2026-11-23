@@ -5,7 +5,8 @@ Input
   reports/update_MMDD_data.json   written by the weekly import (tools/update_MMDD.py):
       {items|monsters|magic|status: {added: [...], changed: [{id, name, fields: {Field: [old, new]}}]}}
   tools/data/update_notes.json    hand-written notes per week (exchanges, maps, things the
-                                   data diff does not cover): {"2026-11-19": ["…", …]}
+                                   data diff does not cover) and official announcement links:
+                                   {"2026-11-19": {"notes": ["…"], "links": [{"t": "官方更新公告", "u": "https://…"}]}}
 
 Output
   data/updates/index.json         [{d: "2026-11-19", n: {counts}}], newest first
@@ -54,7 +55,10 @@ def week(path):
     rep = json.loads(path.read_text(encoding='utf-8'))
     mmdd = re.search(r'update_(\d{4})_data', path.name).group(1)
     day = f'{YEAR}-{mmdd[:2]}-{mmdd[2:]}'
-    out = {'d': day, 'notes': notes.get(day, [])}
+    # update_notes.json: {"YYYY-MM-DD": ["說明", ...]} 或 {"YYYY-MM-DD": {"notes": [...], "links": [{"t": "官方更新公告", "u": "https://..."}]}}
+    note = notes.get(day, [])
+    if isinstance(note, list): note = {'notes': note}
+    out = {'d': day, 'notes': note.get('notes', []), 'links': [l for l in note.get('links', []) if str(l.get('u', '')).startswith('https://')]}
     for sec in ('items', 'monsters', 'magic', 'status'):
         part = rep.get(sec) or {}
         added = []
