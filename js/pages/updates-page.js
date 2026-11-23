@@ -55,7 +55,7 @@
     let w;
     try{ w = await get(`data/updates/${state.week}.json`); }catch(e){ reader.innerHTML = `<section class="card"><div class="empty">${esc(e.message)}</div></section>`; return; }
     const q = norm(state.query);
-    const tabs = index.map(x => `<button type="button" class="qaChip${x.d === state.week ? ' active' : ''}" data-up-week="${esc(x.d)}">${day(x.d)}</button>`).join('');
+    const tabs = index.map(x => `<button type="button" class="qaChip${x.d === state.week ? ' active' : ''}" data-up-week="${esc(x.d)}">${day(x.d)}${x.v ? `<small class="upVer">${esc(x.v)}</small>` : ''}</button>`).join('');
     const blocks = SECTIONS.map(([k, title]) => {
       const rows = rowsFor(k, w, q); if(!rows.length) return '';
       const art = k.endsWith('~') && !q ? (w[k.slice(0, -1)]?.art || 0) : 0;
@@ -68,7 +68,7 @@
       <p class="muted">每週遊戲更新後，拆包比對新舊資料的差異：新道具、新怪物、數值與說明變更、掉落率變化。重點說明整理自官方更新公告與站長補充（兌換、活動、地圖等資料比對看不出來的部分），每週附上官方公告原文連結。</p>
       <div class="upWeeks">${tabs}<a class="qaChip upOfficial" href="https://szo.uj.com.tw/news.php?c=5" target="_blank" rel="noopener noreferrer">📢 官方更新公告列表</a></div>
       <div class="upSearch"><input id="upQuery" type="search" placeholder="在這週的變更裡找：道具、怪物、欄位名稱…" value="${esc(state.query)}"></div>
-      <h2 class="upTitle">${esc(state.week.replace(/-/g, '/'))} 更新</h2>
+      <h2 class="upTitle">${esc(state.week.replace(/-/g, '/'))} 更新${w.v ? `<span class="upVerTitle">版本 ${esc(w.v)}</span>` : ''}</h2>
       ${(w.links || []).length ? `<div class="upLinks">${w.links.map(l => `<a class="qaChip upOfficial" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">📢 ${esc(l.t || '官方公告')}</a>`).join('')}</div>` : ''}
       <nav class="qaNav">${chips}</nav>
       ${blocks || '<div class="empty">沒有符合的變更。</div>'}

@@ -58,7 +58,7 @@ def week(path):
     # update_notes.json: {"YYYY-MM-DD": ["說明", ...]} 或 {"YYYY-MM-DD": {"notes": [...], "links": [{"t": "官方更新公告", "u": "https://..."}]}}
     note = notes.get(day, [])
     if isinstance(note, list): note = {'notes': note}
-    out = {'d': day, 'notes': note.get('notes', []), 'links': [l for l in note.get('links', []) if str(l.get('u', '')).startswith('https://')]}
+    out = {'d': day, 'v': note.get('v', ''), 'notes': note.get('notes', []), 'links': [l for l in note.get('links', []) if str(l.get('u', '')).startswith('https://')]}
     for sec in ('items', 'monsters', 'magic', 'status'):
         part = rep.get(sec) or {}
         added = []
@@ -94,7 +94,7 @@ def main():
         n = {'notes': len(w['notes']), 'drops': len(w['monsters']['drops'])}
         for sec in ('items', 'monsters', 'magic', 'status'):
             n[sec + '+'] = len(w[sec]['added']); n[sec + '~'] = len(w[sec]['changed'])
-        index.append({'d': w['d'], 'n': n})
+        index.append({'d': w['d'], 'v': w['v'], 'n': n})
         print(w['d'], n)
     index.sort(key=lambda x: x['d'], reverse=True)
     (dest / 'index.json').write_text(json.dumps(index, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')

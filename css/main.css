@@ -5258,3 +5258,5 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .upField{font-weight:600}
 .updatesPage .upLinks{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 8px}
 .updatesPage a.upOfficial{text-decoration:none;border-color:#f59e0b;color:#fcd34d;background:rgba(245,158,11,.12)}
+.updatesPage .upVer{margin-left:6px;font-size:11px;opacity:.75;font-weight:500}
+.updatesPage .upVerTitle{margin-left:10px;font-size:13px;font-weight:600;padding:1px 8px;border-radius:7px;background:rgba(148,163,184,.18);vertical-align:2px}
