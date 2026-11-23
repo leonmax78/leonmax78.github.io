@@ -65,8 +65,8 @@
     const chips = SECTIONS.map(([k, title]) => { const n = rowsFor(k, w, q).length; return n ? `<button type="button" class="qaNavChip" data-up-jump="${k}">${title}<b>${n}</b></button>` : ''; }).join('');
     reader.innerHTML = `<section class="card updatesPage">
       <h1>每週更新歷程</h1>
-      <p class="muted">每週遊戲更新後，拆包比對新舊資料的差異：新道具、新怪物、數值與說明變更、掉落率變化。重點說明由站長補充（兌換、地圖等資料比對看不出來的部分）；有官方公告的週次附上連結。</p>
-      <div class="upWeeks">${tabs}</div>
+      <p class="muted">每週遊戲更新後，拆包比對新舊資料的差異：新道具、新怪物、數值與說明變更、掉落率變化。重點說明整理自官方更新公告與站長補充（兌換、活動、地圖等資料比對看不出來的部分），每週附上官方公告原文連結。</p>
+      <div class="upWeeks">${tabs}<a class="qaChip upOfficial" href="https://szo.uj.com.tw/news.php?c=5" target="_blank" rel="noopener noreferrer">📢 官方更新公告列表</a></div>
       <div class="upSearch"><input id="upQuery" type="search" placeholder="在這週的變更裡找：道具、怪物、欄位名稱…" value="${esc(state.query)}"></div>
       <h2 class="upTitle">${esc(state.week.replace(/-/g, '/'))} 更新</h2>
       ${(w.links || []).length ? `<div class="upLinks">${w.links.map(l => `<a class="qaChip upOfficial" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">📢 ${esc(l.t || '官方公告')}</a>`).join('')}</div>` : ''}
