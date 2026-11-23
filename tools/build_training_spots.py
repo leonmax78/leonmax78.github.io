@@ -57,7 +57,7 @@ def respawns(game, overlay=None):
         if i:
             f = f.group(1) if f else ''
             flags[int(i.group(1))] = ('STAGE_FLAG_NOMARK' in f) * 1 + ('STAGE_FLAG_ForbidAutoPlay' in f) * 2
-    out, walk, gone = {}, {}, set()
+    out, walk, gone, lock = {}, {}, set(), set()
     import struct
     import numpy as np
     for sid, data in files.items():
@@ -75,6 +75,11 @@ def respawns(game, overlay=None):
             os.unlink(tf.name)
         shown = {a[3] for br in ev.values() for b in br for a in b['act'] if a[0] == 48}
         hidden = {a[3] for o in objs if o[7] == 7001 and o[8] in ev for b in ev[o[8]] for a in b['act'] if a[0] == 47}
+        # 王死亡事件裡有「變數／計時」動作（13、33～36）＝這層的關卡鎖：王打死後整層怪不再重生
+        # （終末之塔 36、63 樓玩家實測；37 樓沒有這組動作，怪會照常重生）
+        for o in objs:
+            if o[7] == 7001 and o[8] in ev and any(a[0] in (33, 34) for b in ev[o[8]] for a in b['act']):
+                lock.add((sid, o[9], o[1], o[2]))
         for o in objs:
             if o[7] == 7001:
                 k = (sid, o[9], o[1], o[2])
@@ -82,14 +87,14 @@ def respawns(game, overlay=None):
                 if o[5] in hidden and o[5] not in shown and o[11]:
                     out[k] = 0
                     gone.add(k)
-    return out, flags, walk, gone
+    return out, flags, walk, gone, lock
 
 
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--overlay')]
     overlay = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--overlay=')), None)
     game = args[0] if args else '/mnt/user-data/uploads/神州Online'
-    resp, flags, walk, gone = respawns(game, overlay)
+    resp, flags, walk, gone, lock = respawns(game, overlay)
     mons = {num(m['ID']): m for m in json.loads((ROOT / 'data/monsters.json').read_text(encoding='utf-8'))}
     st = json.loads((ROOT / 'data/stage_maps.json').read_text(encoding='utf-8'))
     st = st['stages'] if isinstance(st, dict) else st
@@ -114,19 +119,20 @@ def main():
             aff = [round(v, 5) for v in list(cx) + list(cy)]
         for name, (x0, y0, x1, y1) in zones:
             cnt, pts = {}, []
+            locked = s.get('mapCategory') == 'tower' and any((s['stageId'], m['id'], m.get('rawX'), m.get('rawY')) in lock and x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1 for m in s.get('monsters', []))
             for m in ms:
                 if not (x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1) or m['id'] in SKIP_IDS:
                     continue
                 d = mons.get(m['id'])
                 if not d or num(d.get('HP')) >= BOSS_HP or num(d.get('DropExp')) <= 0:
                     continue
-                k = (m['id'], resp.get((s['stageId'], m['id'], m.get('rawX'), m.get('rawY')), -1))
+                k = (m['id'], 0 if locked else resp.get((s['stageId'], m['id'], m.get('rawX'), m.get('rawY')), -1))
                 cnt[k] = cnt.get(k, 0) + 1
                 pts.append((k, round(m['x']), round(m['y'])))
             if not cnt:
                 continue
             # 終末之塔：地圖檔在這層放了守關妖將（9029）＝會隨機出現，出現後約 1 小時不能掛
-            gone_here = any((s['stageId'], m['id'], m.get('rawX'), m.get('rawY')) in gone and x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1 for m in ms)
+            gone_here = locked or any((s['stageId'], m['id'], m.get('rawX'), m.get('rawY')) in gone and x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1 for m in ms)
             guard = any(m['id'] in SKIP_IDS and x0 <= m['x'] <= x1 and y0 <= m['y'] <= y1 for m in ms) if s.get('mapCategory') == 'tower' else False
             screens = max(1.0, (x1 - x0) * (y1 - y0) * raw * raw / SCREEN)
             keys = sorted(cnt, key=lambda x: (num(mons[x[0]]['Level']), x[1]))

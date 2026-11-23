@@ -573,7 +573,7 @@
       return { mode: 'stand', a: c, mem, v, kpm };
     };
     const stands = pts.map(standOf).sort((x, y) => y.v - x.v);
-    let best = stands[0];
+    const cands = [...stands];
     if(g && !(s.f & 1)){
       const maxWalk = TR.cycle * TR.speed;
       for(const A of stands.slice(0, 6)){
@@ -600,11 +600,21 @@
           let v = mem.reduce((s2, p) => s2 + p.exp, 0), kpm = mem.length;
           for(const p of A.mem){ const k = Math.min(Math.floor(rest / p.r), inMem.has(p) ? Math.floor(rest / p.r) : 1 + Math.floor(rest / p.r)); v += k * p.exp; kpm += k; }
           if(kpm > cap){ v *= cap / kpm; kpm = cap; }
-          if(v > best.v) best = { mode: 'route', a: A.a, b: B, mem: [...new Set([...mem, ...A.mem])], v, kpm, path, t, W: g.W };
+          cands.push({ mode: 'route', a: A.a, b: B, mem: [...new Set([...mem, ...A.mem])], v, kpm, path, t, W: g.W });
         }
       }
     }
-    return best;
+    // V879: 同張地圖再挑 2 個怪物幾乎不重疊的點（推薦點有人在掛時可以換）
+    cands.sort((x, y) => y.v - x.v);
+    const picked = [];
+    for(const c of cands){
+      if(!c.mem.length || c.v <= 0) continue;
+      const set = new Set(c.mem);
+      if(picked.some(p => p.mem.filter(m => set.has(m)).length > Math.min(p.mem.length, c.mem.length) * 0.34)) continue;
+      picked.push(c);
+      if(picked.length >= 3) break;
+    }
+    return picked.length ? picked : null;
   }
   async function answerTraining(lv){
     const [data, walk] = await Promise.all([json('training'), json('walk').catch(() => null)]);
@@ -622,24 +632,25 @@
       for(const m of s.m){ if(!ok(m)) continue; const o = ms.find(x => x[0] === m[0] && x[1] === m[1] && x[2] === m[2] && x[4] === m[4]); if(o) o[3] += m[3]; else ms.push(m.slice()); }
       if(!ms.length) continue;
       const n = ms.reduce((t, m) => t + m[3], 0), exp = ms.reduce((t, m) => t + m[2] * m[3], 0);
-      const spot = inst ? null : bestSpot(s, ok, walk);
-      if(!inst && !spot) continue;
+      const alts = inst ? null : bestSpot(s, ok, walk);
+      if(!inst && !alts) continue;
+      const spot = alts && alts[0];
       // 打得到的怪都不掉錢＝不能用修裝助手，長期掛很難（例如終末之塔 38 樓），排在會掉錢的地點後面
       const noMoney = !inst && ms.every(m => !m[5]);
-      rows.push({ s, ms, n, exp, spot, noMoney, score: inst ? exp : spot.v });
+      rows.push({ s, ms, n, exp, spot, alts, noMoney, score: inst ? exp : spot.v });
     }
     rows.sort((a, b) => (a.noMoney - b.noMoney) || b.score - a.score);
     const top = rows.slice(0, 10);
     const tabs = [['all', '全部'], ['normal', '一般地圖'], ['tower', '終末之塔'], ['inst', '副本（不重生）']].map(([k, t]) => `<button type="button" class="qaChip${trainState.filter === k ? ' active' : ''}" data-qa-train-filter="${k}" data-qa-train-lv="${lv}">${t}</button>`).join('');
     const mapName = r => r.s.n.replace(/\s*\d+樓$/, '');
     const coordBtn = (r, c, label) => { const g = xy(r.s, c); return g ? `<button type="button" class="qaChip" data-qa-map="${html(mapName(r))}" data-qa-map-query="" data-qa-map-x="${g[0]}" data-qa-map-y="${g[1]}">${label ? `<b class="qaSpotLbl">${label}</b> ` : ''}(${g[0]}, ${g[1]})</button>` : ''; };
-    const where = r => r.spot.mode === 'route'
-      ? `<span>掛在</span>${coordBtn(r, r.spot.a, 'A')}<span>傳送大法定點在</span>${coordBtn(r, r.spot.b, 'B')}<span>每 60 秒傳送一次，從 B 沿路打回 A（約 ${Math.round(r.spot.t)} 秒）</span>`
-      : `<span>站在</span>${coordBtn(r, r.spot.a, '')}<span>附近掛機</span>`;
+    const where = (r, sp = r.spot) => sp.mode === 'route'
+      ? `<span>掛在</span>${coordBtn(r, sp.a, 'A')}<span>傳送大法定點在</span>${coordBtn(r, sp.b, 'B')}<span>每 60 秒傳送一次，從 B 沿路打回 A（約 ${Math.round(sp.t)} 秒）</span>`
+      : `<span>站在</span>${coordBtn(r, sp.a, '')}<span>附近掛機</span>`;
     // 小地圖：路線（B→A，沿可走的路）、掛點、打得到的出生點（金點），其他出生點灰點
-    const miniMap = r => {
+    const miniMap = (r, sp = r.spot) => {
       const s = r.s; if(!s.img || !s.bb) return '';
-      const [x0, y0, x1, y1] = s.bb, bw = x1 - x0, bh = y1 - y0, sp = r.spot;
+      const [x0, y0, x1, y1] = s.bb, bw = x1 - x0, bh = y1 - y0;
       const inSet = new Set(sp.mem.map(p => p.x + ',' + p.y));
       const dots = (s.p || []).map(([, x, y]) => `<circle cx="${x}" cy="${y}" r="${inSet.has(x + ',' + y) ? 5 : 3.5}" class="${inSet.has(x + ',' + y) ? 'on' : 'off'}"/>`).join('');
       const pin = (c, t) => `<circle cx="${c.x}" cy="${c.y}" r="9" class="pin"/><text x="${c.x}" y="${c.y - 16}">${t}</text>`;
@@ -650,9 +661,9 @@
       } else body = `<ellipse cx="${sp.a.x}" cy="${sp.a.y}" rx="${TR.stand}" ry="${TR.stand * 3 / 4}"/>${dots}`;
       return `<div class="qaMiniMap" style="aspect-ratio:${bw}/${bh};background-image:url('${html(s.img)}');background-size:${(s.W / bw * 100).toFixed(3)}% auto;background-position:${s.W > bw ? (x0 / (s.W - bw) * 100).toFixed(3) : 0}% ${s.H > bh ? (y0 / (s.H - bh) * 100).toFixed(3) : 0}%"><svg viewBox="${x0} ${y0} ${bw} ${bh}" preserveAspectRatio="none">${body}</svg></div>`;
     };
-    const stats = r => inst
+    const stats = (r, sp = r.spot) => inst
       ? `<span>打完一輪共 <b>${fmt(r.exp)}</b> 經驗</span><span>怪物 <b>${r.n}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`
-      : `<span>每分鐘約 <b>${fmt(r.spot.v)}</b> 經驗</span><span>打得到 <b>${r.spot.mem.length}</b> 個出生點・每分鐘約 <b>${+r.spot.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
+      : `<span>每分鐘約 <b>${fmt(sp.v)}</b> 經驗</span><span>打得到 <b>${sp.mem.length}</b> 個出生點・每分鐘約 <b>${+sp.kpm.toFixed(1)}</b> 隻</span><span>平均每隻 <b>${fmt(r.exp / r.n)}</b> 經驗</span>`;
     // 終末之塔怎麼上去：斷線重登位置（玩家提供的遊戲說明）1～30 樓回虛空渦心、31～60→31、61～100→61、101～130→101、131～180→131；
     // 玩家用終末速行令（39、49…）飛上去後重登，再從重登樓層往上爬。途中有可能出現守關妖將的樓層會擋路。
     const guardFloors = (data.spots || []).filter(x => x.g === '終末之塔' && (x.f & 4)).map(x => +(x.n.match(/(\d+)樓$/) || [])[1]).filter(Boolean);
@@ -671,9 +682,11 @@
       return parts.length ? `<div class="qaTrainAccess"><span>怎麼上去</span>${html(parts.join('；'))}</div>` : '';
     };
     const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : '', r.s.f & 4 ? '可能出現守關妖將' : '', r.s.f & 8 ? '有怪王死後消失' : '', r.noMoney ? '怪物不掉錢' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
+    // 同張地圖的其他點：分頁切換（推薦點有人在掛就換一個）
+    const altTabs = r => r.alts.length < 2 ? '' : `<div class="qaTrainAlts"><span>同張地圖其他點：</span>${r.alts.map((sp, k) => `<button type="button" class="qaChip${k ? '' : ' active'}" data-qa-train-alt="${k}">${k ? `備選 ${k + 1}` : '推薦點'} <small>${fmt(sp.v)}/分</small></button>`).join('')}</div>`;
+    const pane = (r, sp, k) => `<div class="qaTrainPane"${k ? ' hidden' : ''} data-qa-train-pane="${k}"><div class="qaTrainStats">${stats(r, sp)}</div>${k ? '' : access(r)}${miniMap(r, sp)}<div class="qaTrainWhere">${where(r, sp)}</div></div>`;
     const card = (r, i) => `<div class="qaTrain"><div class="qaTrainHead"><b class="qaTrainRank">${i + 1}</b><strong>${html(r.s.n)}</strong>${tags(r)}${chip('看地圖', `data-qa-map="${html(mapName(r))}" data-qa-map-query="${html(r.ms[0][0])}"`)}</div>
-      <div class="qaTrainStats">${stats(r)}</div>${access(r)}
-      ${inst ? '' : `${miniMap(r)}<div class="qaTrainWhere">${where(r)}</div>`}
+      ${inst ? `<div class="qaTrainStats">${stats(r)}</div>${access(r)}` : `${altTabs(r)}${r.alts.map((sp, k) => pane(r, sp, k)).join('')}`}
       <div class="qaTrainMobs">${r.ms.map(m => `<span>${html(m[0])} <small>Lv${m[1]}・${fmt(m[2])} 經驗・${m[3]} 隻・${m[4] > 0 ? sec(m[4]) + '重生' : '不重生'}</small></span>`).join('')}</div></div>`;
     const intro = inst
       ? `這些地圖的怪物打死後不會自動重生（副本、挑戰類），依「打完一輪的總經驗」排序。`
@@ -682,7 +695,7 @@
       <p class="muted">角色只能從等級 ${lv}～${hi} 的怪物拿到經驗。${intro}魔王不列入。</p>
       <div class="qaTrainTabs">${tabs}</div>
       ${top.length ? top.map(card).join('') : '<div class="empty">這個分類沒有等級在範圍內的怪物。</div>'}
-      <p class="muted qaTrainNote"><b>推薦練功位置僅供參考。</b>標「可能出現守關妖將」的終末之塔樓層，守關妖將會隨機出現，出現後約 1 小時不能掛，實際經驗會比顯示的少。有些地圖的怪在王被打死後就不再出現（例如終末之塔 36 樓），這些怪已從練功計算中排除，改列在「副本（不重生）」；標「有怪王死後消失」的地圖表示有部分怪是這樣。標「怪物不掉錢」的地點不能用修裝助手、難以長期掛機，排在其他地點後面。重生時間、出生點位置、障礙物與能否定點、能否自動掛機取自遊戲地圖檔與地圖設定；跑速與打怪時間是大概值（每隻約 1 秒秒殺），實際會依職業、裝備與技能不同。免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。點座標可在地圖上看位置。</p></section>`;
+      <p class="muted qaTrainNote"><b>推薦練功位置僅供參考。</b>標「可能出現守關妖將」的終末之塔樓層，守關妖將會隨機出現，出現後約 1 小時不能掛，實際經驗會比顯示的少。有些地圖的怪在王被打死後就不再出現（例如終末之塔 36、63 樓），這些怪已從練功計算中排除，改列在「副本（不重生）」；標「有怪王死後消失」的地圖表示有部分怪是這樣。標「怪物不掉錢」的地點不能用修裝助手、難以長期掛機，排在其他地點後面。重生時間、出生點位置、障礙物與能否定點、能否自動掛機取自遊戲地圖檔與地圖設定；跑速與打怪時間是大概值（每隻約 1 秒秒殺），實際會依職業、裝備與技能不同。免服經驗 ×0.75、經驗符與活動倍率沒有算進去；終末之塔按樓層計算。點座標可在地圖上看位置；推薦點有人在掛時，可切到「同張地圖其他點」的備選點。</p></section>`;
   }
   async function answerGlobal(query){
     const tlv = trainingLevel(query);
@@ -864,6 +877,8 @@
     if(shopItem){ state.exactItem = shopItem.dataset.qaShopItem || ''; const target = by('qaResults'); if(target){ resultLoading(); target.innerHTML = await answerShop(state.exactItem); } return; }
     const monsterSuggest = ev.target.closest?.('[data-qa-monster-suggest]');
     if(monsterSuggest){ const q = monsterSuggest.dataset.qaMonsterSuggest || ''; const input = by('qaInput'); if(input) input.value = `${q} 在哪`; runQuestion(`${q} 在哪`); return; }
+    const alt = ev.target.closest?.('[data-qa-train-alt]');
+    if(alt){ const card = alt.closest('.qaTrain'); const k = alt.dataset.qaTrainAlt; card?.querySelectorAll('[data-qa-train-alt]').forEach(b => b.classList.toggle('active', b === alt)); card?.querySelectorAll('[data-qa-train-pane]').forEach(p => { p.hidden = p.dataset.qaTrainPane !== k; }); return; }
     const tf = ev.target.closest?.('[data-qa-train-filter]');
     if(tf){ trainState.filter = tf.dataset.qaTrainFilter; const target = by('qaResults'); if(target) target.innerHTML = await answerTraining(Number(tf.dataset.qaTrainLv)); return; }
     const map = ev.target.closest?.('[data-qa-map]');
