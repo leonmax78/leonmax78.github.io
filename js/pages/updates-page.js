@@ -80,7 +80,7 @@
     }).join('');
     const official = (w.links || []).map(l => `<a class="upOfficialLink" href="${esc(l.u)}" target="_blank" rel="noopener noreferrer">📢 ${esc(l.t || '官方公告')} ↗</a>`).join('');
     reader.innerHTML = `<section class="card updatesPage">
-      <header class="upHeader"><div><h1>每週更新歷程</h1><p class="muted">每週遊戲更新後拆包比對的資料差異，加上整理自官方公告的重點說明。</p></div><a class="upOfficialAll" href="${OFFICIAL_LIST}" target="_blank" rel="noopener noreferrer">官方更新公告列表 ↗</a></header>
+      <header class="upHeader"><div><h1>每週更新歷程</h1><p class="muted">每週遊戲更新後拆包比對的資料差異，加上整理自官方公告的重點說明。</p></div><a class="upOfficialAll" href="${OFFICIAL_LIST}" target="_blank" rel="noopener noreferrer"><span class="upOfficialIcon">📢</span><span><b>官方更新公告</b><small>到官網看全部公告 ↗</small></span></a></header>
       ${nav}
       <article class="upWeekBox">
         <header class="upWeekHead"><h2>${esc(state.week.replace(/-/g, '/'))} 更新${w.v ? `<span class="upVerTitle">版本 ${esc(w.v)}</span>` : ''}</h2>${official ? `<div class="upOfficialBox">${official}</div>` : ''}</header>
