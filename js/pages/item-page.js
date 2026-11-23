@@ -513,12 +513,46 @@ function itemContentsHTML(it){
  if(it.Type!=='BONUS')return '';
  const contents=window.SZO_ITEM_CONTENTS?.[String(it.ID)];
  if(!contents)return '<div class="muted itemContentsUnavailable">目前資料未提供可確認的內容物清單。</div>';
- return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><p class="muted">${esc(contents.revision||'機率依原始內容物權重換算。')}</p><div class="itemContentsGrid">${contents.ids.map(id=>{
+ const trade=window.SZO_ITEM_TRADE||{};
+ const hasTrade=contents.ids.some(id=>trade[id]);
+ return `<details class="itemContents"><summary>查看內容物（${contents.ids.length} 項）</summary><p class="muted">${esc(contents.revision||'機率依原始內容物權重換算。')}</p>${hasTrade?`<div class="itemTradeSort"><span>排序：</span><button type="button" class="active" data-item-trade-sort="rate">機率</button><button type="button" data-item-trade-sort="price">賣價</button></div>`:''}<div class="itemContentsGrid">${contents.ids.map((id,i)=>{
   const entry=itemIndex[id];
   const rate=Number.isFinite(contents.rates?.[id])?contents.rates[id].toFixed(6).replace(/\.?0+$/,'')+'%':'資料未提供';
-  return entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span><span class="itemContentRate">機率 ${rate}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）<div class="itemContentRate">機率 ${rate}</div></div>`;
+  const card=entry?`<button type="button" class="resultItem" data-item="${esc(id)}">${itemThumbHTML(entry)}<span><span class="rName">${esc(nameOf(entry))}</span><span class="rSub">ID ${esc(id)}</span><span class="itemContentRate">機率 ${rate}</span></span></button>`:`<div class="muted">道具 ID ${esc(id)}（名稱資料未提供）<div class="itemContentRate">機率 ${rate}</div></div>`;
+  return `<div class="itemContentCell" data-order="${i}" data-price="${trade[id]?.s?.[0]||0}">${card}${itemTradeHTML(trade[id])}</div>`;
  }).join('')}</div></details>`;
 }
+// V878: 內容物卡片下方：最高收購價與收購 NPC（只列地圖上找得到的 NPC）、可拆解成什麼（data/item-trade.js）
+function itemTradeMoney(n){n=Number(n)||0;return n>=10000?(Math.round(n/100)/100).toString().replace(/\.?0+$/,'')+'萬':n.toLocaleString('en-US');}
+function itemTradeNpc(r){return `<button type="button" class="itemTradeNpc" data-trade-map="${esc(r[1])}" data-trade-npc="${esc(r[2])}" data-trade-name="${esc(r[0])}">${esc(r[0])}＠${esc(r[1])}</button>`;}
+function itemTradeHTML(t){
+ if(!t)return '<div class="itemTrade"><span class="itemTradeNone">無 NPC 收購</span></div>';
+ let h='';
+ if(t.s){const [price,where]=t.s;h+=`<div class="itemTradeSell">💰 最高賣 <b>${itemTradeMoney(price)}</b>｜${itemTradeNpc(where[0])}${where.length>1?`<details class="itemTradeMore"><summary>等 ${where.length} 處</summary>${where.slice(1).map(itemTradeNpc).join('')}</details>`:''}</div>`;}
+ else h+='<div class="itemTradeNone">無 NPC 收購</div>';
+ for(const d of t.d||[]){
+  const rewards=d[5].map(([rid,rn,rc])=>itemIndex[rid]?`<button type="button" class="itemTradeItem" data-item="${esc(rid)}">${esc(rn)}×${esc(rc)}</button>`:`<b>${esc(rn)}×${esc(rc)}</b>`).join('、');
+  const extra=d[6].length?`（另需 ${d[6].map(([n,c])=>esc(n)+'×'+esc(c)).join('、')}）`:'';
+  h+=`<div class="itemTradeDec">🔨 拆解 → ${rewards}${extra}${d[7]?`<span class="itemTradeSrv">${esc(d[7])}</span>`:''}｜${itemTradeNpc(d)}</div>`;
+ }
+ return `<div class="itemTrade">${h}</div>`;
+}
+document.addEventListener('click',async e=>{
+ const sort=e.target.closest?.('[data-item-trade-sort]');
+ if(sort){
+  const box=sort.closest('.itemContents');const grid=box?.querySelector('.itemContentsGrid');if(!grid)return;
+  box.querySelectorAll('[data-item-trade-sort]').forEach(b=>b.classList.toggle('active',b===sort));
+  const key=sort.dataset.itemTradeSort;
+  [...grid.children].sort((a,b)=>key==='price'?(b.dataset.price-a.dataset.price)||(a.dataset.order-b.dataset.order):a.dataset.order-b.dataset.order).forEach(c=>grid.appendChild(c));
+  return;
+ }
+ const npc=e.target.closest?.('[data-trade-map]');
+ if(npc){
+  e.preventDefault();e.stopPropagation();
+  const go=async()=>{if(typeof window.ensureMapPageLoaded==='function')await window.ensureMapPageLoaded();await window.openMapSearchLocation?.(npc.dataset.tradeMap,npc.dataset.tradeName,npc.dataset.tradeNpc);};
+  if(npc.closest('dialog[open]')&&window.SZO_PREVIEW?.close)window.SZO_PREVIEW.close(()=>go().catch(console.error));else go().catch(console.error);
+ }
+},true);
 function itemRecipeFlowHTML(it){
  if(it.Type!=='PRESCRIPTION')return '';
  const recipes=window.SZO_RECIPE_FLOWS?.[String(it.ID)];
