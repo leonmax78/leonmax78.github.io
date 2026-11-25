@@ -114,7 +114,7 @@
   if(fileOperation==='restore'&&backupDirectory){
    backupList=await S.listBackups(backupDirectory,model.name);
    $('storage-list').innerHTML='<option value="">選擇備份時間</option>'+backupList.map((b,i)=>`<option value="${i}">${E(new Date(b.time).toLocaleString('zh-TW',{hour12:false}))} · ${E(b.name)}</option>`).join('');
-   $('storage-message').textContent=backupList.length?'選擇要還原的備份時間，再按確認還原。':'此資料夾尚無這個角色的備份。';
+   $('storage-message').textContent=backupList.length?'選擇要還原的備份時間，再按確認還原。只會還原物品清單，其他內掛設定維持目前的。':'此資料夾尚無這個角色的備份。';
   }
   renderStorage();
  }
@@ -143,7 +143,7 @@
   status('正在備份與儲存 DATA，請先不要開啟角色');
   const backup=await S.backupAndWrite(model.handle,backupDirectory,model.meta.source,out);
   model.meta=C.parse(out);model.rows=model.meta.arr.map(r=>({...r,id:data.byName.get(r.name)?.id||''}));model.dirty=false;
-  status(restoreBytes?'已完成 DATA 資料還原，可安心開啟角色。':'已完成物品清單覆蓋，可安心開啟角色。');
+  status(restoreBytes?'已還原備份的物品清單（其他內掛設定維持目前的），可安心開啟角色。':'已完成物品清單覆蓋，可安心開啟角色。');
   $('backup-result').textContent=`本次備份：${backup}`;
  }
  function bind(){
@@ -164,7 +164,7 @@
    backupDirectory=directory;backupParent=isBackupFolder?parent.name:`${parent.name} / SZO_AutoData_Backups`;
    $('storage-message').textContent='備份資料夾已就緒。';await refreshBackups();
   });
-  $('storage-list').onchange=()=>{renderStorage();const b=backupList[Number($('storage-list').value)];$('storage-message').textContent=b&&$('storage-list').value!==''?`將還原 ${new Date(b.time).toLocaleString('zh-TW',{hour12:false})} 的備份；還原前會先備份目前 DATA。`:'請選擇備份時間';};
+  $('storage-list').onchange=()=>{renderStorage();const b=backupList[Number($('storage-list').value)];$('storage-message').textContent=b&&$('storage-list').value!==''?`將還原 ${new Date(b.time).toLocaleString('zh-TW',{hour12:false})} 的備份物品清單（其他內掛設定維持目前的）；還原前會先備份目前 DATA。`:'請選擇備份時間';};
   $('storage-cancel').onclick=()=>$('storage-dialog').close();
   on('storage-confirm',async()=>{
    requireOffline();requireFile();
@@ -176,12 +176,11 @@
    }else if(fileOperation==='restore'){
     const selected=$('storage-list').value,b=backupList[Number(selected)];if(selected===''||!b)throw Error('請選擇備份時間');
     const bytes=await S.bytes(b.handle);
-    if(!S.canRestore(model.meta.source,bytes))throw Error('備份的其他角色設定不同，禁止還原；請確認是否同一角色版本');
-    await saveOriginal(bytes);
+    await saveOriginal(S.restoreItems(model.meta.source,bytes));
    }else await saveOriginal();
    $('storage-dialog').close();
   });
-  $('restore-file').onchange=()=>run(async()=>{const f=$('restore-file').files[0];if(!f)return;const b=new Uint8Array(await f.arrayBuffer());if(!S.canRestore(model.meta.source,b))throw Error('備份的其他角色設定不同，禁止還原到此檔案；請確認是否同一角色版本');await saveOriginal(b);$('restore-file').value='';});
+  $('restore-file').onchange=()=>run(async()=>{const f=$('restore-file').files[0];if(!f)return;const b=new Uint8Array(await f.arrayBuffer());await saveOriginal(S.restoreItems(model.meta.source,b));$('restore-file').value='';});
   ['query','row-query'].forEach(id=>$(id).oninput=()=>{model.page=0;model.cat.clear();render();});
   ['map','monster','fuzzy'].forEach(id=>$(id).onchange=()=>{model.page=0;model.cat.clear();model.anchor.cat=null;render();});
   $('monster-query').oninput=()=>{monsterChoices();$('monster').onchange();};

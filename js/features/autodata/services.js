@@ -72,8 +72,14 @@
  }
  function canRestore(current,backup){
   const a=C.parse(current),b=C.parse(backup);
-  // Only restore the item list. Other character settings must be identical.
   return C.equal(a.prefix,b.prefix)&&C.equal(a.suffix,b.suffix);
  }
- root.AutoDataServices={normalize,matches,loadData,defaults,readSettings,saveSettings,bytes,verifiedWrite,createBackup,listBackups,backupAndWrite,canRestore};
+ // V890: 還原只換物品清單——用目前 DATA 檔的其他角色設定（prefix/suffix 原封不動），
+ // 套上備份檔的物品名稱與處理狀態；serialize 會再驗證其他設定一個位元組都沒變。
+ function restoreItems(current,backup){
+  const cur=C.parse(current);let old;
+  try{old=C.parse(backup);}catch(e){throw Error('備份檔無法讀取，請確認是角色的 _3.data 備份：'+e.message);}
+  return C.serialize(cur,old.arr.map(r=>({name:r.name,raw:r.raw.slice(),state:r.state})));
+ }
+ root.AutoDataServices={normalize,matches,loadData,defaults,readSettings,saveSettings,bytes,verifiedWrite,createBackup,listBackups,backupAndWrite,canRestore,restoreItems};
 })(window);
