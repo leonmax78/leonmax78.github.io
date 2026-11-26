@@ -403,6 +403,27 @@
       + '</div>';
   }
 
+  // V896: 同一張地圖有好幾種怪會掉 → 一鍵在那張地圖把它們全部標出來
+  function sameMapHtml(rows){
+    const byMap=new Map();
+    rows.forEach(function(row){
+      if(row.boxId)return;
+      const name=row.monsterName || nameOfSafe(row.monster||{});
+      const loc=locSafe(name);
+      if(!name||!loc||loc==='??????')return;
+      String(loc).split(/[、,，]/).map(function(s){return s.trim();}).filter(Boolean).forEach(function(map){
+        if(!byMap.has(map))byMap.set(map,[]);
+        const list=byMap.get(map);
+        if(list.indexOf(name)<0)list.push(name);
+      });
+    });
+    const groups=[...byMap].filter(function(g){return g[1].length>1;}).sort(function(a,b){return b[1].length-a[1].length;});
+    if(!groups.length)return '';
+    return '<div class="reverseMapGroups"><b>同一張地圖一起看</b>'
+      + groups.map(function(g){return '<button type="button" class="reverseMapGroupBtn" data-reverse-map-group="'+escHtml(g[0])+'" data-reverse-map-names="'+escHtml(g[1].join('、'))+'" title="'+escHtml(g[1].join('、'))+'">'+escHtml(g[0])+'<span>'+g[1].length+' 種</span></button>';}).join('')
+      + '</div>';
+  }
+
   window.renderReversePreviewHTML=async function(id){
     const itemId=String(id||'').trim();
     await ensureReverseItemDataLoaded(itemId);
@@ -410,6 +431,7 @@
     if(!it)throw Error('找不到這個道具');
     const rows=window.szoBoxSourceRows(getDropReverse()[itemId]||[]).sort((a,b)=>(Number(b.rate)||0)-(Number(a.rate)||0));
     return '<h2>'+escHtml(nameOfSafe(it))+'</h2><p>取得來源｜共 '+rows.length+' 筆</p>'
+      +sameMapHtml(rows)
       +'<div class="reverseDropList">'+(rows.map(row=>renderReverseCard(row,itemId,'reverse')).join('')||'<p>沒有掉落資料。</p>')+'</div>';
   };
   window.showReverse=async function(id,returnView,parentItemId,skipPush){
@@ -443,12 +465,25 @@
         + '<div class="reverseBackActions">'+(parentButton||fallbackBackButton)+'</div>'
         + '<h1>'+escHtml(nameOfSafe(it))+'</h1>'
         + '<div class="muted">掉落反查｜共 '+arr.length+' 筆</div>'
+        + sameMapHtml(arr)
         + (arr.length?'<div class="reverseDropList">'+arr.map(function(row){return renderReverseCard(row,itemId,backView)}).join('')+'</div>':'<div class="empty">沒有怪物掉落這個道具。</div>')
         + '</section>';
     }
     try{if(typeof closeDrawer==='function')closeDrawer();}catch(e){}
     try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){}
   };
+
+  document.addEventListener('click',function(ev){
+    const group=ev.target && ev.target.closest ? ev.target.closest('[data-reverse-map-group]') : null;
+    if(!group)return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    (async function(){
+      if(typeof window.ensureMapPageLoaded==='function')await window.ensureMapPageLoaded();
+      else if(typeof window.loadScriptGroupOnce==='function')await window.loadScriptGroupOnce('page_map');
+      if(typeof window.openMapSearchLocation==='function')await window.openMapSearchLocation(group.getAttribute('data-reverse-map-group'),group.getAttribute('data-reverse-map-names'));
+    })();
+  },true);
 
   document.addEventListener('click',function(ev){
     const btn=ev.target && ev.target.closest ? ev.target.closest('[data-reverse-map-monster]') : null;
