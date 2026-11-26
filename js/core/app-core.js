@@ -1699,6 +1699,8 @@ function goBackToPrevious(targetView){
  else setView('home');
 }
 window.addEventListener('popstate',event=>{if(!window.SZO_DETAIL_NAV?.pop(event))goBackToPrevious();});
+// V897: 網站已開著時在同一分頁貼上分享連結，只有 # 後面改變、頁面不會重新載入 → 照新網址打開那一頁（怪物、道具、地圖…）
+window.addEventListener('hashchange',()=>{szoOpenRoute();});
 
 
 function backLabelFor(view){
