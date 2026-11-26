@@ -5297,3 +5297,15 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 @media(max-width:640px){.updatesPage .upOfficialAll{width:100%;justify-content:center}}
 
 .notice.mapPkNotice{background:color-mix(in srgb,#e5484d 16%,transparent);border-color:color-mix(in srgb,#e5484d 45%,transparent);color:#ffd9d9;font-weight:700}
+/* V895: 手機橫放（高度很矮）時，地圖上方工具列縮成一排細列，按鈕可左右滑動，讓地圖多一點高度 */
+@media (max-height:500px) and (orientation:landscape){
+ html body .mapZoomBar{flex-wrap:nowrap;gap:6px;padding:4px 8px;overflow-x:auto;scrollbar-width:none}
+ html body .mapZoomBar::-webkit-scrollbar{display:none}
+ html body .mapViewTools{flex-wrap:nowrap;gap:4px}
+ html body .mapToolBtn{min-height:28px;padding:3px 10px;font-size:12px}
+ html body .mapZoomBar label{font-size:12px;gap:4px;flex:0 0 auto}
+ html body #mapZoomInput{width:110px;min-width:90px;height:22px}
+ html body .mapZoomBar span{min-width:36px;font-size:12px}
+ html body .mapLayout.mapMaximized{padding:4px;gap:6px}
+ html body .mapLayout.mapMaximized>.mapLeftPane,html body .mapLayout.mapMaximized .mapCanvasWrap{height:calc(100dvh - 8px)}
+}
