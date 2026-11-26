@@ -7,7 +7,7 @@
 齊襄道 300＝30 秒，玩家實測吻合）。0＝不會自動重生（副本、樓層類地圖）。
 
 定點：SETTING/STAGE.INI 的 STAGE_FLAG_NOMARK＝不能記錄定點（傳送大法、傳情等），
-只能在一小塊範圍掛；STAGE_FLAG_ForbidAutoPlay＝禁止自動掛機。每個出生點另存位置（p），
+只能在一小塊範圍掛；STAGE_FLAG_ForbidAutoPlay＝禁止自動掛機；STAGE_FLAG_PK＝PK 場景（f 第 16 位元）。每個出生點另存位置（p），
 網頁依角色等級即時找出最好的掛機範圍。
 障礙物：MPC 地圖格（32×32 原始像素＝圖上 4×4）第 4 個位元組非 0＝不能走（樹、水、建築、牆）。
 另輸出 data/training_walk.json（8×8 圖上單位的粗格，網頁用它算走路距離，打不到牆後的怪、傳送後沿真的能走的路打回掛點）。
@@ -56,7 +56,7 @@ def respawns(game, overlay=None):
         f = re.search(r'^Flag\s*=\s*(.*)$', b, re.M)
         if i:
             f = f.group(1) if f else ''
-            flags[int(i.group(1))] = ('STAGE_FLAG_NOMARK' in f) * 1 + ('STAGE_FLAG_ForbidAutoPlay' in f) * 2
+            flags[int(i.group(1))] = ('STAGE_FLAG_NOMARK' in f) * 1 + ('STAGE_FLAG_ForbidAutoPlay' in f) * 2 + ('STAGE_FLAG_PK' in [x.strip() for x in f.split(',')]) * 16
     out, walk, gone, lock = {}, {}, set(), set()
     import struct
     import numpy as np

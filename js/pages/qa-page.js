@@ -684,7 +684,7 @@
       if(tok && (!R || tok > R)) parts.push(`終末速行令最近可直達 ${tok} 樓${tok < N ? `，再往上 ${N - tok} 層` : ''}`);
       return parts.length ? `<div class="qaTrainAccess"><span>怎麼上去</span>${html(parts.join('；'))}</div>` : '';
     };
-    const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : '', r.s.f & 4 ? '可能出現守關妖將' : '', r.s.f & 8 ? '有怪王死後消失' : '', r.noMoney ? '怪物不掉錢' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
+    const tags = r => [r.s.g, r.s.f & 1 ? '不能定點' : '', r.s.f & 2 ? '禁止自動掛機' : '', r.s.f & 4 ? '可能出現守關妖將' : '', r.s.f & 8 ? '有怪王死後消失' : '', r.s.f & 16 ? '⚔ PK 區' : '', r.noMoney ? '怪物不掉錢' : ''].filter(Boolean).map((t, i) => `<span class="qaTrainTag${i ? ' warn' : ''}">${html(t)}</span>`).join('');
     // 同張地圖的其他點：分頁切換（推薦點有人在掛就換一個）
     const altTabs = r => r.alts.length < 2 ? '' : `<div class="qaTrainAlts"><span>同張地圖其他點：</span>${r.alts.map((sp, k) => `<button type="button" class="qaChip${k ? '' : ' active'}" data-qa-train-alt="${k}">${k ? `備選 ${k + 1}` : '推薦點'} <small>${fmt(sp.v)}/分</small></button>`).join('')}</div>`;
     const pane = (r, sp, k) => `<div class="qaTrainPane"${k ? ' hidden' : ''} data-qa-train-pane="${k}"><div class="qaTrainStats">${stats(r, sp)}</div>${k ? '' : access(r)}${miniMap(r, sp)}<div class="qaTrainWhere">${where(r, sp)}</div></div>`;
