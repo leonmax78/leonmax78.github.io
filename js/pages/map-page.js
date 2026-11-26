@@ -1054,9 +1054,9 @@
     const towerFloors=scopeStages.filter(s=>s.mapCategory==='tower').flatMap(s=>(s.areas||[]).map(a=>Number(a.floor))).filter(Boolean);
     const ownFloors=(stage.areas||[]).map(a=>Number(a.floor)).filter(Boolean);
     const towerSeg=towerFloors.length>10?Math.ceil((state.floorStageId===Number(stage.stageId)&&state.floor?state.floor:Math.min(...(ownFloors.length?ownFloors:towerFloors)))/10):0;
-    const segOptions=towerSeg?[...new Set(towerFloors.map(f=>Math.ceil(f/10)))].sort((a,b)=>a-b).map(g=>`<option value="${g}" ${g===towerSeg?'selected':''}>終末之塔 ${ROMAN(g)}（${g*10-9}～${g*10} 樓）</option>`).join(''):'';
+    const segOptions=towerSeg?[...new Set(towerFloors.map(f=>Math.ceil(f/10)))].sort((a,b)=>a-b).map(g=>`<option value="${g}" ${g===towerSeg?'selected':''}>終末之塔 ${ROMAN(g)}（${g*10-9}～${g*10} 樓）${scopeStages.some(s=>s.pk&&(s.areas||[]).some(a=>Math.ceil(a.floor/10)===g))?' ⚔PK':''}</option>`).join(''):'';
     const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${scopeStages.flatMap(s=>{
-      const rows=s.mapCategory==='tower'?(s.areas||[]).filter(a=>!towerSeg||Math.ceil(a.floor/10)===towerSeg).map(a=>({key:`${s.stageId}:${a.floor}`,label:towerSeg?`${a.floor} 樓`:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
+      const rows=s.mapCategory==='tower'?(s.areas||[]).filter(a=>!towerSeg||Math.ceil(a.floor/10)===towerSeg).map(a=>({key:`${s.stageId}:${a.floor}`,label:(towerSeg?`${a.floor} 樓`:`終末之塔 ${a.floor}樓`)+(s.pk?' ⚔PK':'')})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
       if(s.mapCategory==='tower'&&selectedKey===String(s.stageId))rows.unshift({key:String(s.stageId),label:s.stageName+'（全圖）'});
       return rows.map(r=>`<option value="${r.key}" ${r.key===selectedKey?'selected':''}>${htmlEscape(r.label)}</option>`);
     }).join('')}</optgroup>`;
@@ -1076,6 +1076,7 @@
       ${renderMapSuggestions()}
       <div class="mapLayout${state.maximized ? ' mapMaximized' : ''}${state.listHidden ? ' mapListHidden' : ''}">
         ${stage.flags?.includes('STAGE_FLAG_ForbidGive')?'<p class="notice" style="grid-column:1/-1">此地圖禁止交易／給予道具。</p>':''}
+        ${stage.pk?'<p class="notice mapPkNotice" style="grid-column:1/-1">⚔ PK 場景：這張地圖玩家之間可以互相攻擊，練功、掛機請留意。</p>':''}
         <aside class="mapLeftPane">
         <details class="mapSide mapMonsterSide" data-map-panel="monster" ${state.panels.monster ? 'open' : ''}>
           <summary class="mapSideHead">
