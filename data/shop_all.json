@@ -1,5 +1,5 @@
 {
-  "version": "shop-1119",
+  "version": "shop-1126",
   "description": "All SHOP.INI entries joined with data/items.json values. Percent 100 means 100% of item Value.",
   "shops": [
     {
@@ -14855,6 +14855,17 @@
     {
       "shopId": 19,
       "items": [
+        {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
         {
           "itemId": 28502,
           "name": "藥煉銀票",
@@ -80163,6 +80174,17 @@
       "shopId": 430,
       "items": [
         {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
+        {
           "itemId": 32200,
           "name": "萬能寶石鑿",
           "icon": "26936",
@@ -81053,6 +81075,17 @@
       "shopId": 432,
       "items": [
         {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
+        {
           "itemId": 32200,
           "name": "萬能寶石鑿",
           "icon": "26936",
@@ -81585,6 +81618,17 @@
     {
       "shopId": 433,
       "items": [
+        {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
         {
           "itemId": 32200,
           "name": "萬能寶石鑿",
@@ -82163,6 +82207,17 @@
       "shopId": 435,
       "items": [
         {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
+        {
           "itemId": 32200,
           "name": "萬能寶石鑿",
           "icon": "26936",
@@ -82674,6 +82729,17 @@
       "shopId": 436,
       "items": [
         {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
+        {
           "itemId": 32200,
           "name": "萬能寶石鑿",
           "icon": "26936",
@@ -83173,6 +83239,17 @@
     {
       "shopId": 438,
       "items": [
+        {
+          "itemId": 33004,
+          "name": "絕代英雄戰旗",
+          "icon": "26165",
+          "type": "MATERIAL",
+          "value": 1500000000,
+          "sellPercent": 100,
+          "sellPrice": 1500000000,
+          "buyPercent": null,
+          "buyPrice": null
+        },
         {
           "itemId": 32200,
           "name": "萬能寶石鑿",

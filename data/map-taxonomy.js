@@ -1375,6 +1375,10 @@ window.SZO_MAP_TAXONOMY = {
       "section": "特殊地圖",
       "group": "終末之塔"
     },
+    "349": {
+      "section": "特殊地圖",
+      "group": "終末之塔"
+    },
     "351": {
       "section": "特殊地圖",
       "group": "聯動",

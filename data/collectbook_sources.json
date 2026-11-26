@@ -29,7 +29,7 @@
     "updatedAt": "2026-09-17",
     "officialScoreTotal": 35704,
     "dropSource": "data/drop_reverse.json",
-    "dropSourceSha256": "1f4add6da74839d6a8aad54e96ad3a576929a38bcdabafb120a405ab78a7bdb1"
+    "dropSourceSha256": "3b59af5c6ef7cec3bd946b4be91fa6ec8a0ed80cc89a243a76dd878941c92743"
   },
   "weapon": [
     {
@@ -16615,10 +16615,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18350",
+          "monster": "絕代花無缺寶箱",
+          "level": "1",
+          "rate": 0.0035,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "宮殤別劍Ⅲ 31103 劍 8 超．玄宙神兵寶箱 活俠龍湘錦囊 絕代花無缺錦囊 31103 宮殤別劍Ⅲ",
+      "reverseDropCount": 4,
+      "searchText": "宮殤別劍Ⅲ 31103 劍 8 超．玄宙神兵寶箱 活俠龍湘錦囊 絕代花無缺錦囊 絕代花無缺寶箱",
       "collectOrder": 242
     },
     {
@@ -16650,10 +16657,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18355",
+          "monster": "絕代燕南天寶箱",
+          "level": "1",
+          "rate": 0.0052,
+          "locations": []
         }
       ],
-      "reverseDropCount": 2,
-      "searchText": "宮殤別劍Ⅳ 31104 劍 8 極．玄宙神兵寶箱 絕代燕南天錦囊 31104 宮殤別劍Ⅳ",
+      "reverseDropCount": 3,
+      "searchText": "宮殤別劍Ⅳ 31104 劍 8 極．玄宙神兵寶箱 絕代燕南天錦囊 絕代燕南天寶箱",
       "collectOrder": 243
     },
     {
@@ -32185,10 +32199,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18349",
+          "monster": "絕代江小魚寶箱",
+          "level": "1",
+          "rate": 0.003,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "泰源玉刀Ⅲ 31108 刀 8 超．玄宙神兵寶箱 活俠趙活錦囊 絕代江小魚錦囊 31108 泰源玉刀Ⅲ",
+      "reverseDropCount": 4,
+      "searchText": "泰源玉刀Ⅲ 31108 刀 8 超．玄宙神兵寶箱 活俠趙活錦囊 絕代江小魚錦囊 絕代江小魚寶箱",
       "collectOrder": 477
     },
     {
@@ -32213,10 +32234,17 @@
           "level": "",
           "rate": 11.5,
           "locations": []
+        },
+        {
+          "monsterId": "18357",
+          "monster": "絕代小魔星寶箱",
+          "level": "1",
+          "rate": 0.0045,
+          "locations": []
         }
       ],
-      "reverseDropCount": 1,
-      "searchText": "泰源玉刀Ⅳ 31109 刀 8 極．玄宙神兵寶箱 31109 泰源玉刀Ⅳ",
+      "reverseDropCount": 2,
+      "searchText": "泰源玉刀Ⅳ 31109 刀 8 極．玄宙神兵寶箱 絕代小魔星寶箱",
       "collectOrder": 478
     },
     {
@@ -40077,10 +40105,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18351",
+          "monster": "絕代張菁寶箱",
+          "level": "1",
+          "rate": 0.0027,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "獵仙飛索Ⅲ 31113 暗器 8 超．玄宙神兵寶箱 活俠唐布衣錦囊 絕代張菁錦囊",
+      "reverseDropCount": 4,
+      "searchText": "獵仙飛索Ⅲ 31113 暗器 8 超．玄宙神兵寶箱 活俠唐布衣錦囊 絕代張菁錦囊 絕代張菁寶箱",
       "collectOrder": 627
     },
     {
@@ -50565,10 +50600,17 @@
           "level": "",
           "rate": 9.75,
           "locations": []
+        },
+        {
+          "monsterId": "18356",
+          "monster": "絕代明月孤星寶箱",
+          "level": "1",
+          "rate": 0.005,
+          "locations": []
         }
       ],
-      "reverseDropCount": 1,
-      "searchText": "塹淵幽柄Ⅳ 31119 拂塵 8 極．玄宙神兵寶箱 31119 塹淵幽柄Ⅳ",
+      "reverseDropCount": 2,
+      "searchText": "塹淵幽柄Ⅳ 31119 拂塵 8 極．玄宙神兵寶箱 絕代明月孤星寶箱",
       "collectOrder": 801
     },
     {
@@ -61306,10 +61348,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18352",
+          "monster": "絕代蘇櫻寶箱",
+          "level": "1",
+          "rate": 0.0037,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "渡鴉瞳杖Ⅲ 31123 杖 8 超．玄宙神兵寶箱 活俠夏侯蘭錦囊 絕代蘇櫻錦囊",
+      "reverseDropCount": 4,
+      "searchText": "渡鴉瞳杖Ⅲ 31123 杖 8 超．玄宙神兵寶箱 活俠夏侯蘭錦囊 絕代蘇櫻錦囊 絕代蘇櫻寶箱",
       "collectOrder": 973
     },
     {
@@ -70871,10 +70920,17 @@
           "level": "",
           "rate": 11.25,
           "locations": []
+        },
+        {
+          "monsterId": "18354",
+          "monster": "絕代邀月寶箱",
+          "level": "1",
+          "rate": 0.0032,
+          "locations": []
         }
       ],
-      "reverseDropCount": 1,
-      "searchText": "羅將烈槍Ⅳ 31129 槍 8 極．玄宙神兵寶箱 31129 羅將烈槍Ⅳ",
+      "reverseDropCount": 2,
+      "searchText": "羅將烈槍Ⅳ 31129 槍 8 極．玄宙神兵寶箱 絕代邀月寶箱",
       "collectOrder": 1142
     },
     {
@@ -80402,10 +80458,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18353",
+          "monster": "絕代憐星寶箱",
+          "level": "1",
+          "rate": 0.003,
+          "locations": []
         }
       ],
-      "reverseDropCount": 2,
-      "searchText": "血腥屠夫Ⅳ 31134 棍 8 極．玄宙神兵寶箱 絕代移花宮主錦囊",
+      "reverseDropCount": 3,
+      "searchText": "血腥屠夫Ⅳ 31134 棍 8 極．玄宙神兵寶箱 絕代移花宮主錦囊 絕代憐星寶箱",
       "collectOrder": 1309
     },
     {
@@ -123040,10 +123103,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18350",
+          "monster": "絕代花無缺寶箱",
+          "level": "1",
+          "rate": 0.0022,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "凜月冪巾Ⅱ 31292 帽子 10 真．玄宙凜月裝箱 真．玄宙特仕裝箱 絕代花無缺錦囊 31292 凜月冪巾Ⅱ",
+      "reverseDropCount": 4,
+      "searchText": "凜月冪巾Ⅱ 31292 帽子 10 真．玄宙凜月裝箱 真．玄宙特仕裝箱 絕代花無缺錦囊 絕代花無缺寶箱",
       "collectOrder": 2075
     },
     {
@@ -123082,10 +123152,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18352",
+          "monster": "絕代蘇櫻寶箱",
+          "level": "1",
+          "rate": 0.002,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "舞星釩兜Ⅱ 31312 帽子 10 真．玄宙舞星裝箱 真．玄宙特仕裝箱 絕代蘇櫻錦囊",
+      "reverseDropCount": 4,
+      "searchText": "舞星釩兜Ⅱ 31312 帽子 10 真．玄宙舞星裝箱 真．玄宙特仕裝箱 絕代蘇櫻錦囊 絕代蘇櫻寶箱",
       "collectOrder": 2076
     },
     {
@@ -123292,10 +123369,17 @@
           "level": "",
           "rate": 8.25,
           "locations": []
+        },
+        {
+          "monsterId": "18356",
+          "monster": "絕代明月孤星寶箱",
+          "level": "1",
+          "rate": 0.0027,
+          "locations": []
         }
       ],
-      "reverseDropCount": 2,
-      "searchText": "凜月冪巾Ⅲ 31293 帽子 10 超．玄宙凜月裝箱 超．玄宙特仕裝箱 31293 凜月冪巾Ⅲ",
+      "reverseDropCount": 3,
+      "searchText": "凜月冪巾Ⅲ 31293 帽子 10 超．玄宙凜月裝箱 超．玄宙特仕裝箱 絕代明月孤星寶箱",
       "collectOrder": 2083
     },
     {
@@ -167526,10 +167610,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18349",
+          "monster": "絕代江小魚寶箱",
+          "level": "1",
+          "rate": 0.002,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "舞星鎢掌Ⅱ 31322 護腕 10 真．玄宙舞星裝箱 真．玄宙特仕裝箱 絕代江小魚錦囊 31322 舞星鎢掌Ⅱ",
+      "reverseDropCount": 4,
+      "searchText": "舞星鎢掌Ⅱ 31322 護腕 10 真．玄宙舞星裝箱 真．玄宙特仕裝箱 絕代江小魚錦囊 絕代江小魚寶箱",
       "collectOrder": 3059
     },
     {
@@ -167701,10 +167792,17 @@
           "level": "",
           "rate": 7.25,
           "locations": []
+        },
+        {
+          "monsterId": "18355",
+          "monster": "絕代燕南天寶箱",
+          "level": "1",
+          "rate": 0.0025,
+          "locations": []
         }
       ],
-      "reverseDropCount": 2,
-      "searchText": "騰陽烈釬Ⅲ 31283 護腕 10 超．玄宙騰陽裝箱 超．玄宙特仕裝箱 31283 騰陽烈釬Ⅲ",
+      "reverseDropCount": 3,
+      "searchText": "騰陽烈釬Ⅲ 31283 護腕 10 超．玄宙騰陽裝箱 超．玄宙特仕裝箱 絕代燕南天寶箱",
       "collectOrder": 3065
     },
     {
@@ -187569,10 +187667,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18351",
+          "monster": "絕代張菁寶箱",
+          "level": "1",
+          "rate": 0.002,
+          "locations": []
         }
       ],
-      "reverseDropCount": 4,
-      "searchText": "舞星鋁行Ⅱ 31327 鞋子 10 真．玄宙舞星裝箱 真．玄宙特仕裝箱 活俠趙活錦囊 絕代張菁錦囊",
+      "reverseDropCount": 5,
+      "searchText": "舞星鋁行Ⅱ 31327 鞋子 10 真．玄宙舞星裝箱 真．玄宙特仕裝箱 活俠趙活錦囊 絕代張菁錦囊 絕代張菁寶箱",
       "collectOrder": 3520
     },
     {
@@ -187751,10 +187856,17 @@
           "level": "",
           "rate": 0.025,
           "locations": []
+        },
+        {
+          "monsterId": "18353",
+          "monster": "絕代憐星寶箱",
+          "level": "1",
+          "rate": 0.0017,
+          "locations": []
         }
       ],
-      "reverseDropCount": 3,
-      "searchText": "騰陽巍立Ⅲ 31288 鞋子 10 超．玄宙騰陽裝箱 超．玄宙特仕裝箱 絕代移花宮主錦囊",
+      "reverseDropCount": 4,
+      "searchText": "騰陽巍立Ⅲ 31288 鞋子 10 超．玄宙騰陽裝箱 超．玄宙特仕裝箱 絕代移花宮主錦囊 絕代憐星寶箱",
       "collectOrder": 3526
     },
     {
@@ -223566,24 +223678,10 @@
           "level": "1",
           "rate": 0.0004,
           "locations": []
-        },
-        {
-          "monsterId": "18355",
-          "monster": "絕代燕南天寶箱",
-          "level": "1",
-          "rate": 0.0004,
-          "locations": []
-        },
-        {
-          "monsterId": "18357",
-          "monster": "絕代小魔星寶箱",
-          "level": "1",
-          "rate": 0.0004,
-          "locations": []
         }
       ],
-      "reverseDropCount": 8,
-      "searchText": "九鼎太清經 30969 飾品 10 侯氏兵甲福袋2024 幻三太陰錦囊 麻辣黑潮錦囊 極大秘境寶箱 幻三太陰奇寶箱 幻三太陰奇寶箱 絕代燕南天寶箱 絕代小魔星寶箱",
+      "reverseDropCount": 6,
+      "searchText": "九鼎太清經 30969 飾品 10 侯氏兵甲福袋2024 幻三太陰錦囊 麻辣黑潮錦囊 極大秘境寶箱 幻三太陰奇寶箱 幻三太陰奇寶箱",
       "collectOrder": 3925
     },
     {
@@ -223636,17 +223734,10 @@
           "level": "1",
           "rate": 0.0004,
           "locations": []
-        },
-        {
-          "monsterId": "18356",
-          "monster": "絕代明月孤星寶箱",
-          "level": "1",
-          "rate": 0.0004,
-          "locations": []
         }
       ],
-      "reverseDropCount": 6,
-      "searchText": "南華題命譜 30970 飾品 10 侯氏兵甲福袋2024 麻辣熱浪錦囊 幻三魔黃錦囊 幻三魔黃奇寶箱 幻三魔黃奇寶箱 絕代明月孤星寶箱",
+      "reverseDropCount": 5,
+      "searchText": "南華題命譜 30970 飾品 10 侯氏兵甲福袋2024 麻辣熱浪錦囊 幻三魔黃錦囊 幻三魔黃奇寶箱 幻三魔黃奇寶箱",
       "collectOrder": 3926
     },
     {
@@ -228753,17 +228844,10 @@
           "level": "1",
           "rate": 0.0005,
           "locations": []
-        },
-        {
-          "monsterId": "18349",
-          "monster": "絕代江小魚寶箱",
-          "level": "1",
-          "rate": 0.0005,
-          "locations": []
         }
       ],
-      "reverseDropCount": 7,
-      "searchText": "低溫防護罩 31575 仙器 10 龍川仙器錦囊 焰騰麻辣錦囊 幻三蘇童顏錦囊 極大秘境寶箱 幻三蘇童顏寶箱 幻三蘇童顏寶箱 絕代江小魚寶箱",
+      "reverseDropCount": 6,
+      "searchText": "低溫防護罩 31575 仙器 10 龍川仙器錦囊 焰騰麻辣錦囊 幻三蘇童顏錦囊 極大秘境寶箱 幻三蘇童顏寶箱 幻三蘇童顏寶箱",
       "collectOrder": 4051
     },
     {
@@ -228787,6 +228871,13 @@
           "monster": "侯氏兵甲福袋2026",
           "level": "",
           "rate": 0.055,
+          "locations": []
+        },
+        {
+          "monsterId": "18351",
+          "monster": "絕代張菁寶箱",
+          "level": "1",
+          "rate": 0.001,
           "locations": []
         },
         {
@@ -228815,8 +228906,8 @@
           "locations": []
         }
       ],
-      "reverseDropCount": 4,
-      "searchText": "西狩仙麟角 31857 仙器 20 侯氏兵甲福袋2026 超‧大秘境寶箱 怒相．辰紫荊 真．俠隱樓寶箱 虛空大秘境 修羅級俠隱樓",
+      "reverseDropCount": 5,
+      "searchText": "西狩仙麟角 31857 仙器 20 侯氏兵甲福袋2026 絕代張菁寶箱 超‧大秘境寶箱 怒相．辰紫荊 真．俠隱樓寶箱 虛空大秘境 修羅級俠隱樓",
       "collectOrder": 4052
     },
     {

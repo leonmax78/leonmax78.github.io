@@ -1,23 +1,142 @@
 [
   {
     "kind": "weapon",
+    "itemId": "31103",
+    "name": "宮殤別劍Ⅲ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31104",
+    "name": "宮殤別劍Ⅳ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31108",
+    "name": "泰源玉刀Ⅲ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31109",
+    "name": "泰源玉刀Ⅳ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31113",
+    "name": "獵仙飛索Ⅲ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31119",
+    "name": "塹淵幽柄Ⅳ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31123",
+    "name": "渡鴉瞳杖Ⅲ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31129",
+    "name": "羅將烈槍Ⅳ",
+    "before": 1,
+    "after": 2
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31134",
+    "name": "血腥屠夫Ⅳ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31292",
+    "name": "凜月冪巾Ⅱ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31312",
+    "name": "舞星釩兜Ⅱ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31293",
+    "name": "凜月冪巾Ⅲ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31322",
+    "name": "舞星鎢掌Ⅱ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31283",
+    "name": "騰陽烈釬Ⅲ",
+    "before": 2,
+    "after": 3
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31327",
+    "name": "舞星鋁行Ⅱ",
+    "before": 4,
+    "after": 5
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31288",
+    "name": "騰陽巍立Ⅲ",
+    "before": 3,
+    "after": 4
+  },
+  {
+    "kind": "weapon",
     "itemId": "30969",
     "name": "九鼎太清經",
-    "before": 6,
-    "after": 8
+    "before": 8,
+    "after": 6
   },
   {
     "kind": "weapon",
     "itemId": "30970",
     "name": "南華題命譜",
-    "before": 5,
-    "after": 6
+    "before": 6,
+    "after": 5
   },
   {
     "kind": "weapon",
     "itemId": "31575",
     "name": "低溫防護罩",
-    "before": 6,
-    "after": 7
+    "before": 7,
+    "after": 6
+  },
+  {
+    "kind": "weapon",
+    "itemId": "31857",
+    "name": "西狩仙麟角",
+    "before": 4,
+    "after": 5
   }
 ]
