@@ -597,7 +597,11 @@ async function szoOpenRoute(){
  const m=String(location.hash||'').match(/^#\/([^/]+)(?:\/(.+))?$/);if(!m)return;
  const [,head,rawArg]=m;const arg=rawArg?decodeURIComponent(rawArg):'';
  try{
-  if(['item','monster','quest','npc','npcshop'].includes(head)&&arg){await window.SZO_PREVIEW?.open(head,arg);return;}
+  if(['item','monster','quest','npc','npcshop'].includes(head)&&arg){
+   // V898: 分享連結先開對應的查詢頁當底，關掉預覽時留在那一頁（不是首頁）
+   const base={monster:'monsterQuery',item:'item',quest:'quest',npc:'map',npcshop:'shop'}[head];
+   try{await setView(base);if(head==='item'&&typeof setItemSub==='function')await setItemSub('item');}catch(e){}
+   await window.SZO_PREVIEW?.open(head,arg);return;}
   if(head==='jiang'){setJiang(arg||'support');return;}
   if(head==='items'){await setView('item');if(typeof setItemSub==='function')await setItemSub(arg||'item');return;}
   if(head==='map'){await setView('map');if(arg&&typeof window.szoOpenStage==='function')window.szoOpenStage(Number(arg));return;}
