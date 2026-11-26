@@ -1076,6 +1076,7 @@
       ${renderMapSuggestions()}
       <div class="mapLayout${state.maximized ? ' mapMaximized' : ''}${state.listHidden ? ' mapListHidden' : ''}">
         ${stage.flags?.includes('STAGE_FLAG_ForbidGive')?'<p class="notice" style="grid-column:1/-1">此地圖禁止交易／給予道具。</p>':''}
+        ${stage.relogin?`<p class="notice mapReloginNotice" style="grid-column:1/-1">↩ 在${htmlEscape(stage.stageName)}登出或斷線，下次登入會被送往${/^\d/.test(stage.relogin)?' ':''}${htmlEscape(stage.relogin)}。</p>`:''}
         ${stage.pk?'<p class="notice mapPkNotice" style="grid-column:1/-1">⚔ PK 場景：這張地圖玩家之間可以互相攻擊，練功、掛機請留意。</p>':''}
         <aside class="mapLeftPane">
         <details class="mapSide mapMonsterSide" data-map-panel="monster" ${state.panels.monster ? 'open' : ''}>
