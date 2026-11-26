@@ -551,9 +551,9 @@ function monsterDropRows(m){
 }
 
 function monsterDropsTableHTML(drops){
- const val=r=>{const n=parseFloat(r);return Number.isFinite(n)?n:-1;};
+ const val=r=>{const n=parseFloat(r);return Number.isFinite(n)?n:Infinity;};
  const icon=iid=>{try{const it=itemIndex[String(iid).trim()];return it&&window.SZO_ASSET_MEDIA?`<span class="dropIcon">${window.SZO_ASSET_MEDIA.img(window.SZO_ASSET_MEDIA.itemIconSrc(it),nameOf(it),'assetThumb itemThumb')}</span>`:'<span class="dropIcon none"></span>';}catch(e){return '<span class="dropIcon none"></span>';}};
- const rows=drops.slice().sort((a,b)=>val(b[2])-val(a[2]));
+ const rows=drops.slice().sort((a,b)=>val(a[2])-val(b[2]));  // V897: 機率低到高，大獎在前
  return rows.length?`<div class="tableWrap monsterDropTable"><table><thead><tr><th>道具</th><th>機率</th></tr></thead><tbody>${rows.map(r=>`<tr><td><span class="dropCell">${icon(r[0])}${esc(r[1])}</span></td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">沒有掉落資料</div>';
 }
 

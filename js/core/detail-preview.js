@@ -81,7 +81,7 @@
    }else if(kind==='monster-drops'){
     await ensureMonsterPageLoaded();if(!await ensureMonsterDataLoaded())throw Error('怪物資料載入失敗');if(!await ensureItemDataLoaded())throw Error('道具資料載入失敗');
     const m=monsters.find(row=>String(row.ID)===String(id));if(!m)throw Error('找不到這個怪物');
-    html=`<div class="itemGroupedDetail"><h1>${esc(nameOf(m))}：掉落資料<small class="dropSortNote">機率高到低</small></h1><div class="detailPreviewDrops">${dropRowsSorted(monsterDropRows(m)).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}">${dropIconHTML(itemId,name)}<span class="dropText"><span>${esc(name)}</span><small>${esc(rate)}</small></span></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
+    html=`<div class="itemGroupedDetail"><h1>${esc(nameOf(m))}：掉落資料<small class="dropSortNote">機率低到高，稀有的在前</small></h1><div class="detailPreviewDrops">${dropRowsSorted(monsterDropRows(m)).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}">${dropIconHTML(itemId,name)}<span class="dropText"><span>${esc(name)}</span><small>${esc(rate)}</small></span></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
    }else if(kind==='npc'){
     await ensureMapPageLoaded();
     html=await window.renderNpcPreviewHTML(id);
@@ -111,7 +111,7 @@
     if(!m)throw Error('找不到這個怪物');
     monsterName=nameOf(m);
     const drops=monsterDropRows(m);
-    html=`<div class="itemGroupedDetail"><header class="itemIdentity">${monsterThumbHTML(m)}<h1>${esc(nameOf(m))}</h1></header><h2>怪物資料</h2>${monsterRowsHTML([['等級',m.Level],['生命',m.HP],['精力',m.MP],['種族',raceName(m.Type)],['位置',locOf(nameOf(m))],['經驗',m.DropExp]],'itemSectionGrid')}<h2>能力</h2>${monsterRowsHTML([['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex],['物理防禦',m.ExtraDef],['術法攻擊',m.MagicAttack],['術法防禦',m.MagicDef]],'itemSectionGrid')}<h2>掉落道具<small class="dropSortNote">機率高到低</small></h2><div class="detailPreviewDrops">${dropRowsSorted(drops).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}">${dropIconHTML(itemId,name)}<span class="dropText"><span>${esc(name)}</span><small>${esc(rate)}</small></span></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
+    html=`<div class="itemGroupedDetail"><header class="itemIdentity">${monsterThumbHTML(m)}<h1>${esc(nameOf(m))}</h1></header><h2>怪物資料</h2>${monsterRowsHTML([['等級',m.Level],['生命',m.HP],['精力',m.MP],['種族',raceName(m.Type)],['位置',locOf(nameOf(m))],['經驗',m.DropExp]],'itemSectionGrid')}<h2>能力</h2>${monsterRowsHTML([['體魄',m.Con],['力量',m.Str],['智慧',m.Int],['靈敏',m.Dex],['物理防禦',m.ExtraDef],['術法攻擊',m.MagicAttack],['術法防禦',m.MagicDef]],'itemSectionGrid')}<h2>掉落道具<small class="dropSortNote">機率低到高，稀有的在前</small></h2><div class="detailPreviewDrops">${dropRowsSorted(drops).map(([itemId,name,rate])=>`<button type="button" data-item="${esc(itemId)}">${dropIconHTML(itemId,name)}<span class="dropText"><span>${esc(name)}</span><small>${esc(rate)}</small></span></button>`).join('')||'<p>沒有掉落資料</p>'}</div></div>`;
    }
    if(ticket!==request||!dialog.open)return;
    body.innerHTML=html;
@@ -133,10 +133,11 @@
    }
   }catch(error){if(ticket===request&&dialog.open)body.textContent=error.message||'資料載入失敗，請關閉後重試。';}
  }
- // V780: drop list with item icons, highest chance first (rates kept exactly as the game data has them)
+ // V780: drop list with item icons, lowest chance first — the rare prizes on top (rates kept exactly as the game data has them)
  function dropRowsSorted(drops){
-  const val=r=>{const n=parseFloat(r);return Number.isFinite(n)?n:-1;};
-  return drops.slice().sort((a,b)=>val(b[2])-val(a[2]));
+  // V897: 機率低到高，最稀有的大獎排最前面；沒有機率的放最後
+  const val=r=>{const n=parseFloat(r);return Number.isFinite(n)?n:Infinity;};
+  return drops.slice().sort((a,b)=>val(a[2])-val(b[2]));
  }
  function dropIconHTML(itemId,name){
   try{
