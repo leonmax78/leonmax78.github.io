@@ -1052,7 +1052,8 @@
     const ROMAN=n=>{let r='';for(const [v,c] of [[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']])while(n>=v){r+=c;n-=v;}return r;};
     const scopeStages=SZO_MAP_CLASS.order(stages.filter(s=>SZO_MAP_CLASS.same(s.stageId,scope)));
     const towerFloors=scopeStages.filter(s=>s.mapCategory==='tower').flatMap(s=>(s.areas||[]).map(a=>Number(a.floor))).filter(Boolean);
-    const towerSeg=towerFloors.length>10?Math.ceil((state.floorStageId===Number(stage.stageId)&&state.floor?state.floor:Math.min(...towerFloors))/10):0;
+    const ownFloors=(stage.areas||[]).map(a=>Number(a.floor)).filter(Boolean);
+    const towerSeg=towerFloors.length>10?Math.ceil((state.floorStageId===Number(stage.stageId)&&state.floor?state.floor:Math.min(...(ownFloors.length?ownFloors:towerFloors)))/10):0;
     const segOptions=towerSeg?[...new Set(towerFloors.map(f=>Math.ceil(f/10)))].sort((a,b)=>a-b).map(g=>`<option value="${g}" ${g===towerSeg?'selected':''}>終末之塔 ${ROMAN(g)}（${g*10-9}～${g*10} 樓）</option>`).join(''):'';
     const stageOptions = `<optgroup label="${htmlEscape(scope.series||scope.group)}">${scopeStages.flatMap(s=>{
       const rows=s.mapCategory==='tower'?(s.areas||[]).filter(a=>!towerSeg||Math.ceil(a.floor/10)===towerSeg).map(a=>({key:`${s.stageId}:${a.floor}`,label:towerSeg?`${a.floor} 樓`:`終末之塔 ${a.floor}樓`})):[{key:String(s.stageId),label:`${String(s.stageId).padStart(3,'0')} ${s.stageName}`}];
