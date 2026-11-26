@@ -5309,3 +5309,9 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
  html body .mapLayout.mapMaximized{padding:4px;gap:6px}
  html body .mapLayout.mapMaximized>.mapLeftPane,html body .mapLayout.mapMaximized .mapCanvasWrap{height:calc(100dvh - 8px)}
 }
+/* V896: 反查掉落 — 同一張地圖有多種怪會掉，一鍵一起標在地圖上 */
+.reverseMapGroups{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 14px;padding:10px 12px;border:1px solid rgba(45,212,191,.3);border-radius:14px;background:rgba(20,184,166,.06)}
+.reverseMapGroups>b{color:#67e8f9;font-size:13px;margin-right:4px}
+.reverseMapGroupBtn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(45,212,191,.42);border-radius:999px;background:rgba(20,184,166,.1);color:#bdf8ff;padding:5px 10px;font:inherit;font-weight:800;cursor:pointer}
+.reverseMapGroupBtn:hover{border-color:#2dd4bf;background:rgba(20,184,166,.2)}
+.reverseMapGroupBtn span{border-radius:999px;background:linear-gradient(135deg,#f59e0b,#67e8f9);color:#06101f;padding:1px 7px;font-size:11px;font-weight:1000}
