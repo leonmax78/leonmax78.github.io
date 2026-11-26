@@ -5315,3 +5315,6 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 .reverseMapGroupBtn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(45,212,191,.42);border-radius:999px;background:rgba(20,184,166,.1);color:#bdf8ff;padding:5px 10px;font:inherit;font-weight:800;cursor:pointer}
 .reverseMapGroupBtn:hover{border-color:#2dd4bf;background:rgba(20,184,166,.2)}
 .reverseMapGroupBtn span{border-radius:999px;background:linear-gradient(135deg,#f59e0b,#67e8f9);color:#06101f;padding:1px 7px;font-size:11px;font-weight:1000}
+/* V899: iPhone Safari 會把小於約 2000px 的圖層整張畫成一張圖，放大到 1:1 時超過上限就自動降解析度（洞府、大營等小地圖整張變糊）。
+   用看不見的撐大元素讓圖層超過 2000px，Safari 改成分塊繪製；撐大元素放在左上方（負座標不產生捲動範圍），可拖曳範圍不變。 */
+.mapImageStage::after{content:"";position:absolute;left:-2100px;top:-2100px;width:2100px;height:2100px;pointer-events:none;visibility:hidden}
