@@ -727,7 +727,7 @@
     if(tlv) return answerTraining(tlv);
     const term = searchTerm(query);
     const [items, monsters, maps, aliasData, trade] = await Promise.all([json('items'), json('monsters'), json('maps'), json('alias').catch(() => ({})), json('trade').catch(() => ({}))]);
-    const itemMatches = findByName(items, itemName, term, 12);
+    const itemMatches = findByName(items, itemName, term, 40);
     let monsterMatches = findByName(monsters, monsterName, term, 12);
     // 別名、合稱、常見錯字（黑白無常、牛馬魔將…）→ 正式怪名
     const aliasHit = Object.entries(aliasData.alias || {}).find(([k]) => norm(k) === norm(term));
@@ -740,7 +740,7 @@
     const mapMatches = (maps.stages || []).filter(stage => norm(stage.stageName).includes(norm(term))).slice(0, 10);
     const shopHtml = await answerShop(term);
     const shopHasResult = !shopHtml.includes('data-qa-shop-empty="all"');
-    const itemSection = itemMatches.length ? `<div class="qaAnswer" id="qaSecItem"><h2>道具</h2><div class="qaList qaCompact">${itemMatches.map(item => {
+    const itemRow = item => {
       const img = itemIcon(item);
       return `<div class="qaRow qaShopRow">
         <strong>${html(itemName(item))}</strong>
@@ -749,7 +749,8 @@
         <div class="qaRowActions">${chip('道具資訊', `data-qa-item="${html(itemId(item))}"`)}${chip('掉落反查', `data-qa-reverse="${html(itemId(item))}"`)}${chip('找商店', `data-qa-shop-item="${html(itemName(item))}"`)}</div>
         ${sellLine(trade[itemId(item)])}
       </div>`;
-    }).join('')}</div></div>` : '';
+    };
+    let itemSection = itemMatches.length ? `<div class="qaAnswer" id="qaSecItem"><h2>道具</h2><div class="qaList qaCompact">${itemMatches.map(itemRow).join('')}</div>@@MATS@@</div>` : '';
     const monsterSection = monsterMatches.length ? `<div class="qaAnswer" id="qaSecMonster"><h2>怪物</h2><div class="qaList qaCompact">${await Promise.all(monsterMatches.map(async monster => {
       const img = monsterIcon(monster);
       const loc = await locationForMonster(monsterName(monster));
@@ -814,11 +815,19 @@
     const itemFold = (name, body, n, i) => `<details class="qaItemBlock qaItemFold"${i === 0 ? ' open' : ''}><summary><span>${html(name)}</span>${n ? `<b>${n}</b>` : ''}</summary>${body}</details>`;
     const countRows = body => (body.match(/class="qaLine"/g) || []).length;
     const perItem = (build) => { const parts = itemOrder.map(name => [name, build(name)]).filter(x => x[1]); return parts.length > 1 ? parts.map(([name, body], i) => itemFold(name, body, countRows(body), i)).join('') : parts.map(([, body]) => `<div class="qaItemBlock">${body}</div>`).join(''); };
-    const srcItems = itemMatches.filter(it => norm(itemName(it)) === norm(term)).concat(itemMatches.filter(it => norm(itemName(it)) !== norm(term))).slice(0, 12);
+    const srcItems = itemMatches.filter(it => norm(itemName(it)) === norm(term)).concat(itemMatches.filter(it => norm(itemName(it)) !== norm(term))).slice(0, 40);
     const srcList = (await Promise.all(srcItems.map(it => itemSources(itemId(it)).catch(() => null)))).filter(Boolean);
+    // V908：合成材料名字不含關鍵字（例：聖鑽 ← 梅鑽碎末），一併列出並查取得方式
+    const matchedIds = new Set(itemMatches.map(itemId));
+    const itemById = new Map(items.map(it => [itemId(it), it]));
+    const matIds = [...new Set(srcList.flatMap(src => src.crafts.flatMap(c => c.mats.map(m => String(m[2] || '')))))].filter(id => id && !matchedIds.has(id) && itemById.has(id)).slice(0, 16);
+    const matSrcList = (await Promise.all(matIds.map(id => itemSources(id).catch(() => null)))).filter(Boolean);
+    itemSection = itemSection.replace('@@MATS@@', matIds.length ? `<h3 class="qaSubHead">合成用材料<b>${matIds.length}</b></h3><div class="qaList qaCompact">${matIds.map(id => itemRow(itemById.get(id))).join('')}</div>` : '');
     const srcTotal = src => SRC_KINDS.reduce((n, [k]) => n + src[k].length, 0);
     const srcShown = srcList.filter(src => srcTotal(src));
-    const getHtml = srcShown.map((src, i) => srcShown.length > 1 ? itemFold(src.name, sourcesBody(src, { show: 4 }), srcTotal(src), i) : `<div class="qaItemBlock">${sourcesBody(src, { show: 4 })}</div>`).join('');
+    const matShown = matSrcList.filter(src => srcTotal(src));
+    const getHtml = srcShown.map((src, i) => srcShown.length > 1 || matShown.length ? itemFold(src.name, sourcesBody(src, { show: 4 }), srcTotal(src), i) : `<div class="qaItemBlock">${sourcesBody(src, { show: 4 })}</div>`).join('')
+      + (matShown.length ? `<h3 class="qaSubHead">合成用材料<b>${matShown.length}</b></h3>` + matShown.map(src => itemFold(src.name, sourcesBody(src, { show: 4 }), srcTotal(src), 1)).join('') : '');
     // 用途：拆解・升階材料 (data/exchanges.json)
     const exUse = [];
     const exData = srcItems.length ? await json('exchanges').catch(() => null) : null;
@@ -853,7 +862,7 @@
       + block('交給 NPC 兌換', talkRows.filter(r => r.item === name && r.rel === 't'), npcLine)
       + block('對話需要持有', talkRows.filter(r => r.item === name && r.rel === 'h'), npcLine)
       + sellUse(name));
-    const getCount = srcList.reduce((n, src) => n + srcTotal(src), 0);
+    const getCount = srcList.concat(matSrcList).reduce((n, src) => n + srcTotal(src), 0);
     const useCount = talkRows.filter(r => r.rel !== 'g').length + recipeRows.length + exUse.length + questUse.length + itemOrder.filter(n => trade[idByName.get(n)]?.s).length;
     // 技能
     let skillRows = [];
