@@ -963,7 +963,8 @@
     8411: {pic: 6023, from: 6019},
     8319: {pic: 6009, from: 6087},   // 馴獸師（祁州城）
     8320: {pic: 6009, from: 6087},   // 馴獸師（京城）— in game: blue jacket, white cap
-    8321: {pic: 6009, from: 6087}    // 馴獸師（玄州城）
+    8321: {pic: 6009, from: 6087},   // 馴獸師（玄州城）
+    11657: {pic: 6238, from: 6230}   // 婚姻諮詢師（祁州城、京城、玄州城）— in game: 采芸_紫, purple dress (NPC.INI says 天官中)
   };
   function markerImage(marker){
     if(marker.role === 'trap') return '';
