@@ -814,7 +814,7 @@
     const itemFold = (name, body, n, i) => `<details class="qaItemBlock qaItemFold"${i === 0 ? ' open' : ''}><summary><span>${html(name)}</span>${n ? `<b>${n}</b>` : ''}</summary>${body}</details>`;
     const countRows = body => (body.match(/class="qaLine"/g) || []).length;
     const perItem = (build) => { const parts = itemOrder.map(name => [name, build(name)]).filter(x => x[1]); return parts.length > 1 ? parts.map(([name, body], i) => itemFold(name, body, countRows(body), i)).join('') : parts.map(([, body]) => `<div class="qaItemBlock">${body}</div>`).join(''); };
-    const srcItems = itemMatches.filter(it => norm(itemName(it)) === norm(term)).concat(itemMatches.filter(it => norm(itemName(it)) !== norm(term))).slice(0, 3);
+    const srcItems = itemMatches.filter(it => norm(itemName(it)) === norm(term)).concat(itemMatches.filter(it => norm(itemName(it)) !== norm(term))).slice(0, 12);
     const srcList = (await Promise.all(srcItems.map(it => itemSources(itemId(it)).catch(() => null)))).filter(Boolean);
     const srcTotal = src => SRC_KINDS.reduce((n, [k]) => n + src[k].length, 0);
     const srcShown = srcList.filter(src => srcTotal(src));
