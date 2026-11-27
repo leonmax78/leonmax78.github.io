@@ -740,7 +740,7 @@
     const mapMatches = (maps.stages || []).filter(stage => norm(stage.stageName).includes(norm(term))).slice(0, 10);
     const shopHtml = await answerShop(term);
     const shopHasResult = !shopHtml.includes('data-qa-shop-empty="all"');
-    const itemSection = itemMatches.length ? `<div class="qaAnswer" id="qaSecItem"><h2>道具</h2><div class="qaList">${itemMatches.map(item => {
+    const itemSection = itemMatches.length ? `<div class="qaAnswer" id="qaSecItem"><h2>道具</h2><div class="qaList qaCompact">${itemMatches.map(item => {
       const img = itemIcon(item);
       return `<div class="qaRow qaShopRow">
         <strong>${html(itemName(item))}</strong>
@@ -750,7 +750,7 @@
         ${sellLine(trade[itemId(item)])}
       </div>`;
     }).join('')}</div></div>` : '';
-    const monsterSection = monsterMatches.length ? `<div class="qaAnswer" id="qaSecMonster"><h2>怪物</h2><div class="qaList">${await Promise.all(monsterMatches.map(async monster => {
+    const monsterSection = monsterMatches.length ? `<div class="qaAnswer" id="qaSecMonster"><h2>怪物</h2><div class="qaList qaCompact">${await Promise.all(monsterMatches.map(async monster => {
       const img = monsterIcon(monster);
       const loc = await locationForMonster(monsterName(monster));
       const locs = String(loc || '').split(/[、,]/).map(x => x.trim()).filter(Boolean);
@@ -811,11 +811,14 @@
     const fold = (rows, line, show = 6) => rows.length <= show + 2 ? rows.map(line).join('') : rows.slice(0, show).map(line).join('') + `<details class="qaMore"><summary>顯示其餘 ${rows.length - show} 筆</summary>${rows.slice(show).map(line).join('')}</details>`;
     const itemOrder = [...new Set([...itemMatches.map(itemName), ...talkRows.map(r => r.item), ...recipeRows.map(r => r.material)])];
     const block = (title, rows, line) => rows.length ? `<div class="qaGroup"><h3>${html(title)}<b>${rows.length}</b></h3><div class="qaLines">${fold(rows, line)}</div></div>` : '';
-    const perItem = (build) => itemOrder.map(name => { const body = build(name); return body ? `<div class="qaItemBlock">${itemOrder.length > 1 ? `<h4>${html(name)}</h4>` : ''}${body}</div>` : ''; }).join('');
+    const itemFold = (name, body, n, i) => `<details class="qaItemBlock qaItemFold"${i === 0 ? ' open' : ''}><summary><span>${html(name)}</span>${n ? `<b>${n}</b>` : ''}</summary>${body}</details>`;
+    const countRows = body => (body.match(/class="qaLine"/g) || []).length;
+    const perItem = (build) => { const parts = itemOrder.map(name => [name, build(name)]).filter(x => x[1]); return parts.length > 1 ? parts.map(([name, body], i) => itemFold(name, body, countRows(body), i)).join('') : parts.map(([, body]) => `<div class="qaItemBlock">${body}</div>`).join(''); };
     const srcItems = itemMatches.filter(it => norm(itemName(it)) === norm(term)).concat(itemMatches.filter(it => norm(itemName(it)) !== norm(term))).slice(0, 3);
     const srcList = (await Promise.all(srcItems.map(it => itemSources(itemId(it)).catch(() => null)))).filter(Boolean);
     const srcTotal = src => SRC_KINDS.reduce((n, [k]) => n + src[k].length, 0);
-    const getHtml = srcList.filter(src => srcTotal(src)).map(src => `<div class="qaItemBlock">${srcList.length > 1 ? `<h4>${html(src.name)}</h4>` : ''}${sourcesBody(src, { show: 4 })}</div>`).join('');
+    const srcShown = srcList.filter(src => srcTotal(src));
+    const getHtml = srcShown.map((src, i) => srcShown.length > 1 ? itemFold(src.name, sourcesBody(src, { show: 4 }), srcTotal(src), i) : `<div class="qaItemBlock">${sourcesBody(src, { show: 4 })}</div>`).join('');
     // 用途：拆解・升階材料 (data/exchanges.json)
     const exUse = [];
     const exData = srcItems.length ? await json('exchanges').catch(() => null) : null;
@@ -876,9 +879,15 @@
       }
       return near.length ? `<div class="empty">找不到「${html(term)}」。</div><div class="qaAlias">你是不是要找：${near.slice(0, 12).map(n => chip(n, `data-qa-search="${html(n)}"`)).join('')}</div>` : '<div class="empty">目前找不到符合的資料，可以換更短或更完整的關鍵字。</div>';
     }
-    const nav = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecUse','用途',useCount],['qaSecGet','取得方式',getCount],['qaSecQuest','任務',questRows.length],['qaSecSkill','技能',skillRows.length],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
-      .filter(x => x[2]).map(([id, label, n]) => `<button type="button" class="qaNavChip" data-qa-jump="${id}">${label}<b>${n}</b></button>`).join('');
-    return `${aliasNote}<nav class="qaNav">${nav}</nav>${itemSection}${monsterSection}${shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''}${useSection}${getSection}${questSection}${skillSection}${npcSection}${mapSection}`;
+    const navList = [['qaSecItem','道具',itemMatches.length],['qaSecMonster','怪物',monsterMatches.length],['qaSecShop','商店商品',shopHasResult ? '有' : 0],['qaSecUse','用途',useCount],['qaSecGet','取得方式',getCount],['qaSecQuest','任務',questRows.length],['qaSecSkill','技能',skillRows.length],['qaSecNpc','NPC',npcRows.length],['qaSecMap','地圖',mapMatches.length]]
+      .filter(x => x[2]);
+    // V906：分頁顯示，一次只展開一類，避免幾百筆擠在同一頁
+    const first = navList[0]?.[0] || '';
+    const tabbed = navList.length > 1;
+    const nav = navList.map(([id, label, n]) => `<button type="button" class="qaNavChip${tabbed && id === first ? ' active' : ''}" data-qa-tab="${id}">${label}<b>${n}</b></button>`).join('') + (tabbed ? '<button type="button" class="qaNavChip qaNavAll" data-qa-tab="all">全部展開</button>' : '');
+    const panes = [['qaSecItem', itemSection], ['qaSecMonster', monsterSection], ['qaSecShop', shopHasResult ? `<div id="qaSecShop">${shopHtml}</div>` : ''], ['qaSecUse', useSection], ['qaSecGet', getSection], ['qaSecQuest', questSection], ['qaSecSkill', skillSection], ['qaSecNpc', npcSection], ['qaSecMap', mapSection]]
+      .filter(x => x[1]).map(([id, body]) => `<section class="qaPane${id === first ? ' qaOn' : ''}" data-qa-pane="${id}">${body}</section>`).join('');
+    return `${aliasNote}<nav class="qaNav${tabbed ? ' qaTabs' : ''}">${nav}</nav><div class="qaPanes${tabbed ? ' qaTabbed' : ''}">${panes}</div>`;
   }
   async function runQuestion(query){
     state.query = String(query || '').trim();
@@ -923,6 +932,17 @@
     }
     const jump = ev.target.closest?.('[data-qa-jump]');
     if(jump){ by(jump.dataset.qaJump)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const tab = ev.target.closest?.('[data-qa-tab]');
+    if(tab){
+      const nav = tab.closest('.qaNav'), panes = nav?.nextElementSibling;
+      if(!panes) return;
+      const id = tab.dataset.qaTab, all = id === 'all';
+      nav.querySelectorAll('[data-qa-tab]').forEach(b => b.classList.toggle('active', b === tab));
+      panes.classList.toggle('qaTabbed', !all);
+      panes.querySelectorAll('[data-qa-pane]').forEach(p => p.classList.toggle('qaOn', all || p.dataset.qaPane === id));
+      if(nav.getBoundingClientRect().top < 0) nav.scrollIntoView({ block: 'start' });
+      return;
+    }
     const previewItem = ev.target.closest?.('[data-qa-preview-item]');
     if(previewItem){ ev.preventDefault(); window.SZO_PREVIEW?.open('item', previewItem.dataset.qaPreviewItem); return; }
     const srcMon = ev.target.closest?.('[data-qa-src-monster]');
