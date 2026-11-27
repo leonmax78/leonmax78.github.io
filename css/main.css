@@ -5345,3 +5345,5 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
   .qaList.qaCompact .qaRow span{grid-column:1;grid-row:2}
   .qaList.qaCompact .qaRowActions{grid-column:1 / -1;justify-content:flex-start}
 }
+.qaSubHead{display:flex;align-items:center;gap:8px;margin:14px 0 6px;font-size:15px;color:#c6d9f6}
+.qaSubHead b{font-size:12px;padding:0 7px;border-radius:999px;background:color-mix(in srgb,var(--accent,#2dd4bf) 30%,transparent);color:var(--text)}
