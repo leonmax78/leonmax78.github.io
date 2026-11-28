@@ -5347,3 +5347,12 @@ html.mapExitLabelsHidden .mapExit:hover .mapExitName,html.mapExitLabelsHidden .m
 }
 .qaSubHead{display:flex;align-items:center;gap:8px;margin:14px 0 6px;font-size:15px;color:#c6d9f6}
 .qaSubHead b{font-size:12px;padding:0 7px;border-radius:999px;background:color-mix(in srgb,var(--accent,#2dd4bf) 30%,transparent);color:var(--text)}
+
+/* V913 版權聲明按鈕 */
+.siteSupportTools{grid-template-columns:repeat(3,1fr)!important}
+.siteSupportTools .siteSupportBtn{padding:9px 4px;font-size:12.5px}
+.copyrightNotice p{margin:0 0 12px;line-height:1.75;color:#dbe7f5;word-break:normal}
+.copyrightNotice p:last-child{margin-bottom:0}
+.siteCopyrightLine{display:block;width:100%;margin:6px 0 2px;padding:6px 8px;border:0;background:none;color:rgba(203,213,225,.55);font-size:11.5px;line-height:1.5;text-align:center;cursor:pointer;word-break:normal}
+.siteCopyrightLine:hover{color:rgba(226,232,240,.9);text-decoration:underline}
+.siteCopyrightLine span{display:block}
