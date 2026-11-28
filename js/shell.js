@@ -72,6 +72,7 @@
     <div class="siteSupportTools" aria-label="站務連結">
       <button class="siteSupportBtn" id="openSupportBtn" type="button">贊助本站</button>
       <button class="siteSupportBtn" id="openContactBtn" type="button">聯絡站長</button>
+      <button class="siteSupportBtn" id="openCopyrightBtn" type="button">版權聲明</button>
     </div>
     <div class="visitorCounter" aria-label="網頁瀏覽人數">
       <div class="visitorCounterTitle">網頁瀏覽人數</div>
@@ -79,6 +80,7 @@
         <img class="visitorCounterBadge" onerror="this.closest('.visitorCounter').style.display='none'" data-src="https://visitor-badge.laobi.icu/badge?page_id=leonmax78.test&left_text=%E2%80%8B&left_color=%23040605&right_color=%23040605&height=34&radius=999" alt="網頁瀏覽人數" loading="lazy">
       </span>
     </div>
+    <button type="button" class="siteCopyrightLine" id="openCopyrightLine"><span>非官方玩家資料站</span><span>遊戲素材著作權屬宇峻奧汀科技所有</span></button>
   </div>
 </aside>
 <main class="content"><div class="reader" id="reader"></div></main>
@@ -198,6 +200,24 @@
     const ipassAccount = '0000001517184496';
     const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
     const open = (kind) => {
+      if(kind === 'copyright'){
+        if(eyebrow) eyebrow.textContent = '站務資訊';
+        title.textContent = '版權聲明';
+        body.innerHTML = `
+          <div class="copyrightNotice">
+            <p>本站為玩家自行整理的《神州Online》非官方資料站，與宇峻奧汀科技股份有限公司無任何關係，亦未獲其授權或背書。</p>
+            <p>本站所使用之遊戲圖像、地圖、文字、名稱等素材，著作權均屬宇峻奧汀科技股份有限公司所有，僅供玩家查詢與交流參考。</p>
+            <p>本站資料整理自遊戲內容，可能有錯誤或與實際遊戲不符，一切以遊戲內及官方公告為準。</p>
+            <p>若權利人認為本站內容有不妥之處，請透過「聯絡站長」告知，我們將儘速處理或移除。</p>
+          </div>
+          <div class="siteModalActions">
+            <button class="primary" type="button" data-site-open="contact">聯絡站長</button>
+          </div>
+        `;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        return;
+      }
       if(kind === 'contact'){
         if(eyebrow) eyebrow.textContent = '聯絡站長';
         title.textContent = '聯絡站長';
@@ -259,9 +279,13 @@
 
     document.getElementById('openSupportBtn')?.addEventListener('click', (ev) => { ev.preventDefault(); open('support'); });
     document.getElementById('openContactBtn')?.addEventListener('click', (ev) => { ev.preventDefault(); open('contact'); });
+    document.getElementById('openCopyrightBtn')?.addEventListener('click', (ev) => { ev.preventDefault(); open('copyright'); });
+    document.getElementById('openCopyrightLine')?.addEventListener('click', (ev) => { ev.preventDefault(); open('copyright'); });
     modal.addEventListener('click', async (ev) => {
       const closeHit = ev.target && ev.target.closest && ev.target.closest('[data-site-modal-close]');
       if(closeHit){ close(); return; }
+      const reopen = ev.target && ev.target.closest && ev.target.closest('[data-site-open]');
+      if(reopen){ open(reopen.dataset.siteOpen); return; }
       const copyBtn = ev.target && ev.target.closest && ev.target.closest('[data-copy-text]');
       if(!copyBtn) return;
       const text = copyBtn.getAttribute('data-copy-text') || '';
